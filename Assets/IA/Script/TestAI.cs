@@ -1,15 +1,9 @@
 using UnityEngine;
 
-public class TestAI : BasicAI
+namespace AI
 {
-    new void Start()
+    public class TestAI : BasicAI
     {
-        base.Start();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
