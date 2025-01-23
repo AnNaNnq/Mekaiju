@@ -1,14 +1,9 @@
-name: Build project
+name: Publish project
 
 on: 
   pull_request:
     branches:
-      - dev
-  push:
-    branches:
       - main
-      - dev
-
 
 jobs:
   buildForAllSupportedPlatforms:
@@ -38,3 +33,8 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
