@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace AI
+namespace Mekaiju.AI
 {
     public class TestAI : BasicAI
     {
