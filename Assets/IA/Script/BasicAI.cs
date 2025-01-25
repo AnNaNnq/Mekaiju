@@ -1,4 +1,4 @@
-using Mekaiju.Attributes;
+using MyBox;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,18 +10,27 @@ namespace Mekaiju.AI
     //Variable dans le script pour la vitesse (du kaju)
     public abstract class BasicAI : MonoBehaviour
     {
-        
         private NavMeshAgent _agent;
 
+        [Foldout("General", true)]
         public CombatStates states;
+        public LayerMask mask;
+        [Tag] public string targetTag;
 
-        public float agroTriggerArea = 10f;
-        public float awaitTriggerArea = 30f;
-        public float awaitPlayerDistance = 20f;
+        [Foldout("Agro", true)]
+        [PositiveValueOnly] public float agroTriggerArea = 10f;
+        [PositiveValueOnly] public float agroSpeed = 3.5f;
 
-        [SerializeField] Transform _nest;
-        [SerializeField] private LayerMask _mask;
-        [SerializeField] private string _tag;
+        [Foldout("Await", true)]
+        [PositiveValueOnly] public float awaitTriggerArea = 30f;
+        [PositiveValueOnly] public float awaitPlayerDistance = 20f;
+        [PositiveValueOnly] public float awaitSpeed = 3f;
+
+        [Foldout("Normal", true)]
+        [MustBeAssigned] public Transform nest;
+
+        [Foldout("Debug", true)]
+        public bool showGizmo;
 
         private GameObject _target;
 
@@ -29,7 +38,7 @@ namespace Mekaiju.AI
         {
             _agent = GetComponent<NavMeshAgent>();
             states = CombatStates.Normal;
-            _target = GameObject.FindGameObjectWithTag(_tag);
+            _target = GameObject.FindGameObjectWithTag(targetTag);
         }
 
         protected void Update()
@@ -45,6 +54,7 @@ namespace Mekaiju.AI
                 if (FindPlayer(agroTriggerArea))
                 {
                     states = CombatStates.Agro;
+                    _agent.speed = agroSpeed;
                 }
                 else
                 {
@@ -53,6 +63,7 @@ namespace Mekaiju.AI
                         if (states != CombatStates.Await)
                         {
                             states = CombatStates.Await;
+                            _agent.speed = awaitSpeed;
                         }
                     }
                     else
@@ -75,17 +86,16 @@ namespace Mekaiju.AI
             }
             else if (states == CombatStates.Normal)
             {
-                _agent.SetDestination(_nest.position);
+                _agent.SetDestination(nest.position);
                 _agent.stoppingDistance = 0.3f;
             }
-            Debug.Log(_agent.destination);
         }
 
         public void CombatStatesMachine()
         {
             switch (states)
             {
-                case CombatStates.Agro: break;
+                case CombatStates.Agro: Agro(); break;
                 case CombatStates.Await:
                     var t_targetPoint = new Vector3(_target.transform.position.x, transform.position.y, _target.transform.position.z) - transform.position;
                     var t_targetRotation = Quaternion.LookRotation(t_targetPoint, Vector3.up);
@@ -99,10 +109,10 @@ namespace Mekaiju.AI
 
         public bool FindPlayer(float p_range)
         {
-            Collider[] t_collisions = Physics.OverlapSphere(transform.position, p_range, _mask);
+            Collider[] t_collisions = Physics.OverlapSphere(transform.position, p_range, mask);
             foreach (Collider t_col in t_collisions)
             {
-                if (t_col.CompareTag(_tag))
+                if (t_col.CompareTag(targetTag))
                 {
                     return true;
                 }
@@ -113,6 +123,7 @@ namespace Mekaiju.AI
 
         private void OnDrawGizmos()
         {
+            if(!showGizmo) return;
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, agroTriggerArea);
             Gizmos.color = Color.yellow;
@@ -120,5 +131,7 @@ namespace Mekaiju.AI
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, awaitPlayerDistance);
         }
+
+        public virtual void Agro() {}
     }
 }
