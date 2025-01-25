@@ -28,9 +28,9 @@ namespace Mekaiju.Utils
             private TValue[] _array;
             private int      _index;
 
-            public Enumerator(TValue[] t_array)
+            public Enumerator(TValue[] p_array)
             {
-                _array = t_array;
+                _array = p_array;
                 _index = -1;
             }
 

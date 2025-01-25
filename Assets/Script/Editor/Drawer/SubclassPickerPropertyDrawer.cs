@@ -11,58 +11,58 @@ namespace Mekaiju.Editor
     [CustomPropertyDrawer(typeof(Attributes.SubclassPickerAttribute))]
     public class SubclassPickerPropertyDrawer : PropertyDrawer
     {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        public override float GetPropertyHeight(SerializedProperty p_property, GUIContent p_label)
         {
-            return EditorGUI.GetPropertyHeight(property);
+            return EditorGUI.GetPropertyHeight(p_property);
         }
 
-        IEnumerable GetClasses(Type baseType)
+        IEnumerable GetClasses(Type p_baseType)
         {
-            return Assembly.GetAssembly(baseType).GetTypes().Where(t => t.IsClass && !t.IsAbstract && baseType.IsAssignableFrom(t));
+            return Assembly.GetAssembly(p_baseType).GetTypes().Where(t => t.IsClass && !t.IsAbstract && p_baseType.IsAssignableFrom(t));
         }
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        public override void OnGUI(Rect p_position, SerializedProperty p_property, GUIContent p_label)
         {
-            Type t = fieldInfo.FieldType;
+            Type t_type = fieldInfo.FieldType;
 
-            if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(List<>))
+            if (t_type.IsGenericType && t_type.GetGenericTypeDefinition() == typeof(List<>))
             {
-                t = t.GetGenericArguments()[0];
+                t_type = t_type.GetGenericArguments()[0];
             }
 
-            if (t.IsArray && t.FullName.EndsWith("[]")) 
+            if (t_type.IsArray && t_type.FullName.EndsWith("[]")) 
             { 
-                t = Type.GetType(t.FullName[..^2]); 
+                t_type = Type.GetType(t_type.FullName[..^2]); 
             } 
-            string typeName = property.managedReferenceValue?.GetType().Name ?? "None";
+            string t_typeName = p_property.managedReferenceValue?.GetType().Name ?? "None";
 
-            Rect dropdownRect = position;
-            dropdownRect.x += EditorGUIUtility.labelWidth + 2;
-            dropdownRect.width -= EditorGUIUtility.labelWidth + 2;
-            dropdownRect.height = EditorGUIUtility.singleLineHeight;
-            if (EditorGUI.DropdownButton(dropdownRect, new(typeName), FocusType.Keyboard))
+            Rect t_dropdownRect   = p_position;
+            t_dropdownRect.x     += EditorGUIUtility.labelWidth + 2;
+            t_dropdownRect.width -= EditorGUIUtility.labelWidth + 2;
+            t_dropdownRect.height = EditorGUIUtility.singleLineHeight;
+            if (EditorGUI.DropdownButton(t_dropdownRect, new(t_typeName), FocusType.Keyboard))
             {
                 GenericMenu menu = new();
 
                 // null
-                menu.AddItem(new GUIContent("None"), property.managedReferenceValue == null, () =>
+                menu.AddItem(new GUIContent("None"), p_property.managedReferenceValue == null, () =>
                 {
-                    property.managedReferenceValue = null;
-                    property.serializedObject.ApplyModifiedProperties();
+                    p_property.managedReferenceValue = null;
+                    p_property.serializedObject.ApplyModifiedProperties();
                 });
 
                 // inherited types
-                foreach (Type type in GetClasses(t))
+                foreach (Type type in GetClasses(t_type))
                 {
-                    menu.AddItem(new GUIContent(type.Name), typeName == type.Name, () =>
+                    menu.AddItem(new GUIContent(type.Name), t_typeName == type.Name, () =>
                     {
-                        property.managedReferenceValue = type.GetConstructor(Type.EmptyTypes).Invoke(null);
-                        property.serializedObject.ApplyModifiedProperties();
+                        p_property.managedReferenceValue = type.GetConstructor(Type.EmptyTypes).Invoke(null);
+                        p_property.serializedObject.ApplyModifiedProperties();
                     });
                 }
                 menu.ShowAsContext();
             }
-            EditorGUI.PropertyField(position, property, label, true);
+            EditorGUI.PropertyField(p_position, p_property, p_label, true);
         }
     }
 }
