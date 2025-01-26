@@ -237,8 +237,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 10852436}
-  - component: {fileID: 10852437}
   - component: {fileID: 10852438}
+  - component: {fileID: 10852437}
   m_Layer: 0
   m_Name: Kaiju
   m_TagString: Untagged
@@ -302,15 +302,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af6d76802ca8df469ed59cc48b7ce70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _states: 0
+  states: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
+  targetTag: Player
   agroTriggerArea: 10
+  agroSpeed: 3.5
   awaitTriggerArea: 30
   awaitPlayerDistance: 20
-  _nest: {fileID: 1615825249}
-  _mask:
-    serializedVersion: 2
-    m_Bits: 55
-  _tag: Player
+  awaitSpeed: 3
+  nest: {fileID: 1615825249}
+  showGizmo: 1
 --- !u!1 &33813366
 GameObject:
   m_ObjectHideFlags: 0

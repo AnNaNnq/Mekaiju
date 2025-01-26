@@ -1,8 +1,8 @@
+using MyBox;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.GraphicsBuffer;
 
-namespace AI
+namespace Mekaiju.AI
 {
 
     //Temps avant de follow le joueur lors de l'éloginement + Autre temps avant de retourner au nest
@@ -11,21 +11,34 @@ namespace AI
     public abstract class BasicAI : MonoBehaviour
     {
         private NavMeshAgent _agent;
-        [SerializeField] private CombatStates _states;
-        public float agroTriggerArea = 10f;
-        public float awaitTriggerArea = 30f;
-        public float awaitPlayerDistance = 20f;
-        [SerializeField] Transform _nest;
-        [SerializeField] private LayerMask _mask;
-        [SerializeField] private string _tag;
+
+        [Foldout("General", true)]
+        public CombatStates states;
+        public LayerMask mask;
+        [Tag] public string targetTag;
+
+        [Foldout("Agro", true)]
+        [PositiveValueOnly] public float agroTriggerArea = 10f;
+        [PositiveValueOnly] public float agroSpeed = 3.5f;
+
+        [Foldout("Await", true)]
+        [PositiveValueOnly] public float awaitTriggerArea = 30f;
+        [PositiveValueOnly] public float awaitPlayerDistance = 20f;
+        [PositiveValueOnly] public float awaitSpeed = 3f;
+
+        [Foldout("Normal", true)]
+        [MustBeAssigned] public Transform nest;
+
+        [Foldout("Debug", true)]
+        public bool showGizmo;
 
         private GameObject _target;
 
         protected void Start()
         {
             _agent = GetComponent<NavMeshAgent>();
-            _states = CombatStates.Normal;
-            _target = GameObject.FindGameObjectWithTag(_tag);
+            states = CombatStates.Normal;
+            _target = GameObject.FindGameObjectWithTag(targetTag);
         }
 
         protected void Update()
@@ -36,26 +49,28 @@ namespace AI
 
         public void ChangeState()
         {
-            if (_states != CombatStates.Agro)
+            if (states != CombatStates.Agro)
             {
                 if (FindPlayer(agroTriggerArea))
                 {
-                    _states = CombatStates.Agro;
+                    states = CombatStates.Agro;
+                    _agent.speed = agroSpeed;
                 }
                 else
                 {
                     if (FindPlayer(awaitTriggerArea))
                     {
-                        if (_states != CombatStates.Await)
+                        if (states != CombatStates.Await)
                         {
-                            _states = CombatStates.Await;
+                            states = CombatStates.Await;
+                            _agent.speed = awaitSpeed;
                         }
                     }
                     else
                     {
-                        if (_states != CombatStates.Normal)
+                        if (states != CombatStates.Normal)
                         {
-                            _states = CombatStates.Normal;
+                            states = CombatStates.Normal;
                         }
                     }
                 }
@@ -64,24 +79,23 @@ namespace AI
 
         public void AIMove()
         {
-            if (_states == CombatStates.Await)
+            if (states == CombatStates.Await)
             {
                 _agent.destination = _target.transform.position;
                 _agent.stoppingDistance = awaitPlayerDistance;
             }
-            else if (_states == CombatStates.Normal)
+            else if (states == CombatStates.Normal)
             {
-                _agent.SetDestination(_nest.position);
+                _agent.SetDestination(nest.position);
                 _agent.stoppingDistance = 0.3f;
             }
-            Debug.Log(_agent.destination);
         }
 
         public void CombatStatesMachine()
         {
-            switch (_states)
+            switch (states)
             {
-                case CombatStates.Agro: break;
+                case CombatStates.Agro: Agro(); break;
                 case CombatStates.Await:
                     var t_targetPoint = new Vector3(_target.transform.position.x, transform.position.y, _target.transform.position.z) - transform.position;
                     var t_targetRotation = Quaternion.LookRotation(t_targetPoint, Vector3.up);
@@ -95,10 +109,10 @@ namespace AI
 
         public bool FindPlayer(float p_range)
         {
-            Collider[] t_collisions = Physics.OverlapSphere(transform.position, p_range, _mask);
+            Collider[] t_collisions = Physics.OverlapSphere(transform.position, p_range, mask);
             foreach (Collider t_col in t_collisions)
             {
-                if (t_col.CompareTag(_tag))
+                if (t_col.CompareTag(targetTag))
                 {
                     return true;
                 }
@@ -109,6 +123,7 @@ namespace AI
 
         private void OnDrawGizmos()
         {
+            if(!showGizmo) return;
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, agroTriggerArea);
             Gizmos.color = Color.yellow;
@@ -116,5 +131,7 @@ namespace AI
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, awaitPlayerDistance);
         }
+
+        public virtual void Agro() {}
     }
 }
