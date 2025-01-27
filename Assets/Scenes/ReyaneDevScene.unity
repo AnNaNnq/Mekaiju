@@ -653,8 +653,9 @@ MonoBehaviour:
   groundCheck: {fileID: 1100880116}
   camera: {fileID: 1581115460}
   _jumpForce: 5
-  _speed: 5
-  _cameraSpeed: 5
+  _dashForce: 20
+  _dashDuration: 0.25
+  _baseSpeed: 5
 --- !u!136 &1893595336
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -686,7 +687,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1893595329}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 1.3
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
