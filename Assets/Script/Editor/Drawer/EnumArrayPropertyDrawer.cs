@@ -10,25 +10,30 @@ namespace Mekaiju.Editor
     {
         public override float GetPropertyHeight(SerializedProperty p_property, GUIContent p_label)
         {
-            if (p_property.isExpanded)
+            if (fieldInfo.FieldType.GetGenericArguments()[1].IsSerializable)
             {
-                Type t_kType = fieldInfo.FieldType.GetGenericArguments()[0];
-                int  t_size  = Enum.GetValues(t_kType).Length;
-
-                SerializedProperty array = p_property.FindPropertyRelative("_array");
-
-                float t_totalHeight = EditorGUIUtility.singleLineHeight;
-
-                for (int i = 0; i < t_size; i++)
+                if (p_property.isExpanded)
                 {
-                    SerializedProperty t_elem = array.GetArrayElementAtIndex(i);
-                    t_totalHeight += EditorGUI.GetPropertyHeight(t_elem, true) + EditorGUIUtility.standardVerticalSpacing;
+                    Type t_kType = fieldInfo.FieldType.GetGenericArguments()[0];
+                    int  t_size  = Enum.GetValues(t_kType).Length;
+
+                    SerializedProperty array = p_property.FindPropertyRelative("_array");
+
+                    float t_totalHeight = EditorGUIUtility.singleLineHeight;
+
+                    for (int i = 0; i < t_size; i++)
+                    {
+                        SerializedProperty t_elem = array.GetArrayElementAtIndex(i);
+                        t_totalHeight += EditorGUI.GetPropertyHeight(t_elem, true) + EditorGUIUtility.standardVerticalSpacing;
+                    }
+
+                    return t_totalHeight;
                 }
 
-                return t_totalHeight;
+                return EditorGUIUtility.singleLineHeight;
             }
 
-            return EditorGUIUtility.singleLineHeight;
+            return 0f;
         }
 
 
@@ -36,30 +41,33 @@ namespace Mekaiju.Editor
         {
             EditorGUI.BeginProperty(p_position, p_label, p_property);
 
-            Rect t_foldRect = new(p_position.x, p_position.y, p_position.width, EditorGUIUtility.singleLineHeight);
-            p_property.isExpanded = EditorGUI.Foldout(t_foldRect, p_property.isExpanded, p_label, true);
-
-            if (p_property.isExpanded)
+            if (fieldInfo.FieldType.GetGenericArguments()[1].IsSerializable)
             {
-                Type     t_kType = fieldInfo.FieldType.GetGenericArguments()[0];
-                string[] t_names = Enum.GetNames(t_kType);
+                Rect t_foldRect = new(p_position.x, p_position.y, p_position.width, EditorGUIUtility.singleLineHeight);
+                p_property.isExpanded = EditorGUI.Foldout(t_foldRect, p_property.isExpanded, p_label, true);
 
-                SerializedProperty array = p_property.FindPropertyRelative("_array");
-
-                float t_yOffset = p_position.y + EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-                for (int i = 0; i < t_names.Length; i++)
+                if (p_property.isExpanded)
                 {
-                    SerializedProperty t_elem  = array.GetArrayElementAtIndex(i);
-                    GUIContent         t_label = new(t_names[i]);
+                    Type     t_kType = fieldInfo.FieldType.GetGenericArguments()[0];
+                    string[] t_names = Enum.GetNames(t_kType);
 
-                    EditorGUI.indentLevel++;
+                    SerializedProperty array = p_property.FindPropertyRelative("_array");
 
-                    Rect t_elemRect = new(p_position.x, t_yOffset, p_position.width, EditorGUI.GetPropertyHeight(t_elem, true));
-                    EditorGUI.PropertyField(t_elemRect, t_elem, t_label, true);
+                    float t_yOffset = p_position.y + EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+                    for (int i = 0; i < t_names.Length; i++)
+                    {
+                        SerializedProperty t_elem  = array.GetArrayElementAtIndex(i);
+                        GUIContent         t_label = new(t_names[i]);
 
-                    EditorGUI.indentLevel--;
+                        EditorGUI.indentLevel++;
 
-                    t_yOffset += t_elemRect.height + EditorGUIUtility.standardVerticalSpacing;
+                        Rect t_elemRect = new(p_position.x, t_yOffset, p_position.width, EditorGUI.GetPropertyHeight(t_elem, true));
+                        EditorGUI.PropertyField(t_elemRect, t_elem, t_label, true);
+
+                        EditorGUI.indentLevel--;
+
+                        t_yOffset += t_elemRect.height + EditorGUIUtility.standardVerticalSpacing;
+                    }
                 }
             }
 
