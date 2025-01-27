@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,9 +16,16 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rigidbody;
 
     [SerializeField] private float _jumpForce = 5f;
-    [SerializeField] private float _speed = 5f;
-    [SerializeField] private float _cameraSpeed = 5f;
+    [SerializeField] private float _dashForce = 20f;
+    [SerializeField] private float _dashDuration = 0.25f;
+    [SerializeField] private float _baseSpeed = 5f;
+    private float _speed;
+    //[SerializeField] private float _cameraSpeed = 5f;
+
     private bool _isGrounded;
+    private bool _isDashing;
+    private bool _isProtected;
+    private Vector3 _dashDirection;
 
 
     private LayerMask _groundLayerMask;
@@ -26,6 +34,8 @@ public class PlayerController : MonoBehaviour
     {
         _playerActions = new MechaPlayerActions();
         _rigidbody = GetComponent<Rigidbody>();
+
+        _speed = _baseSpeed;
 
         _groundLayerMask = LayerMask.GetMask("Ground");
     }
@@ -44,6 +54,7 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.GunAttack.Enable();
 
         _playerActions.Player.Shield.performed += OnShield;
+        _playerActions.Player.Shield.canceled += OnUnshield;
         _playerActions.Player.Shield.Enable();
 
         _playerActions.Player.Jump.started += OnJump;
@@ -76,14 +87,22 @@ public class PlayerController : MonoBehaviour
     }
     private void OnShield(InputAction.CallbackContext p_context)
     {
-        Debug.Log("Shield");
+        float t_shieldSpeedModifier = 0.5f;
+
+        _isProtected = true;
+        _speed = _baseSpeed * t_shieldSpeedModifier;
+    }
+    private void OnUnshield(InputAction.CallbackContext p_context)
+    {
+        _isProtected = false;
+        _speed = _baseSpeed;
     }
     private void OnJump(InputAction.CallbackContext p_context)
     {
         if (_isGrounded)
         {
             _isGrounded = false;
-            _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Acceleration);
+            _rigidbody.AddForce(Vector3.up  * _jumpForce, ForceMode.Impulse);
         }
     }
     //private void OnHover(InputAction.CallbackContext p_context)
@@ -94,23 +113,66 @@ public class PlayerController : MonoBehaviour
     //{
     //    Debug.Log("StopHover");
     //}
+
     private void OnDash(InputAction.CallbackContext p_context)
     {
+        if (!_isDashing)
+        {
+            // Determine dash direction based on movement input
+            Vector2 moveInput = _moveAction.ReadValue<Vector2>();
+            _dashDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+
+            // If no input, dash forward relative to player's facing direction
+            if (_dashDirection.sqrMagnitude == 0f)
+            {
+
+                //CHANGER ICI POUR CHANGER LE COMPORTEMENT QUAND LE JOEUUR DASH SANS DIRECTION
+                _dashDirection = transform.forward;
+            }
+
+            StartCoroutine(DashCoroutine());
+        }
+    }
+
+    private IEnumerator DashCoroutine()
+    {
+        _isDashing = true;
+        yield return new WaitForSeconds(_dashDuration);
+        _isDashing = false;
+    }
+
+
+    private IEnumerator Dash(Vector2 p_moveDir,Vector3 p_vel)
+    {
         Debug.Log("Dash");
+        _isDashing = true;
+
+        _rigidbody.linearVelocity = new Vector3(_dashForce * p_moveDir.x,p_vel.y,_dashForce*p_moveDir.y);
+
+        yield return new WaitForSeconds(_dashDuration);
+        _isDashing = false;
     }
 
     private void FixedUpdate()
     {
-        if (!_isGrounded)
-        {
-            _isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, 0.05f, _groundLayerMask);
-        }
+        _isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, 0.05f, _groundLayerMask);
 
-        Vector2 t_moveDir = _moveAction.ReadValue<Vector2>();
-        Vector3 t_vel = _rigidbody.linearVelocity;
-        t_vel.x = _speed * t_moveDir.x;
-        t_vel.z = _speed * t_moveDir.y;
-        _rigidbody.linearVelocity = t_vel;
+        if (_isDashing)
+        {
+            // Maintain dash velocity while preserving gravity
+            Vector3 newVelocity = _dashDirection * _dashForce;
+            newVelocity.y = _rigidbody.linearVelocity.y;
+            _rigidbody.linearVelocity = newVelocity;
+        }
+        else
+        {
+            // Regular movement
+            Vector2 t_moveDir = _moveAction.ReadValue<Vector2>();
+            Vector3 t_vel = _rigidbody.linearVelocity;
+            t_vel.x = _speed * t_moveDir.x;
+            t_vel.z = _speed * t_moveDir.y;
+            _rigidbody.linearVelocity = t_vel;
+        }
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>();
         //Debug.Log($"look: {t_lookDir}");
