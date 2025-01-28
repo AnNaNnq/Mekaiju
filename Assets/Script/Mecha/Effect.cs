@@ -23,5 +23,11 @@ namespace Mekaiju
         /// </summary>
         [field: SerializeReference, SubclassPicker]
         public IEffectBehaviour Behaviour { get; private set; }
+
+        private void OnValidate()
+        {
+            if (Behaviour == null)
+                Debug.LogWarning("You must provide a behaviour for each mecha effect.");
+        }
     }
 }
