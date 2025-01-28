@@ -101,10 +101,26 @@ namespace Mekaiju.AI
         {
             if (states == CombatStates.Await)
             {
-                _agent.destination = _target.transform.position;
-                _agent.stoppingDistance = awaitPlayerDistance;
+                float distanceToTarget = Vector3.Distance(_agent.transform.position, _target.transform.position);
+
+                if (distanceToTarget < awaitPlayerDistance)
+                {
+                    Vector3 directionAwayFromTarget = (_agent.transform.position - _target.transform.position).normalized;
+                    _agent.destination = _agent.transform.position + directionAwayFromTarget * (awaitPlayerDistance - distanceToTarget);
+                    _agent.stoppingDistance = 0.3f;
+                    Vector3 lookDirection = _target.transform.position - _agent.transform.position;
+                    lookDirection.y = 0;
+                    _agent.transform.rotation = Quaternion.LookRotation(lookDirection);
+                }
+                else
+                {
+                    _agent.destination = _target.transform.position;
+                    _agent.stoppingDistance = awaitPlayerDistance;
+                }
+
                 _canSwitch = false;
             }
+
             else if (states == CombatStates.Normal)
             {
                 _agent.SetDestination(nest.position);
