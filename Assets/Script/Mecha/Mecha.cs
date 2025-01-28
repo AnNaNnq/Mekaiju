@@ -1,4 +1,5 @@
 using UnityEngine;
+using Mekaiju.Utils;
 
 namespace Mekaiju
 {  
@@ -19,7 +20,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [field: SerializeField]
-        public Utils.EnumArray<MechaPart, MechaPartDesc> Parts { get; private set; }
+        public EnumArray<MechaPart, MechaPartDesc> Parts { get; private set; }
     }
     
 }
