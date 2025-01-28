@@ -1,4 +1,6 @@
+using Mekaiju.Attribute;
 using MyBox;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,29 +9,32 @@ namespace Mekaiju.AI
 
     //Temps avant de follow le joueur lors de l'éloginement + Autre temps avant de retourner au nest
     //Faire Agro
-    //Variable dans le script pour la vitesse (du kaju)
     public abstract class BasicAI : MonoBehaviour
     {
         private NavMeshAgent _agent;
 
-        [Foldout("General", true)]
+        [Foldout("General")]
         public CombatStates states;
         public LayerMask mask;
         [Tag] public string targetTag;
 
-        [Foldout("Agro", true)]
+        [Foldout("Agro")]
         [PositiveValueOnly] public float agroTriggerArea = 10f;
         [PositiveValueOnly] public float agroSpeed = 3.5f;
 
-        [Foldout("Await", true)]
+        [Foldout("Await")]
         [PositiveValueOnly] public float awaitTriggerArea = 30f;
         [PositiveValueOnly] public float awaitPlayerDistance = 20f;
         [PositiveValueOnly] public float awaitSpeed = 3f;
+        private bool _switchToAwait = false;
+        [PositiveValueOnly][Tooltip("Temps avant le changement d'état pour await (en s)")] public float timeBeforeAwait = 2f;
 
-        [Foldout("Normal", true)]
-        [MustBeAssigned] public Transform nest;
+        [Foldout("Normal")]
+        [MustBeAssigned] [FocusTransform] public Transform nest;
+        [PositiveValueOnly] public float normalSpeed = 3f;
+        [PositiveValueOnly] [Tooltip("Temps avant le changement d'état pour normal (en s)")] public float timeBeforeNormal = 2f;
 
-        [Foldout("Debug", true)]
+        [Foldout("Debug")]
         public bool showGizmo;
 
         private GameObject _target;
@@ -71,6 +76,7 @@ namespace Mekaiju.AI
                         if (states != CombatStates.Normal)
                         {
                             states = CombatStates.Normal;
+                            _agent.speed = normalSpeed;
                         }
                     }
                 }
@@ -133,5 +139,12 @@ namespace Mekaiju.AI
         }
 
         public virtual void Agro() {}
+
+        public IEnumerator countDown(float p_timer, bool p_var)
+        {
+            p_var = false;
+            yield return new WaitForSeconds(p_timer);
+            p_var = true;
+        }
     }
 }
