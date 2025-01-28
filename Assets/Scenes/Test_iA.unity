@@ -305,14 +305,17 @@ MonoBehaviour:
   states: 0
   mask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 51
   targetTag: Player
   agroTriggerArea: 10
   agroSpeed: 3.5
   awaitTriggerArea: 30
   awaitPlayerDistance: 20
   awaitSpeed: 3
+  timeBeforeAwait: 2
   nest: {fileID: 1615825249}
+  normalSpeed: 3
+  timeBeforeNormal: 2
   showGizmo: 1
 --- !u!1 &33813366
 GameObject:

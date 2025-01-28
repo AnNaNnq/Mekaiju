@@ -11,8 +11,6 @@ namespace Mekaiju.AI
     //Faire Agro
     public abstract class BasicAI : MonoBehaviour
     {
-        private NavMeshAgent _agent;
-
         [Foldout("General")]
         public CombatStates states;
         public LayerMask mask;
@@ -26,7 +24,6 @@ namespace Mekaiju.AI
         [PositiveValueOnly] public float awaitTriggerArea = 30f;
         [PositiveValueOnly] public float awaitPlayerDistance = 20f;
         [PositiveValueOnly] public float awaitSpeed = 3f;
-        private bool _switchToAwait = false;
         [PositiveValueOnly][Tooltip("Temps avant le changement d'état pour await (en s)")] public float timeBeforeAwait = 2f;
 
         [Foldout("Normal")]
@@ -37,7 +34,10 @@ namespace Mekaiju.AI
         [Foldout("Debug")]
         public bool showGizmo;
 
-        private GameObject _target;
+        protected GameObject _target;
+        protected NavMeshAgent _agent;
+
+        private bool _canSwitch = false;
 
         protected void Start()
         {
@@ -67,16 +67,30 @@ namespace Mekaiju.AI
                     {
                         if (states != CombatStates.Await)
                         {
-                            states = CombatStates.Await;
-                            _agent.speed = awaitSpeed;
+                            if (_canSwitch)
+                            {
+                                states = CombatStates.Await;
+                                _agent.speed = awaitSpeed;
+                            }
+                            else
+                            {
+                                StartCoroutine(Countdown(timeBeforeAwait));
+                            }
                         }
                     }
                     else
                     {
                         if (states != CombatStates.Normal)
                         {
-                            states = CombatStates.Normal;
-                            _agent.speed = normalSpeed;
+                            if (_canSwitch)
+                            {
+                                states = CombatStates.Normal;
+                                _agent.speed = normalSpeed;
+                            }
+                            else
+                            {
+                                StartCoroutine(Countdown(timeBeforeNormal));
+                            }
                         }
                     }
                 }
@@ -89,11 +103,13 @@ namespace Mekaiju.AI
             {
                 _agent.destination = _target.transform.position;
                 _agent.stoppingDistance = awaitPlayerDistance;
+                _canSwitch = false;
             }
             else if (states == CombatStates.Normal)
             {
                 _agent.SetDestination(nest.position);
                 _agent.stoppingDistance = 0.3f;
+                _canSwitch = false;
             }
         }
 
@@ -140,11 +156,11 @@ namespace Mekaiju.AI
 
         public virtual void Agro() {}
 
-        public IEnumerator countDown(float p_timer, bool p_var)
+        public IEnumerator Countdown(float p_timer)
         {
-            p_var = false;
+            _canSwitch = false;
             yield return new WaitForSeconds(p_timer);
-            p_var = true;
+            _canSwitch = true;
         }
     }
 }
