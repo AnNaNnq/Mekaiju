@@ -36,6 +36,15 @@ namespace Mekaiju
         /// </summary>
         [field: SerializeReference, SubclassPicker]
         public IAbilityBehaviour Behaviour { get; private set; }
+
+        public void OnValidate()
+        {
+            if (Prefab == null)
+                Debug.LogWarning("You must provide a prefab for each mecha ability.");
+
+            if (Behaviour == null)
+                Debug.LogWarning("You must provide a behaviour for each mecha ability.");
+        }
     }
     
 }
