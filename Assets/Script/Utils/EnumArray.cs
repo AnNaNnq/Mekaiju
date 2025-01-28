@@ -64,9 +64,20 @@ namespace Mekaiju.Utils
         public static EnumArray<K, V> Select<F, K, V>(this EnumArray<K, F> self, Func<F, V> selector) where K: Enum
         {
             EnumArray<K, V> t_ret = new();
-            foreach (var (i, v) in self.Select((v, i) => (i, v)))
+            foreach (var (i, v) in self.Select<F, (int, F)>((v, i) => (i, v)))
             {
                 t_ret[(K)Enum.ToObject(typeof(K), i)] = selector(v);
+            }
+            return t_ret;
+        }
+
+        public static EnumArray<K, V> Select<F, K, V>(this EnumArray<K, F> self, Func<K, F, V> selector) where K: Enum
+        {
+            EnumArray<K, V> t_ret = new();
+            foreach (var (i, v) in self.Select<F, (int, F)>((v, i) => (i, v)))
+            {
+                var t_key = (K)Enum.ToObject(typeof(K), i);
+                t_ret[t_key] = selector(t_key, v);
             }
             return t_ret;
         }
