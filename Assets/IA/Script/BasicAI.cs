@@ -11,7 +11,7 @@ namespace Mekaiju.AI
     //Faire Agro
     public abstract class BasicAI : MonoBehaviour
     {
-        [Foldout("General")]
+       [Foldout("General")]
         public CombatStates states;
         public LayerMask mask;
         [Tag] public string targetTag;
@@ -27,14 +27,15 @@ namespace Mekaiju.AI
         [PositiveValueOnly][Tooltip("Temps avant le changement d'état pour await (en s)")] public float timeBeforeAwait = 2f;
 
         [Foldout("Normal")]
-        [MustBeAssigned] [FocusTransform] public Transform nest;
+        [MustBeAssigned] [FocusObject] public Transform nest;
         [PositiveValueOnly] public float normalSpeed = 3f;
         [PositiveValueOnly] [Tooltip("Temps avant le changement d'état pour normal (en s)")] public float timeBeforeNormal = 2f;
 
-        [Foldout("Debug")]
+        [Foldout("Debug", false)]
         public bool showGizmo;
 
         protected GameObject _target;
+
         protected NavMeshAgent _agent;
 
         private bool _canSwitch = false;
@@ -101,22 +102,8 @@ namespace Mekaiju.AI
         {
             if (states == CombatStates.Await)
             {
-                float distanceToTarget = Vector3.Distance(_agent.transform.position, _target.transform.position);
-
-                if (distanceToTarget < awaitPlayerDistance)
-                {
-                    Vector3 directionAwayFromTarget = (_agent.transform.position - _target.transform.position).normalized;
-                    _agent.destination = _agent.transform.position + directionAwayFromTarget * (awaitPlayerDistance - distanceToTarget);
-                    _agent.stoppingDistance = 0.3f;
-                    Vector3 lookDirection = _target.transform.position - _agent.transform.position;
-                    lookDirection.y = 0;
-                    _agent.transform.rotation = Quaternion.LookRotation(lookDirection);
-                }
-                else
-                {
-                    _agent.destination = _target.transform.position;
-                    _agent.stoppingDistance = awaitPlayerDistance;
-                }
+                _agent.destination = _target.transform.position;
+                _agent.stoppingDistance = awaitPlayerDistance;
 
                 _canSwitch = false;
             }
