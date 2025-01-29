@@ -307,6 +307,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 51
   targetTag: Player
+  bodyParts:
+  - nom: Corps
+    part:
+    - {fileID: 1451481799}
+  - nom: Pattes
+    part:
+    - {fileID: 1129748584}
+    - {fileID: 876891195}
+    - {fileID: 1076477688}
+    - {fileID: 1625284588}
+  - nom: "T\xEAte"
+    part:
+    - {fileID: 626677740}
   agroTriggerArea: 10
   agroSpeed: 3.5
   awaitTriggerArea: 40
@@ -317,7 +330,7 @@ MonoBehaviour:
   normalSpeed: 3
   timeBeforeNormal: 2
   showGizmo: 1
-  kaijuName: Test
+  test: 2
 --- !u!1 &33813366
 GameObject:
   m_ObjectHideFlags: 0
@@ -1554,13 +1567,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 473784784}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.07752365, y: -0, z: -0, w: 0.99699056}
+  m_LocalPosition: {x: 12.1, y: 28.6, z: -52.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 8.892, y: 0, z: 0}
 --- !u!114 &473784788
 MonoBehaviour:
   m_ObjectHideFlags: 0
