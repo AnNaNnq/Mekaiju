@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private float _speed;
     //[SerializeField] private float _cameraSpeed = 5f;
 
+    [SerializeField]
     private bool _isGrounded;
     private bool _isDashing;
     private bool _isProtected;
@@ -38,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
         _speed = _baseSpeed;
 
-        _groundLayerMask = LayerMask.GetMask("Ground");
+        _groundLayerMask = LayerMask.GetMask("Walkable");
     }
 
     private void OnEnable()
@@ -157,7 +158,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, 0.05f, _groundLayerMask);
+        Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, 0.3f, _groundLayerMask);
+        _isGrounded = t_checkGround.Length > 0;
 
         if (_isDashing)
         {
@@ -178,5 +180,11 @@ public class PlayerController : MonoBehaviour
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>();
         //Debug.Log($"look: {t_lookDir}");
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(groundCheck.position, 0.3f);
     }
 }
