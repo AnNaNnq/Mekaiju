@@ -1,6 +1,7 @@
 using Mekaiju.Attribute;
 using MyBox;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,10 +12,11 @@ namespace Mekaiju.AI
     //Faire Agro
     public abstract class BasicAI : MonoBehaviour
     {
-       [Foldout("General")]
+        [Foldout("General")]
         public CombatStates states;
         public LayerMask mask;
         [Tag] public string targetTag;
+        public BodyPart[] bodyParts;
 
         [Foldout("Agro")]
         [PositiveValueOnly] public float agroTriggerArea = 10f;
@@ -31,14 +33,14 @@ namespace Mekaiju.AI
         [PositiveValueOnly] public float normalSpeed = 3f;
         [PositiveValueOnly] [Tooltip("Temps avant le changement d'état pour normal (en s)")] public float timeBeforeNormal = 2f;
 
-        [Foldout("Debug", false)]
-        public bool showGizmo;
-
         protected GameObject _target;
 
         protected NavMeshAgent _agent;
 
         private bool _canSwitch = false;
+
+        [Foldout("Debug", false)]
+        public bool showGizmo;
 
         protected void Start()
         {
