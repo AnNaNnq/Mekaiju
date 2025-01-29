@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -116,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext p_context)
     {
-        if (!_isDashing)
+        if (!_isDashing && !_isProtected)
         {
             // Determine dash direction based on movement input
             Vector2 moveInput = _moveAction.ReadValue<Vector2>();
@@ -126,8 +127,9 @@ public class PlayerController : MonoBehaviour
             if (_dashDirection.sqrMagnitude == 0f)
             {
 
-                //CHANGER ICI POUR CHANGER LE COMPORTEMENT QUAND LE JOEUUR DASH SANS DIRECTION
-                _dashDirection = transform.forward;
+                //CHANGER ICI POUR CHANGER LE COMPORTEMENT QUAND LE JOUEUR DASH SANS DIRECTION
+                return;
+                //_dashDirection = transform.forward;
             }
 
             StartCoroutine(DashCoroutine());
