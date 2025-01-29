@@ -1,4 +1,6 @@
+using Mekaiju.Attribute;
 using MyBox;
+using UnityEditor;
 using UnityEngine;
 
 namespace Mekaiju.AI
@@ -6,7 +8,8 @@ namespace Mekaiju.AI
     public class TestAI : BasicAI
     {
         [Separator("Combat Stat")]
-        public float test;
+        [SelectFromList(nameof(bodyParts))]
+        public int test;
 
         public override void Agro()
         {
