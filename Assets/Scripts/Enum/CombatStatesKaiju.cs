@@ -6,13 +6,3 @@ public enum CombatStatesKaiju
     Await,
     Normal
 }
-
-public enum TypesAttaquesKaijuTuto
-{
-    Charge,
-    AttaqueFace,
-    DefenseBoule,
-    GrosCroc,
-    Rapprochement,
-    Eloignement
-}
