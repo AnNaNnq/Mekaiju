@@ -8,7 +8,6 @@ using UnityEngine.AI;
 namespace Mekaiju.AI
 {
 
-    //Temps avant de follow le joueur lors de l'éloginement + Autre temps avant de retourner au nest
     //Faire Agro
     public abstract class BasicAI : MonoBehaviour
     {
