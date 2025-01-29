@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Mekaiju.Attribute
 {
-    public class FocusTransformAttribute : PropertyAttribute
+    public class FocusObjectAttribute : PropertyAttribute
     {
         
     }
@@ -15,7 +15,7 @@ namespace Mekaiju.Internal
     using Mekaiju.Attribute;
     using UnityEditor;
 
-    [CustomPropertyDrawer(typeof(FocusTransformAttribute))]
+    [CustomPropertyDrawer(typeof(FocusObjectAttribute))]
     public class FocusTransformDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
