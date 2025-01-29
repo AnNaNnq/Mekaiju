@@ -1,15 +1,15 @@
 using Mekaiju.Attribute;
 using MyBox;
-using UnityEditor;
-using UnityEngine;
+using System.ComponentModel;
 
 namespace Mekaiju.AI
 {
     public class TestAI : BasicAI
     {
-        [Separator("Combat Stat")]
-        [SelectFromList(nameof(bodyParts))]
-        public int test;
+        [Foldout("Attaque de face")]
+        [OverrideLabel("Degat")]
+        public int attack1dmg = 5;
+
 
         public override void Agro()
         {
