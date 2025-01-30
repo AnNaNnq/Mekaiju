@@ -21,6 +21,18 @@ namespace Mekaiju
         /// </summary>
         [field: SerializeField]
         public Ability DefaultAbility { get; private set; }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [field: SerializeField]
+        public Ability SpecialAbility { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool HasSpecial => SpecialAbility != null;
     }
 
 }

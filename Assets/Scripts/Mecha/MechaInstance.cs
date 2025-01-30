@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mekaiju.AI;
 using Mekaiju.Utils;
 using UnityEngine;
 
@@ -12,12 +13,12 @@ namespace Mekaiju
     /// </summary>
     public class MechaInstance : MonoBehaviour
     {
-        public static int DefaultStamina = 100;
+        public static int MaxStamina = 100;
 
         /// <summary>
         /// 
         /// </summary>
-        public MechaConfig Config;
+        public MechaDesc Desc;
 
         /// <summary>
         /// 
@@ -45,20 +46,20 @@ namespace Mekaiju
 
         private void Start()
         {
-            Config = GameManager.Instance.PData.Config;
+            // Desc = GameManager.Instance.PData.Mecha;
 
-            Debug.Assert(Config.Base.Prefab);
-            var t_main = Instantiate(Config.Base.Prefab, transform);
+            Debug.Assert(Desc.Prefab);
+            var t_main = Instantiate(Desc.Prefab, transform);
 
-            _parts = Config.Parts.Select((key, part) => 
+            _parts = Desc.Parts.Select((key, part) => 
                 {
                     var t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
                     Debug.Assert(t_tr);
 
                     t_tr.gameObject.SetActive(false);
 
-                    Debug.Assert(part.Base.DefaultAbility.Prefab);
-                    var t_go = Instantiate(part.Base.DefaultAbility.Prefab, t_tr);
+                    Debug.Assert(part.DefaultAbility.Prefab);
+                    var t_go = Instantiate(part.DefaultAbility.Prefab, t_tr);
 
                     var t_inst = t_go.AddComponent<MechaPartInstance>();
                     t_inst.Initialize(part);
@@ -76,7 +77,7 @@ namespace Mekaiju
             // };
 
             _health  = 100;
-            _stamina = DefaultStamina;
+            _stamina = 0;
         }
 
         private void Update()
@@ -118,7 +119,16 @@ namespace Mekaiju
         /// <returns></returns>
         public bool CanExecuteAbility(int p_consumption)
         {
-            return _stamina - p_consumption >= 0;
+            return _stamina + p_consumption <= MaxStamina;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="amount"></param>
+        public void ConsumeStamina(int amount)
+        {
+            _stamina = Math.Min(MaxStamina, _stamina + amount);
         }
 
         /// <summary>
@@ -128,9 +138,8 @@ namespace Mekaiju
         /// <param name="p_part"></param>
         /// <param name="p_target"></param>
         /// <returns></returns>
-        public IEnumerator ExecuteAbility(int p_consumption, MechaPart p_part, MechaInstance p_target)
+        public IEnumerator ExecuteAbility(MechaPart p_part, BasicAI p_target)
         {
-            _stamina -= p_consumption;
             yield return _parts[p_part].Ability.Behaviour.Execute(this, p_target);
         }
     }
