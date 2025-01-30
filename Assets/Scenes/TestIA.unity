@@ -334,14 +334,22 @@ MonoBehaviour:
   attack1Range: 11.91
   attack1Body: 2
   attack1Count: 2
-  attack1Coutdown: 0.6
+  attack1Coutdown: 2
+  attack1AttackCoutdown: 0.5
+  attack1RunSpeed: 8
+  _canAttack1: 1
   attack2dmg: 5
-  attack2RangeMax: 27.3
-  attack2RangeMin: 23.6
+  attack2RangeMax: 64.1
+  attack2RangeMin: 14.2
   attack2Body: 0
+  attack2Speed: 10
+  chargeDuration: 0.5
+  attack2Coutdown: 2
+  stopChargeDistance: 5
+  _canCharge: 1
   debugAttak1: 0
   colorForFaceAttackRange: {r: 1, g: 0, b: 0, a: 1}
-  debugAttak2: 0
+  debugAttak2: 1
   colorForChargeMaxRange: {r: 0, g: 0, b: 1, a: 1}
   colorForChargeMinRange: {r: 1, g: 0.9203187, b: 0, a: 1}
   textDPS: {fileID: 1628645693}
