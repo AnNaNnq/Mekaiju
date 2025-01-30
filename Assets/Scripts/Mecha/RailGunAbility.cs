@@ -37,6 +37,12 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        [SerializeField]
+        private GameObject _projectile;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private float _lastTriggerTime;
 
         /// <summary>
@@ -77,15 +83,39 @@ namespace Mekaiju
                     var t_dist = Vector3.Distance(p_self.transform.position, t_targetPosition);
                     var t_time = t_dist / _travelTime;
 
+                    bool t_hasCollide = false;
+
+                    var t_go = GameObject.Instantiate(_projectile);
+                    var t_wb = t_go.GetComponent<WeaponBullet>();
+
+                    t_wb.transform.position = p_self.transform.position + new Vector3(0, 2f, 2f);
+                    t_wb.OnCollide.AddListener(
+                        collision => {
+                            Debug.Log(collision.gameObject.name);
+                            if (collision.gameObject.name == "Kaiju")
+                            {
+                                t_hasCollide = true;
+                                GameObject.Destroy(t_wb);
+                            }
+                        }
+                    );
+                    t_wb.Launch(p_self.transform.forward.normalized * _travelTime);
+                    
+
                     // Wait for bullet travel
-                    yield return new WaitForSeconds(t_time);
+                    float t_timout = t_time;
+                    yield return new WaitUntil(() => t_hasCollide || (t_timout -= Time.deltaTime) <= 0);
 
                     // Check new position of BasicAI ?
-                    // if (p_target.transform.position == t_targetPosition)
-                    // {
+                    if (t_hasCollide)
+                    {
                         // Apply damage
                         Debug.Log("RailGun projectile reach its target!");
-                    // }
+                    }
+                    else
+                    {
+                        GameObject.Destroy(t_go);
+                    }
                 }
             }
         }
