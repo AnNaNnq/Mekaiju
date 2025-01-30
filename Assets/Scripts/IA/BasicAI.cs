@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 namespace Mekaiju.AI
 {
@@ -40,6 +41,7 @@ namespace Mekaiju.AI
         private bool _canSwitch = false;
 
         [Foldout("Debug", false)]
+        [OverrideLabel("Show Gizmo For Non-agro Phase")]
         public bool showGizmo;
 
         protected void Start()
@@ -124,9 +126,7 @@ namespace Mekaiju.AI
             {
                 case CombatStatesKaiju.Agro: Agro(); break;
                 case CombatStatesKaiju.Await:
-                    var t_targetPoint = new Vector3(_target.transform.position.x, transform.position.y, _target.transform.position.z) - transform.position;
-                    var t_targetRotation = Quaternion.LookRotation(t_targetPoint, Vector3.up);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, t_targetRotation, Time.deltaTime * 2.0f);
+                    LookTarget();
                     AIMove();
                     break;
                 case CombatStatesKaiju.Normal: AIMove(); break;
@@ -148,7 +148,32 @@ namespace Mekaiju.AI
             return false;
         }
 
-        private void OnDrawGizmos()
+        public void BackOff(Vector3 p_pos)
+        {
+            MoveTo(p_pos);
+            LookTarget();
+        }
+
+        public void MoveTo(Vector3 p_pos)
+        {
+            _agent.destination = p_pos;
+            _agent.stoppingDistance = 0.2f;
+        }
+
+        public void LookTarget()
+        {
+            Vector3 direction = _target.transform.position - transform.position;
+            direction.y = 0; // On ignore la composante Y pour éviter l'inclinaison
+
+            // Vérifier que la direction n'est pas nulle pour éviter des erreurs
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _agent.angularSpeed * Time.deltaTime);
+            }
+        }
+
+        protected void OnDrawGizmos()
         {
             if(!showGizmo) return;
             Gizmos.color = Color.red;
