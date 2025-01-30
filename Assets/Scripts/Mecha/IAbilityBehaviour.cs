@@ -1,4 +1,5 @@
 using System.Collections;
+using Mekaiju.AI;
 
 namespace Mekaiju
 {
@@ -11,10 +12,18 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        public virtual void Initialize() 
+        {
+            
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="p_self"></param>
         /// <param name="p_target"></param>
         /// <returns></returns>
-        public abstract IEnumerator Execute(MechaInstance p_self, MechaInstance p_target);
+        public abstract IEnumerator Execute(MechaInstance p_self, BasicAI p_target);
     }
 
 }
