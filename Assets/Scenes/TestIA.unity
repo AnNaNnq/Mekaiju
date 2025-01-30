@@ -329,8 +329,11 @@ MonoBehaviour:
   nest: {fileID: 1615825249}
   normalSpeed: 3
   timeBeforeNormal: 2
-  showGizmo: 0
-  test: 0
+  showGizmo: 1
+  attack1dmg: 5
+  attack1Range: 10
+  debugAttak1: 0
+  debugAttack1RangeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &33813366
 GameObject:
   m_ObjectHideFlags: 0
@@ -4805,7 +4808,7 @@ Transform:
   m_GameObject: {fileID: 1615825248}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.74, y: 2.14, z: -9.34}
+  m_LocalPosition: {x: 33.3, y: 2.14, z: -9.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5750,13 +5753,9 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 473784787}
-    - target: {fileID: 4291421069947845287, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
     - target: {fileID: 5292195136981956654, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.61
+      value: 7.2
       objectReference: {fileID: 0}
     - target: {fileID: 5292195136981956654, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5764,7 +5763,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5292195136981956654, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 35.06
+      value: 25.4
       objectReference: {fileID: 0}
     - target: {fileID: 5292195136981956654, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
       propertyPath: m_LocalRotation.w
