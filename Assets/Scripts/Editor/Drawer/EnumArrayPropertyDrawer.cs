@@ -10,7 +10,8 @@ namespace Mekaiju.Editor
     {
         public override float GetPropertyHeight(SerializedProperty p_property, GUIContent p_label)
         {
-            if (fieldInfo.FieldType.GetGenericArguments()[1].IsSerializable)
+            var t_elemType = fieldInfo.FieldType.GetGenericArguments()[1];
+            if (t_elemType.IsSerializable || typeof(UnityEngine.Object).IsAssignableFrom(t_elemType))
             {
                 if (p_property.isExpanded)
                 {
@@ -41,7 +42,8 @@ namespace Mekaiju.Editor
         {
             EditorGUI.BeginProperty(p_position, p_label, p_property);
 
-            if (fieldInfo.FieldType.GetGenericArguments()[1].IsSerializable)
+            var t_elemType  = fieldInfo.FieldType.GetGenericArguments()[1];
+            if (t_elemType.IsSerializable || typeof(UnityEngine.Object).IsAssignableFrom(t_elemType))
             {
                 Rect t_foldRect = new(p_position.x, p_position.y, p_position.width, EditorGUIUtility.singleLineHeight);
                 p_property.isExpanded = EditorGUI.Foldout(t_foldRect, p_property.isExpanded, p_label, true);
