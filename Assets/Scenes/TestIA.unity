@@ -330,24 +330,28 @@ MonoBehaviour:
   normalSpeed: 3
   timeBeforeNormal: 2
   showGizmo: 0
-  attack1dmg: 5
-  attack1Range: 11.91
-  attack1Body: 2
-  attack1Count: 2
-  attack1Coutdown: 2
-  attack1AttackCoutdown: 0.5
-  attack1RunSpeed: 8
-  _canAttack1: 1
-  attack2dmg: 5
-  attack2RangeMax: 64.1
-  attack2RangeMin: 14.2
+  attackmg: 5
+  attackRange: 8
+  attackBody: 0
+  attackCount: 2
+  attackCoutdown: 2
+  attackCoutdownBetween: 2
+  attackRunSpeed: 8
+  chargeDmg: 5
+  chargeRangeMax: 25
+  chargeRangeMin: 20
   attack2Body: 0
-  attack2Speed: 10
+  chargeSpeed: 10
   chargeDuration: 0.5
-  attack2Coutdown: 2
+  chargeCoutdown: 2
   stopChargeDistance: 5
-  _canCharge: 1
-  debugAttak1: 0
+  chargePrepTime: 1
+  hitsNumberDefense: 3
+  durationDefense: 5
+  damagePercentageDefense: 75
+  defenseSpeed: 3
+  defenseCoutdown: 5
+  debugAttak1: 1
   colorForFaceAttackRange: {r: 1, g: 0, b: 0, a: 1}
   debugAttak2: 1
   colorForChargeMaxRange: {r: 0, g: 0, b: 1, a: 1}

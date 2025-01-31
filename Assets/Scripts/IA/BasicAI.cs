@@ -173,6 +173,13 @@ namespace Mekaiju.AI
             }
         }
 
+        public Vector3 GetPositionBehind(float distance)
+        {
+            // On prend la direction vers la target et on l'inverse
+            Vector3 direction = (transform.position - _target.transform.position).normalized;
+            return transform.position + direction * distance;
+        }
+
         protected void OnDrawGizmos()
         {
             if(!showGizmo) return;
