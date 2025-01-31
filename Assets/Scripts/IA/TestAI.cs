@@ -25,9 +25,10 @@ namespace Mekaiju.AI
         public float attackCoutdownBetween = 2;
         [OverrideLabel("Run Speed")]
         public float attackRunSpeed = 8;
-        [SerializeField]
+
         private bool _canAttack = true;
         private bool _attackActive = false;
+
 
         [Foldout("Charge")]
         [OverrideLabel("Damage")]
@@ -44,10 +45,24 @@ namespace Mekaiju.AI
         public float chargeDuration = 0.5f;
         [OverrideLabel("Countdown (sec)")]
         public float chargeCoutdown = 2;
+        [OverrideLabel("Stop Distance")]
         public float stopChargeDistance = 10;
+        [OverrideLabel("Time Prep Before Charge (sec)")]
+        public float chargePrepTime = 1;
 
         private bool _isCharging = false;
         private bool _canCharge = true;
+
+
+        [Foldout("Défense Tite Boule")]
+        [PositiveValueOnly]
+        [OverrideLabel("Number of hits before trigger")]
+        public int hitsNumberDefense = 3;
+        [OverrideLabel("Duration (sec)")]
+        public float durationDefense = 5;
+        [OverrideLabel("Damage reduction percentage (%)")]
+        public float damagePercentageDefense = 75;
+
 
         [Foldout("Debug")]
         [OverrideLabel("Show Gizmo For Face Attack")]
@@ -88,10 +103,13 @@ namespace Mekaiju.AI
 
         public void AttackStateMachine()
         {
+            if (_isCharging) return;
             float t_dist = Vector3.Distance(transform.position, _target.transform.position);
             //Run for face attack
             if (t_dist < chargeRangeMin && t_dist > attackRange)
             {
+                _agent.enabled = true;
+                _agent.isStopped = false;
                 _agent.speed = attackRunSpeed;
                 MoveTo(_target.transform.position, attackRange);
             }
@@ -109,6 +127,8 @@ namespace Mekaiju.AI
             //Etat Normal
             else
             {
+                _agent.enabled = true;
+                _agent.isStopped = false;
                 _agent.speed = normalSpeed;
                 MoveTo(_target.transform.position, attackRange);
             }
@@ -124,7 +144,6 @@ namespace Mekaiju.AI
                     {
                         dps += attackmg;
                         textDPS.text = dps.ToString();
-                        Debug.Log("Attack");
                         yield return new WaitForSeconds(attackCoutdownBetween);
                     }
                     _canAttack = false;
@@ -147,10 +166,13 @@ namespace Mekaiju.AI
             _agent.enabled = false;
 
             Vector3 t_targetPos = _target.transform.position;
+            StartCoroutine(ChargeCoroutine(t_targetPos));
         }
 
         private IEnumerator ChargeCoroutine(Vector3 p_targetPosition)
         {
+            LookTarget();
+            yield return new WaitForSeconds(chargePrepTime);
             float t_elapsedTime = 0f;
             Vector3 t_startPos = transform.position;
             Vector3 t_direction = (p_targetPosition - t_startPos).normalized;
@@ -182,16 +204,7 @@ namespace Mekaiju.AI
 
 
 
-
-
-
-
-
-
-
-
-
-
+        #region Fonctions pour les LD
 
         protected new void OnDrawGizmos()
         {
@@ -218,5 +231,7 @@ namespace Mekaiju.AI
                 textDPS.text = dps.ToString();
             }
         }
+
+        #endregion
     }
 }
