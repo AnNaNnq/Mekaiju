@@ -337,6 +337,8 @@ MonoBehaviour:
   attackCoutdown: 2
   attackCoutdownBetween: 2
   attackRunSpeed: 8
+  _canAttack: 1
+  _attackActive: 0
   chargeDmg: 5
   chargeRangeMax: 25
   chargeRangeMin: 20
@@ -348,8 +350,9 @@ MonoBehaviour:
   chargePrepTime: 1
   hitsNumberDefense: 3
   durationDefense: 5
+  defenseBody: 0
   damagePercentageDefense: 75
-  defenseSpeed: 3
+  defenseSpeed: 2
   defenseCoutdown: 5
   debugAttak1: 1
   colorForFaceAttackRange: {r: 1, g: 0, b: 0, a: 1}

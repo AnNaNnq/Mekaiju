@@ -65,6 +65,8 @@ namespace Mekaiju.AI
         public int hitsNumberDefense = 3;
         [OverrideLabel("Duration (sec)")]
         public float durationDefense = 5;
+        [OverrideLabel("Body Part")]
+        [SelectFromList(nameof(bodyParts))] public int defenseBody;
         [OverrideLabel("Damage reduction percentage (%)")]
         public float damagePercentageDefense = 75;
         [OverrideLabel("Speed")]
@@ -75,6 +77,12 @@ namespace Mekaiju.AI
         private int _currentHitsDefense = 0;
         private bool _isDefense = false;
         private bool _canDefense = true;
+        #endregion
+
+        #region Gros croc
+        [Foldout("Gros Croc")]
+        [OverrideLabel("Damage")]
+        public int bigAttackDmg = 10;
         #endregion
 
         #region Debug
