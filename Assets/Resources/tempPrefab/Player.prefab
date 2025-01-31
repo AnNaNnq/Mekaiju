@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 2043552065261511318}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -188,7 +188,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &2544616303998590407
 MonoBehaviour:
@@ -208,6 +208,7 @@ MonoBehaviour:
   _dashForce: 20
   _dashDuration: 0.25
   _baseSpeed: 5
+  _isGrounded: 0
 --- !u!136 &2043552065261511318
 CapsuleCollider:
   m_ObjectHideFlags: 0
