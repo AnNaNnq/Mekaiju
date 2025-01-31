@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 18817628}
   - component: {fileID: 18817627}
   - component: {fileID: 18817626}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: sol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -620,8 +620,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1893595329}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 81a571c3bcc249e4881bdee1dcc5d3a8, type: 3}
+  m_Controller: {fileID: 9100000, guid: 81b7d68eb2a253a4785e8aea1fc02087, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -656,6 +656,7 @@ MonoBehaviour:
   _dashForce: 20
   _dashDuration: 0.25
   _baseSpeed: 5
+  _isGrounded: 0
 --- !u!136 &1893595336
 CapsuleCollider:
   m_ObjectHideFlags: 0
