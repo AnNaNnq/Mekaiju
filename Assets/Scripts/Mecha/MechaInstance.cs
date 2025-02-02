@@ -138,9 +138,12 @@ namespace Mekaiju
         /// <param name="p_part"></param>
         /// <param name="p_target"></param>
         /// <returns></returns>
-        public IEnumerator ExecuteAbility(MechaPart p_part, BasicAI p_target)
+        public IEnumerator ExecuteAbility(MechaPart p_part, BasicAI p_target, object p_opt)
         {
-            yield return _parts[p_part].Ability.Behaviour.Execute(this, p_target);
+            if (CanExecuteAbility(_parts[p_part].Ability.Behaviour.Consumption(p_opt)))
+            {
+                yield return _parts[p_part].Ability.Behaviour.Execute(this, p_target, p_opt);
+            }
         }
     }
 
