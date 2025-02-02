@@ -7,6 +7,12 @@ using UnityEngine;
 
 namespace Mekaiju
 {
+    [Serializable]
+    public class InstanceContext
+    {
+        public float LastAbilityTime = -1000f;
+    }
+
 
     /// <summary>
     /// 
@@ -42,6 +48,11 @@ namespace Mekaiju
         [SerializeField]
         private float _stamina;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public InstanceContext Context { get; private set; }
+
         private void Start()
         {
             // Desc = GameManager.Instance.PData.Mecha;
@@ -68,14 +79,19 @@ namespace Mekaiju
                 }
             );
 
-            _effects = new();
-            // _effects = new()
-            // {
-            //     Resources.LoadAll<Effect>("Effect/")[0]
-            // };
-            _health  = Desc.Stamina;
-            _stamina = Desc.Health;
+            // TODO: remove
+            t_main.SetActive(false);
 
+            // _effects = new();
+            _effects = new()
+            {
+                Resources.Load<Effect>("Mecha/Effect/Stamina")
+            };
+
+            _health  = Desc.Health;
+            _stamina = 0;
+
+            Context = new();
         }
 
         private void Update()
@@ -149,6 +165,7 @@ namespace Mekaiju
         {
             if (CanExecuteAbility(_parts[p_part].Ability.Behaviour.Consumption(p_opt)))
             {
+                Context.LastAbilityTime = Time.time;
                 yield return _parts[p_part].Ability.Behaviour.Execute(this, p_target, p_opt);
             }
         }
