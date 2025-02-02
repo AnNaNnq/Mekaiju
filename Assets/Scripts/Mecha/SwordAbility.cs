@@ -58,29 +58,32 @@ namespace Mekaiju
         /// <param name="p_self"></param>
         /// <param name="p_target"></param>
         /// <returns></returns>
-        public override IEnumerator Execute(MechaInstance p_self, BasicAI p_target)
+        public override IEnumerator Execute(MechaInstance p_self, BasicAI p_target, object p_opt)
         {
             var t_now     = Time.time; 
             var t_elapsed = t_now - _lastTriggerTime;
             if (t_elapsed >= _minTimeBetweenFire)
             {
-                if (p_self.CanExecuteAbility(_consumption))
-                {   
-                    _lastTriggerTime = t_now;
-                    // TODO: Launch animation
+                _lastTriggerTime = t_now;
+                // TODO: Launch animation
 
-                    p_self.ConsumeStamina(_consumption);
+                p_self.ConsumeStamina(_consumption);
 
-                    // Compute travel time
-                    var t_tpos = p_target.transform.position;
-                    var t_dist = Vector3.Distance(p_self.transform.position, t_tpos);
-                    if (t_dist < _reachDistance)
-                    {
-                        Debug.Log("Sword is able to apply damage!");   
-                    }
+                // Compute travel time
+                var t_tpos = p_target.transform.position;
+                var t_dist = Vector3.Distance(p_self.transform.position, t_tpos);
+                if (t_dist < _reachDistance)
+                {
+                    Debug.Log("Sword is able to apply damage!");   
                 }
+
             }
             yield return null;
+        }
+
+        public override float Consumption(object p_opt)
+        {
+            return _consumption;
         }
     }
 
