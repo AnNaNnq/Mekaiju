@@ -13,8 +13,6 @@ namespace Mekaiju
     /// </summary>
     public class MechaInstance : MonoBehaviour
     {
-        public static int MaxStamina = 100;
-
         /// <summary>
         /// 
         /// </summary>
@@ -42,7 +40,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private int _stamina;
+        private float _stamina;
 
         private void Start()
         {
@@ -75,9 +73,9 @@ namespace Mekaiju
             // {
             //     Resources.LoadAll<Effect>("Effect/")[0]
             // };
+            _health  = Desc.Stamina;
+            _stamina = Desc.Health;
 
-            _health  = 100;
-            _stamina = 0;
         }
 
         private void Update()
@@ -117,18 +115,27 @@ namespace Mekaiju
         /// </summary>
         /// <param name="p_consumption"></param>
         /// <returns></returns>
-        public bool CanExecuteAbility(int p_consumption)
+        public bool CanExecuteAbility(float p_consumption)
         {
-            return _stamina + p_consumption <= MaxStamina;
+            return _stamina + p_consumption <= Desc.Stamina;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="amount"></param>
-        public void ConsumeStamina(int amount)
+        public void ConsumeStamina(float p_amount)
         {
-            _stamina = Math.Min(MaxStamina, _stamina + amount);
+            _stamina = Math.Min(Desc.Stamina, _stamina + p_amount);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="amount"></param>
+        public void RestoreStamina(float p_amount)
+        {
+            _stamina = Math.Max(0, _stamina - p_amount);
         }
 
         /// <summary>

@@ -14,6 +14,18 @@ namespace Mekaiju
         /// 
         /// </summary>
         [field: SerializeField]
+        public float Health { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [field: SerializeField]
+        public float Stamina { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [field: SerializeField]
         public GameObject Prefab { get; private set; }
 
         /// <summary>
