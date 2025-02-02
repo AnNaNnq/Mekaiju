@@ -166,7 +166,7 @@ namespace Mekaiju
             if (CanExecuteAbility(_parts[p_part].Ability.Behaviour.Consumption(p_opt)))
             {
                 Context.LastAbilityTime = Time.time;
-                yield return _parts[p_part].Ability.Behaviour.Execute(this, p_target, p_opt);
+                yield return _parts[p_part].Ability.Behaviour.Trigger(this, p_target, p_opt);
             }
         }
     }
