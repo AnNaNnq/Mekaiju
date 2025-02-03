@@ -83,6 +83,8 @@ namespace Mekaiju.AI
         [Foldout("Gros Croc")]
         [OverrideLabel("Damage")]
         public int bigAttackDmg = 10;
+        [OverrideLabel("Range")]
+        public float bigAttackRange = 10;
         #endregion
 
         #region Debug
@@ -90,11 +92,14 @@ namespace Mekaiju.AI
         [OverrideLabel("Show Gizmo For Face Attack")]
         public bool debugAttak1 = false;
         [ConditionalField(nameof(debugAttak1))] public Color colorForFaceAttackRange;
-        [OverrideLabel("Show Gizmo For Range Attack")]
+        [OverrideLabel("Show Gizmo For Charge Attack")]
         public bool debugAttak2 = false;
         [ConditionalField(nameof(debugAttak2))] public Color colorForChargeMaxRange = Color.blue;
         [ConditionalField(nameof(debugAttak2))] public Color colorForChargeMinRange = Color.yellow;
         public TextMeshProUGUI textDPS;
+        [OverrideLabel("Show Gizmo For Crocs")]
+        public bool debugCrocs = false;
+        [ConditionalField(nameof(debugCrocs))] public Color colorForCrocsMaxRange = Color.green;
         #endregion
 
         private int dps = 0;
@@ -268,6 +273,11 @@ namespace Mekaiju.AI
                 Gizmos.DrawWireSphere(transform.position, chargeRangeMax);
                 Gizmos.color = colorForChargeMinRange;
                 Gizmos.DrawWireSphere(transform.position, chargeRangeMin);
+            }
+            if (debugCrocs)
+            {
+                Gizmos.color = colorForCrocsMaxRange;
+                Gizmos.DrawWireSphere(transform.position, bigAttackRange);
             }
         }
 
