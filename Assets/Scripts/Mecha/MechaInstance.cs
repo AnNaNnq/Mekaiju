@@ -89,7 +89,7 @@ namespace Mekaiju
             };
 
             _health  = Desc.Health;
-            _stamina = 0;
+            _stamina = Desc.Stamina;
 
             Context = new();
         }
@@ -140,7 +140,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         /// <param name="amount"></param>
-        public void ConsumeStamina(float p_amount)
+        public void RestoreStamina(float p_amount)
         {
             _stamina = Math.Min(Desc.Stamina, _stamina + p_amount);
         }
@@ -149,7 +149,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         /// <param name="amount"></param>
-        public void RestoreStamina(float p_amount)
+        public void ConsumeStamina(float p_amount)
         {
             _stamina = Math.Max(0, _stamina - p_amount);
         }
