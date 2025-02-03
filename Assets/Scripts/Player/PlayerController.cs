@@ -115,8 +115,9 @@ public class PlayerController : MonoBehaviour
     }
     private void OnJump(InputAction.CallbackContext p_context)
     {
-        if (_isGrounded)
+        if (_isGrounded && _instance.CanExecuteAbility(10f))
         {
+            _instance.ConsumeStamina(10);
             _isGrounded = false;
             _animator.SetTrigger("Jump");
             _rigidbody.AddForce(Vector3.up  * _jumpForce, ForceMode.Impulse);
@@ -133,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext p_context)
     {
-        if (!_isDashing && !_isProtected)
+        if (!_isDashing && !_isProtected && _instance.CanExecuteAbility(33f))
         {
             // Determine dash direction based on movement input
             Vector2 moveInput = _moveAction.ReadValue<Vector2>();
@@ -148,6 +149,7 @@ public class PlayerController : MonoBehaviour
                 //_dashDirection = transform.forward;
             }
 
+            _instance.ConsumeStamina(33);
             StartCoroutine(DashCoroutine());
         }
     }

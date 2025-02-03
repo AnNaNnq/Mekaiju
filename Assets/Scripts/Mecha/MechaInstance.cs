@@ -148,7 +148,7 @@ namespace Mekaiju
         /// <returns></returns>
         public bool CanExecuteAbility(float p_consumption)
         {
-            return _stamina + p_consumption <= Desc.Stamina;
+            return _stamina - p_consumption > 0;
         }
 
         /// <summary>
