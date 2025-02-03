@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AimSystem : MonoBehaviour
@@ -21,7 +22,7 @@ public class AimSystem : MonoBehaviour
 
     void Update()
     {
-        AimAtTarget();
+        DetectTargets();
 
         // Verrouiller/Déverrouiller le Lock-On (Touche L)
         if (Input.GetKeyDown(KeyCode.L))
@@ -35,35 +36,27 @@ public class AimSystem : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.J)) ChangeTarget(-1);
             if (Input.GetKeyDown(KeyCode.K)) ChangeTarget(1);
         }
-
-        // Suivre la cible verrouillée
-        if (isLockedOn && lockedTarget != null)
-        {
-            FollowTarget();
-        }
     }
 
-    // 🔵 Détection de la cible sous le curseur
-    void AimAtTarget()
+    //Détection des cibles proches
+    void DetectTargets()
     {
-        Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        Collider[] hits = Physics.OverlapSphere(transform.position, lockOnRange, aimLayer);
+        potentialTargets.Clear();
 
-        if (Physics.Raycast(ray, out hit, aimRange, aimLayer))
+        foreach (Collider hit in hits)
         {
-            target = hit.transform; // Assigne la cible visée
-            if (!potentialTargets.Contains(target))
-            {
-                potentialTargets.Add(target);
-            }
+            potentialTargets.Add(hit.transform);
         }
-        else
-        {
-            target = null;
-        }
+
+        // Trier les cibles par distance
+        potentialTargets.Sort((a, b) =>
+            Vector3.Distance(transform.position, a.position)
+            .CompareTo(Vector3.Distance(transform.position, b.position))
+        );
     }
 
-    // 🔴 Active/Désactive le Lock-On
+    //Active/Désactive le Lock-On
     void ToggleLockOn()
     {
         if (!isLockedOn && potentialTargets.Count > 0)
@@ -72,16 +65,18 @@ public class AimSystem : MonoBehaviour
             targetIndex = 0;
             lockedTarget = potentialTargets[targetIndex];
             Debug.Log("Lock-On activé sur : " + lockedTarget.name);
+            StartCoroutine(SmoothFollowTarget());
         }
         else
         {
             isLockedOn = false;
             lockedTarget = null;
             Debug.Log("Lock-On désactivé");
+            StopAllCoroutines();
         }
     }
 
-    // 🔄 Change la cible verrouillée
+    //Change la cible verrouillée
     void ChangeTarget(int direction)
     {
         if (potentialTargets.Count == 0) return;
@@ -94,20 +89,22 @@ public class AimSystem : MonoBehaviour
         Debug.Log("Nouvelle cible verrouillée : " + lockedTarget.name);
     }
 
-    // 🎯 Suivre la cible verrouillée
-    void FollowTarget()
+    //Coroutine pour suivre la cible verrouillée
+    IEnumerator SmoothFollowTarget()
     {
-        if (lockedTarget != null)
+        while (isLockedOn && lockedTarget != null)
         {
             Vector3 direction = lockedTarget.position - transform.position;
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lockOnRotationSpeed);
+            yield return null;
         }
     }
 
-    // 🎨 Gizmos pour voir les cibles en mode éditeur
+    //Gizmos pour voir les cibles en mode éditeur
     void OnDrawGizmos()
     {
+#if UNITY_EDITOR
         if (lockedTarget != null)
         {
             Gizmos.color = Color.red;
@@ -119,5 +116,6 @@ public class AimSystem : MonoBehaviour
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(t.position, 1f);
         }
+#endif
     }
 }
