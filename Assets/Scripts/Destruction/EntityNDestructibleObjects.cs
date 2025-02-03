@@ -38,7 +38,19 @@ public class EntityNDestructibleObjects : MonoBehaviour
             Instantiate(smokePrefab, target.transform.position, Quaternion.identity);
             print("effet de particules");
         }
-        Destroy(target);
+
+        if (target.TryGetComponent<destructible>(out destructible myScript))
+        {
+            if (myScript.GetType().GetMethod("getDestruct") != null)
+            {
+                Debug.Log("Méthode trouvée !");
+                myScript.getDestruct();
+            }
+        }
+        else
+        {
+            Destroy(target);
+        }
     }
 
     private void CreateImpact(Collider wall)
