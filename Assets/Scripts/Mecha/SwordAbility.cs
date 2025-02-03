@@ -74,7 +74,7 @@ namespace Mekaiju
                 var t_dist = Vector3.Distance(p_self.transform.position, t_tpos);
                 if (t_dist < _reachDistance)
                 {
-                    Debug.Log("Sword is able to apply damage!");   
+                    Debug.Log($"Sword damage : {_damage}");   
                 }
 
             }
