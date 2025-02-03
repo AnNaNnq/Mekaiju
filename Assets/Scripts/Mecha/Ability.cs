@@ -39,7 +39,7 @@ namespace Mekaiju
 
         public void OnValidate()
         {
-            if (Prefab == null)
+            if (!Prefab)
                 Debug.LogWarning("You must provide a prefab for each mecha ability.");
 
             if (Behaviour == null)
