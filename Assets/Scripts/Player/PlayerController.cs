@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public Transform camera;
 
+    private Animator _animator;
+
     private MechaPlayerActions _playerActions;
 
     private InputAction _moveAction;
@@ -36,6 +38,7 @@ public class PlayerController : MonoBehaviour
     {
         _playerActions = new MechaPlayerActions();
         _rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
 
         _speed = _baseSpeed;
 
@@ -82,21 +85,25 @@ public class PlayerController : MonoBehaviour
     private void OnSwordAttack(InputAction.CallbackContext p_context)
     {
         Debug.Log("SwordAttack");
+        _animator.SetTrigger("swordAttack");
     }
     private void OnGunAttack(InputAction.CallbackContext p_context)
     {
         Debug.Log("GunAttack");
+        _animator.SetTrigger("laserAttack");
     }
     private void OnShield(InputAction.CallbackContext p_context)
     {
         float t_shieldSpeedModifier = 0.5f;
 
+        _animator.SetTrigger("shield");
         _isProtected = true;
         _speed = _baseSpeed * t_shieldSpeedModifier;
     }
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
         _isProtected = false;
+        _animator.SetTrigger("unshield");
         _speed = _baseSpeed;
     }
     private void OnJump(InputAction.CallbackContext p_context)
@@ -104,6 +111,7 @@ public class PlayerController : MonoBehaviour
         if (_isGrounded)
         {
             _isGrounded = false;
+            _animator.SetTrigger("Jump");
             _rigidbody.AddForce(Vector3.up  * _jumpForce, ForceMode.Impulse);
         }
     }
@@ -176,6 +184,7 @@ public class PlayerController : MonoBehaviour
             t_vel.x = _speed * t_moveDir.x;
             t_vel.z = _speed * t_moveDir.y;
             _rigidbody.linearVelocity = t_vel;
+            _animator.SetFloat("WalkingSpeed",Mathf.Abs(t_vel.x)+Mathf.Abs(t_vel.z));
         }
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>();
