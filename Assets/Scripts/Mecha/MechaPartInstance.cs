@@ -13,7 +13,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private MechaPartConfig _config;
+        private MechaPartDesc _desc;
 
         /// <summary>
         /// 
@@ -39,12 +39,15 @@ namespace Mekaiju
         //     _isDefautlAbility = true;
         // }
 
-        public void Initialize(MechaPartConfig p_config)
+        public void Initialize(MechaPartDesc p_config)
         {
-            _config  = p_config;
-            _health = p_config.Base.Health;
-            Ability = p_config.Base.DefaultAbility;
+            _desc   = p_config;
+            _health = p_config.Health;
+            Ability = p_config.DefaultAbility;
             _isDefautlAbility = true;
+
+            _desc.DefaultAbility.Behaviour?.Initialize();
+            _desc.SpecialAbility?.Behaviour?.Initialize();
         }
 
         /// <summary>
@@ -52,14 +55,14 @@ namespace Mekaiju
         /// </summary>
         public void SwapAbility()
         {
-            if (_isDefautlAbility)
+            if (_isDefautlAbility && _desc.HasSpecial)
             {
-                Ability = _config.Special;
+                Ability = _desc.SpecialAbility;
                 _isDefautlAbility = false;
             }
             else
             {
-                Ability = _config.Base.DefaultAbility;
+                Ability = _desc.DefaultAbility;
                 _isDefautlAbility = true;
             }
         }
