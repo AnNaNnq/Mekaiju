@@ -34,7 +34,8 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private List<Effect> _effects;
+        private List<EffectState> _effects;
+        public  List<EffectState> Effetcs => _effects;
 
         /// <summary>
         /// 
@@ -85,7 +86,8 @@ namespace Mekaiju
             // _effects = new();
             _effects = new()
             {
-                Resources.Load<Effect>("Mecha/Effect/Stamina")
+                new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
+                new(Resources.Load<Effect>("Mecha/Effect/Bleeding"))
             };
 
             _health  = Desc.Health;
@@ -96,7 +98,20 @@ namespace Mekaiju
 
         private void Update()
         {
-            _effects.ForEach(effect => effect.Behaviour.Tick(this));
+            List<int> t_toRemove = new();
+            for (int i = 0; i < _effects.Count; i++)
+            {
+                var t_effect = _effects[i];
+                t_effect.Tick(this);
+                if (t_effect.ToRemove)
+                    t_toRemove.Add(i);
+            }
+            
+            for (int i = 0; i < t_toRemove.Count; i++)
+            {
+                _effects.RemoveAt(t_toRemove[i]);
+            }
+            
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace Mekaiju
     public class BleedingEffect : IEffectBehaviour
     {
         [SerializeField]
-        private int Damage;
+        private int _damage;
 
         /// <summary>
         /// 
@@ -19,7 +19,7 @@ namespace Mekaiju
         /// <param name="self"></param>
         public override void Tick(MechaInstance self)
         {
-            self.TakeDamage(Damage * Time.deltaTime);
+            self.TakeDamage(_damage * Time.deltaTime);
         }
     }
 
