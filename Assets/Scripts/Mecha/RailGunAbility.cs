@@ -110,10 +110,7 @@ namespace Mekaiju
                     // Apply damage
                     Debug.Log("RailGun projectile reach its target!");
                 }
-                else
-                {
-                    GameObject.Destroy(t_go);
-                }
+                GameObject.Destroy(t_go);
             }
         }
 
