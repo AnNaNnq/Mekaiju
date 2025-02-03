@@ -1,4 +1,6 @@
 using System.Collections;
+using Mekaiju;
+using Mekaiju.AI;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -31,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private bool _isProtected;
     private Vector3 _dashDirection;
 
+    private MechaInstance _instance;
 
     private LayerMask _groundLayerMask;
 
@@ -43,6 +46,8 @@ public class PlayerController : MonoBehaviour
         _speed = _baseSpeed;
 
         _groundLayerMask = LayerMask.GetMask("Walkable");
+
+        _instance = GetComponent<MechaInstance>();
     }
 
     private void OnEnable()
@@ -85,11 +90,13 @@ public class PlayerController : MonoBehaviour
     private void OnSwordAttack(InputAction.CallbackContext p_context)
     {
         Debug.Log("SwordAttack");
+        StartCoroutine(_instance.ExecuteAbility(MechaPart.LeftArm, GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
         _animator.SetTrigger("swordAttack");
     }
     private void OnGunAttack(InputAction.CallbackContext p_context)
     {
         Debug.Log("GunAttack");
+        StartCoroutine(_instance.ExecuteAbility(MechaPart.RightArm, GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
         _animator.SetTrigger("laserAttack");
     }
     private void OnShield(InputAction.CallbackContext p_context)
