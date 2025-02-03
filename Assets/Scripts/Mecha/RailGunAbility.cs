@@ -93,7 +93,6 @@ namespace Mekaiju
                         if (collision.gameObject.name == "Kaiju")
                         {
                             t_hasCollide = true;
-                            GameObject.Destroy(t_wb);
                         }
                     }
                 );
