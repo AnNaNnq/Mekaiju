@@ -148,16 +148,16 @@ namespace Mekaiju.AI
             return false;
         }
 
-        public void BackOff(Vector3 p_pos)
+        public void BackOff(Vector3 p_pos, float p_stopping = 0.2f)
         {
-            MoveTo(p_pos);
+            MoveTo(p_pos, p_stopping);
             LookTarget();
         }
 
-        public void MoveTo(Vector3 p_pos)
+        public void MoveTo(Vector3 p_pos, float p_stopping = 0.2f)
         {
             _agent.destination = p_pos;
-            _agent.stoppingDistance = 0.2f;
+            _agent.stoppingDistance = p_stopping;
         }
 
         public void LookTarget()
@@ -171,6 +171,13 @@ namespace Mekaiju.AI
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _agent.angularSpeed * Time.deltaTime);
             }
+        }
+
+        public Vector3 GetPositionBehind(float distance)
+        {
+            // On prend la direction vers la target et on l'inverse
+            Vector3 direction = (transform.position - _target.transform.position).normalized;
+            return transform.position + direction * distance;
         }
 
         protected void OnDrawGizmos()
