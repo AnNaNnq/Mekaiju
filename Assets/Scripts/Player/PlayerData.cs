@@ -11,11 +11,11 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public MechaConfig Config;
+        public MechaDesc Mecha;
 
         public PlayerData()
         {
-            Config = new(Resources.LoadAll<Mecha>("")[0]);
+            Mecha = Resources.LoadAll<MechaDesc>("")[0];
         }   
     }
 
