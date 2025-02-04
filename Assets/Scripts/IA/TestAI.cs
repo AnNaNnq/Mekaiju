@@ -1,8 +1,10 @@
 using Mekaiju.Attribute;
+using Mekaiju.Attributes;
 using MyBox;
 using System;
 using System.Collections;
 using TMPro;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -13,7 +15,7 @@ namespace Mekaiju.AI
         #region Attaque de face
         [Foldout("Attaque de face")]
         [OverrideLabel("Damage")]
-        public int attackmg = 5;
+        public int attackDmg = 5;
         [PositiveValueOnly]
         [OverrideLabel("Range")]
         public float attackRange = 5;
@@ -27,9 +29,12 @@ namespace Mekaiju.AI
         public float attackCoutdownBetween = 2;
         [OverrideLabel("Run Speed")]
         public float attackRunSpeed = 8;
-        [SerializeField]
-        private bool _canAttack = true;
-        [SerializeField]
+        [OverrideLabel("Attack zone center")]
+        public Vector3 attackZoneCenter;
+        [OverrideLabel("Attack zone size")]
+        public Vector3 attackZoneSize;
+
+        private bool _canBaseAttack = true;
         private bool _attackActive = false;
         #endregion
 
@@ -53,6 +58,10 @@ namespace Mekaiju.AI
         public float stopChargeDistance = 10;
         [OverrideLabel("Time Prep Before Charge (sec)")]
         public float chargePrepTime = 1;
+        [OverrideLabel("Attak zone center")]
+        public Vector3 chargeZoneCenter;
+        [OverrideLabel("Attak zone size")]
+        public Vector3 chargeZoneSize;
 
         private bool _isCharging = false;
         private bool _canCharge = true;
@@ -71,7 +80,7 @@ namespace Mekaiju.AI
         public float damagePercentageDefense = 75;
         [OverrideLabel("Speed")]
         public float defenseSpeed = 2;
-        [OverrideLabel("Countdown")]
+        [OverrideLabel("Countdown (sec)")]
         public float defenseCoutdown = 1;
 
         private int _currentHitsDefense = 0;
@@ -85,6 +94,20 @@ namespace Mekaiju.AI
         public int bigAttackDmg = 10;
         [OverrideLabel("Range")]
         public float bigAttackRange = 10;
+        [OverrideLabel("Body Part")]
+        [SelectFromList(nameof(bodyParts))] public int bigBody;
+        [SOSelector]
+        [OverrideLabel("Effect")]
+        public Effect bigEffect;
+        [OverrideLabel("Countdown (sec)")]
+        public float bigCoutdown = 1;
+        [OverrideLabel("Attack zone center")]
+        public Vector3 bigZoneCenter;
+        [OverrideLabel("Attack zone size")]
+        public Vector3 bigZoneSize;
+
+        private bool _isBigAttack = false;
+        private bool _canBigAttack = true;
         #endregion
 
         #region Debug
@@ -96,16 +119,11 @@ namespace Mekaiju.AI
         public bool debugAttak2 = false;
         [ConditionalField(nameof(debugAttak2))] public Color colorForChargeMaxRange = Color.blue;
         [ConditionalField(nameof(debugAttak2))] public Color colorForChargeMinRange = Color.yellow;
-        public TextMeshProUGUI textDPS;
         [OverrideLabel("Show Gizmo For Crocs")]
         public bool debugCrocs = false;
         [ConditionalField(nameof(debugCrocs))] public Color colorForCrocsMaxRange = Color.green;
         #endregion
 
-        private int dps = 0;
-
-
-        //public int vie = 100;
 
         public override void Agro()
         {
@@ -121,8 +139,6 @@ namespace Mekaiju.AI
         private new void Start()
         {
             base.Start();
-            StartCoroutine(ShowDPS());
-            textDPS.text = dps.ToString();
         }
 
 
@@ -139,7 +155,15 @@ namespace Mekaiju.AI
                 _agent.speed = defenseSpeed;
                 StartCoroutine(Defense());
             }
-            //Run for face attack
+            //Gros croc
+            else if (t_dist < bigAttackRange && _canBigAttack && !_isBigAttack)
+            {
+                _agent.enabled = true;
+                _agent.isStopped = false;
+                _agent.speed = normalSpeed;
+                StartCoroutine(BigAttack());
+            }
+            //Face attack
             else if (t_dist < chargeRangeMin && t_dist > attackRange)
             {
                 _agent.enabled = true;
@@ -192,17 +216,39 @@ namespace Mekaiju.AI
             _attackActive = true;
             for (int i = 0; i < attackCount; i++)
             {
-                dps += attackmg;
-                textDPS.text = dps.ToString();
+                Attack(attackDmg, attackZoneCenter, attackZoneSize);
                 yield return new WaitForSeconds(attackCoutdownBetween);
             }
-            _canAttack = false;
+            _canBaseAttack = false;
             yield return new WaitForSeconds(attackCoutdown);
-            _canAttack = true;
+            _canBaseAttack = true;
             _attackActive = false;
 
             _agent.enabled = true;
             _agent.isStopped = false;
+        }
+
+        public IEnumerator BigAttack()
+        {
+            _canBigAttack = false;
+            float t_dist = Vector3.Distance(transform.position, _target.transform.position);
+
+            while (t_dist < bigAttackRange)
+            {
+                _isBigAttack = true;
+                LookTarget();
+                Attack(bigAttackDmg, bigZoneCenter, bigZoneSize, bigEffect);
+                _isBigAttack = false;
+                float i = 0;
+                while (i < bigCoutdown)
+                {
+                    LookTarget();
+                    yield return new WaitForSeconds(0.01f);
+                    i += 0.01f;
+                }
+                t_dist = Vector3.Distance(transform.position, _target.transform.position);
+            }
+            _canBigAttack = true;
         }
 
         public void StartCharge()
@@ -242,7 +288,7 @@ namespace Mekaiju.AI
             }
 
             transform.position = t_targetPos;
-
+            Attack(chargeDmg, chargeZoneCenter, chargeZoneSize);
             _agent.enabled = true;
             _agent.isStopped = false;
             _isCharging = false;
@@ -267,30 +313,25 @@ namespace Mekaiju.AI
             {
                 Gizmos.color = colorForFaceAttackRange;
                 Gizmos.DrawWireSphere(transform.position, attackRange);
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireCube(transform.position + transform.rotation * attackZoneCenter, attackZoneSize);
             }
             if (debugAttak2) {
                 Gizmos.color = colorForChargeMaxRange;
                 Gizmos.DrawWireSphere(transform.position, chargeRangeMax);
                 Gizmos.color = colorForChargeMinRange;
                 Gizmos.DrawWireSphere(transform.position, chargeRangeMin);
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireCube(transform.position + transform.rotation * chargeZoneCenter, chargeZoneSize);
             }
             if (debugCrocs)
             {
                 Gizmos.color = colorForCrocsMaxRange;
                 Gizmos.DrawWireSphere(transform.position, bigAttackRange);
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireCube(transform.position + transform.rotation * bigZoneCenter, bigZoneSize);
             }
         }
-
-        IEnumerator ShowDPS()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(1);
-                dps = 0;
-                textDPS.text = dps.ToString();
-            }
-        }
-
         #endregion
     }
 }
