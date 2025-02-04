@@ -1,12 +1,7 @@
 using Mekaiju.Attribute;
-using Mekaiju.Attributes;
 using MyBox;
-using System;
 using System.Collections;
-using TMPro;
-using TreeEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Mekaiju.AI
 {
