@@ -773,6 +773,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 198146580}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!2083052967 &250065536 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 2035803322339453288, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
+  m_PrefabInstance: {fileID: 6722456186625466576}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &328167361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1874,6 +1879,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 535734764}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!2083052967 &586508765 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 188395549284549644, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
+  m_PrefabInstance: {fileID: 6722456186625466576}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &617425536
 GameObject:
   m_ObjectHideFlags: 0
@@ -5410,6 +5420,22 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 473784787}
+    - target: {fileID: 2544616303998590407, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
+      propertyPath: shieldVFX
+      value: 
+      objectReference: {fileID: 586508765}
+    - target: {fileID: 2544616303998590407, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
+      propertyPath: _baseSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2544616303998590407, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
+      propertyPath: _dashForce
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2544616303998590407, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
+      propertyPath: shieldBreakVFX
+      value: 
+      objectReference: {fileID: 250065536}
     - target: {fileID: 5292195136981956654, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.01
