@@ -1,52 +1,56 @@
 using UnityEngine;
 
-public class MovementMecha : MonoBehaviour
+
+namespace Mekaiju.MechaControl
 {
-    public float moveSpeed = 5f; // Vitesse de déplacement
-    public float gravity = -9.81f; // Gravité
-    public float jumpHeight = 2f; // Hauteur de saut
-
-    private CharacterController controller;
-    private Vector3 velocity;
-    private bool isGrounded;
-
-    public Transform groundCheck; // Un Empty GameObject positionné sous le joueur
-    public float groundDistance = 0.4f; // Rayon pour détecter le sol
-    public LayerMask groundMask; // Mask pour identifier les layers du sol
-
-    void Start()
+    public class MovementMecha : MonoBehaviour
     {
-        controller = GetComponent<CharacterController>();
-    }
+        public float MoveSpeed = 5f; // Vitesse de déplacement
+        public float Gravity = -9.81f; // Gravité
+        public float JumpHeight = 2f; // Hauteur de saut
 
-    void Update()
-    {
-        // Vérifier si le joueur est au sol
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        private CharacterController _controller;
+        private Vector3 _velocity;
+        private bool _isGrounded;
 
-        if (isGrounded && velocity.y < 0)
+        public Transform GroundCheck; // Un Empty GameObject positionné sous le joueur
+        public float GroundDistance = 0.4f; // Rayon pour détecter le sol
+        public LayerMask GroundMask; // Mask pour identifier les layers du sol
+
+        void Start()
         {
-            velocity.y = -2f; // Reste légèrement au sol pour éviter les problèmes de collision
+            _controller = GetComponent<CharacterController>();
         }
 
-        // Récupérer les inputs (horizontal et vertical)
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        // Calculer la direction de déplacement
-        Vector3 move = transform.right * horizontal + transform.forward * vertical;
-
-        // Appliquer le déplacement
-        controller.Move(move * moveSpeed * Time.deltaTime);
-
-        // Saut
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        void Update()
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
+            // Vérifier si le joueur est au sol
+            _isGrounded = Physics.CheckSphere(GroundCheck.position, GroundDistance, GroundMask);
 
-        // Appliquer la gravité
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+            if (_isGrounded && _velocity.y < 0)
+            {
+                _velocity.y = -2f; // Reste légèrement au sol pour éviter les problèmes de collision
+            }
+
+            // Récupérer les inputs (horizontal et vertical)
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+
+            // Calculer la direction de déplacement
+            Vector3 move = transform.right * horizontal + transform.forward * vertical;
+
+            // Appliquer le déplacement
+            _controller.Move(move * MoveSpeed * Time.deltaTime);
+
+            // Saut
+            if (Input.GetButtonDown("Jump") && _isGrounded)
+            {
+                _velocity.y = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+            }
+
+            // Appliquer la gravité
+            _velocity.y += Gravity * Time.deltaTime;
+            _controller.Move(_velocity * Time.deltaTime);
+        }
     }
 }
