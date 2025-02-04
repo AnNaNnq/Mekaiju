@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Mekaiju
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Serializable]
     public class InstanceContext
     {
@@ -34,8 +37,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private List<EffectState> _effects;
-        public  List<EffectState> Effetcs => _effects;
+        private List<StatefullEffect> _effects;
 
         /// <summary>
         /// 
@@ -87,7 +89,7 @@ namespace Mekaiju
             _effects = new()
             {
                 new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
-                new(Resources.Load<Effect>("Mecha/Effect/Bleeding"))
+                new(Resources.Load<Effect>("Mecha/Effect/Bleeding"), 10f)
             };
 
             _health  = Desc.Health;
@@ -97,21 +99,9 @@ namespace Mekaiju
         }
 
         private void Update()
-        {
-            List<int> t_toRemove = new();
-            for (int i = 0; i < _effects.Count; i++)
-            {
-                var t_effect = _effects[i];
-                t_effect.Tick(this);
-                if (t_effect.ToRemove)
-                    t_toRemove.Add(i);
-            }
-            
-            for (int i = 0; i < t_toRemove.Count; i++)
-            {
-                _effects.RemoveAt(t_toRemove[i]);
-            }
-            
+        {            
+            _effects.ForEach  (effect => effect.Tick(this));
+            _effects.RemoveAll(effect => effect.State == EffectState.Expired);
         }
 
         /// <summary>
@@ -135,10 +125,10 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="p_part"></param>
-        public void SwapAbility(MechaPart p_part)
+        /// <param name="p_effect"></param>
+        public void AddEffect(Effect p_effect)
         {
-            _parts[p_part].SwapAbility();
+            _effects.Add(new(p_effect));
         }
 
         /// <summary>
