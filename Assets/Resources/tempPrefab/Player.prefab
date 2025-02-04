@@ -215,6 +215,11 @@ MonoBehaviour:
   _dashDuration: 0.25
   _baseSpeed: 5
   _isGrounded: 0
+  _isDashing: 0
+  _isProtected: 0
+  _shieldCost: 2
+  _jumpCost: 10
+  _dashCost: 33
 --- !u!136 &2043552065261511318
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -901,7 +906,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0.048534393, y: 4.878833, z: 1.1827993}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6876653, y: 0.6876653, z: 0.6876653}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5292195136981956654}
@@ -913,7 +918,7 @@ VisualEffect:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5117983577156292043}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Asset: {fileID: 8926484042661614526, guid: c2db68502ca7cfc4880bc18fc04b7b60, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
@@ -952,7 +957,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5117983577156292043}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
