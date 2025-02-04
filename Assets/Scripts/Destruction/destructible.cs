@@ -1,42 +1,46 @@
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class destructible : MonoBehaviour
-{
-    public GameObject newMeshPrefab; // Prefab de la structure endommagée
 
-    public void getDestruct()
+namespace Mekaiju.DestructionStructures { 
+    public class Destructible : MonoBehaviour
     {
-        ChangeMesh(this.gameObject, newMeshPrefab);
-    }
+        public GameObject newMeshPrefab; // Prefab de la structure endommagée
 
-    public void ChangeMesh(GameObject target, GameObject prefab)
-    {
-        if (target == null || prefab == null)
+        public void getDestruct()
         {
-            Debug.LogError("Target or Prefab is null!");
-            return;
+            _ChangeMesh(this.gameObject, newMeshPrefab);
         }
 
-        MeshFilter targetMeshFilter = target.GetComponent<MeshFilter>();
-        MeshRenderer targetMeshRenderer = target.GetComponent<MeshRenderer>();
-
-        MeshFilter prefabMeshFilter = prefab.GetComponent<MeshFilter>();
-        MeshRenderer prefabMeshRenderer = prefab.GetComponent<MeshRenderer>();
-
-        if (targetMeshFilter == null || prefabMeshFilter == null)
+        private void _ChangeMesh(GameObject p_target, GameObject p_prefab)
         {
-            Debug.LogError("MeshFilter missing on target or prefab!");
-            return;
-        }
+            if (p_target == null || p_prefab == null)
+            {
+                // évite les erreurs s'il n'y a pas de Prefab 
+                Debug.LogError("Target or Prefab is null!");
+                return;
+            }
 
-        // Remplace le mesh
-        targetMeshFilter.mesh = prefabMeshFilter.sharedMesh;
+            MeshFilter t_targetMeshFilter = p_target.GetComponent<MeshFilter>();
+            MeshRenderer t_targetMeshRenderer = p_target.GetComponent<MeshRenderer>();
 
-        // Remplace le renderer si nécessaire
-        if (targetMeshRenderer != null && prefabMeshRenderer != null)
-        {
-            targetMeshRenderer.sharedMaterials = prefabMeshRenderer.sharedMaterials;
+            MeshFilter t_prefabMeshFilter = p_prefab.GetComponent<MeshFilter>();
+            MeshRenderer t_prefabMeshRenderer = p_prefab.GetComponent<MeshRenderer>();
+
+            if (t_targetMeshFilter == null || t_prefabMeshFilter == null)
+            {
+                Debug.LogError("MeshFilter missing on target or prefab!");
+                return;
+            }
+
+            // Remplace le mesh
+            t_targetMeshFilter.mesh = t_prefabMeshFilter.sharedMesh;
+
+            // Remplace le renderer si nécessaire
+            if (t_targetMeshRenderer != null && t_prefabMeshRenderer != null)
+            {
+                t_targetMeshRenderer.sharedMaterials = t_prefabMeshRenderer.sharedMaterials;
+            }
         }
     }
 }

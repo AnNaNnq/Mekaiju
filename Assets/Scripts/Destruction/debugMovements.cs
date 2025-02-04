@@ -1,22 +1,25 @@
 using UnityEngine;
 
-public class debugMovements : MonoBehaviour
-{
-    public float speed = 5f; // Vitesse de déplacement
 
-    void Update()
+namespace Mekaiju.DestructionStructuresDebug { 
+    public class debugMovements : MonoBehaviour
     {
-        float move = 0f;
+        public float speed = 5f; // Vitesse de déplacement
 
-        if (Input.GetKey(KeyCode.A))
+        void Update()
         {
-            move = -speed * Time.deltaTime;
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            move = speed * Time.deltaTime;
-        }
+            float move = 0f;
 
-        transform.Translate(0, 0, move);
+            if (Input.GetKey(KeyCode.A))
+            {
+                move = -speed * Time.deltaTime;
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                move = speed * Time.deltaTime;
+            }
+
+            transform.Translate(0, 0, move);
+        }
     }
 }
