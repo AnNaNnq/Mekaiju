@@ -1,12 +1,9 @@
 using Mekaiju.Attribute;
 using MyBox;
 using System.Collections;
-using System.Net;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.GraphicsBuffer;
 
 namespace Mekaiju.AI
 {
@@ -48,7 +45,7 @@ namespace Mekaiju.AI
         public TextMeshProUGUI textDPS;
 
 
-        private int dps = 0;
+        private int _dps = 0;
 
         protected void Start()
         {
@@ -56,7 +53,7 @@ namespace Mekaiju.AI
             states = CombatStatesKaiju.Normal;
             _target = GameObject.FindGameObjectWithTag(targetTag);
             StartCoroutine(ShowDPS());
-            textDPS.text = dps.ToString();
+            textDPS.text = _dps.ToString();
         }
 
         protected void Update()
@@ -170,25 +167,25 @@ namespace Mekaiju.AI
 
         public void LookTarget()
         {
-            Vector3 direction = _target.transform.position - transform.position;
-            direction.y = 0; // On ignore la composante Y pour éviter l'inclinaison
+            Vector3 t_direction = _target.transform.position - transform.position;
+            t_direction.y = 0; // On ignore la composante Y pour éviter l'inclinaison
 
             // Vérifier que la direction n'est pas nulle pour éviter des erreurs
-            if (direction != Vector3.zero)
+            if (t_direction != Vector3.zero)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _agent.angularSpeed * Time.deltaTime);
+                Quaternion t_targetRotation = Quaternion.LookRotation(t_direction);
+                transform.rotation = Quaternion.Lerp(transform.rotation, t_targetRotation, _agent.angularSpeed * Time.deltaTime);
             }
         }
 
-        public Vector3 GetPositionBehind(float distance)
+        public Vector3 GetPositionBehind(float p_distance)
         {
             // On prend la direction vers la target et on l'inverse
             Vector3 direction = (transform.position - _target.transform.position).normalized;
-            return transform.position + direction * distance;
+            return transform.position + direction * p_distance;
         }
 
-        public void Attack(int p_damage, Vector3 attackCenter, Vector3 attackSize, Effect p_effect = null)
+        public void Attack(int p_damage, Vector3 attackCenter, Vector3 attackSize, Effect p_effect = null, float p_effectTime = 0)
         {
             Collider[] t_collisions = Physics.OverlapBox(
                 transform.position + transform.rotation * attackCenter, // Appliquer la rotation à l'offset
@@ -198,13 +195,12 @@ namespace Mekaiju.AI
             );
             if (t_collisions.Length > 0)
             {
-                dps += p_damage;
-                textDPS.text = dps.ToString();
+                _dps += p_damage;
+                textDPS.text = _dps.ToString();
                 if(p_effect != null)
                 {
                     MechaInstance t_mecha = t_collisions[0].GetComponent<MechaInstance>();
-                    EffectState t_effectState = new EffectState(p_effect);
-                    t_mecha.Effetcs.Add(t_effectState);
+                    t_mecha.AddEffect(p_effect, p_effectTime);
                 }
             }
 
@@ -226,8 +222,8 @@ namespace Mekaiju.AI
             while (true)
             {
                 yield return new WaitForSeconds(1);
-                dps = 0;
-                textDPS.text = dps.ToString();
+                _dps = 0;
+                textDPS.text = _dps.ToString();
             }
         }
 
