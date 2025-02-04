@@ -2,9 +2,11 @@ using System.Collections;
 using Mekaiju;
 using Mekaiju.AI;
 using MyBox;
+using Mono.Cecil.Cil;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -21,7 +23,9 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody _rigidbody;
 
-
+    public VisualEffect shieldVFX;
+    public VisualEffect shieldBreakVFX;
+    
     [Foldout("Movement Attributes")]
     [SerializeField] private float _jumpForce = 5f;
     [SerializeField] private float _dashForce = 20f;
@@ -109,30 +113,36 @@ public class PlayerController : MonoBehaviour
     }
     private void OnShield(InputAction.CallbackContext p_context)
     {
+        shieldVFX.enabled = true;
+        shieldBreakVFX.enabled = false;
+
         float t_shieldSpeedModifier = 0.5f;
 
         _isProtected = true;
         _animator.SetBool("IsShielding", _isProtected);
         _speed = _baseSpeed * t_shieldSpeedModifier;
 
-        // Démarre la consommation de stamina
+        // Dï¿½marre la consommation de stamina
         if (_shieldStaminaDrainCoroutine != null) StopCoroutine(_shieldStaminaDrainCoroutine);
         _shieldStaminaDrainCoroutine = StartCoroutine(ShieldStaminaDrain());
     }
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
+        shieldVFX.enabled = false;
+        shieldBreakVFX.enabled = true;
+        StartCoroutine(ShieldBreakCoroutine());
+
         _isProtected = false;
         _animator.SetBool("IsShielding", _isProtected);
         _speed = _baseSpeed;
 
-        // Arrête la consommation de stamina
+        // Arrï¿½te la consommation de stamina
         if (_shieldStaminaDrainCoroutine != null)
         {
             StopCoroutine(_shieldStaminaDrainCoroutine);
             _shieldStaminaDrainCoroutine = null;
         }
     }
-
     private IEnumerator ShieldStaminaDrain()
     {
         while (_isProtected && _instance.CanExecuteAbility(_shieldCost))
@@ -141,7 +151,7 @@ public class PlayerController : MonoBehaviour
             _instance.ConsumeStamina(2f);
             _instance.Context.LastAbilityTime = Time.time;
 
-            // Si la stamina est épuisée, désactive le bouclier
+            // Si la stamina est ï¿½puisï¿½e, dï¿½sactive le bouclier
             if (!_instance.CanExecuteAbility(_shieldCost))
             {
                 OnUnshield(new InputAction.CallbackContext());
@@ -151,7 +161,11 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
     }
-
+    private IEnumerator ShieldBreakCoroutine()
+    {
+        yield return new WaitForSeconds(2);
+        shieldBreakVFX.enabled = false;
+    }
     private void OnJump(InputAction.CallbackContext p_context)
     {
         if (_isGrounded && _instance.CanExecuteAbility(10f))
@@ -168,7 +182,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isDashing && !_isProtected && _instance.CanExecuteAbility(_dashCost))
         {
-            // determine direction du dash basé sur la direction de deplacement
+            // determine direction du dash basï¿½ sur la direction de deplacement
             Vector2 moveInput = _moveAction.ReadValue<Vector2>();
             _dashDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
 

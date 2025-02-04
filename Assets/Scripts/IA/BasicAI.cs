@@ -1,6 +1,8 @@
 using Mekaiju.Attribute;
 using MyBox;
 using System.Collections;
+using System.Net;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -40,15 +42,21 @@ namespace Mekaiju.AI
 
         private bool _canSwitch = false;
 
-        [Foldout("Debug", false)]
+        [Foldout("Debug")]
         [OverrideLabel("Show Gizmo For Non-agro Phase")]
         public bool showGizmo;
+        public TextMeshProUGUI textDPS;
+
+
+        private int dps = 0;
 
         protected void Start()
         {
             _agent = GetComponent<NavMeshAgent>();
             states = CombatStatesKaiju.Normal;
             _target = GameObject.FindGameObjectWithTag(targetTag);
+            StartCoroutine(ShowDPS());
+            textDPS.text = dps.ToString();
         }
 
         protected void Update()
@@ -148,16 +156,16 @@ namespace Mekaiju.AI
             return false;
         }
 
-        public void BackOff(Vector3 p_pos)
+        public void BackOff(Vector3 p_pos, float p_stopping = 0.2f)
         {
-            MoveTo(p_pos);
+            MoveTo(p_pos, p_stopping);
             LookTarget();
         }
 
-        public void MoveTo(Vector3 p_pos)
+        public void MoveTo(Vector3 p_pos, float p_stopping = 0.2f)
         {
             _agent.destination = p_pos;
-            _agent.stoppingDistance = 0.2f;
+            _agent.stoppingDistance = p_stopping;
         }
 
         public void LookTarget()
@@ -173,6 +181,35 @@ namespace Mekaiju.AI
             }
         }
 
+        public Vector3 GetPositionBehind(float distance)
+        {
+            // On prend la direction vers la target et on l'inverse
+            Vector3 direction = (transform.position - _target.transform.position).normalized;
+            return transform.position + direction * distance;
+        }
+
+        public void Attack(int p_damage, Vector3 attackCenter, Vector3 attackSize, Effect p_effect = null)
+        {
+            Collider[] t_collisions = Physics.OverlapBox(
+                transform.position + transform.rotation * attackCenter, // Appliquer la rotation à l'offset
+                attackSize / 2,                                         // Demi-taille de la boîte
+                transform.rotation,                                     // Rotation de la boîte
+                LayerMask.GetMask("Player")                             // Layer ciblé
+            );
+            if (t_collisions.Length > 0)
+            {
+                dps += p_damage;
+                textDPS.text = dps.ToString();
+                if(p_effect != null)
+                {
+                    MechaInstance t_mecha = t_collisions[0].GetComponent<MechaInstance>();
+                    EffectState t_effectState = new EffectState(p_effect);
+                    t_mecha.Effetcs.Add(t_effectState);
+                }
+            }
+
+        }
+
         protected void OnDrawGizmos()
         {
             if(!showGizmo) return;
@@ -182,6 +219,16 @@ namespace Mekaiju.AI
             Gizmos.DrawWireSphere(transform.position, awaitTriggerArea);
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, awaitPlayerDistance);
+        }
+
+        IEnumerator ShowDPS()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(1);
+                dps = 0;
+                textDPS.text = dps.ToString();
+            }
         }
 
         public virtual void Agro() {}
