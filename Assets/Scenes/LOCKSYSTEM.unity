@@ -739,14 +739,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 157688489}
-  aimRange: 100
-  aimLayer:
+  maxLockRange: 100
+  targetLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  lockOnRange: 30
+  lockOnRange: 100
   lockOnRotationSpeed: 10
-  target: {fileID: 0}
-  lockedTarget: {fileID: 0}
+  _currentTarget: {fileID: 0}
+  _lockedTarget: {fileID: 0}
 --- !u!114 &1358994149
 MonoBehaviour:
   m_ObjectHideFlags: 0
