@@ -1,84 +1,79 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-
-
-namespace Mekaiju.CameraFollowTPS
+namespace Mekaiju.CameraSystem
 {
     public class CameraFollowTPS : MonoBehaviour
     {
-        public Transform mecha; // Référence au mecha
-        public Transform cameraPivot; // Pivot de la caméra (au niveau de la tête ou du torse)
-        public float mouseSensitivity = 100f; // Sensibilité de la souris
-        public float verticalClamp = 80f; // Limites pour l'angle vertical de la caméra
+        public Transform Mecha; // Référence au mecha
+        public Transform CameraPivot; // Pivot de la caméra (au niveau de la tête ou du torse)
+        public float MaxMouseSensitivity = 100f; // Sensibilité de la souris
+        public float MaxVerticalClamp = 80f; // Limites pour l'angle vertical de la caméra
 
         // Distances dynamiques en fonction des états
-        public float idleDistance = 7f;
-        public float combatDistance = 5f;
+        public float IdleDistance = 7f;
+        public float CombatDistance = 5f;
+        public float TransitionSpeed = 5f; // Vitesse de transition entre les positions
 
-        public float transitionSpeed = 5f; // Vitesse de transition entre les positions
         private float _targetDistance; // Distance actuelle visée par la caméra
-
-        private float verticalRotation = 0f; // Stocke la rotation verticale de la caméra
+        private float _verticalRotation = 0f; // Stocke la rotation verticale de la caméra
 
         // État actuel du mecha
         public enum MechaState { Idle, Combat }
-        public MechaState currentState = MechaState.Idle;
+        public MechaState CurrentState = MechaState.Idle;
 
-        void Start()
+        private void Start()
         {
             // Verrouille le curseur au centre de l'écran
             Cursor.lockState = CursorLockMode.Locked;
 
             // Initialisation de la distance cible
-            _targetDistance = idleDistance;
+            _targetDistance = IdleDistance;
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             // Récupérer les mouvements de la souris
-            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+            float p_mouseX = Input.GetAxis("Mouse X") * MaxMouseSensitivity * Time.deltaTime;
+            float p_mouseY = Input.GetAxis("Mouse Y") * MaxMouseSensitivity * Time.deltaTime;
 
             // Tourner le joueur avec la caméra horizontalement
-            mecha.Rotate(Vector3.up * mouseX);
+            Mecha.Rotate(Vector3.up * p_mouseX);
 
             // Gérer la rotation verticale de la caméra
-            verticalRotation -= mouseY;
-            verticalRotation = Mathf.Clamp(verticalRotation, -verticalClamp, verticalClamp);
-            cameraPivot.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+            _verticalRotation -= p_mouseY;
+            _verticalRotation = Mathf.Clamp(_verticalRotation, -MaxVerticalClamp, MaxVerticalClamp);
+            CameraPivot.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
 
             // Ajuster la distance cible selon l'état actuel
-            AdjustDistanceByState();
+            _AdjustDistanceByState();
 
             // Calculer la position souhaitée
-            Vector3 desiredPosition = cameraPivot.position - cameraPivot.forward * _targetDistance;
+            Vector3 t_desiredPosition = CameraPivot.position - CameraPivot.forward * _targetDistance;
 
             // Appliquer une transition fluide vers la nouvelle position
-            transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * transitionSpeed);
+            transform.position = Vector3.Lerp(transform.position, t_desiredPosition, Time.deltaTime * TransitionSpeed);
 
             // Faire en sorte que la caméra regarde toujours le pivot
-            transform.LookAt(cameraPivot);
+            transform.LookAt(CameraPivot);
         }
 
-        void AdjustDistanceByState()
+        private void _AdjustDistanceByState()
         {
-            float targetDistance = currentState switch
+            float t_targetDistance = CurrentState switch
             {
-                MechaState.Idle => idleDistance,
-                MechaState.Combat => combatDistance,
-                _ => idleDistance
+                MechaState.Idle => IdleDistance,
+                MechaState.Combat => CombatDistance,
+                _ => IdleDistance
             };
 
             // Transition douce entre la distance actuelle et la cible
-            targetDistance = Mathf.Lerp(targetDistance, targetDistance, Time.deltaTime * transitionSpeed);
+            _targetDistance = Mathf.Lerp(_targetDistance, t_targetDistance, Time.deltaTime * TransitionSpeed);
         }
 
         // Méthode publique pour changer l'état du mecha
-        public void ChangeMechaState(MechaState newState)
+        public void ChangeMechaState(MechaState p_newState)
         {
-            currentState = newState;
+            CurrentState = p_newState;
         }
     }
 }

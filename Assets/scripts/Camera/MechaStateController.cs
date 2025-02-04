@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Mekaiju.CameraSystem;
 public class MechaStateController : MonoBehaviour
 {
     
