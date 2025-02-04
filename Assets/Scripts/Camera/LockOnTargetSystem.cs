@@ -25,6 +25,13 @@ namespace Mekaiju.LockOnTargetSystem
         private int _targetIndex = 0; // Index pour changer de cible
         private bool _isLockedOn = false; // État du Lock-On
 
+        private Transform _cameraPivot;
+
+        private void Start()
+        {
+            _cameraPivot = transform.Find("CameraPivot");
+        }
+
         private void Update()
         {
             DetectTargets();
@@ -99,16 +106,18 @@ namespace Mekaiju.LockOnTargetSystem
             while (_isLockedOn && _lockedTarget != null)
             {
                 // Calculer la position désirée
-                Vector3 directionToTarget = (_lockedTarget.position - transform.position).normalized;
-                Vector3 targetPosition = _lockedTarget.position - directionToTarget * lockOnDistance;
-
-                // Appliquer la position avec une transition douce
-                transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * lockOnRotationSpeed);
+                Vector3 directionToTarget = (_lockedTarget.position - _cameraPivot.position).normalized;
 
                 // Calculer et appliquer la rotation
                 Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-                targetRotation *= Quaternion.Euler(-verticalAngle, 0f, 0f);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lockOnRotationSpeed);
+
+                Quaternion yRotation = Quaternion.Euler(0, targetRotation.eulerAngles.y, 0);
+                transform.rotation = Quaternion.Slerp(transform.rotation, yRotation, Time.deltaTime * lockOnRotationSpeed);
+
+                _cameraPivot.localRotation = Quaternion.Euler(targetRotation.eulerAngles.x, 0, 0);
+
+                Quaternion xzRotation = Quaternion.Euler(targetRotation.eulerAngles.x, 0, targetRotation.eulerAngles.z);
+                _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, xzRotation, Time.deltaTime * lockOnRotationSpeed);
 
                 yield return null;
             }
