@@ -126,9 +126,9 @@ namespace Mekaiju
         /// 
         /// </summary>
         /// <param name="p_effect"></param>
-        public void AddEffect(Effect p_effect)
+        public void AddEffect(Effect p_effect, float p_time)
         {
-            _effects.Add(new(p_effect));
+            _effects.Add(new(p_effect, p_time));
         }
 
         /// <summary>

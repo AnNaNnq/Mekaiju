@@ -185,7 +185,7 @@ namespace Mekaiju.AI
             return transform.position + direction * p_distance;
         }
 
-        public void Attack(int p_damage, Vector3 attackCenter, Vector3 attackSize, Effect p_effect = null)
+        public void Attack(int p_damage, Vector3 attackCenter, Vector3 attackSize, Effect p_effect = null, float p_effectTime = 0)
         {
             Collider[] t_collisions = Physics.OverlapBox(
                 transform.position + transform.rotation * attackCenter, // Appliquer la rotation à l'offset
@@ -200,8 +200,7 @@ namespace Mekaiju.AI
                 if(p_effect != null)
                 {
                     MechaInstance t_mecha = t_collisions[0].GetComponent<MechaInstance>();
-                    EffectState t_effectState = new EffectState(p_effect);
-                    t_mecha.Effetcs.Add(t_effectState);
+                    t_mecha.AddEffect(p_effect, p_effectTime);
                 }
             }
 
