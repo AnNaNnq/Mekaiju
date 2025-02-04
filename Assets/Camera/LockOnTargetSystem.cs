@@ -14,6 +14,8 @@ namespace Mekaiju.LockOnTargetSystem
         [Header("Paramètres de Lock-On")]
         public float lockOnRange = 100f; // Portée du Lock-On
         public float lockOnRotationSpeed = 10f; // Vitesse de rotation vers la cible
+        public float lockOnDistance = 3f; // Distance de rotation souhaitée
+        public float verticalAngle = 0f; // Angle vertical fixe
 
         [Header("Paramètres de Debug")]
         [SerializeField] private Transform _currentTarget; // Cible actuelle
@@ -96,12 +98,18 @@ namespace Mekaiju.LockOnTargetSystem
         {
             while (_isLockedOn && _lockedTarget != null)
             {
-                Vector3 direction = (_lockedTarget.position - transform.position).normalized;
-                if (direction != Vector3.zero)
-                {
-                    Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lockOnRotationSpeed);
-                }
+                // Calculer la position désirée
+                Vector3 directionToTarget = (_lockedTarget.position - transform.position).normalized;
+                Vector3 targetPosition = _lockedTarget.position - directionToTarget * lockOnDistance;
+
+                // Appliquer la position avec une transition douce
+                transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * lockOnRotationSpeed);
+
+                // Calculer et appliquer la rotation
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                targetRotation *= Quaternion.Euler(-verticalAngle, 0f, 0f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lockOnRotationSpeed);
+
                 yield return null;
             }
         }
@@ -112,13 +120,13 @@ namespace Mekaiju.LockOnTargetSystem
             if (_lockedTarget != null)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(_lockedTarget.position, 1f);
+                Gizmos.DrawWireCube(_lockedTarget.position, new Vector3(1f, 1f, 1f));
             }
 
             foreach (Transform target in _potentialTargets)
             {
                 Gizmos.color = Color.blue;
-                Gizmos.DrawWireSphere(target.position, 1f);
+                Gizmos.DrawWireCube(target.position, new Vector3(2f, 2f, 2f));
             }
 
         }

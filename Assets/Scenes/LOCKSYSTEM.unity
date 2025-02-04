@@ -744,7 +744,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   lockOnRange: 100
-  lockOnRotationSpeed: 10
+  lockOnRotationSpeed: 3
+  lockOnDistance: 3
+  verticalAngle: 0
   _currentTarget: {fileID: 0}
   _lockedTarget: {fileID: 0}
 --- !u!114 &1358994149
@@ -759,12 +761,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 710666ba7775fe7409cb17107048a8f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  gravity: -9.81
-  jumpHeight: 2
-  groundCheck: {fileID: 1653873962}
-  groundDistance: 0.4
-  groundMask:
+  MoveSpeed: 5
+  Gravity: -9.81
+  JumpHeight: 2
+  GroundCheck: {fileID: 1653873962}
+  GroundDistance: 0.4
+  GroundMask:
     serializedVersion: 2
     m_Bits: 8
 --- !u!23 &1358994150
