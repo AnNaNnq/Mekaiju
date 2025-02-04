@@ -94,6 +94,8 @@ namespace Mekaiju.AI
         [SOSelector]
         [OverrideLabel("Effect")]
         public Effect bigEffect;
+        [OverrideLabel("Effect duration (sec)")]
+        public float bigEffectDuration = 2;
         [OverrideLabel("Countdown (sec)")]
         public float bigCoutdown = 1;
         [OverrideLabel("Attack zone center")]
@@ -232,7 +234,7 @@ namespace Mekaiju.AI
             {
                 _isBigAttack = true;
                 LookTarget();
-                Attack(bigAttackDmg, bigZoneCenter, bigZoneSize, bigEffect);
+                Attack(bigAttackDmg, bigZoneCenter, bigZoneSize, bigEffect, bigEffectDuration);
                 _isBigAttack = false;
                 float i = 0;
                 while (i < bigCoutdown)
