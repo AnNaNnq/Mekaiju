@@ -1,4 +1,6 @@
 using System.Collections;
+using Mekaiju;
+using Mekaiju.AI;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +10,8 @@ public class PlayerController : MonoBehaviour
 {
     public Transform groundCheck;
     public Transform camera;
+
+    private Animator _animator;
 
     private MechaPlayerActions _playerActions;
 
@@ -29,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private bool _isProtected;
     private Vector3 _dashDirection;
 
+    private MechaInstance _instance;
 
     private LayerMask _groundLayerMask;
 
@@ -36,10 +41,13 @@ public class PlayerController : MonoBehaviour
     {
         _playerActions = new MechaPlayerActions();
         _rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
 
         _speed = _baseSpeed;
 
         _groundLayerMask = LayerMask.GetMask("Walkable");
+
+        _instance = GetComponent<MechaInstance>();
     }
 
     private void OnEnable()
@@ -82,28 +90,36 @@ public class PlayerController : MonoBehaviour
     private void OnSwordAttack(InputAction.CallbackContext p_context)
     {
         Debug.Log("SwordAttack");
+        StartCoroutine(_instance.ExecuteAbility(MechaPart.LeftArm, GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
+        _animator.SetTrigger("swordAttack");
     }
     private void OnGunAttack(InputAction.CallbackContext p_context)
     {
         Debug.Log("GunAttack");
+        StartCoroutine(_instance.ExecuteAbility(MechaPart.RightArm, GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
+        _animator.SetTrigger("laserAttack");
     }
     private void OnShield(InputAction.CallbackContext p_context)
     {
         float t_shieldSpeedModifier = 0.5f;
 
+        _animator.SetTrigger("shield");
         _isProtected = true;
         _speed = _baseSpeed * t_shieldSpeedModifier;
     }
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
         _isProtected = false;
+        _animator.SetTrigger("unshield");
         _speed = _baseSpeed;
     }
     private void OnJump(InputAction.CallbackContext p_context)
     {
-        if (_isGrounded)
+        if (_isGrounded && _instance.CanExecuteAbility(10f))
         {
+            _instance.ConsumeStamina(10);
             _isGrounded = false;
+            _animator.SetTrigger("Jump");
             _rigidbody.AddForce(Vector3.up  * _jumpForce, ForceMode.Impulse);
         }
     }
@@ -118,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext p_context)
     {
-        if (!_isDashing && !_isProtected)
+        if (!_isDashing && !_isProtected && _instance.CanExecuteAbility(33f))
         {
             // Determine dash direction based on movement input
             Vector2 moveInput = _moveAction.ReadValue<Vector2>();
@@ -133,6 +149,7 @@ public class PlayerController : MonoBehaviour
                 //_dashDirection = transform.forward;
             }
 
+            _instance.ConsumeStamina(33);
             StartCoroutine(DashCoroutine());
         }
     }
@@ -176,6 +193,7 @@ public class PlayerController : MonoBehaviour
             t_vel.x = _speed * t_moveDir.x;
             t_vel.z = _speed * t_moveDir.y;
             _rigidbody.linearVelocity = t_vel;
+            _animator.SetFloat("WalkingSpeed",Mathf.Abs(t_vel.x)+Mathf.Abs(t_vel.z));
         }
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>();
