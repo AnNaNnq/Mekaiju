@@ -208,8 +208,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundCheck: {fileID: 6432498026279094924}
   camera: {fileID: 0}
-  shieldVFX: {fileID: 0}
-  shieldBreakVFX: {fileID: 0}
+  shieldVFX: {fileID: 188395549284549644}
+  shieldBreakVFX: {fileID: 2035803322339453288}
   _jumpForce: 5
   _dashForce: 20
   _dashDuration: 0.25
@@ -918,7 +918,7 @@ VisualEffect:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5117983577156292043}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Asset: {fileID: 8926484042661614526, guid: c2db68502ca7cfc4880bc18fc04b7b60, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
@@ -957,7 +957,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5117983577156292043}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
