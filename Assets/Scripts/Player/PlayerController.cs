@@ -1,9 +1,11 @@
 using System.Collections;
 using Mekaiju;
 using Mekaiju.AI;
+using Mono.Cecil.Cil;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -19,6 +21,9 @@ public class PlayerController : MonoBehaviour
     private InputAction _lookAction;
 
     private Rigidbody _rigidbody;
+
+    public VisualEffect shieldVFX;
+    public VisualEffect shieldBreakVFX;
 
     [SerializeField] private float _jumpForce = 5f;
     [SerializeField] private float _dashForce = 20f;
@@ -101,6 +106,9 @@ public class PlayerController : MonoBehaviour
     }
     private void OnShield(InputAction.CallbackContext p_context)
     {
+        shieldVFX.enabled = true;
+        shieldBreakVFX.enabled = false;
+
         float t_shieldSpeedModifier = 0.5f;
 
         _animator.SetTrigger("shield");
@@ -109,10 +117,21 @@ public class PlayerController : MonoBehaviour
     }
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
+        shieldVFX.enabled = false;
+        shieldBreakVFX.enabled = true;
+        StartCoroutine(ShieldBreakCoroutine());
+
         _isProtected = false;
         _animator.SetTrigger("unshield");
         _speed = _baseSpeed;
     }
+    private IEnumerator ShieldBreakCoroutine()
+    {
+        yield return new WaitForSeconds(2);
+        shieldBreakVFX.enabled = false;
+    }
+
+
     private void OnJump(InputAction.CallbackContext p_context)
     {
         if (_isGrounded && _instance.CanExecuteAbility(10f))
