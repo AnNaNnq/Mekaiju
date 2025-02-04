@@ -1,0 +1,196 @@
+using Mekaiju.Attribute;
+using MyBox;
+using System.Collections;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
+
+namespace Mekaiju.AI
+{
+
+    //Temps avant de follow le joueur lors de l'éloginement + Autre temps avant de retourner au nest
+    //Faire Agro
+    public abstract class BasicAI : MonoBehaviour
+    {
+        [Foldout("General")]
+        public CombatStatesKaiju states;
+        public LayerMask mask;
+        [Tag] public string targetTag;
+        public BodyPart[] bodyParts;
+
+        [Foldout("Agro")]
+        [PositiveValueOnly] public float agroTriggerArea = 10f;
+        [PositiveValueOnly] public float agroSpeed = 3.5f;
+
+        [Foldout("Await")]
+        [PositiveValueOnly] public float awaitTriggerArea = 30f;
+        [PositiveValueOnly] public float awaitPlayerDistance = 20f;
+        [PositiveValueOnly] public float awaitSpeed = 3f;
+        [PositiveValueOnly][Tooltip("Temps avant le changement d'état pour await (en s)")] public float timeBeforeAwait = 2f;
+
+        [Foldout("Normal")]
+        [MustBeAssigned] [FocusObject] public Transform nest;
+        [PositiveValueOnly] public float normalSpeed = 3f;
+        [PositiveValueOnly] [Tooltip("Temps avant le changement d'état pour normal (en s)")] public float timeBeforeNormal = 2f;
+
+        protected GameObject _target;
+
+        protected NavMeshAgent _agent;
+
+        private bool _canSwitch = false;
+
+        [Foldout("Debug", false)]
+        [OverrideLabel("Show Gizmo For Non-agro Phase")]
+        public bool showGizmo;
+
+        protected void Start()
+        {
+            _agent = GetComponent<NavMeshAgent>();
+            states = CombatStatesKaiju.Normal;
+            _target = GameObject.FindGameObjectWithTag(targetTag);
+        }
+
+        protected void Update()
+        {
+            ChangeState();
+            CombatStatesMachine();
+        }
+
+        public void ChangeState()
+        {
+            if (states != CombatStatesKaiju.Agro)
+            {
+                if (FindPlayer(agroTriggerArea))
+                {
+                    states = CombatStatesKaiju.Agro;
+                    _agent.speed = agroSpeed;
+                }
+                else
+                {
+                    if (FindPlayer(awaitTriggerArea))
+                    {
+                        if (states != CombatStatesKaiju.Await)
+                        {
+                            if (_canSwitch)
+                            {
+                                states = CombatStatesKaiju.Await;
+                                _agent.speed = awaitSpeed;
+                            }
+                            else
+                            {
+                                StartCoroutine(Countdown(timeBeforeAwait));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (states != CombatStatesKaiju.Normal)
+                        {
+                            if (_canSwitch)
+                            {
+                                states = CombatStatesKaiju.Normal;
+                                _agent.speed = normalSpeed;
+                            }
+                            else
+                            {
+                                StartCoroutine(Countdown(timeBeforeNormal));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void AIMove()
+        {
+            if (states == CombatStatesKaiju.Await)
+            {
+                _agent.destination = _target.transform.position;
+                _agent.stoppingDistance = awaitPlayerDistance;
+
+                _canSwitch = false;
+            }
+
+            else if (states == CombatStatesKaiju.Normal)
+            {
+                _agent.SetDestination(nest.position);
+                _agent.stoppingDistance = 0.3f;
+                _canSwitch = false;
+            }
+        }
+
+        public void CombatStatesMachine()
+        {
+            switch (states)
+            {
+                case CombatStatesKaiju.Agro: Agro(); break;
+                case CombatStatesKaiju.Await:
+                    LookTarget();
+                    AIMove();
+                    break;
+                case CombatStatesKaiju.Normal: AIMove(); break;
+                default: break;
+            }
+        }
+
+        public bool FindPlayer(float p_range)
+        {
+            Collider[] t_collisions = Physics.OverlapSphere(transform.position, p_range, mask);
+            foreach (Collider t_col in t_collisions)
+            {
+                if (t_col.CompareTag(targetTag))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void BackOff(Vector3 p_pos)
+        {
+            MoveTo(p_pos);
+            LookTarget();
+        }
+
+        public void MoveTo(Vector3 p_pos)
+        {
+            _agent.destination = p_pos;
+            _agent.stoppingDistance = 0.2f;
+        }
+
+        public void LookTarget()
+        {
+            Vector3 direction = _target.transform.position - transform.position;
+            direction.y = 0; // On ignore la composante Y pour éviter l'inclinaison
+
+            // Vérifier que la direction n'est pas nulle pour éviter des erreurs
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _agent.angularSpeed * Time.deltaTime);
+            }
+        }
+
+        protected void OnDrawGizmos()
+        {
+            if(!showGizmo) return;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, agroTriggerArea);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, awaitTriggerArea);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, awaitPlayerDistance);
+        }
+
+        public virtual void Agro() {}
+
+        public IEnumerator Countdown(float p_timer)
+        {
+            _canSwitch = false;
+            yield return new WaitForSeconds(p_timer);
+            _canSwitch = true;
+        }
+    }
+}
