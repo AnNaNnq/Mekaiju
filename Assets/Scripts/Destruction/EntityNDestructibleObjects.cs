@@ -18,7 +18,7 @@ namespace Mekaiju.DestructionStructures {
                 float maHauteur = GetComponent<Collider>().bounds.size.y;
                 float autreHauteur = p_other.bounds.size.y;
 
-                if ((this.tag == "mechaDash") && ((maHauteur / 5) >= autreHauteur))
+                if ((this.tag == "Player") && ((maHauteur / 5) >= autreHauteur))
                 {
                     _DestructStructures(p_other.gameObject);
                 }
@@ -27,7 +27,7 @@ namespace Mekaiju.DestructionStructures {
                     _DestructStructures(p_other.gameObject);
                 }
             }
-            else if (this.tag == "mechaAttack")
+            else if (this.tag == "Player")
             {
 
                 _CreateImpact(p_other);

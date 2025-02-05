@@ -198,7 +198,11 @@ public class PlayerController : MonoBehaviour
         {
             // determine direction du dash bas� sur la direction de deplacement
             Vector2 moveInput = _moveAction.ReadValue<Vector2>();
-            _dashDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+            //_dashDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+
+            _dashDirection = moveInput.y *  transform.forward;
+            _dashDirection += moveInput.x * transform.right;
+            _dashDirection = _dashDirection.normalized;
 
             // Si aucune input, pas de dash
             if (_dashDirection.sqrMagnitude == 0f)
