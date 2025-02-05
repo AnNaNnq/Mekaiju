@@ -41,7 +41,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool _isGrounded;
     [SerializeField] private bool _isDashing;
     [SerializeField] private bool _isProtected;
-    [SerializeField] private Vector3 _dashDirection;
 
     [SerializeField] private float _mouseSensitivity = 75f; 
     [SerializeField] private float _minVerticalAngle = -30f; 
