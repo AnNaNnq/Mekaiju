@@ -247,7 +247,7 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.up * t_lookDir.x);
 
         // G�rer la rotation verticale de la cam�ra
-        var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x + t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
+        var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x - t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
         var t_delta = t_clamp - _cameraPivot.eulerAngles.x;
         _cameraPivot.Rotate(Vector3.right * t_delta);
     }
