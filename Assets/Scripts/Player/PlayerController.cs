@@ -1,9 +1,10 @@
 using System.Collections;
 using Mekaiju;
 using Mekaiju.AI;
-using Unity.VisualScripting;
+using MyBox;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -15,32 +16,41 @@ public class PlayerController : MonoBehaviour
 
     private Animator _animator;
 
-    private MechaPlayerActions _playerActions;
+    private MechaPlayerActions _playerActions; // NewInputSystem reference
 
     private InputAction _moveAction;
     private InputAction _lookAction;
 
     private Rigidbody _rigidbody;
 
+    public VisualEffect shieldVFX;
+    public VisualEffect shieldBreakVFX;
+    
+    [Foldout("Movement Attributes")]
     [SerializeField] private float _jumpForce = 5f;
     [SerializeField] private float _dashForce = 20f;
     [SerializeField] private float _dashDuration = 0.25f;
     [SerializeField] private float _baseSpeed = 5f;
+    private Vector3 _dashDirection;
     private float _speed;
     //[SerializeField] private float _cameraSpeed = 5f;
+
+    [Foldout("Movement Boolean")]
+    [SerializeField] bool _isGrounded;
+    [SerializeField] private bool _isDashing;
+    [SerializeField] private bool _isProtected;
 
     [SerializeField] private float _mouseSensitivity = 75f; 
     [SerializeField] private float _minVerticalAngle = -30f; 
     [SerializeField] private float _maxVerticalAngle = 80f; 
 
-    [SerializeField]
-    private bool _isGrounded;
-    private bool _isDashing;
-    private bool _isProtected;
-    private Vector3 _dashDirection;
+    [Foldout("Stamina Costs")]
+    [SerializeField] private float _shieldCost = 2f;
+    [SerializeField] private float _jumpCost = 10f;
+    [SerializeField] private float _dashCost = 33f;
 
     private MechaInstance _instance;
-
+    private Coroutine _shieldStaminaDrainCoroutine;
     private LayerMask _groundLayerMask;
 
     private void Awake()
@@ -101,63 +111,106 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(_instance.ExecuteAbility(MechaPart.LeftArm, GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
         _animator.SetTrigger("swordAttack");
     }
+    
     private void OnGunAttack(InputAction.CallbackContext p_context)
     {
         Debug.Log("GunAttack");
         StartCoroutine(_instance.ExecuteAbility(MechaPart.RightArm, GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
         _animator.SetTrigger("laserAttack");
     }
+    
     private void OnShield(InputAction.CallbackContext p_context)
     {
+        shieldVFX.enabled = true;
+        shieldBreakVFX.enabled = false;
+
         float t_shieldSpeedModifier = 0.5f;
 
-        _animator.SetTrigger("shield");
         _isProtected = true;
+        _animator.SetBool("IsShielding", _isProtected);
         _speed = _baseSpeed * t_shieldSpeedModifier;
+
+        // D�marre la consommation de stamina
+        if (_shieldStaminaDrainCoroutine != null) StopCoroutine(_shieldStaminaDrainCoroutine);
+        _shieldStaminaDrainCoroutine = StartCoroutine(ShieldStaminaDrain());
     }
+    
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
+        shieldVFX.enabled = false;
+        shieldBreakVFX.enabled = true;
+        StartCoroutine(ShieldBreakCoroutine());
+
         _isProtected = false;
-        _animator.SetTrigger("unshield");
+        _animator.SetBool("IsShielding", _isProtected);
         _speed = _baseSpeed;
+
+        // Arr�te la consommation de stamina
+        if (_shieldStaminaDrainCoroutine != null)
+        {
+            StopCoroutine(_shieldStaminaDrainCoroutine);
+            _shieldStaminaDrainCoroutine = null;
+        }
     }
+    
+    private IEnumerator ShieldStaminaDrain()
+    {
+        while (_isProtected && _instance.CanExecuteAbility(_shieldCost))
+        {
+            // Consomme 2 points de stamina par seconde
+            _instance.ConsumeStamina(2f);
+            _instance.Context.LastAbilityTime = Time.time;
+
+            // Si la stamina est �puis�e, d�sactive le bouclier
+            if (!_instance.CanExecuteAbility(_shieldCost))
+            {
+                OnUnshield(new InputAction.CallbackContext());
+                yield break;
+            }
+
+            yield return new WaitForSeconds(1f);
+        }
+    }
+    
+    private IEnumerator ShieldBreakCoroutine()
+    {
+        yield return new WaitForSeconds(2);
+        shieldBreakVFX.enabled = false;
+    }
+    
     private void OnJump(InputAction.CallbackContext p_context)
     {
         if (_isGrounded && _instance.CanExecuteAbility(10f))
         {
-            _instance.ConsumeStamina(10);
+            _instance.ConsumeStamina(_jumpCost);
+            _instance.Context.LastAbilityTime = Time.time;
             _isGrounded = false;
             _animator.SetTrigger("Jump");
             _rigidbody.AddForce(Vector3.up  * _jumpForce, ForceMode.Impulse);
         }
     }
-    //private void OnHover(InputAction.CallbackContext p_context)
-    //{
-    //    Debug.Log("Hover");
-    //}
-    //private void OnStopHover(InputAction.CallbackContext p_context)
-    //{
-    //    Debug.Log("StopHover");
-    //}
 
     private void OnDash(InputAction.CallbackContext p_context)
     {
-        if (!_isDashing && !_isProtected && _instance.CanExecuteAbility(33f))
+        if (!_isDashing && !_isProtected && _instance.CanExecuteAbility(_dashCost))
         {
-            // Determine dash direction based on movement input
+            // determine direction du dash bas� sur la direction de deplacement
             Vector2 moveInput = _moveAction.ReadValue<Vector2>();
-            _dashDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+            //_dashDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
 
-            // If no input, dash forward relative to player's facing direction
+            _dashDirection = moveInput.y *  transform.forward;
+            _dashDirection += moveInput.x * transform.right;
+            _dashDirection = _dashDirection.normalized;
+
+            // Si aucune input, pas de dash
             if (_dashDirection.sqrMagnitude == 0f)
             {
-
                 //CHANGER ICI POUR CHANGER LE COMPORTEMENT QUAND LE JOUEUR DASH SANS DIRECTION
                 return;
-                //_dashDirection = transform.forward;
             }
 
-            _instance.ConsumeStamina(33);
+            _instance.ConsumeStamina(_dashCost);
+            _instance.Context.LastAbilityTime = Time.time;
             StartCoroutine(DashCoroutine());
         }
     }
@@ -168,8 +221,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(_dashDuration);
         _isDashing = false;
     }
-
-
+    
     private IEnumerator Dash(Vector2 p_moveDir,Vector3 p_vel)
     {
         Debug.Log("Dash");
@@ -197,11 +249,11 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.up * t_lookDir.x);
 
         // G�rer la rotation verticale de la cam�ra
-        var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x + t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
+        var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x - t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
         var t_delta = t_clamp - _cameraPivot.eulerAngles.x;
         _cameraPivot.Rotate(Vector3.right * t_delta);
     }
-
+    
     private void FixedUpdate()
     {
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, 0.3f, _groundLayerMask);
