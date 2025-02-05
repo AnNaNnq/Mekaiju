@@ -2,8 +2,6 @@ using System.Collections;
 using Mekaiju;
 using Mekaiju.AI;
 using MyBox;
-using Mono.Cecil.Cil;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
@@ -198,7 +196,11 @@ public class PlayerController : MonoBehaviour
         {
             // determine direction du dash bas� sur la direction de deplacement
             Vector2 moveInput = _moveAction.ReadValue<Vector2>();
-            _dashDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+            //_dashDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+
+            _dashDirection = moveInput.y *  transform.forward;
+            _dashDirection += moveInput.x * transform.right;
+            _dashDirection = _dashDirection.normalized;
 
             // Si aucune input, pas de dash
             if (_dashDirection.sqrMagnitude == 0f)
@@ -247,7 +249,7 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.up * t_lookDir.x);
 
         // G�rer la rotation verticale de la cam�ra
-        var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x + t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
+        var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x - t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
         var t_delta = t_clamp - _cameraPivot.eulerAngles.x;
         _cameraPivot.Rotate(Vector3.right * t_delta);
     }
