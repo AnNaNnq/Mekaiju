@@ -1,38 +1,69 @@
 using System;
-using JetBrains.Annotations;
-using Mekaiju;
 using UnityEngine;
 
-/// <summary>
-/// 
-/// </summary>
-[Serializable]
-public class EffectState
+namespace Mekaiju
 {
     /// <summary>
     /// 
     /// </summary>
-    private Effect _effect;
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    private float _elapsed;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool ToRemove => _effect.EffectiveTime > 0 && _elapsed > _effect.EffectiveTime;
-
-    public EffectState(Effect p_effect)
+    public enum EffectState
     {
-        _effect  = p_effect;
-        _elapsed = 0f;
+        Active, Inactive, Expired
     }
 
-    public void Tick(MechaInstance p_self)
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
+    public class StatefullEffect
     {
-        _effect.Behaviour.Tick(p_self);
-        _elapsed += Time.deltaTime;
+        /// <summary>
+        /// 
+        /// </summary>
+        private Effect _effect;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _time;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _elapsed;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public EffectState State { get; private set; }
+
+        public StatefullEffect(Effect p_effect, float p_time)
+        {
+            State = EffectState.Inactive;
+
+            _effect  = p_effect;
+            _time    = p_time;
+            _elapsed = 0f;
+        }
+
+        public StatefullEffect(Effect p_effect) : this(p_effect, -1)
+        {        
+
+        }
+
+        public void Tick(MechaInstance p_self)
+        {
+            if (_time > 0 && _elapsed > _time)
+            {
+                State = EffectState.Expired;
+            }
+            else
+            {
+                State = EffectState.Active;
+
+                _effect.Behaviour.Tick(p_self);
+                _elapsed += Time.deltaTime;
+            }
+        }
     }
 }

@@ -17,12 +17,6 @@ namespace Mekaiju
         /// </summary>
         [field: SerializeField]
         public string Description { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [field: SerializeField]
-        public float EffectiveTime { get; private set; }
         
         /// <summary>
         /// 
