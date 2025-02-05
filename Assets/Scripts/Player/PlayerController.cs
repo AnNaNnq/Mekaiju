@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public Transform camera;
 
+    public Transform _cameraPivot;
+
     private Animator _animator;
 
     private MechaPlayerActions _playerActions; // NewInputSystem reference
@@ -39,6 +41,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool _isGrounded;
     [SerializeField] private bool _isDashing;
     [SerializeField] private bool _isProtected;
+    [SerializeField] private Vector3 _dashDirection;
+
+    [SerializeField] private float _mouseSensitivity = 75f; 
+    [SerializeField] private float _minVerticalAngle = -30f; 
+    [SerializeField] private float _maxVerticalAngle = 80f; 
 
     [Foldout("Stamina Costs")]
     [SerializeField] private float _shieldCost = 2f;
@@ -60,6 +67,8 @@ public class PlayerController : MonoBehaviour
         _groundLayerMask = LayerMask.GetMask("Walkable");
 
         _instance = GetComponent<MechaInstance>();
+
+        _cameraPivot = transform.Find("CameraPivot");
     }
 
     private void OnEnable()
@@ -105,12 +114,14 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(_instance.ExecuteAbility(MechaPart.LeftArm, GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
         _animator.SetTrigger("swordAttack");
     }
+    
     private void OnGunAttack(InputAction.CallbackContext p_context)
     {
         Debug.Log("GunAttack");
         StartCoroutine(_instance.ExecuteAbility(MechaPart.RightArm, GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
         _animator.SetTrigger("laserAttack");
     }
+    
     private void OnShield(InputAction.CallbackContext p_context)
     {
         shieldVFX.enabled = true;
@@ -126,6 +137,7 @@ public class PlayerController : MonoBehaviour
         if (_shieldStaminaDrainCoroutine != null) StopCoroutine(_shieldStaminaDrainCoroutine);
         _shieldStaminaDrainCoroutine = StartCoroutine(ShieldStaminaDrain());
     }
+    
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
         shieldVFX.enabled = false;
@@ -143,6 +155,7 @@ public class PlayerController : MonoBehaviour
             _shieldStaminaDrainCoroutine = null;
         }
     }
+    
     private IEnumerator ShieldStaminaDrain()
     {
         while (_isProtected && _instance.CanExecuteAbility(_shieldCost))
@@ -161,11 +174,13 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
     }
+    
     private IEnumerator ShieldBreakCoroutine()
     {
         yield return new WaitForSeconds(2);
         shieldBreakVFX.enabled = false;
     }
+    
     private void OnJump(InputAction.CallbackContext p_context)
     {
         if (_isGrounded && _instance.CanExecuteAbility(10f))
@@ -205,7 +220,39 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(_dashDuration);
         _isDashing = false;
     }
+    
+    private IEnumerator Dash(Vector2 p_moveDir,Vector3 p_vel)
+    {
+        Debug.Log("Dash");
+        _isDashing = true;
 
+        _rigidbody.linearVelocity = new Vector3(_dashForce * p_moveDir.x,p_vel.y,_dashForce*p_moveDir.y);
+
+        yield return new WaitForSeconds(_dashDuration);
+        _isDashing = false;
+    }
+
+    float ClampAngle(float angle, float from, float to)
+    {
+        // accepts e.g. -80, 80
+        if (angle < 0f) angle = 360 + angle;
+        if (angle > 180f) return Mathf.Max(angle, 360+from);
+        return Mathf.Min(angle, to);
+    }
+
+    private void Update()
+    {
+        Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
+
+        // Tourner le joueur avec la cam�ra horizontalement
+        transform.Rotate(Vector3.up * t_lookDir.x);
+
+        // G�rer la rotation verticale de la cam�ra
+        var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x + t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
+        var t_delta = t_clamp - _cameraPivot.eulerAngles.x;
+        _cameraPivot.Rotate(Vector3.right * t_delta);
+    }
+    
     private void FixedUpdate()
     {
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, 0.3f, _groundLayerMask);
@@ -223,13 +270,18 @@ public class PlayerController : MonoBehaviour
             // Regular movement
             Vector2 t_moveDir = _moveAction.ReadValue<Vector2>();
             Vector3 t_vel = _rigidbody.linearVelocity;
-            t_vel.x = _speed * t_moveDir.x;
-            t_vel.z = _speed * t_moveDir.y;
+
+            // t_vel = _speed * t_moveDir.y * Time.fixedDeltaTime * transform.forward; for intertia
+            t_vel  = _speed * t_moveDir.y * Time.fixedDeltaTime * transform.forward;
+            t_vel += _speed * t_moveDir.x * Time.fixedDeltaTime * transform.right;
+
+            _rigidbody.angularVelocity = Vector3.zero;
+
+            // t_vel.x = _speed * t_moveDir.x;
+            // t_vel.z = _speed * t_moveDir.y;
             _rigidbody.linearVelocity = t_vel;
             _animator.SetFloat("WalkingSpeed",Mathf.Abs(t_vel.x)+Mathf.Abs(t_vel.z));
         }
-
-        Vector2 t_lookDir = _lookAction.ReadValue<Vector2>();
         //Debug.Log($"look: {t_lookDir}");
     }
 
