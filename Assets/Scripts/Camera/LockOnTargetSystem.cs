@@ -98,18 +98,12 @@ namespace Mekaiju.LockOnTargetSystem
         {
             while (_isLockedOn && _lockedTarget != null)
             {
-                // Calculer la position désirée
-                Vector3 directionToTarget = (_lockedTarget.position - transform.position).normalized;
-                Vector3 targetPosition = _lockedTarget.position - directionToTarget * lockOnDistance;
-
-                // Appliquer la position avec une transition douce
-                transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * lockOnRotationSpeed);
-
-                // Calculer et appliquer la rotation
-                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-                targetRotation *= Quaternion.Euler(-verticalAngle, 0f, 0f);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lockOnRotationSpeed);
-
+                Vector3 direction = (_lockedTarget.position - transform.position).normalized;
+                if (direction != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lockOnRotationSpeed);
+                }
                 yield return null;
             }
         }
