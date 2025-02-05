@@ -121,24 +121,19 @@ namespace Mekaiju.AI
         [ConditionalField(nameof(debugCrocs))] public Color colorForCrocsMaxRange = Color.green;
         #endregion
 
-
+        /// <summary>
+        /// Fonction appelée lorsqu'un ennemi est en mode agressif
+        /// </summary>
         public override void Agro()
         {
             base.Agro();
             AttackStateMachine();
         }
 
-        private new void Update()
-        {
-            base.Update();
-        }
 
-        private new void Start()
-        {
-            base.Start();
-        }
-
-
+        /// <summary>
+        /// Machine à état des attaques
+        /// </summary>
         public void AttackStateMachine()
         {
             if (_isCharging) return;
@@ -147,6 +142,7 @@ namespace Mekaiju.AI
             //Defense
             if(_currentHitsDefense >= hitsNumberDefense && _canDefense && !_isDefense)
             {
+                _canAttack = false;
                 _isDefense = true;
                 _canDefense = false;
                 _agent.speed = defenseSpeed;
@@ -155,6 +151,7 @@ namespace Mekaiju.AI
             //Gros croc
             else if (t_dist < bigAttackRange && _canBigAttack && !_isBigAttack)
             {
+                _canAttack = false;
                 _agent.enabled = true;
                 _agent.isStopped = false;
                 _agent.speed = normalSpeed;
@@ -169,15 +166,17 @@ namespace Mekaiju.AI
                 MoveTo(_target.transform.position, attackRange);
                 if(_agent.remainingDistance <= attackRange)
                 {
-                    if(_attackActive) return;
+                    _canAttack = false;
                     _agent.isStopped = true;
                     _agent.enabled = false;
+                    if (_attackActive) return;
                     StartCoroutine(FaceAttack());
                 }
             }
             //Charge
             else if(t_dist > chargeRangeMin && t_dist < chargeRangeMax && _canCharge && !_isCharging)
             {
+                _canAttack = false;
                 StartCharge();
                 _currentHitsDefense++;
             }
@@ -191,6 +190,10 @@ namespace Mekaiju.AI
             }
         }
 
+        /// <summary>
+        /// Défense en boule
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator Defense()
         {
             float t_time = 0;
@@ -206,8 +209,13 @@ namespace Mekaiju.AI
             yield return new WaitForSeconds(defenseCoutdown);
             _canDefense = true;
             _currentHitsDefense = 0;
+            StartCoroutine(AttackCountdown());
         }
 
+        /// <summary>
+        /// Attaque de face
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator FaceAttack()
         {
             _attackActive = true;
@@ -223,8 +231,13 @@ namespace Mekaiju.AI
 
             _agent.enabled = true;
             _agent.isStopped = false;
+            StartCoroutine(AttackCountdown());
         }
 
+        /// <summary>
+        /// Attaque gros croc
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator BigAttack()
         {
             _canBigAttack = false;
@@ -246,8 +259,12 @@ namespace Mekaiju.AI
                 t_dist = Vector3.Distance(transform.position, _target.transform.position);
             }
             _canBigAttack = true;
+            StartCoroutine(AttackCountdown());
         }
 
+        /// <summary>
+        /// Comance la charge
+        /// </summary>
         public void StartCharge()
         {
             _isCharging = true;
@@ -259,6 +276,10 @@ namespace Mekaiju.AI
             StartCoroutine(ChargeCoroutine());
         }
 
+        /// <summary>
+        /// Lance la charge (déplacement + dégats)
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator ChargeCoroutine()
         {
             float t_time = 0;
@@ -290,9 +311,14 @@ namespace Mekaiju.AI
             _agent.isStopped = false;
             _isCharging = false;
             _canCharge = false;
+            StartCoroutine(AttackCountdown());
             StartCoroutine(ChargeCountdown());
         }
 
+        /// <summary>
+        /// Temps entre 2 charges
+        /// </summary>
+        /// <returns></returns>
         IEnumerator ChargeCountdown()
         {
             yield return new WaitForSeconds(chargeCoutdown);
