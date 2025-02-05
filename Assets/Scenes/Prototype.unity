@@ -3925,6 +3925,18 @@ PrefabInstance:
       propertyPath: textDPS
       value: 
       objectReference: {fileID: 890542393}
+    - target: {fileID: 233982449120186214, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
+      propertyPath: attackRange
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 233982449120186214, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
+      propertyPath: debugAttak1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 233982449120186214, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
+      propertyPath: bigAttackRange
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1078369655045439190, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 39.76378
@@ -3969,47 +3981,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kaiju
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 120795842061927557, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
-    - {fileID: 8526111834869688428, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
-    - {fileID: 7150038289923029522, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
-    - {fileID: 2664540730070816646, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
-    - {fileID: 664792445227239923, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
-    - {fileID: 7267831458546076964, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
-    - {fileID: 4659091137740473921, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3592290967890215276, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1602610313}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
---- !u!1 &1602610312 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3592290967890215276, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
-  m_PrefabInstance: {fileID: 1602610311}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1602610313
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1602610312}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 7, y: 7, z: 7}
-  m_Center: {x: 0, y: 1.09, z: 0}
 --- !u!1 &1606729750
 GameObject:
   m_ObjectHideFlags: 0
