@@ -9,15 +9,24 @@ namespace Mekaiju.Destruction
         public GameObject destructionParticuleEffect;
         Material _mat;
 
+
+        /// <summary>
+        /// Start function
+        /// </summary>
         private void Start()
         {
             _mat = GetComponent<Renderer>().material;
         }
 
+        /// <summary>
+        /// Function executed on collision with another object
+        /// </summary>
+        /// <param name="collision"></param>
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.collider.CompareTag("Player") || collision.collider.CompareTag("Kaiju"))
             {
+                // Get the highest force
                 float t_force = Mathf.Max(Mathf.Abs(collision.impulse.x), Mathf.Abs(collision.impulse.y), Mathf.Abs(collision.impulse.z));
                 switch (destructionType)
                 {
@@ -37,12 +46,17 @@ namespace Mekaiju.Destruction
                         break;
                     default: break;
                 }
-
+                // Instantiate destruction particule effect
                 GameObject t_part = Instantiate(destructionParticuleEffect, transform.position, Quaternion.identity);
+                // Destroy the particule effect after 2 seconds
                 Destroy(t_part, 2);
             }
         }
 
+        /// <summary>
+        /// FadOut object animation
+        /// </summary>
+        /// <returns></returns>
         IEnumerator FadOutAnim()
         {
             while (_mat.color.a > 0)
@@ -55,6 +69,9 @@ namespace Mekaiju.Destruction
             GetComponent<Collider>().enabled = false;
         }
 
+        /// <summary>
+        /// Enum for the type of destruction
+        /// </summary>
         public enum DestructionType
         {
             None,
