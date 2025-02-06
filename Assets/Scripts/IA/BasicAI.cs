@@ -280,6 +280,24 @@ namespace Mekaiju.AI
                 t_bodyPart.isDestroyed = true;
                 t_bodyPart.health = 0;
             }
+
+            if(IsDead())
+            {
+                Debug.Log("Dead");
+                Destroy(gameObject);
+            }
+        }
+
+        public bool IsDead()
+        {
+            foreach (BodyPart t_part in bodyParts)
+            {
+                if (!t_part.isDestroyed)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public BodyPart GetBodyPartWithGameObject(GameObject p_object)
