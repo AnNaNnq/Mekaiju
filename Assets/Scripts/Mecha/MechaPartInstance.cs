@@ -26,7 +26,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private int _health;
+        public int Health { get; private set; }
 
         /// <summary>
         /// 
@@ -37,8 +37,8 @@ namespace Mekaiju
         {
             Mecha   = p_inst;
 
-            _desc   = p_config;
-            _health = p_config.Health;
+            _desc  = p_config;
+            Health = p_config.Health;
 
             _desc.DefaultAbility.Behaviour?.Initialize();
             if (_desc.HasSpecial)
