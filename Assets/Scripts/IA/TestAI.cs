@@ -43,7 +43,7 @@ namespace Mekaiju.AI
         [OverrideLabel("Range min")]
         public float chargeRangeMin = 20;
         [OverrideLabel("Body Part")]
-        [SelectFromList(nameof(bodyParts))] public int attack2Body;
+        [SelectFromList(nameof(bodyParts))] public int chargeBody;
         [OverrideLabel("Charge Speed")]
         public float chargeSpeed = 10;
         public float chargeDuration = 0.5f;
@@ -197,7 +197,12 @@ namespace Mekaiju.AI
         public IEnumerator Defense()
         {
             float t_time = 0;
-            while(t_time < durationDefense)
+            float t_duration = durationDefense;
+            if (bodyParts[defenseBody].isDestroyed)
+            {
+                t_duration /= 2;
+            }
+            while (t_time < t_duration)
             {
                 Vector3 t_posBehind = GetPositionBehind(10);
                 BackOff(t_posBehind);
@@ -221,7 +226,12 @@ namespace Mekaiju.AI
             _attackActive = true;
             for (int i = 0; i < attackCount; i++)
             {
-                Attack(attackDmg, attackZoneCenter, attackZoneSize);
+                int t_dmg = attackDmg;
+                if (bodyParts[attackBody].isDestroyed)
+                {
+                    t_dmg /= 2;
+                }
+                Attack(t_dmg, attackZoneCenter, attackZoneSize);
                 yield return new WaitForSeconds(attackCoutdownBetween);
             }
             _canBaseAttack = false;
@@ -247,7 +257,12 @@ namespace Mekaiju.AI
             {
                 _isBigAttack = true;
                 LookTarget();
-                Attack(bigAttackDmg, bigZoneCenter, bigZoneSize, bigEffect, bigEffectDuration);
+                int t_dmg = bigAttackDmg;
+                if (bodyParts[bigBody].isDestroyed)
+                {
+                    t_dmg /= 2;
+                }
+                Attack(t_dmg, bigZoneCenter, bigZoneSize, bigEffect, bigEffectDuration);
                 _isBigAttack = false;
                 float i = 0;
                 while (i < bigCoutdown)
@@ -306,7 +321,12 @@ namespace Mekaiju.AI
             }
 
             transform.position = t_targetPos;
-            Attack(chargeDmg, chargeZoneCenter, chargeZoneSize);
+            int t_dmg = chargeDmg;
+            if (bodyParts[attackBody].isDestroyed)
+            {
+                t_dmg /= 2;
+            }
+            Attack(t_dmg, chargeZoneCenter, chargeZoneSize);
             _agent.enabled = true;
             _agent.isStopped = false;
             _isCharging = false;
