@@ -293,7 +293,7 @@ GameObject:
   - component: {fileID: 911741115229721978}
   m_Layer: 0
   m_Name: Kaiju
-  m_TagString: Kaiiju
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -380,7 +380,7 @@ MonoBehaviour:
   chargeDmg: 5
   chargeRangeMax: 25
   chargeRangeMin: 20
-  attack2Body: 0
+  chargeBody: 0
   chargeSpeed: 10
   chargeDuration: 0.5
   chargeCoutdown: 2
@@ -550,6 +550,7 @@ GameObject:
   - component: {fileID: 2556312979957223692}
   - component: {fileID: 1962087565301067856}
   - component: {fileID: 6244151867051101859}
+  - component: {fileID: 4110789806910455049}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -625,6 +626,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4110789806910455049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5551521203586782951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02cd06fc653fbc94e9b9f25ab3c61636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5928693170675147533
 GameObject:
   m_ObjectHideFlags: 0
