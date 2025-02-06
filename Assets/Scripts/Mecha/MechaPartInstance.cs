@@ -26,7 +26,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private int _health;
+        public int Health { get; private set; }
 
         /// <summary>
         /// 
@@ -37,8 +37,8 @@ namespace Mekaiju
         {
             Mecha   = p_inst;
 
-            _desc   = p_config;
-            _health = p_config.Health;
+            _desc  = p_config;
+            Health = p_config.Health;
 
             _desc.DefaultAbility.Behaviour?.Initialize();
             if (_desc.HasSpecial)
@@ -57,6 +57,7 @@ namespace Mekaiju
         {
             if (Mecha.CanExecuteAbility(_desc.DefaultAbility.Behaviour.Consumption(p_opt)))
             {
+                Mecha.Context.LastAbilityTime = Time.time;
                 yield return _desc.DefaultAbility.Behaviour.Trigger(this, p_target, p_opt);
             }
         }
@@ -73,6 +74,7 @@ namespace Mekaiju
             {
                 if (Mecha.CanExecuteAbility(_desc.SpecialAbility.Behaviour.Consumption(p_opt)))
                 {
+                    Mecha.Context.LastAbilityTime = Time.time;
                     yield return _desc.SpecialAbility.Behaviour.Trigger(this, p_target, p_opt);    
                 }
             }

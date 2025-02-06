@@ -72,6 +72,7 @@ namespace Mekaiju
             {
                 _lastTriggerTime = t_now;
                 // TODO: Launch animation
+                p_self.Mecha.Context.Animator.SetTrigger("laserAttack");
 
                 p_self.Mecha.ConsumeStamina(_consumption);
 
@@ -106,9 +107,7 @@ namespace Mekaiju
                 // Check new position of BasicAI ?
                 if (t_hasCollide)
                 {
-                    // Apply damage
-                    Debug.Log("RailGun projectile reach its target!");
-                    Debug.Log($"RailGun damage : {_damage}");  
+                    DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Gun, _damage.ToString(), 0.5f);
                 }
                 GameObject.Destroy(t_go);
             }
