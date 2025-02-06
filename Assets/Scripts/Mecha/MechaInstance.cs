@@ -12,6 +12,8 @@ namespace Mekaiju
     public class InstanceContext
     {
         public float LastAbilityTime = -1000f;
+
+        public Animator Animator;
     }
 
 
@@ -41,13 +43,13 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private float _health;
+        public float Health { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
         [SerializeField]
-        private float _stamina;
+        public float Stamina { get; private set; }
 
         /// <summary>
         /// 
@@ -99,10 +101,11 @@ namespace Mekaiju
                 new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
             };
 
-            _health  = Desc.Health;
-            _stamina = Desc.Stamina;
+            Health  = Desc.Health;
+            Stamina = Desc.Stamina;
 
             Context = new();
+            Context.Animator = GetComponent<Animator>();
         }
 
         private void Update()
@@ -122,7 +125,7 @@ namespace Mekaiju
         /// <returns></returns>
         public bool IsAlive()
         {
-            return _health > 0;
+            return Health > 0;
         }
 
         /// <summary>
@@ -131,7 +134,7 @@ namespace Mekaiju
         /// <param name="p_damage"></param>
         public void TakeDamage(float p_damage)
         {
-            _health = Math.Max(0, _health - p_damage);
+            Health = Math.Max(0, Health - p_damage);
         }
 
         /// <summary>
@@ -161,7 +164,7 @@ namespace Mekaiju
         /// <returns></returns>
         public bool CanExecuteAbility(float p_consumption)
         {
-            return _stamina - p_consumption > 0;
+            return Stamina - p_consumption > 0;
         }
 
         /// <summary>
@@ -170,7 +173,7 @@ namespace Mekaiju
         /// <param name="p_amount"></param>
         public void RestoreStamina(float p_amount)
         {
-            _stamina = Math.Min(Desc.Stamina, _stamina + p_amount);
+            Stamina = Math.Min(Desc.Stamina, Stamina + p_amount);
         }
 
         /// <summary>
@@ -179,7 +182,7 @@ namespace Mekaiju
         /// <param name="p_amount"></param>
         public void ConsumeStamina(float p_amount)
         {
-            _stamina = Math.Max(0, _stamina - p_amount);
+            Stamina = Math.Max(0, Stamina - p_amount);
         }
     }
 

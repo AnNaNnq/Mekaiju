@@ -65,7 +65,9 @@ namespace Mekaiju
             if (t_elapsed >= _minTimeBetweenFire)
             {
                 _lastTriggerTime = t_now;
+
                 // TODO: Launch animation
+                p_self.Mecha.Context.Animator.SetTrigger("swordAttack");
 
                 p_self.Mecha.ConsumeStamina(_consumption);
 
@@ -74,7 +76,7 @@ namespace Mekaiju
                 var t_dist = Vector3.Distance(p_self.transform.position, t_tpos);
                 if (t_dist < _reachDistance)
                 {
-                    Debug.Log($"Sword damage : {_damage}");   
+                    DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Sword, _damage.ToString(), 1f);
                 }
 
             }
