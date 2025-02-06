@@ -273,6 +273,8 @@ namespace Mekaiju.AI
 
         public void TakeDamage(int p_damage, GameObject p_tuchObject)
         {
+            if (states != CombatStatesKaiju.Agro) states = CombatStatesKaiju.Agro;
+
             BodyPart t_bodyPart = GetBodyPartWithGameObject(p_tuchObject);
             t_bodyPart.health -= p_damage;
             if(t_bodyPart.health <= 0)
