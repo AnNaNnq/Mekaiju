@@ -25,6 +25,13 @@ namespace Mekaiju.LockOnTargetSystem
         private int _targetIndex = 0; // Index pour changer de cible
         private bool _isLockedOn = false; // État du Lock-On
 
+        private Transform _cameraPivot;
+
+        private void Start()
+        {
+            _cameraPivot = transform.Find("CameraPivot");
+        }
+
         private void Update()
         {
             DetectTargets();
@@ -98,12 +105,29 @@ namespace Mekaiju.LockOnTargetSystem
         {
             while (_isLockedOn && _lockedTarget != null)
             {
+                //HEAD
                 Vector3 direction = (_lockedTarget.position - transform.position).normalized;
                 if (direction != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(direction);
                     transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * lockOnRotationSpeed);
                 }
+
+                // Calculer la position désirée
+                Vector3 directionToTarget = (_lockedTarget.position - _cameraPivot.position).normalized;
+
+                // Calculer et appliquer la rotation
+                Quaternion targetRotationToTarget = Quaternion.LookRotation(directionToTarget);
+
+                Quaternion yRotation = Quaternion.Euler(0, targetRotationToTarget.eulerAngles.y, 0);
+                transform.rotation = Quaternion.Slerp(transform.rotation, yRotation, Time.deltaTime * lockOnRotationSpeed);
+
+                _cameraPivot.localRotation = Quaternion.Euler(targetRotationToTarget.eulerAngles.x, 0, 0);
+
+                Quaternion xzRotation = Quaternion.Euler(targetRotationToTarget.eulerAngles.x, 0, targetRotationToTarget.eulerAngles.z);
+                _cameraPivot.localRotation = Quaternion.Slerp(_cameraPivot.localRotation, xzRotation, Time.deltaTime * lockOnRotationSpeed);
+
+//a0ef2d7f154941279cd6cc4a4ed6722a30a35cd4
                 yield return null;
             }
         }
