@@ -57,6 +57,7 @@ namespace Mekaiju
         {
             if (Mecha.CanExecuteAbility(_desc.DefaultAbility.Behaviour.Consumption(p_opt)))
             {
+                Mecha.Context.LastAbilityTime = Time.time;
                 yield return _desc.DefaultAbility.Behaviour.Trigger(this, p_target, p_opt);
             }
         }
@@ -73,6 +74,7 @@ namespace Mekaiju
             {
                 if (Mecha.CanExecuteAbility(_desc.SpecialAbility.Behaviour.Consumption(p_opt)))
                 {
+                    Mecha.Context.LastAbilityTime = Time.time;
                     yield return _desc.SpecialAbility.Behaviour.Trigger(this, p_target, p_opt);    
                 }
             }
