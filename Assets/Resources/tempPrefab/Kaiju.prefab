@@ -291,10 +291,9 @@ GameObject:
   - component: {fileID: 1078369655045439190}
   - component: {fileID: 233982449120186214}
   - component: {fileID: 911741115229721978}
-  - component: {fileID: 6997100270167301878}
   m_Layer: 0
   m_Name: Kaiju
-  m_TagString: Untagged
+  m_TagString: Kaiiju
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -341,16 +340,22 @@ MonoBehaviour:
   bodyParts:
   - nom: Corp
     part:
-    - {fileID: 0}
-    - {fileID: 0}
-  - nom: "T\xEAte"
-    part:
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 5551521203586782951}
+    health: 100
+    isDestroyed: 0
   - nom: Patte
     part:
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 5928693170675147533}
+    - {fileID: 5085126965866158908}
+    - {fileID: 2179837640039621086}
+    - {fileID: 6714684652640316601}
+    health: 100
+    isDestroyed: 0
+  - nom: "T\xEAte"
+    part:
+    - {fileID: 2481524739238156992}
+    health: 100
+    isDestroyed: 0
   agroTriggerArea: 14.44
   agroSpeed: 3.32
   attackCountdown: 0.2
@@ -402,7 +407,7 @@ MonoBehaviour:
   debugAttak2: 0
   colorForChargeMaxRange: {r: 0, g: 0, b: 1, a: 1}
   colorForChargeMinRange: {r: 1, g: 0.9203187, b: 0, a: 1}
-  debugCrocs: 1
+  debugCrocs: 0
   colorForCrocsMaxRange: {r: 0, g: 1, b: 0, a: 1}
 --- !u!195 &911741115229721978
 NavMeshAgent:
@@ -426,27 +431,6 @@ NavMeshAgent:
   m_BaseOffset: 2.65
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!65 &6997100270167301878
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3592290967890215276}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 7, y: 7, z: 7}
-  m_Center: {x: 0, y: 1.09, z: 0}
 --- !u!1 &5085126965866158908
 GameObject:
   m_ObjectHideFlags: 0
