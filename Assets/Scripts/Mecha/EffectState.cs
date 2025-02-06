@@ -65,5 +65,13 @@ namespace Mekaiju
                 _elapsed += Time.deltaTime;
             }
         }
+        
+        public void FixedTick(MechaInstance p_self)
+        {
+            if (_time < 0 || _elapsed < _time)
+            {
+                _effect.Behaviour.FixedTick(p_self);
+            }
+        }
     }
 }

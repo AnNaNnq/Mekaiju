@@ -58,7 +58,7 @@ namespace Mekaiju
         /// <param name="p_self"></param>
         /// <param name="p_target"></param>
         /// <returns></returns>
-        public override IEnumerator Trigger(MechaInstance p_self, BasicAI p_target, object p_opt)
+        public override IEnumerator Trigger(MechaPartInstance p_self, BasicAI p_target, object p_opt)
         {
             var t_now     = Time.time; 
             var t_elapsed = t_now - _lastTriggerTime;
@@ -67,7 +67,7 @@ namespace Mekaiju
                 _lastTriggerTime = t_now;
                 // TODO: Launch animation
 
-                p_self.ConsumeStamina(_consumption);
+                p_self.Mecha.ConsumeStamina(_consumption);
 
                 // Compute travel time
                 var t_tpos = p_target.transform.position;
@@ -81,6 +81,11 @@ namespace Mekaiju
             yield return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p_opt"></param>
+        /// <returns></returns>
         public override float Consumption(object p_opt)
         {
             return _consumption;

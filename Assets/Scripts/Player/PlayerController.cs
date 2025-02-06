@@ -108,14 +108,14 @@ public class PlayerController : MonoBehaviour
     private void OnSwordAttack(InputAction.CallbackContext p_context)
     {
         Debug.Log("SwordAttack");
-        StartCoroutine(_instance.ExecuteAbility(MechaPart.LeftArm, GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
+        StartCoroutine(_instance[MechaPart.LeftArm].TriggerDefaultAbility(GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
         _animator.SetTrigger("swordAttack");
     }
     
     private void OnGunAttack(InputAction.CallbackContext p_context)
     {
         Debug.Log("GunAttack");
-        StartCoroutine(_instance.ExecuteAbility(MechaPart.RightArm, GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
+        StartCoroutine(_instance[MechaPart.RightArm].TriggerDefaultAbility(GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
         _animator.SetTrigger("laserAttack");
     }
     
