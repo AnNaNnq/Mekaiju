@@ -18,12 +18,12 @@ namespace Mekaiju
         }
 
         /// <summary>
-        /// Simple overload of <see cref="Trigger(MechaInstance,BasicAI,object)"/>
+        /// Simple overload of <see cref="Trigger(MechaPartInstance,BasicAI,object)"/>
         /// </summary>
         /// <param name="p_self"></param>
         /// <param name="p_target"></param>
         /// <returns></returns>
-        public virtual IEnumerator Trigger(MechaInstance p_self, BasicAI p_target)
+        public virtual IEnumerator Trigger(MechaPartInstance p_self, BasicAI p_target)
         {
             return Trigger(p_self, p_target, null);
         }
@@ -35,13 +35,13 @@ namespace Mekaiju
         /// <param name="p_self"></param>
         /// <param name="p_target"></param>
         /// <returns></returns>
-        public abstract IEnumerator Trigger(MechaInstance p_self, BasicAI p_target, object p_opt);
+        public abstract IEnumerator Trigger(MechaPartInstance p_self, BasicAI p_target, object p_opt);
 
         /// <summary>
         /// Must be called in <see cref="MonoBehviour.Update"/> to allow some common process.
         /// </summary>
         /// <param name="p_self"></param>
-        public virtual void Tick(MechaInstance p_self)
+        public virtual void Tick(MechaPartInstance p_self)
         {
 
         }
@@ -50,7 +50,7 @@ namespace Mekaiju
         /// Must be called in <see cref="MonoBehviour.FixedUpdate"/> to allow some physics process.
         /// </summary>
         /// <param name="p_self"></param>
-        public virtual void FixedTick(MechaInstance p_self)
+        public virtual void FixedTick(MechaPartInstance p_self)
         {
 
         }

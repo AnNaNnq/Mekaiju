@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Mekaiju.AI;
 using Mekaiju.Utils;
 using UnityEngine;
 
@@ -56,6 +54,16 @@ namespace Mekaiju
         /// </summary>
         public InstanceContext Context { get; private set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p_part"></param>
+        /// <returns></returns>
+        public MechaPartInstance this[MechaPart p_part]
+        {
+            get => _parts[p_part];
+        }
+
         private void Start()
         {
             // Desc = GameManager.Instance.PData.Mecha;
@@ -74,7 +82,7 @@ namespace Mekaiju
                     var t_go = Instantiate(part.DefaultAbility.Prefab, t_tr);
 
                     var t_inst = t_go.AddComponent<MechaPartInstance>();
-                    t_inst.Initialize(part);
+                    t_inst.Initialize(this, part);
 
                     t_tr.gameObject.SetActive(true);
 
@@ -89,7 +97,6 @@ namespace Mekaiju
             _effects = new()
             {
                 new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
-                new(Resources.Load<Effect>("Mecha/Effect/Bleeding"), 10f)
             };
 
             _health  = Desc.Health;
@@ -102,6 +109,11 @@ namespace Mekaiju
         {            
             _effects.ForEach  (effect => effect.Tick(this));
             _effects.RemoveAll(effect => effect.State == EffectState.Expired);
+        }
+
+        private void FixedUpdate()
+        {
+            _effects.ForEach(effect => effect.FixedTick(this));
         }
 
         /// <summary>
@@ -123,9 +135,20 @@ namespace Mekaiju
         }
 
         /// <summary>
-        /// 
+        /// Adds a new effect to the list of active effects without a timeout. 
+        /// The effect will remain active indefinitely until it is manually removed.
         /// </summary>
-        /// <param name="p_effect"></param>
+        /// <param name="p_effect">The effect to be added.</param>
+        public void AddEffect(Effect p_effect)
+        {
+            _effects.Add(new(p_effect));
+        }
+
+        /// <summary>
+        /// Adds a new effect to the list of active effects, with a specified duration.
+        /// </summary>
+        /// <param name="p_effect">The effect to be added.</param>
+        /// <param name="p_time">The duration of the effect in seconds.</param>
         public void AddEffect(Effect p_effect, float p_time)
         {
             _effects.Add(new(p_effect, p_time));
@@ -144,7 +167,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="amount"></param>
+        /// <param name="p_amount"></param>
         public void RestoreStamina(float p_amount)
         {
             _stamina = Math.Min(Desc.Stamina, _stamina + p_amount);
@@ -153,26 +176,10 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="amount"></param>
+        /// <param name="p_amount"></param>
         public void ConsumeStamina(float p_amount)
         {
             _stamina = Math.Max(0, _stamina - p_amount);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_consumption"></param>
-        /// <param name="p_part"></param>
-        /// <param name="p_target"></param>
-        /// <returns></returns>
-        public IEnumerator ExecuteAbility(MechaPart p_part, BasicAI p_target, object p_opt)
-        {
-            if (CanExecuteAbility(_parts[p_part].Ability.Behaviour.Consumption(p_opt)))
-            {
-                Context.LastAbilityTime = Time.time;
-                yield return _parts[p_part].Ability.Behaviour.Trigger(this, p_target, p_opt);
-            }
         }
     }
 
