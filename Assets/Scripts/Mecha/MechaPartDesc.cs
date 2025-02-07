@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Mekaiju
@@ -32,7 +33,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public bool HasSpecial => SpecialAbility != null;
+        public bool HasSpecial => !SpecialAbility.IsUnityNull();
     }
 
 }

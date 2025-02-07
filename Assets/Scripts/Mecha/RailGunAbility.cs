@@ -64,7 +64,7 @@ namespace Mekaiju
         /// <param name="p_self"></param>
         /// <param name="p_target"></param>
         /// <returns></returns>
-        public override IEnumerator Trigger(MechaInstance p_self, BasicAI p_target, object p_opt)
+        public override IEnumerator Trigger(MechaPartInstance p_self, BasicAI p_target, object p_opt)
         {
             var t_now     = Time.time; 
             var t_elapsed = t_now - _lastTriggerTime;
@@ -72,8 +72,9 @@ namespace Mekaiju
             {
                 _lastTriggerTime = t_now;
                 // TODO: Launch animation
+                p_self.Mecha.Context.Animator.SetTrigger("laserAttack");
 
-                p_self.ConsumeStamina(_consumption);
+                p_self.Mecha.ConsumeStamina(_consumption);
 
                 var t_targetPosition = p_target.transform.position;
 
@@ -106,9 +107,7 @@ namespace Mekaiju
                 // Check new position of BasicAI ?
                 if (t_hasCollide)
                 {
-                    // Apply damage
-                    Debug.Log("RailGun projectile reach its target!");
-                    Debug.Log($"RailGun damage : {_damage}");  
+                    DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Gun, _damage.ToString(), 0.5f);
                 }
                 GameObject.Destroy(t_go);
             }
