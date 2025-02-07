@@ -267,16 +267,13 @@ public class PlayerController : MonoBehaviour
             // Regular movement
             Vector2 t_moveDir = _moveAction.ReadValue<Vector2>();
             Vector3 t_vel = _rigidbody.linearVelocity;
-
-            // t_vel = _speed * t_moveDir.y * Time.fixedDeltaTime * transform.forward; for intertia
+            
             t_vel  = _speed * t_moveDir.y * Time.fixedDeltaTime * transform.forward;
             t_vel += _speed * t_moveDir.x * Time.fixedDeltaTime * transform.right;
 
             _rigidbody.angularVelocity = Vector3.zero;
 
-            // t_vel.x = _speed * t_moveDir.x;
-            // t_vel.z = _speed * t_moveDir.y;
-            _rigidbody.linearVelocity = t_vel;
+            _rigidbody.linearVelocity = new(t_vel.x, _rigidbody.linearVelocity.y, t_vel.z);
             _animator.SetFloat("WalkingSpeed",Mathf.Abs(t_vel.x)+Mathf.Abs(t_vel.z));
         }
         //Debug.Log($"look: {t_lookDir}");
