@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("IsShielding", _isProtected);
         _speed = _baseSpeed * t_shieldSpeedModifier;
 
-        // D�marre la consommation de stamina
+        // D marre la consommation de stamina
         if (_shieldStaminaDrainCoroutine != null) StopCoroutine(_shieldStaminaDrainCoroutine);
         _shieldStaminaDrainCoroutine = StartCoroutine(ShieldStaminaDrain());
     }
@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("IsShielding", _isProtected);
         _speed = _baseSpeed;
 
-        // Arr�te la consommation de stamina
+        // Arr te la consommation de stamina
         if (_shieldStaminaDrainCoroutine != null)
         {
             StopCoroutine(_shieldStaminaDrainCoroutine);
@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
             _instance.ConsumeStamina(2f);
             _instance.Context.LastAbilityTime = Time.time;
 
-            // Si la stamina est �puis�e, d�sactive le bouclier
+            // Si la stamina est  puis e, d sactive le bouclier
             if (!_instance.CanExecuteAbility(_shieldCost))
             {
                 OnUnshield(new InputAction.CallbackContext());
@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isDashing && !_isProtected && _instance.CanExecuteAbility(_dashCost))
         {
-            // determine direction du dash bas� sur la direction de deplacement
+            // determine direction du dash bas  sur la direction de deplacement
             Vector2 moveInput = _moveAction.ReadValue<Vector2>();
             //_dashDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
 
@@ -245,10 +245,10 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
-        // Tourner le joueur avec la cam�ra horizontalement
+        // Tourner le joueur avec la cam ra horizontalement
         transform.Rotate(Vector3.up * t_lookDir.x);
 
-        // G�rer la rotation verticale de la cam�ra
+        // G rer la rotation verticale de la cam ra
         var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x - t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
         var t_delta = t_clamp - _cameraPivot.eulerAngles.x;
         _cameraPivot.Rotate(Vector3.right * t_delta);
@@ -280,7 +280,7 @@ public class PlayerController : MonoBehaviour
 
             // t_vel.x = _speed * t_moveDir.x;
             // t_vel.z = _speed * t_moveDir.y;
-            _rigidbody.linearVelocity = t_vel;
+            _rigidbody.linearVelocity = new(t_vel.x, _rigidbody.linearVelocity.y, t_vel.z);
             _animator.SetFloat("WalkingSpeed",Mathf.Abs(t_vel.x)+Mathf.Abs(t_vel.z));
         }
         //Debug.Log($"look: {t_lookDir}");
