@@ -16,6 +16,8 @@ namespace Mekaiju.AI
         public LayerMask mask;
         [Tag] public string targetTag;
         public BodyPart[] bodyParts;
+        [ReadOnly]
+        public int nbPhase;
 
         [Foldout("Agro")]
         [PositiveValueOnly] public float agroTriggerArea = 10f;
@@ -41,6 +43,10 @@ namespace Mekaiju.AI
 
         private bool _canSwitch = false;
 
+        protected int _currentPhase = 1;
+
+        private int _totalStartHealth;
+
         [Foldout("Debug")]
         [OverrideLabel("Show Gizmo For Non-agro Phase")]
         public bool showGizmo;
@@ -59,6 +65,18 @@ namespace Mekaiju.AI
             _target = GameObject.FindGameObjectWithTag(targetTag);
             StartCoroutine(ShowDPS());
             textDPS.text = _dps.ToString();
+            _totalStartHealth = GetTotalHealth();
+            _currentPhase = 1;
+        }
+
+        public int GetTotalHealth()
+        {
+            int t_health = 0;
+            foreach (BodyPart t_part in bodyParts)
+            {
+                t_health += t_part.health;
+            }
+            return t_health;
         }
 
         /// <summary>
@@ -283,7 +301,13 @@ namespace Mekaiju.AI
                 t_bodyPart.health = 0;
             }
 
-            if(IsDead())
+            int t_curretHealth = GetTotalHealth();
+            if (t_curretHealth <= (_totalStartHealth / 2))
+            {
+                _currentPhase++;
+            }
+
+            if (IsDead())
             {
                 Debug.Log("Dead");
                 Destroy(gameObject);
