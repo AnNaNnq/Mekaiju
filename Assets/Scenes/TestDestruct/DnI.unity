@@ -392,7 +392,7 @@ GameObject:
   - component: {fileID: 1617801720}
   m_Layer: 0
   m_Name: mur
-  m_TagString: mur
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -520,11 +520,10 @@ GameObject:
   - component: {fileID: 1926330183}
   - component: {fileID: 1926330189}
   - component: {fileID: 1926330186}
-  - component: {fileID: 1926330187}
   - component: {fileID: 1926330188}
   m_Layer: 0
   m_Name: mecha
-  m_TagString: mechaAttack
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -610,20 +609,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
---- !u!114 &1926330187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1926330181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a11943f80d9a8f241a3e46e14781f914, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  smokePrefab: {fileID: 6801462485523027840, guid: 84287bb5e6d16444ea74c1ac733fe376, type: 3}
-  impactPrefab: {fileID: 2857382829751860275, guid: 04d06cafd20dd414d8e26ab650399cac, type: 3}
 --- !u!54 &1926330188
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -682,7 +667,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 918077179424027443, guid: e884e90c34f3dcd4991c6fa13ac73452, type: 3}
       propertyPath: m_Name
-      value: destructible
+      value: Destructible
+      objectReference: {fileID: 0}
+    - target: {fileID: 918077179424027443, guid: e884e90c34f3dcd4991c6fa13ac73452, type: 3}
+      propertyPath: m_TagString
+      value: Destructible
       objectReference: {fileID: 0}
     - target: {fileID: 2043969325129933756, guid: e884e90c34f3dcd4991c6fa13ac73452, type: 3}
       propertyPath: m_LocalPosition.x

@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 9203401255997159517}
   - component: {fileID: 8904710303935430914}
   m_Layer: 0
-  m_Name: destructible
-  m_TagString: destructible
+  m_Name: Destructible
+  m_TagString: Destructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -149,3 +149,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb208da403a63364fbb4a49316e3259e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  newMeshPrefab: {fileID: 8250991705823984891, guid: b8646cd68a9464549bdf404064d746d6, type: 3}
+  SmokePrefab: {fileID: 6801462485523027840, guid: 84287bb5e6d16444ea74c1ac733fe376, type: 3}
+  ImpactPrefab: {fileID: 7839332906791269395, guid: f8dd433ce17d8204cb623e13e5ac78e9, type: 3}
+  sizeRatioDefault: 0.125
+  sizeRatioHV: 0.25
+  Mass: 500
