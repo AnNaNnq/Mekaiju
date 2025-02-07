@@ -89,6 +89,24 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Lock"",
+                    ""type"": ""Button"",
+                    ""id"": ""b6283451-8749-4b9a-b367-7b158b95db4a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LockSwitch"",
+                    ""type"": ""Value"",
+                    ""id"": ""8871c376-6529-44d5-a090-3890f174f57b"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -210,6 +228,28 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""GunAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce75ec55-ebb7-436c-9dac-b39cdf0f1461"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Lock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""56a55da9-4185-4bb7-b67b-a4cdeec27cc2"",
+                    ""path"": ""<Mouse>/radius/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LockSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -804,6 +844,8 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         m_Player_Shield = m_Player.FindAction("Shield", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_Lock = m_Player.FindAction("Lock", throwIfNotFound: true);
+        m_Player_LockSwitch = m_Player.FindAction("LockSwitch", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -890,6 +932,8 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Shield;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_Lock;
+    private readonly InputAction m_Player_LockSwitch;
     public struct PlayerActions
     {
         private @MechaPlayerActions m_Wrapper;
@@ -901,6 +945,8 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         public InputAction @Shield => m_Wrapper.m_Player_Shield;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        public InputAction @Lock => m_Wrapper.m_Player_Lock;
+        public InputAction @LockSwitch => m_Wrapper.m_Player_LockSwitch;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -931,6 +977,12 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
+            @Lock.started += instance.OnLock;
+            @Lock.performed += instance.OnLock;
+            @Lock.canceled += instance.OnLock;
+            @LockSwitch.started += instance.OnLockSwitch;
+            @LockSwitch.performed += instance.OnLockSwitch;
+            @LockSwitch.canceled += instance.OnLockSwitch;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -956,6 +1008,12 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
+            @Lock.started -= instance.OnLock;
+            @Lock.performed -= instance.OnLock;
+            @Lock.canceled -= instance.OnLock;
+            @LockSwitch.started -= instance.OnLockSwitch;
+            @LockSwitch.performed -= instance.OnLockSwitch;
+            @LockSwitch.canceled -= instance.OnLockSwitch;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1145,6 +1203,8 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         void OnShield(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnLock(InputAction.CallbackContext context);
+        void OnLockSwitch(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
