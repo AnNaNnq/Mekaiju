@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using Mekaiju.AI;
 using UnityEngine;
 
 namespace Mekaiju
@@ -13,59 +15,71 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        public MechaInstance Mecha { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         private MechaPartDesc _desc;
 
         /// <summary>
         /// 
         /// </summary>
         [SerializeField]
-        private int _health;
+        public int Health { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public Ability Ability { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool _isDefautlAbility;
-
-        // public MechaPartInstance(MechaPartConfig config)
-        // {
-        //     _config  = config;
-        //     _health = config.Base.Health;
-        //     Ability = config.Base.DefaultAbility;
-        //     _isDefautlAbility = true;
-        // }
-
-        public void Initialize(MechaPartDesc p_config)
+        /// <param name="p_inst"></param>
+        /// <param name="p_config"></param>
+        public void Initialize(MechaInstance p_inst, MechaPartDesc p_config)
         {
-            _desc   = p_config;
-            _health = p_config.Health;
-            Ability = p_config.DefaultAbility;
-            _isDefautlAbility = true;
+            Mecha   = p_inst;
+
+            _desc  = p_config;
+            Health = p_config.Health;
 
             _desc.DefaultAbility.Behaviour?.Initialize();
-            _desc.SpecialAbility?.Behaviour?.Initialize();
+            if (_desc.HasSpecial)
+            {
+                _desc.SpecialAbility.Behaviour?.Initialize();
+            }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public void SwapAbility()
+        /// <param name="p_target"></param>
+        /// <param name="p_opt"></param>
+        /// <returns></returns>
+        public IEnumerator TriggerDefaultAbility(BasicAI p_target, object p_opt)
         {
-            if (_isDefautlAbility && _desc.HasSpecial)
+            if (Mecha.CanExecuteAbility(_desc.DefaultAbility.Behaviour.Consumption(p_opt)))
             {
-                Ability = _desc.SpecialAbility;
-                _isDefautlAbility = false;
-            }
-            else
-            {
-                Ability = _desc.DefaultAbility;
-                _isDefautlAbility = true;
+                Mecha.Context.LastAbilityTime = Time.time;
+                yield return _desc.DefaultAbility.Behaviour.Trigger(this, p_target, p_opt);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p_target"></param>
+        /// <param name="p_opt"></param>
+        /// <returns></returns>
+        public IEnumerator TriggerSpecialAbility(BasicAI p_target, object p_opt)
+        {   
+            if (_desc.HasSpecial)
+            {
+                if (Mecha.CanExecuteAbility(_desc.SpecialAbility.Behaviour.Consumption(p_opt)))
+                {
+                    Mecha.Context.LastAbilityTime = Time.time;
+                    yield return _desc.SpecialAbility.Behaviour.Trigger(this, p_target, p_opt);    
+                }
+            }
+        }
+
     }
 
 }
