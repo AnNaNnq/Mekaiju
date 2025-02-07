@@ -16,6 +16,8 @@ namespace Mekaiju.AI
         public LayerMask mask;
         [Tag] public string targetTag;
         public BodyPart[] bodyParts;
+        [ReadOnly]
+        public int nbPhase;
 
         [Foldout("Agro")]
         [PositiveValueOnly] public float agroTriggerArea = 10f;
@@ -41,6 +43,10 @@ namespace Mekaiju.AI
 
         private bool _canSwitch = false;
 
+        protected int _currentPhase = 1;
+
+        private int _totalStartHealth;
+
         [Foldout("Debug")]
         [OverrideLabel("Show Gizmo For Non-agro Phase")]
         public bool showGizmo;
@@ -59,6 +65,18 @@ namespace Mekaiju.AI
             _target = GameObject.FindGameObjectWithTag(targetTag);
             StartCoroutine(ShowDPS());
             textDPS.text = _dps.ToString();
+            _totalStartHealth = GetTotalHealth();
+            _currentPhase = 1;
+        }
+
+        public int GetTotalHealth()
+        {
+            int t_health = 0;
+            foreach (BodyPart t_part in bodyParts)
+            {
+                t_health += t_part.health;
+            }
+            return t_health;
         }
 
         /// <summary>
@@ -271,33 +289,58 @@ namespace Mekaiju.AI
 
         }
 
-        /// <summary>
-        /// Affiche les gizmos
-        /// </summary>
-        protected void OnDrawGizmos()
+        public void TakeDamage(int p_damage, GameObject p_tuchObject)
         {
-            if(!showGizmo) return;
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, agroTriggerArea);
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, awaitTriggerArea);
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, awaitPlayerDistance);
-        }
+            if (states != CombatStatesKaiju.Agro) states = CombatStatesKaiju.Agro;
 
-        /// <summary>
-        /// Affiche les DPS
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator ShowDPS()
-        {
-            while (true)
+            BodyPart t_bodyPart = GetBodyPartWithGameObject(p_tuchObject);
+            t_bodyPart.health -= p_damage;
+            if(t_bodyPart.health <= 0)
             {
-                yield return new WaitForSeconds(1);
-                _dps = 0;
-                textDPS.text = _dps.ToString();
+                t_bodyPart.isDestroyed = true;
+                t_bodyPart.health = 0;
+            }
+
+            int t_curretHealth = GetTotalHealth();
+            if (t_curretHealth <= (_totalStartHealth / 2))
+            {
+                _currentPhase++;
+            }
+
+            if (IsDead())
+            {
+                Debug.Log("Dead");
+                Destroy(gameObject);
             }
         }
+
+        public bool IsDead()
+        {
+            foreach (BodyPart t_part in bodyParts)
+            {
+                if (!t_part.isDestroyed)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public BodyPart GetBodyPartWithGameObject(GameObject p_object)
+        {
+            foreach (BodyPart t_part in bodyParts)
+            {
+                foreach (GameObject t_obj in t_part.part)
+                {
+                    if (t_obj == p_object)
+                    {
+                        return t_part;
+                    }
+                }
+            }
+            return null;
+        }
+
 
         /// <summary>
         /// Fonction virtuel pour le combat
@@ -325,5 +368,38 @@ namespace Mekaiju.AI
             yield return new WaitForSeconds(attackCountdown);
             _canAttack = true;
         }
+
+
+        #region Fonction pour les LD
+
+        /// <summary>
+        /// Affiche les gizmos
+        /// </summary>
+        protected void OnDrawGizmos()
+        {
+            if (!showGizmo) return;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, agroTriggerArea);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, awaitTriggerArea);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, awaitPlayerDistance);
+        }
+
+        /// <summary>
+        /// Affiche les DPS
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator ShowDPS()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(1);
+                _dps = 0;
+                textDPS.text = _dps.ToString();
+            }
+        }
+
+        #endregion
     }
 }
