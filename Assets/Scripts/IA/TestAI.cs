@@ -105,7 +105,7 @@ namespace Mekaiju.AI
         [SelectFromList(nameof(bodyParts))] public int bigBody;
         [SOSelector]
         [OverrideLabel("Effect")]
-        public Effect bigEffect;
+        public Effect effect;
         [OverrideLabel("Effect duration (sec)")]
         public float bigEffectDuration = 2;
         [OverrideLabel("Countdown (sec)")]
@@ -278,7 +278,7 @@ namespace Mekaiju.AI
                 {
                     t_dmg /= 2;
                 }
-                Attack(t_dmg, bigZoneCenter, bigZoneSize, bigEffect, bigEffectDuration);
+                Attack(t_dmg, bigZoneCenter, bigZoneSize, effect, bigEffectDuration);
                 _isBigAttack = false;
                 float i = 0;
                 while (i < bigCoutdown)
