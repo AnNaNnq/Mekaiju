@@ -11,12 +11,9 @@ namespace Mekaiju.AI
             _ai = GetComponentInParent<BasicAI>();
         }
 
-        private void OnCollisionEnter(Collision collision)
+        public void TakeDamage(int p_damage)
         {
-            if (collision.collider.CompareTag("Bullet"))
-            {
-                _ai.TakeDamage(10, gameObject);
-            }
+            _ai.TakeDamage(p_damage, gameObject);
         }
     }
 }
