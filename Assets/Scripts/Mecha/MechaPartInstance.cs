@@ -89,6 +89,24 @@ namespace Mekaiju
             }
         }
 
+        private void Update()
+        {
+            _desc.DefaultAbility.Behaviour?.Tick(this);
+            if (_desc.SpecialAbility)
+            {
+                _desc.SpecialAbility.Behaviour?.Tick(this);
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            _desc.DefaultAbility.Behaviour?.FixedTick(this);
+            if (_desc.SpecialAbility)
+            {
+                _desc.SpecialAbility.Behaviour?.FixedTick(this);
+            }
+        }
+
     }
 
 }

@@ -205,14 +205,7 @@ public class PlayerController : MonoBehaviour
     
     private void OnJump(InputAction.CallbackContext p_context)
     {
-        if (_isGrounded && _instance.CanExecuteAbility(10f))
-        {
-            _instance.ConsumeStamina(_jumpCost);
-            _instance.Context.LastAbilityTime = Time.time;
-            _isGrounded = false;
-            _animator.SetTrigger("Jump");
-            _rigidbody.AddForce(Vector3.up  * _jumpForce, ForceMode.Impulse);
-        }
+        StartCoroutine(_instance[MechaPart.Legs].TriggerDefaultAbility(null, null));
     }
 
     private void OnDash(InputAction.CallbackContext p_context)
@@ -283,6 +276,8 @@ public class PlayerController : MonoBehaviour
     {
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, 0.3f, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
+
+        _instance.Context.IsGrounded = _isGrounded;
 
         if (_isDashing)
         {
