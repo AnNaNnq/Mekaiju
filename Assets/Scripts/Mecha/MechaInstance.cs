@@ -14,7 +14,11 @@ namespace Mekaiju
     {
         public float LastAbilityTime = -1000f;
 
-        public bool IsGrounded = false;
+        public bool IsGrounded          = false;
+        public bool IsMovementAltered   = false;
+        public bool IsMovementOverrided = false;
+
+        public Vector2 MoveInput = new(0, 0);
 
         public Animator  Animator;
         public Rigidbody Rigidbody;
