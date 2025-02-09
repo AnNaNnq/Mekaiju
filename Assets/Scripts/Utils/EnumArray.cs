@@ -16,7 +16,7 @@ namespace Mekaiju.Utils
     public class EnumArray<TKey, TValue> : EnumArray, IEnumerable<TValue> where TKey : Enum
     {
         [SerializeField]
-        private TValue[] _array = new TValue[Enum.GetValues(typeof(TKey)).Length];
+        private List<TValue> _array = new(Enumerable.Repeat<TValue>(default, Enum.GetValues(typeof(TKey)).Length));
 
         public TValue this[TKey key]
         {
@@ -55,7 +55,7 @@ namespace Mekaiju.Utils
             }
         }
 
-        public IEnumerator<TValue> GetEnumerator() => new Enumerator(_array);
+        public IEnumerator<TValue> GetEnumerator() => new Enumerator(_array.ToArray());
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
