@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mekaiju.Utils;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Mekaiju
 {
@@ -18,7 +19,7 @@ namespace Mekaiju
         public bool IsMovementAltered   = false;
         public bool IsMovementOverrided = false;
 
-        public Vector2 MoveInput = new(0, 0);
+        public InputAction MoveAction;
 
         public Animator  Animator;
         public Rigidbody Rigidbody;

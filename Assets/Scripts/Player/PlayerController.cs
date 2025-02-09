@@ -71,36 +71,36 @@ public class PlayerController : MonoBehaviour
         _cameraPivot = transform.Find("CameraPivot");
     }
 
-    private void OnEnable()
+    private void Start()
     {
         _moveAction = _playerActions.Player.Move;
-        _moveAction.Enable();
         _lookAction = _playerActions.Player.Look;
-        _lookAction.Enable();
 
         _playerActions.Player.SwordAttack.performed += OnSwordAttack;
-        _playerActions.Player.SwordAttack.Enable();
-
-        _playerActions.Player.GunAttack.performed += OnGunAttack;
-        _playerActions.Player.GunAttack.Enable();
-
         _playerActions.Player.Shield.performed += OnShield;
-        _playerActions.Player.Shield.canceled += OnUnshield;
-        _playerActions.Player.Shield.Enable();
-
+        _playerActions.Player.Shield.canceled  += OnUnshield;
         _playerActions.Player.Jump.started += OnJump;
-        //_playerActions.Player.Jump.performed += OnHover;
-        //_playerActions.Player.Jump.canceled += OnStopHover;
-        _playerActions.Player.Jump.Enable();
-
         _playerActions.Player.Dash.performed += OnDash;
+
+        _instance.Context.MoveAction = _moveAction;
+    }
+
+    private void OnEnable()
+    {
+        _playerActions.Player.Move.Enable();
+        _playerActions.Player.Look.Enable();
+        _playerActions.Player.SwordAttack.Enable();
+        _playerActions.Player.GunAttack.Enable();
+        _playerActions.Player.Shield.Enable();
+        _playerActions.Player.Jump.Enable();
         _playerActions.Player.Dash.Enable();
 
     }
+
     private void OnDisable()
     {
-        _moveAction.Disable();
-        _lookAction.Disable();
+        _playerActions.Player.Move.Disable();
+        _playerActions.Player.Look.Disable();
         _playerActions.Player.SwordAttack.Disable();
         _playerActions.Player.GunAttack.Disable();
         _playerActions.Player.Shield.Disable();
@@ -223,7 +223,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _instance.Context.MoveInput  = _moveAction.ReadValue<Vector2>();
         _instance.Context.IsGrounded = _isGrounded;
         _instance.Context.IsMovementAltered = _isProtected;
 

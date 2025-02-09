@@ -43,7 +43,7 @@ namespace Mekaiju
         {
             if (!_isAcitve && !p_self.Mecha.Context.IsMovementAltered)
             {
-                Vector2   t_input     = p_self.Mecha.Context.MoveInput;
+                Vector2   t_input     = p_self.Mecha.Context.MoveAction.ReadValue<Vector2>();
                 Transform t_transform = p_self.Mecha.transform;
                 _direction = (t_input.y * t_transform.forward + t_input.x * t_transform.right).normalized;
 
