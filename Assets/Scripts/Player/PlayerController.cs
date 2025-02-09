@@ -205,50 +205,12 @@ public class PlayerController : MonoBehaviour
     
     private void OnJump(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.Legs].TriggerDefaultAbility(null, null));
+        StartCoroutine(_instance[MechaPart.Legs].TriggerDefaultAbility(null, LegsSelector.Jump));
     }
 
     private void OnDash(InputAction.CallbackContext p_context)
     {
-        if (!_isDashing && !_isProtected && _instance.CanExecuteAbility(_dashCost))
-        {
-            // determine direction du dash bas� sur la direction de deplacement
-            Vector2 moveInput = _moveAction.ReadValue<Vector2>();
-            //_dashDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
-
-            _dashDirection = moveInput.y *  transform.forward;
-            _dashDirection += moveInput.x * transform.right;
-            _dashDirection = _dashDirection.normalized;
-
-            // Si aucune input, pas de dash
-            if (_dashDirection.sqrMagnitude == 0f)
-            {
-                //CHANGER ICI POUR CHANGER LE COMPORTEMENT QUAND LE JOUEUR DASH SANS DIRECTION
-                return;
-            }
-
-            _instance.ConsumeStamina(_dashCost);
-            _instance.Context.LastAbilityTime = Time.time;
-            StartCoroutine(DashCoroutine());
-        }
-    }
-
-    private IEnumerator DashCoroutine()
-    {
-        _isDashing = true;
-        yield return new WaitForSeconds(_dashDuration);
-        _isDashing = false;
-    }
-    
-    private IEnumerator Dash(Vector2 p_moveDir,Vector3 p_vel)
-    {
-        Debug.Log("Dash");
-        _isDashing = true;
-
-        _rigidbody.linearVelocity = new Vector3(_dashForce * p_moveDir.x,p_vel.y,_dashForce*p_moveDir.y);
-
-        yield return new WaitForSeconds(_dashDuration);
-        _isDashing = false;
+        StartCoroutine(_instance[MechaPart.Legs].TriggerDefaultAbility(null, LegsSelector.Dash));
     }
 
     float ClampAngle(float angle, float from, float to)
@@ -261,6 +223,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        _instance.Context.MoveInput  = _moveAction.ReadValue<Vector2>();
+        _instance.Context.IsGrounded = _isGrounded;
+        _instance.Context.IsMovementAltered = _isProtected;
+
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
         // Tourner le joueur avec la cam�ra horizontalement
@@ -277,33 +243,20 @@ public class PlayerController : MonoBehaviour
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, 0.3f, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
-        _instance.Context.IsGrounded = _isGrounded;
-
-        if (_isDashing)
-        {
-            // Maintain dash velocity while preserving gravity
-            Vector3 newVelocity = _dashDirection * _dashForce;
-            newVelocity.y = _rigidbody.linearVelocity.y;
-            _rigidbody.linearVelocity = newVelocity;
-        }
-        else
+        if (!_instance.Context.IsMovementOverrided)
         {
             // Regular movement
             Vector2 t_moveDir = _moveAction.ReadValue<Vector2>();
-            Vector3 t_vel = _rigidbody.linearVelocity;
+            Vector3 t_vel;
 
-            // t_vel = _speed * t_moveDir.y * Time.fixedDeltaTime * transform.forward; for intertia
             t_vel  = _speed * t_moveDir.y * Time.fixedDeltaTime * transform.forward;
             t_vel += _speed * t_moveDir.x * Time.fixedDeltaTime * transform.right;
 
             _rigidbody.angularVelocity = Vector3.zero;
 
-            // t_vel.x = _speed * t_moveDir.x;
-            // t_vel.z = _speed * t_moveDir.y;
             _rigidbody.linearVelocity = t_vel;
             _animator.SetFloat("WalkingSpeed",Mathf.Abs(t_vel.x)+Mathf.Abs(t_vel.z));
         }
-        //Debug.Log($"look: {t_lookDir}");
     }
 
     private void OnDrawGizmos()
