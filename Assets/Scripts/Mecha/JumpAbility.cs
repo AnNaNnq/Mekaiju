@@ -32,7 +32,7 @@ public class JumpAbility : IAbilityBehaviour
 
     public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
     {  
-        if (p_self.Mecha.Context.IsGrounded)
+        if (p_self.Mecha.Context.IsGrounded && !_requested)
         {
             p_self.Mecha.ConsumeStamina(_consumption);
             _requested = true;
