@@ -25,8 +25,8 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
-        public int Health { get; private set; }
+        [field: SerializeField]
+        public float Health { get; private set; }
 
         /// <summary>
         /// 
@@ -45,6 +45,15 @@ namespace Mekaiju
             {
                 _desc.SpecialAbility.Behaviour?.Initialize();
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p_damage"></param>
+        public void TakeDamage(float p_damage)
+        {
+            Health = Mathf.Max(0f, Health - p_damage);
         }
 
         /// <summary>

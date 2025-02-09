@@ -15,7 +15,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [field: SerializeField]
-        public int Health { get; private set; }
+        public float Health { get; private set; }
 
         /// <summary>
         /// 
