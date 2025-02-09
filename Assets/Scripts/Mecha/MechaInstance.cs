@@ -14,7 +14,10 @@ namespace Mekaiju
     {
         public float LastAbilityTime = -1000f;
 
-        public Animator Animator;
+        public bool IsGrounded = false;
+
+        public Animator  Animator;
+        public Rigidbody Rigidbody;
     }
 
 
@@ -99,7 +102,7 @@ namespace Mekaiju
             );
 
             // TODO: remove
-            t_main.SetActive(false);
+            // t_main.SetActive(false);
 
             // _effects = new();
             _effects = new()
@@ -109,8 +112,11 @@ namespace Mekaiju
 
             Stamina = Desc.Stamina;
 
-            Context = new();
-            Context.Animator = GetComponent<Animator>();
+            Context = new()
+            {
+                Animator  = GetComponent<Animator>(),
+                Rigidbody = GetComponent<Rigidbody>()
+            };
         }
 
         private void Update()
