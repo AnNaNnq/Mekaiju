@@ -53,7 +53,7 @@ namespace Mekaiju
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
-        public IEnumerator TriggerDefaultAbility(BasicAI p_target, object p_opt)
+        public IEnumerator TriggerDefaultAbility(BodyPartObject p_target, object p_opt)
         {
             if (Mecha.CanExecuteAbility(_desc.DefaultAbility.Behaviour.Consumption(p_opt)))
             {
@@ -68,7 +68,7 @@ namespace Mekaiju
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
-        public IEnumerator TriggerSpecialAbility(BasicAI p_target, object p_opt)
+        public IEnumerator TriggerSpecialAbility(BodyPartObject p_target, object p_opt)
         {   
             if (_desc.HasSpecial)
             {

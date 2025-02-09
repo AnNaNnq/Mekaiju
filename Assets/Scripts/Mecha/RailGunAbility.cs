@@ -64,7 +64,7 @@ namespace Mekaiju
         /// <param name="p_self"></param>
         /// <param name="p_target"></param>
         /// <returns></returns>
-        public override IEnumerator Trigger(MechaPartInstance p_self, BasicAI p_target, object p_opt)
+        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
             var t_now     = Time.time; 
             var t_elapsed = t_now - _lastTriggerTime;
@@ -107,6 +107,7 @@ namespace Mekaiju
                 // Check new position of BasicAI ?
                 if (t_hasCollide)
                 {
+                    p_target.TakeDamage(_damage);
                     DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Gun, _damage.ToString(), 0.5f);
                 }
                 GameObject.Destroy(t_go);
