@@ -90,8 +90,7 @@ namespace Mekaiju
                 t_wb.transform.position = p_self.transform.position + new Vector3(0, 2f, 2f);
                 t_wb.OnCollide.AddListener(
                     collision => {
-                        Debug.Log(collision.gameObject.name);
-                        if (collision.gameObject.name == "Kaiju")
+                        if (collision.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
                         {
                             t_hasCollide = true;
                         }
