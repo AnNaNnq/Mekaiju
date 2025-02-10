@@ -21,7 +21,7 @@ namespace Mekaiju.AI
         [PositiveValueOnly] public float agroTriggerArea = 10f;
         [PositiveValueOnly] public float agroSpeed = 3.5f;
         [PositiveValueOnly][OverrideLabel("Attack Countdown (sec)")] public float attackCountdown = 0.2f;
-        [SerializeField]
+        
         protected bool _canAttack = true;
 
         [Foldout("Await")]
@@ -304,13 +304,13 @@ namespace Mekaiju.AI
         /// </summary>
         /// <param name="p_damage"></param>
         /// <param name="p_tuchObject"></param>
-        public void TakeDamage(int p_damage, GameObject p_tuchObject)
+        public virtual void TakeDamage(int p_damage, GameObject p_tuchObject)
         {
             if (states != CombatStatesKaiju.Agro) states = CombatStatesKaiju.Agro;
 
             BodyPart t_bodyPart = GetBodyPartWithGameObject(p_tuchObject);
             t_bodyPart.health -= p_damage;
-            if(t_bodyPart.health <= 0)
+            if (t_bodyPart.health <= 0)
             {
                 t_bodyPart.isDestroyed = true;
                 t_bodyPart.health = 0;

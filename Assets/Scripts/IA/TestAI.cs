@@ -361,6 +361,18 @@ namespace Mekaiju.AI
             _canCharge = true;
         }
 
+        /// <summary>
+        /// Rewrite TakeDamage function to take defense into account
+        /// </summary>
+        /// <param name="p_damage"></param>
+        /// <param name="p_tuchObject"></param>
+        public override void TakeDamage(int p_damage, GameObject p_tuchObject)
+        {
+            int t_damage = p_damage;
+            if (_isDefense) t_damage -= (int)(damagePercentageDefense * t_damage) / 100;
+            base.TakeDamage(t_damage, p_tuchObject);
+        }
+
 
 
         #region Fonctions pour les LD
