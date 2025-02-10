@@ -141,8 +141,6 @@ namespace Mekaiju
         /// <param name="p_damage"></param>
         public void TakeDamage(float p_damage)
         {
-            Health = Math.Max(0, Health - p_damage);
-            Context.LastDamageTime = Time.time;
             foreach (var t_part in _parts)
             {
                 // TODO: Maybe not divide
@@ -156,7 +154,10 @@ namespace Mekaiju
         /// <param name="p_amount"></param>
         public void Heal(float p_amount)
         {
-            Health = Math.Min(Desc.Health, Health + p_amount);
+            foreach (var t_part in _parts)
+            {
+                t_part.Heal(p_amount);
+            }
         }
 
         /// <summary>
