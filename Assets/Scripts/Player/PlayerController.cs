@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public VisualEffect shieldBreakVFX;
     
     [Foldout("Movement Attributes")]
+    [SerializeField] private float _groundCheckRadius = 0.5f;
     [SerializeField] private float _baseSpeed = 5f;
     private float _speed;
     //[SerializeField] private float _cameraSpeed = 5f;
@@ -234,7 +235,7 @@ public class PlayerController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, 1f, _groundLayerMask);
+        Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
         if (!_instance.Context.IsMovementOverrided)
@@ -264,6 +265,6 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(groundCheck.position, 0.5f);
+        Gizmos.DrawWireSphere(groundCheck.position, _groundCheckRadius);
     }
 }
