@@ -46,6 +46,11 @@ namespace Mekaiju
             _elapsed = 0f;
         }
 
+        public Effect GetEffect()
+        {
+            return _effect;
+        }
+
         public StatefullEffect(Effect p_effect) : this(p_effect, -1)
         {        
 
