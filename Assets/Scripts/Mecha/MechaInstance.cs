@@ -14,6 +14,7 @@ namespace Mekaiju
     public class InstanceContext
     {
         public float LastAbilityTime = -1000f;
+        public float LastDamageTime = -1000f;
 
         public bool IsGrounded          = false;
         public bool IsMovementAltered   = false;
@@ -113,6 +114,7 @@ namespace Mekaiju
             _effects = new()
             {
                 new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
+                new(Resources.Load<Effect>("Mecha/Effect/Heal")),
             };
 
             Stamina = Desc.Stamina;
@@ -154,6 +156,18 @@ namespace Mekaiju
             {
                 // TODO: Maybe not divide
                 t_part.TakeDamage(p_damage / _parts.Count());    
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p_amount"></param>
+        public void Heal(float p_amount)
+        {
+            foreach (var t_part in _parts)
+            {
+                t_part.Heal(p_amount);
             }
         }
 
