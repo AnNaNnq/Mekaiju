@@ -25,8 +25,8 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
-        public int Health { get; private set; }
+        [field: SerializeField]
+        public float Health { get; private set; }
 
         /// <summary>
         /// 
@@ -50,10 +50,19 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="p_damage"></param>
+        public void TakeDamage(float p_damage)
+        {
+            Health = Mathf.Max(0f, Health - p_damage);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
-        public IEnumerator TriggerDefaultAbility(BasicAI p_target, object p_opt)
+        public IEnumerator TriggerDefaultAbility(BodyPartObject p_target, object p_opt)
         {
             if (Mecha.CanExecuteAbility(_desc.DefaultAbility.Behaviour.Consumption(p_opt)))
             {
@@ -68,7 +77,7 @@ namespace Mekaiju
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
-        public IEnumerator TriggerSpecialAbility(BasicAI p_target, object p_opt)
+        public IEnumerator TriggerSpecialAbility(BodyPartObject p_target, object p_opt)
         {   
             if (_desc.HasSpecial)
             {

@@ -4,7 +4,7 @@ using Mekaiju.AI;
 
 public class EmptyAbility : IAbilityBehaviour
 {
-    public override IEnumerator Trigger(MechaPartInstance p_self, BasicAI p_target, object p_opt)
+    public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
     {
         yield return null;
     }

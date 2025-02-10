@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mekaiju.Utils;
 using UnityEngine;
 
@@ -43,8 +44,13 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
-        public float Health { get; private set; }
+        public float Health 
+        { 
+            get
+            {
+                return _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.Health; });
+            } 
+        }
 
         /// <summary>
         /// 
@@ -103,7 +109,6 @@ namespace Mekaiju
                 new(Resources.Load<Effect>("Mecha/Effect/Heal")),
             };
 
-            Health  = Desc.Health;
             Stamina = Desc.Stamina;
 
             Context = new();
@@ -138,6 +143,11 @@ namespace Mekaiju
         {
             Health = Math.Max(0, Health - p_damage);
             Context.LastDamageTime = Time.time;
+            foreach (var t_part in _parts)
+            {
+                // TODO: Maybe not divide
+                t_part.TakeDamage(p_damage / _parts.Count());    
+            }
         }
 
         /// <summary>
