@@ -138,7 +138,7 @@ namespace Mekaiju.AI
         #endregion
 
         /// <summary>
-        /// Fonction appelée lorsqu'un ennemi est en mode agressif
+        /// Function called when an enemy is in aggressive mode
         /// </summary>
         public override void Agro()
         {
@@ -148,7 +148,7 @@ namespace Mekaiju.AI
 
 
         /// <summary>
-        /// Machine à état des attaques
+        /// Attack status machine
         /// </summary>
         public void AttackStateMachine()
         {
@@ -164,7 +164,7 @@ namespace Mekaiju.AI
                 _agent.speed = defenseSpeed;
                 StartCoroutine(Defense());
             }
-            //Gros croc
+            //Big fang
             else if (t_dist < bigAttackRange && _canBigAttack && !_isBigAttack && _canAttack && _currentPhase >= bigPhaseStart && (bigPhaseStop == 0 || _currentPhase < bigPhaseStop))
             {
                 _canAttack = false;
@@ -196,7 +196,7 @@ namespace Mekaiju.AI
                 StartCharge();
                 _currentHitsDefense++;
             }
-            //Etat Normal
+            // Normal status
             else
             {
                 _agent.enabled = true;
@@ -206,8 +206,8 @@ namespace Mekaiju.AI
             }
         }
 
-        /// <summary>
-        /// Défense en boule
+        /// <summary>_canAttack
+        /// Ball defense
         /// </summary>
         /// <returns></returns>
         public IEnumerator Defense()
@@ -234,7 +234,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Attaque de face
+        /// Front attack
         /// </summary>
         /// <returns></returns>
         public IEnumerator FaceAttack()
@@ -261,7 +261,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Attaque gros croc
+        /// Big fang attack
         /// </summary>
         /// <returns></returns>
         public IEnumerator BigAttack()
@@ -294,7 +294,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Comance la charge
+        /// Start charging
         /// </summary>
         public void StartCharge()
         {
@@ -308,7 +308,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Lance la charge (déplacement + dégats)
+        /// Launches charge (displacement + damage)
         /// </summary>
         /// <returns></returns>
         private IEnumerator ChargeCoroutine()
@@ -352,7 +352,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Temps entre 2 charges
+        /// Time between 2 charges
         /// </summary>
         /// <returns></returns>
         IEnumerator ChargeCountdown()
