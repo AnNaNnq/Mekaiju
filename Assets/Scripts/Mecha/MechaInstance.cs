@@ -12,6 +12,7 @@ namespace Mekaiju
     public class InstanceContext
     {
         public float LastAbilityTime = -1000f;
+        public float LastDamageTime = -1000f;
 
         public Animator Animator;
     }
@@ -136,8 +137,7 @@ namespace Mekaiju
         public void TakeDamage(float p_damage)
         {
             Health = Math.Max(0, Health - p_damage);
-            HealEffect t_heal = _effects[1].GetEffect().Behaviour as HealEffect;
-            t_heal.SropHeal();
+            Context.LastDamageTime = Time.time;
         }
 
         /// <summary>
