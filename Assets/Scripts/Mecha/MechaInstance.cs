@@ -113,6 +113,7 @@ namespace Mekaiju
             _effects = new()
             {
                 new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
+                new(Resources.Load<Effect>("Mecha/Effect/Health")),
             };
 
             Stamina = Desc.Stamina;
@@ -155,6 +156,15 @@ namespace Mekaiju
                 // TODO: Maybe not divide
                 t_part.TakeDamage(p_damage / _parts.Count());    
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p_amount"></param>
+        public void Heal(float p_amount)
+        {
+            Health = Math.Min(Desc.Health, Health + p_amount);
         }
 
         /// <summary>
