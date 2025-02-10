@@ -53,7 +53,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public override void Initialize()
+        public override void Initialize(MechaPartInstance p_self)
         {
             _lastTriggerTime = 0f;
         }

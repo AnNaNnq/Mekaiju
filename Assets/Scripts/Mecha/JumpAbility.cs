@@ -26,7 +26,7 @@ namespace Mekaiju
         /// </summary>
         private bool _requested;
 
-        public override void Initialize()
+        public override void Initialize(MechaPartInstance p_self)
         {
             _requested = false;
         }
