@@ -99,7 +99,7 @@ namespace Mekaiju
             _effects = new()
             {
                 new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
-                new(Resources.Load<Effect>("Mecha/Effect/Health")),
+                new(Resources.Load<Effect>("Mecha/Effect/Heal")),
             };
 
             Health  = Desc.Health;
@@ -136,6 +136,8 @@ namespace Mekaiju
         public void TakeDamage(float p_damage)
         {
             Health = Math.Max(0, Health - p_damage);
+            HealEffect t_heal = _effects[1].GetEffect().Behaviour as HealEffect;
+            t_heal.SropHeal();
         }
 
         /// <summary>
