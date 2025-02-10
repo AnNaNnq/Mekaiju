@@ -156,7 +156,7 @@ namespace Mekaiju.AI
             if(_isDefense) return;
             float t_dist = Vector3.Distance(transform.position, _target.transform.position);
             //Defense
-            if(_currentHitsDefense >= hitsNumberDefense && _canDefense && !_isDefense && _currentPhase >= defensePhaseStart && (defensePhaseStop == 0 || _currentPhase < defensePhaseStop))
+            if(_currentHitsDefense >= hitsNumberDefense && _canDefense && !_isDefense && _canAttack && _currentPhase >= defensePhaseStart && (defensePhaseStop == 0 || _currentPhase < defensePhaseStop))
             {
                 _canAttack = false;
                 _isDefense = true;
@@ -165,7 +165,7 @@ namespace Mekaiju.AI
                 StartCoroutine(Defense());
             }
             //Gros croc
-            else if (t_dist < bigAttackRange && _canBigAttack && !_isBigAttack && _currentPhase >= bigPhaseStart && (bigPhaseStop == 0 || _currentPhase < bigPhaseStop))
+            else if (t_dist < bigAttackRange && _canBigAttack && !_isBigAttack && _canAttack && _currentPhase >= bigPhaseStart && (bigPhaseStop == 0 || _currentPhase < bigPhaseStop))
             {
                 _canAttack = false;
                 _agent.enabled = true;
@@ -174,7 +174,7 @@ namespace Mekaiju.AI
                 StartCoroutine(BigAttack());
             }
             //Face attack
-            else if (t_dist < chargeRangeMin && t_dist > attackRange && _currentPhase >= attackPhaseStart && (attackPhaseStop == 0 || _currentPhase < attackPhaseStop))
+            else if (t_dist < chargeRangeMin && _canAttack && t_dist > attackRange && _currentPhase >= attackPhaseStart && (attackPhaseStop == 0 || _currentPhase < attackPhaseStop))
             {
                 _agent.enabled = true;
                 _agent.isStopped = false;
@@ -190,7 +190,7 @@ namespace Mekaiju.AI
                 }
             }
             //Charge
-            else if(t_dist > chargeRangeMin && t_dist < chargeRangeMax && _canCharge && !_isCharging && _currentPhase >= chargePhaseStart && (chargePhaseStop == 0 || _currentPhase < chargePhaseStop))
+            else if(t_dist > chargeRangeMin && t_dist < chargeRangeMax && _canCharge && _canAttack && !_isCharging && _currentPhase >= chargePhaseStart && (chargePhaseStop == 0 || _currentPhase < chargePhaseStop))
             {
                 _canAttack = false;
                 StartCharge();
