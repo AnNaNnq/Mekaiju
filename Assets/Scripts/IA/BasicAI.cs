@@ -22,8 +22,8 @@ namespace Mekaiju.AI
         [Foldout("Agro")]
         [PositiveValueOnly] public float agroTriggerArea = 10f;
         [PositiveValueOnly] public float agroSpeed = 3.5f;
-        [HideInInspector][PositiveValueOnly][OverrideLabel("Attack Countdown (sec)")] public float attackCountdown = 0.2f;
-        
+        [PositiveValueOnly][OverrideLabel("Attack Countdown (sec)")] public float attackCountdown = 0.2f;
+        [SerializeField]
         protected bool _canAttack = true;
 
         [Foldout("Await")]
@@ -279,6 +279,7 @@ namespace Mekaiju.AI
         /// <param name="p_effectTime"></param>
         public void Attack(int p_damage, Vector3 attackCenter, Vector3 attackSize, Effect p_effect = null, float p_effectTime = 0)
         {
+            StartCoroutine(AttackCountdown());
             // On vérifie si on peut attaquer
             Collider[] t_collisions = Physics.OverlapBox(
                 transform.position + transform.rotation * attackCenter, // Appliquer la rotation à l'offset
@@ -298,12 +299,12 @@ namespace Mekaiju.AI
                     t_mecha.AddEffect(p_effect, p_effectTime);
                 }
             }
-
         }
 
         public void TakeDamage(int p_damage, GameObject p_tuchObject)
         {
             if (states != CombatStatesKaiju.Agro) states = CombatStatesKaiju.Agro;
+            Debug.Log("Tuch");
 
             BodyPart t_bodyPart = GetBodyPartWithGameObject(p_tuchObject);
             t_bodyPart.health -= p_damage;
