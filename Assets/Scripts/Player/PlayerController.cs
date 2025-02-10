@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _dashCost = 33f;
 
     private MechaInstance _instance;
+    private BasicAI       _target;
+
     private Coroutine _shieldStaminaDrainCoroutine;
     private LayerMask _groundLayerMask;
 
@@ -64,6 +66,7 @@ public class PlayerController : MonoBehaviour
         _groundLayerMask = LayerMask.GetMask("Walkable");
 
         _instance = GetComponent<MechaInstance>();
+        _target   = GameObject.Find("Kaiju").GetComponent<BasicAI>();
 
         _cameraPivot = transform.Find("CameraPivot");
     }
@@ -105,14 +108,40 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Dash.Disable();
     }
 
+    private BodyPartObject PickRandomTargetPart()
+    {
+        if (_target)
+        {
+            BodyPart t_part;
+            do
+            {
+                t_part = _target.bodyParts[Random.Range(0, _target.bodyParts.Length)];
+            }
+            while (t_part.isDestroyed == true);
+            return t_part.part[Random.Range(0, t_part.part.Length)].GetComponent<BodyPartObject>();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     private void OnSwordAttack(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.LeftArm].TriggerDefaultAbility(GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
+        BodyPartObject t_target = PickRandomTargetPart();
+        if (t_target)
+        {
+            StartCoroutine(_instance[MechaPart.LeftArm].TriggerDefaultAbility(PickRandomTargetPart(), null));
+        }
     }
     
     private void OnGunAttack(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.RightArm].TriggerDefaultAbility(GameObject.Find("Kaiju").GetComponent<TestAI>(), null));
+        BodyPartObject t_target = PickRandomTargetPart();
+        if (t_target)
+        {
+            StartCoroutine(_instance[MechaPart.RightArm].TriggerDefaultAbility(PickRandomTargetPart(), null));
+        }
     }
     
     private void OnShield(InputAction.CallbackContext p_context)
