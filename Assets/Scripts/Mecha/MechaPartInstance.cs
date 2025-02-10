@@ -53,7 +53,13 @@ namespace Mekaiju
         /// <param name="p_damage"></param>
         public void TakeDamage(float p_damage)
         {
+            Mecha.Context.LastDamageTime = Time.time;
             Health = Mathf.Max(0f, Health - p_damage);
+        }
+
+        public void Heal(float p_heal)
+        {
+            Health = Mathf.Min(_desc.Health, Health + p_heal);
         }
 
         /// <summary>
