@@ -67,6 +67,18 @@ namespace Mekaiju.AI
             textDPS.text = _dps.ToString();
             _totalStartHealth = GetTotalHealth();
             _currentPhase = 1;
+
+            //On ajoute le script BodyPartObject aux objets de bodyParts s'ils ne l'on pas déjà
+            foreach (BodyPart t_part in bodyParts)
+            {
+                foreach (GameObject t_obj in t_part.part)
+                {
+                    if (t_obj.GetComponent<BodyPartObject>() == null)
+                    {
+                        t_obj.AddComponent<BodyPartObject>();
+                    }
+                }
+            }
         }
 
         public int GetTotalHealth()
