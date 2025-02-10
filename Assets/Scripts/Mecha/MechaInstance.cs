@@ -164,7 +164,10 @@ namespace Mekaiju
         /// <param name="p_amount"></param>
         public void Heal(float p_amount)
         {
-            Health = Math.Min(Desc.Health, Health + p_amount);
+            foreach (var t_part in _parts)
+            {
+                t_part.Heal(p_amount);
+            }
         }
 
         /// <summary>
