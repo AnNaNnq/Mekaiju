@@ -12,7 +12,8 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public virtual void Initialize() 
+        /// <param name="p_self"></param>
+        public virtual void Initialize(MechaPartInstance p_self) 
         {
             
         }

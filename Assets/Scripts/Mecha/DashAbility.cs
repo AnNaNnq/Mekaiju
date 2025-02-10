@@ -34,7 +34,7 @@ namespace Mekaiju
         /// </summary>
         private Vector3 _direction;
 
-        public override void Initialize()
+        public override void Initialize(MechaPartInstance p_self)
         {
             _isAcitve = false;
         }

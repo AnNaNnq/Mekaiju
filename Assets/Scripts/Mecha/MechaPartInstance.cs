@@ -40,10 +40,10 @@ namespace Mekaiju
             _desc  = p_config;
             Health = p_config.Health;
 
-            _desc.DefaultAbility.Behaviour?.Initialize();
+            _desc.DefaultAbility.Behaviour?.Initialize(this);
             if (_desc.HasSpecial)
             {
-                _desc.SpecialAbility.Behaviour?.Initialize();
+                _desc.SpecialAbility.Behaviour?.Initialize(this);
             }
         }
 

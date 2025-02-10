@@ -48,6 +48,17 @@ namespace Mekaiju
             }
         }
 
+        public override void Initialize(MechaPartInstance p_self)
+        {
+            foreach (var t_ability in _abilities)
+            {
+                if (t_ability)
+                {
+                    t_ability.Behaviour?.Initialize(p_self);
+                }
+            };
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (typeof(E).IsAssignableFrom(p_opt.GetType()))
