@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour
         _lookAction = _playerActions.Player.Look;
 
         _playerActions.Player.SwordAttack.performed += OnSwordAttack;
+        _playerActions.Player.GunAttack.performed += OnGunAttack;
         _playerActions.Player.Shield.performed += OnShield;
         _playerActions.Player.Shield.canceled  += OnUnshield;
         _playerActions.Player.Jump.started += OnJump;
