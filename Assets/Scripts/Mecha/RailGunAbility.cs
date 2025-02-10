@@ -107,7 +107,10 @@ namespace Mekaiju
                 if (t_hasCollide)
                 {
                     p_target.TakeDamage(_damage);
-                    DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Gun, _damage.ToString(), 0.5f);
+                    if (DebugInfo.Instance)
+                    {
+                        DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Gun, _damage.ToString(), 0.5f);
+                    }
                 }
                 GameObject.Destroy(t_go);
             }
