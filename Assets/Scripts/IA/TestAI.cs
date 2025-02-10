@@ -28,6 +28,10 @@ namespace Mekaiju.AI
         public Vector3 attackZoneCenter;
         [OverrideLabel("Attack zone size")]
         public Vector3 attackZoneSize;
+        [OverrideLabel("Use from phase")]
+        public int attackPhaseStart = 0;
+        [OverrideLabel("Stop use form phase (0 = never stop)")]
+        public int attackPhaseStop = 0;
 
         private bool _canBaseAttack = true;
         private bool _attackActive = false;
@@ -43,7 +47,7 @@ namespace Mekaiju.AI
         [OverrideLabel("Range min")]
         public float chargeRangeMin = 20;
         [OverrideLabel("Body Part")]
-        [SelectFromList(nameof(bodyParts))] public int attack2Body;
+        [SelectFromList(nameof(bodyParts))] public int chargeBody;
         [OverrideLabel("Charge Speed")]
         public float chargeSpeed = 10;
         public float chargeDuration = 0.5f;
@@ -57,6 +61,10 @@ namespace Mekaiju.AI
         public Vector3 chargeZoneCenter;
         [OverrideLabel("Attak zone size")]
         public Vector3 chargeZoneSize;
+        [OverrideLabel("Use from phase")]
+        public int chargePhaseStart = 0;
+        [OverrideLabel("Stop use form phase (0 = never stop)")]
+        public int chargePhaseStop = 0;
 
         private bool _isCharging = false;
         private bool _canCharge = true;
@@ -77,6 +85,10 @@ namespace Mekaiju.AI
         public float defenseSpeed = 2;
         [OverrideLabel("Countdown (sec)")]
         public float defenseCoutdown = 1;
+        [OverrideLabel("Use from phase")]
+        public int defensePhaseStart = 0;
+        [OverrideLabel("Stop use form phase (0 = never stop)")]
+        public int defensePhaseStop = 0;
 
         private int _currentHitsDefense = 0;
         private bool _isDefense = false;
@@ -93,7 +105,7 @@ namespace Mekaiju.AI
         [SelectFromList(nameof(bodyParts))] public int bigBody;
         [SOSelector]
         [OverrideLabel("Effect")]
-        public Effect bigEffect;
+        public Effect effect;
         [OverrideLabel("Effect duration (sec)")]
         public float bigEffectDuration = 2;
         [OverrideLabel("Countdown (sec)")]
@@ -102,6 +114,10 @@ namespace Mekaiju.AI
         public Vector3 bigZoneCenter;
         [OverrideLabel("Attack zone size")]
         public Vector3 bigZoneSize;
+        [OverrideLabel("Use from phase")]
+        public int bigPhaseStart = 1;
+        [OverrideLabel("Stop use form phase (0 = never stop)")]
+        public int bigPhaseStop = 0;
 
         private bool _isBigAttack = false;
         private bool _canBigAttack = true;
@@ -122,7 +138,7 @@ namespace Mekaiju.AI
         #endregion
 
         /// <summary>
-        /// Fonction appelée lorsqu'un ennemi est en mode agressif
+        /// Function called when an enemy is in aggressive mode
         /// </summary>
         public override void Agro()
         {
@@ -132,7 +148,7 @@ namespace Mekaiju.AI
 
 
         /// <summary>
-        /// Machine à état des attaques
+        /// Attack status machine
         /// </summary>
         public void AttackStateMachine()
         {
@@ -140,7 +156,7 @@ namespace Mekaiju.AI
             if(_isDefense) return;
             float t_dist = Vector3.Distance(transform.position, _target.transform.position);
             //Defense
-            if(_currentHitsDefense >= hitsNumberDefense && _canDefense && !_isDefense)
+            if(_currentHitsDefense >= hitsNumberDefense && _canDefense && !_isDefense && _canAttack && _currentPhase >= defensePhaseStart && (defensePhaseStop == 0 || _currentPhase < defensePhaseStop))
             {
                 _canAttack = false;
                 _isDefense = true;
@@ -148,8 +164,8 @@ namespace Mekaiju.AI
                 _agent.speed = defenseSpeed;
                 StartCoroutine(Defense());
             }
-            //Gros croc
-            else if (t_dist < bigAttackRange && _canBigAttack && !_isBigAttack)
+            //Big fang
+            else if (t_dist < bigAttackRange && _canBigAttack && !_isBigAttack && _canAttack && _currentPhase >= bigPhaseStart && (bigPhaseStop == 0 || _currentPhase < bigPhaseStop))
             {
                 _canAttack = false;
                 _agent.enabled = true;
@@ -158,7 +174,7 @@ namespace Mekaiju.AI
                 StartCoroutine(BigAttack());
             }
             //Face attack
-            else if (t_dist < chargeRangeMin && t_dist > attackRange)
+            else if (t_dist < chargeRangeMin && _canAttack && t_dist > attackRange && _currentPhase >= attackPhaseStart && (attackPhaseStop == 0 || _currentPhase < attackPhaseStop))
             {
                 _agent.enabled = true;
                 _agent.isStopped = false;
@@ -174,13 +190,13 @@ namespace Mekaiju.AI
                 }
             }
             //Charge
-            else if(t_dist > chargeRangeMin && t_dist < chargeRangeMax && _canCharge && !_isCharging)
+            else if(t_dist > chargeRangeMin && t_dist < chargeRangeMax && _canCharge && _canAttack && !_isCharging && _currentPhase >= chargePhaseStart && (chargePhaseStop == 0 || _currentPhase < chargePhaseStop))
             {
                 _canAttack = false;
                 StartCharge();
                 _currentHitsDefense++;
             }
-            //Etat Normal
+            // Normal status
             else
             {
                 _agent.enabled = true;
@@ -190,14 +206,19 @@ namespace Mekaiju.AI
             }
         }
 
-        /// <summary>
-        /// Défense en boule
+        /// <summary>_canAttack
+        /// Ball defense
         /// </summary>
         /// <returns></returns>
         public IEnumerator Defense()
         {
             float t_time = 0;
-            while(t_time < durationDefense)
+            float t_duration = durationDefense;
+            if (bodyParts[defenseBody].isDestroyed)
+            {
+                t_duration /= 2;
+            }
+            while (t_time < t_duration)
             {
                 Vector3 t_posBehind = GetPositionBehind(10);
                 BackOff(t_posBehind);
@@ -213,7 +234,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Attaque de face
+        /// Front attack
         /// </summary>
         /// <returns></returns>
         public IEnumerator FaceAttack()
@@ -221,7 +242,12 @@ namespace Mekaiju.AI
             _attackActive = true;
             for (int i = 0; i < attackCount; i++)
             {
-                Attack(attackDmg, attackZoneCenter, attackZoneSize);
+                int t_dmg = attackDmg;
+                if (bodyParts[attackBody].isDestroyed)
+                {
+                    t_dmg /= 2;
+                }
+                Attack(t_dmg, attackZoneCenter, attackZoneSize);
                 yield return new WaitForSeconds(attackCoutdownBetween);
             }
             _canBaseAttack = false;
@@ -235,7 +261,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Attaque gros croc
+        /// Big fang attack
         /// </summary>
         /// <returns></returns>
         public IEnumerator BigAttack()
@@ -247,7 +273,12 @@ namespace Mekaiju.AI
             {
                 _isBigAttack = true;
                 LookTarget();
-                Attack(bigAttackDmg, bigZoneCenter, bigZoneSize, bigEffect, bigEffectDuration);
+                int t_dmg = bigAttackDmg;
+                if (bodyParts[bigBody].isDestroyed)
+                {
+                    t_dmg /= 2;
+                }
+                Attack(t_dmg, bigZoneCenter, bigZoneSize, effect, bigEffectDuration);
                 _isBigAttack = false;
                 float i = 0;
                 while (i < bigCoutdown)
@@ -263,7 +294,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Comance la charge
+        /// Start charging
         /// </summary>
         public void StartCharge()
         {
@@ -277,7 +308,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Lance la charge (déplacement + dégats)
+        /// Launches charge (displacement + damage)
         /// </summary>
         /// <returns></returns>
         private IEnumerator ChargeCoroutine()
@@ -306,7 +337,12 @@ namespace Mekaiju.AI
             }
 
             transform.position = t_targetPos;
-            Attack(chargeDmg, chargeZoneCenter, chargeZoneSize);
+            int t_dmg = chargeDmg;
+            if (bodyParts[attackBody].isDestroyed)
+            {
+                t_dmg /= 2;
+            }
+            Attack(t_dmg, chargeZoneCenter, chargeZoneSize);
             _agent.enabled = true;
             _agent.isStopped = false;
             _isCharging = false;
@@ -316,13 +352,25 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Temps entre 2 charges
+        /// Time between 2 charges
         /// </summary>
         /// <returns></returns>
         IEnumerator ChargeCountdown()
         {
             yield return new WaitForSeconds(chargeCoutdown);
             _canCharge = true;
+        }
+
+        /// <summary>
+        /// Rewrite TakeDamage function to take defense into account
+        /// </summary>
+        /// <param name="p_damage"></param>
+        /// <param name="p_tuchObject"></param>
+        public override void TakeDamage(int p_damage, GameObject p_tuchObject)
+        {
+            int t_damage = p_damage;
+            if (_isDefense) t_damage -= (int)(damagePercentageDefense * t_damage) / 100;
+            base.TakeDamage(t_damage, p_tuchObject);
         }
 
 

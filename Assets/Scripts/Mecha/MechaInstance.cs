@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mekaiju.Utils;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Mekaiju
 {
@@ -12,8 +14,16 @@ namespace Mekaiju
     public class InstanceContext
     {
         public float LastAbilityTime = -1000f;
+        public float LastDamageTime = -1000f;
 
-        public Animator Animator;
+        public bool IsGrounded          = false;
+        public bool IsMovementAltered   = false;
+        public bool IsMovementOverrided = false;
+
+        public InputAction MoveAction;
+
+        public Animator  Animator;
+        public Rigidbody Rigidbody;
     }
 
 
@@ -42,8 +52,13 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
-        public float Health { get; private set; }
+        public float Health 
+        { 
+            get
+            {
+                return _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.Health; });
+            } 
+        }
 
         /// <summary>
         /// 
@@ -93,19 +108,22 @@ namespace Mekaiju
             );
 
             // TODO: remove
-            t_main.SetActive(false);
+            // t_main.SetActive(false);
 
             // _effects = new();
             _effects = new()
             {
                 new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
+                new(Resources.Load<Effect>("Mecha/Effect/Heal")),
             };
 
-            Health  = Desc.Health;
             Stamina = Desc.Stamina;
 
-            Context = new();
-            Context.Animator = GetComponent<Animator>();
+            Context = new()
+            {
+                Animator  = GetComponent<Animator>(),
+                Rigidbody = GetComponent<Rigidbody>()
+            };
         }
 
         private void Update()
@@ -134,7 +152,23 @@ namespace Mekaiju
         /// <param name="p_damage"></param>
         public void TakeDamage(float p_damage)
         {
-            Health = Math.Max(0, Health - p_damage);
+            foreach (var t_part in _parts)
+            {
+                // TODO: Maybe not divide
+                t_part.TakeDamage(p_damage / _parts.Count());    
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p_amount"></param>
+        public void Heal(float p_amount)
+        {
+            foreach (var t_part in _parts)
+            {
+                t_part.Heal(p_amount);
+            }
         }
 
         /// <summary>
