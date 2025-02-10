@@ -77,7 +77,10 @@ namespace Mekaiju
                 if (t_dist < _reachDistance)
                 {
                     p_target.TakeDamage(_damage);
-                    DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Sword, _damage.ToString(), 1f);
+                    if (DebugInfo.Instance)
+                    {
+                        DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Sword, _damage.ToString(), 1f);
+                    }
                 }
 
             }

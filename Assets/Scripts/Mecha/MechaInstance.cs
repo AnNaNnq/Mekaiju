@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mekaiju.Utils;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Mekaiju
 {
@@ -15,7 +16,11 @@ namespace Mekaiju
         public float LastAbilityTime = -1000f;
         public float LastDamageTime = -1000f;
 
-        public bool IsGrounded = false;
+        public bool IsGrounded          = false;
+        public bool IsMovementAltered   = false;
+        public bool IsMovementOverrided = false;
+
+        public InputAction MoveAction;
 
         public Animator  Animator;
         public Rigidbody Rigidbody;
