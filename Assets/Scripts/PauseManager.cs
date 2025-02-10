@@ -10,20 +10,16 @@ namespace Mekaiju.Pause
         [SerializeField] private GameObject _pauseMenu; // Pause panel
         [SerializeField] private GameObject _settingsMenu; // Settings panel
         [SerializeField] private Button _resumeButton; // Default selected button
-        
-        
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
+
         private void Start()
         {
             _pauseMenu.SetActive(false); // Hide pause menu at start
             _settingsMenu.SetActive(false); // Hide settings menu at start
         }
 
-
-        // Update is called once per frame
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.P)) // Press "P" to pause/unpause
             {
                 if (_settingsMenu.activeSelf)
                 {
@@ -59,5 +55,6 @@ namespace Mekaiju.Pause
             _settingsMenu.SetActive(false); // Hide settings menu
             _pauseMenu.SetActive(true); // Show pause menu again
         }
+
     }
 }
