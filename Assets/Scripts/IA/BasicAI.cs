@@ -53,7 +53,7 @@ namespace Mekaiju.AI
         public TextMeshProUGUI textDPS;
 
 
-        private int _dps = 0;
+        protected int _dps = 0;
 
         /// <summary>
         /// Initializing important variables
@@ -290,15 +290,22 @@ namespace Mekaiju.AI
             // If we hit the player
             if (t_collisions.Length > 0)
             {
+                MechaInstance t_mecha = t_collisions[0].GetComponent<MechaInstance>();
+                t_mecha.TakeDamage(p_damage);
                 _dps += p_damage;
                 textDPS.text = _dps.ToString();
                 // Apply an effect if available
                 if (p_effect != null)
                 {
-                    MechaInstance t_mecha = t_collisions[0].GetComponent<MechaInstance>();
                     t_mecha.AddEffect(p_effect, p_effectTime);
                 }
             }
+        }
+
+        public void AddDps(int p_dps)
+        {
+            _dps += p_dps;
+            textDPS.text = _dps.ToString();
         }
 
         /// <summary>
