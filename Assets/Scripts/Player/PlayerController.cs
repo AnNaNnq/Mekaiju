@@ -34,10 +34,7 @@ public class PlayerController : MonoBehaviour
 
     [Foldout("Movement Boolean")]
     [SerializeField] bool _isGrounded;
-    [SerializeField] private bool _isProtected;
 
-    [Foldout("Stamina Costs")]
-    [SerializeField] private float _shieldCost = 2f;
 
     private MechaInstance _instance;
     private BasicAI       _target;
