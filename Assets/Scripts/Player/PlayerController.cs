@@ -1,10 +1,8 @@
-using System.Collections;
 using Mekaiju;
 using Mekaiju.AI;
 using MyBox;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.VFX;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -22,9 +20,6 @@ public class PlayerController : MonoBehaviour
     private InputAction _lookAction;
 
     private Rigidbody _rigidbody;
-
-    public VisualEffect shieldVFX;
-    public VisualEffect shieldBreakVFX;
     
     [Foldout("Movement Attributes")]
     [SerializeField] private float _jumpForce = 5f;
@@ -52,7 +47,6 @@ public class PlayerController : MonoBehaviour
     private MechaInstance _instance;
     private BasicAI       _target;
 
-    private Coroutine _shieldStaminaDrainCoroutine;
     private LayerMask _groundLayerMask;
 
     private void Awake()
@@ -147,61 +141,12 @@ public class PlayerController : MonoBehaviour
     
     private void OnShield(InputAction.CallbackContext p_context)
     {
-        shieldVFX.enabled = true;
-        shieldBreakVFX.enabled = false;
-
-        float t_shieldSpeedModifier = 0.5f;
-
-        _isProtected = true;
-        _animator.SetBool("IsShielding", _isProtected);
-        _speed = _baseSpeed * t_shieldSpeedModifier;
-
-        // D�marre la consommation de stamina
-        if (_shieldStaminaDrainCoroutine != null) StopCoroutine(_shieldStaminaDrainCoroutine);
-        _shieldStaminaDrainCoroutine = StartCoroutine(ShieldStaminaDrain());
+        StartCoroutine(_instance[MechaPart.Chest].TriggerDefaultAbility(null, null));
     }
     
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
-        shieldVFX.enabled = false;
-        shieldBreakVFX.enabled = true;
-        StartCoroutine(ShieldBreakCoroutine());
-
-        _isProtected = false;
-        _animator.SetBool("IsShielding", _isProtected);
-        _speed = _baseSpeed;
-
-        // Arr�te la consommation de stamina
-        if (_shieldStaminaDrainCoroutine != null)
-        {
-            StopCoroutine(_shieldStaminaDrainCoroutine);
-            _shieldStaminaDrainCoroutine = null;
-        }
-    }
-    
-    private IEnumerator ShieldStaminaDrain()
-    {
-        while (_isProtected && _instance.CanExecuteAbility(_shieldCost))
-        {
-            // Consomme 2 points de stamina par seconde
-            _instance.ConsumeStamina(2f);
-            _instance.Context.LastAbilityTime = Time.time;
-
-            // Si la stamina est �puis�e, d�sactive le bouclier
-            if (!_instance.CanExecuteAbility(_shieldCost))
-            {
-                OnUnshield(new InputAction.CallbackContext());
-                yield break;
-            }
-
-            yield return new WaitForSeconds(1f);
-        }
-    }
-    
-    private IEnumerator ShieldBreakCoroutine()
-    {
-        yield return new WaitForSeconds(2);
-        shieldBreakVFX.enabled = false;
+        _instance[MechaPart.Chest].ReleaseDefaultAbility();
     }
     
     private void OnJump(InputAction.CallbackContext p_context)
@@ -214,18 +159,17 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(_instance[MechaPart.Legs].TriggerDefaultAbility(null, LegsSelector.Dash));
     }
 
-    float ClampAngle(float angle, float from, float to)
+    float ClampAngle(float p_angle, float p_from, float p_to)
     {
         // accepts e.g. -80, 80
-        if (angle < 0f) angle = 360 + angle;
-        if (angle > 180f) return Mathf.Max(angle, 360+from);
-        return Mathf.Min(angle, to);
+        if (p_angle < 0f) p_angle = 360 + p_angle;
+        if (p_angle > 180f) return Mathf.Max(p_angle, 360 + p_from);
+        return Mathf.Min(p_angle, p_to);
     }
 
     private void Update()
     {
         _instance.Context.IsGrounded = _isGrounded;
-        _instance.Context.IsMovementAltered = _isProtected;
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
@@ -245,7 +189,8 @@ public class PlayerController : MonoBehaviour
 
         if (!_instance.Context.IsMovementOverrided)
         {
-            // Regular movement
+            _speed = _baseSpeed * _instance.Context.SpeedModifier;
+
             Vector2 t_moveDir = _moveAction.ReadValue<Vector2>();
             Vector3 t_vel;
 
