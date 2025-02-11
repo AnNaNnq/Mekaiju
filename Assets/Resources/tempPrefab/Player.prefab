@@ -176,7 +176,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1492760335613161966}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 1000
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -210,19 +210,12 @@ MonoBehaviour:
   groundCheck: {fileID: 6432498026279094924}
   camera: {fileID: 0}
   _cameraPivot: {fileID: 1708984074938599406}
-  _jumpForce: 5
-  _dashForce: 25
-  _dashDuration: 0.25
+  _groundCheckRadius: 0.5
   _baseSpeed: 250
-  _isGrounded: 0
-  _isDashing: 0
-  _isProtected: 0
   _mouseSensitivity: 50
   _minVerticalAngle: -30
   _maxVerticalAngle: 80
-  _shieldCost: 2
-  _jumpCost: 10
-  _dashCost: 33
+  _isGrounded: 0
 --- !u!136 &2043552065261511318
 CapsuleCollider:
   m_ObjectHideFlags: 0
