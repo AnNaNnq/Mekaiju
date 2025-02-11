@@ -1,6 +1,7 @@
 using System.Collections;
 using Mekaiju;
 using Mekaiju.AI;
+using Mekaiju.LockOnTargetSystem;
 using MyBox;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,21 +11,22 @@ using UnityEngine.VFX;
 public class PlayerController : MonoBehaviour
 {
     public Transform groundCheck;
-    public Transform camera;
 
     public Transform _cameraPivot;
 
     private Animator _animator;
 
     private MechaPlayerActions _playerActions; // NewInputSystem reference
+    [SerializeField] private LockOnTargetSystem _lockOnTargetSystem;
 
     private InputAction _moveAction;
     private InputAction _lookAction;
+    private InputAction _scrollAction;
 
     private Rigidbody _rigidbody;
 
-    public VisualEffect shieldVFX;
-    public VisualEffect shieldBreakVFX;
+    [SerializeField] private VisualEffect shieldVFX;
+    [SerializeField] private VisualEffect shieldBreakVFX;
     
     [Foldout("Movement Attributes")]
     [SerializeField] private float _jumpForce = 5f;
@@ -33,13 +35,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _baseSpeed = 5f;
     private Vector3 _dashDirection;
     private float _speed;
-    //[SerializeField] private float _cameraSpeed = 5f;
 
     [Foldout("Movement Boolean")]
     [SerializeField] bool _isGrounded;
     [SerializeField] private bool _isDashing;
     [SerializeField] private bool _isProtected;
 
+    [Foldout("Camera Attributes")]
     [SerializeField] private float _mouseSensitivity = 75f; 
     [SerializeField] private float _minVerticalAngle = -30f; 
     [SerializeField] private float _maxVerticalAngle = 80f; 
@@ -52,6 +54,10 @@ public class PlayerController : MonoBehaviour
     private MechaInstance _instance;
     private Coroutine _shieldStaminaDrainCoroutine;
     private LayerMask _groundLayerMask;
+
+    //Public variables
+    public bool isLockedOn = false;
+    public float scroll;
 
     private void Awake()
     {
@@ -74,6 +80,8 @@ public class PlayerController : MonoBehaviour
         _moveAction.Enable();
         _lookAction = _playerActions.Player.Look;
         _lookAction.Enable();
+        _scrollAction = _playerActions.Player.LockSwitch;
+        _scrollAction.Enable();
 
         _playerActions.Player.SwordAttack.performed += OnSwordAttack;
         _playerActions.Player.SwordAttack.Enable();
@@ -86,23 +94,27 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Shield.Enable();
 
         _playerActions.Player.Jump.started += OnJump;
-        //_playerActions.Player.Jump.performed += OnHover;
-        //_playerActions.Player.Jump.canceled += OnStopHover;
         _playerActions.Player.Jump.Enable();
 
         _playerActions.Player.Dash.performed += OnDash;
         _playerActions.Player.Dash.Enable();
+
+        _playerActions.Player.Lock.performed += OnLock;
+        _playerActions.Player.Lock.Enable();
 
     }
     private void OnDisable()
     {
         _moveAction.Disable();
         _lookAction.Disable();
+        _scrollAction.Disable();
+
         _playerActions.Player.SwordAttack.Disable();
         _playerActions.Player.GunAttack.Disable();
         _playerActions.Player.Shield.Disable();
         _playerActions.Player.Jump.Disable();
         _playerActions.Player.Dash.Disable();
+        _playerActions.Player.Lock.Disable();
     }
 
     private void OnSwordAttack(InputAction.CallbackContext p_context)
@@ -209,6 +221,12 @@ public class PlayerController : MonoBehaviour
             _instance.Context.LastAbilityTime = Time.time;
             StartCoroutine(DashCoroutine());
         }
+    }
+
+    private void OnLock(InputAction.CallbackContext p_context)
+    {
+        isLockedOn = !isLockedOn;
+        _lockOnTargetSystem.ToggleLockOn(isLockedOn);
     }
 
     private IEnumerator DashCoroutine()

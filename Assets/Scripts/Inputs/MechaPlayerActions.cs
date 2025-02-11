@@ -245,7 +245,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""56a55da9-4185-4bb7-b67b-a4cdeec27cc2"",
-                    ""path"": ""<Mouse>/radius/y"",
+                    ""path"": ""<Mouse>/scroll/y"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
