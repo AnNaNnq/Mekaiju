@@ -10,21 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2c90c8f421734c05b8e3589afd75ced, type: 3}
-  m_Name: DefaultLegs
+  m_Name: DashAbility
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: bsn,vq;l
-  <Description>k__BackingField: nbvrj,ke
+  <Name>k__BackingField: Dash
+  <Description>k__BackingField: Dash
   <Prefab>k__BackingField: {fileID: 7356328789365181207, guid: 6bb313dd8a4b3485ab6b9c8e7fa6fcee, type: 3}
   <Target>k__BackingField: 4
   <Behaviour>k__BackingField:
-    rid: 2512019247687794750
+    rid: 2512019247687794751
   references:
     version: 2
     RefIds:
-    - rid: 2512019247687794750
-      type: {class: LegsCompoundAbility, ns: Mekaiju, asm: Assembly-CSharp}
+    - rid: 2512019247687794751
+      type: {class: DashAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
-        _abilities:
-          _array:
-          - {fileID: 11400000, guid: 91ffdedc6e8784a359d9b8c4d8a498ac, type: 2}
-          - {fileID: 11400000, guid: ff9124bec67854bf9921cbf70c61e448, type: 2}
+        _force: 50
+        _duration: 0.5
+        _consumption: 5
+        _ghostMaterial: {fileID: -876546973899608171, guid: eda1e64517cca074782659ab3569707f, type: 3}
+        _speedVfx: {fileID: 4796063517896905453, guid: 1026ad1c8924c4fad997c86a5afd79a4, type: 3}
