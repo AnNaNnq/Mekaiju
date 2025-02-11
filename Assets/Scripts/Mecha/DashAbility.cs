@@ -34,9 +34,15 @@ namespace Mekaiju
         /// </summary>
         private Vector3 _direction;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _time;
+
         public override void Initialize(MechaPartInstance p_self)
         {
             _isAcitve = false;
+            _time = 0;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -53,8 +59,13 @@ namespace Mekaiju
                     p_self.Mecha.Context.IsMovementOverrided = true;
 
                     _isAcitve = true;
-                    yield return new WaitForSeconds(_duration);
+                    yield return new WaitUntil(() => 
+                    {
+                        _time += Time.deltaTime;
+                        return _time >= _duration; 
+                    });
                     _isAcitve = false;
+                    _time = 0;
 
                     p_self.Mecha.Context.IsMovementOverrided = false;
                 }
@@ -68,7 +79,7 @@ namespace Mekaiju
             if (_isAcitve)
             {
                 Rigidbody t_rb  = p_self.Mecha.Context.Rigidbody;
-                Vector3   t_vel = _direction * _force;
+                Vector3   t_vel = _force * (1 - _time / _duration) * _direction;
                 t_rb.linearVelocity = new(t_vel.x, t_rb.linearVelocity.y, t_vel.z);
             }   
         }
