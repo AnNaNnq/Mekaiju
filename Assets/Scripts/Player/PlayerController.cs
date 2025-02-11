@@ -266,10 +266,22 @@ public class PlayerController : MonoBehaviour
         var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x - t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
         var t_delta = t_clamp - _cameraPivot.eulerAngles.x;
         _cameraPivot.Rotate(Vector3.right * t_delta);
+
+
+        int t_scrollValue = (int)_scrollAction.ReadValue<float>();
+
+        if (t_scrollValue != 0 && isLockedOn) 
+        {
+            _lockOnTargetSystem.ChangeTarget(t_scrollValue);
+        }
     }
     
     private void FixedUpdate()
     {
+        print(_scrollAction.ReadValue<float>());
+
+
+
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, 0.3f, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
