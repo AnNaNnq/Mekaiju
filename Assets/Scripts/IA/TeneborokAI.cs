@@ -1,3 +1,4 @@
+using Mekaiju.Attacks;
 using Mekaiju.Attribute;
 using MyBox;
 using System.Collections;
@@ -10,7 +11,7 @@ namespace Mekaiju.AI
     public class TeneborokAI : BasicAI
     {
         [SerializeField]
-        private int lastAttack = 0;
+        private TeneborokAttack lastAttack;
 
         #region Coup tranchant
         [Foldout("Coup tranchant")]
@@ -28,11 +29,12 @@ namespace Mekaiju.AI
         [OverrideLabel("Range")] public float vortexRange = 2f;
         [OverrideLabel("Body Part")]
         [SelectFromList(nameof(bodyParts))] public int vortexBody;
-        [OverrideLabel("Attack zone center")] public Vector3 vortexZoneCenter;
-        [OverrideLabel("Attack zone size")] public Vector3 vortexZoneSize;
-        [OverrideLabel("Gravitational Zone Prefab")] public GameObject gameObjectVortex;
+        [OverrideLabel("Gravitational zone prefab")][OpenPrefabButton] public GameObject gameObjectVortex;
+        [OverrideLabel("Kaillou prefab")][OpenPrefabButton] public GameObject gameObjectRock;
+        [OverrideLabel("Vortex Radius")] public float vortexRadius = 10f;
+        [OverrideLabel("Number of rock")] public int vortexNumberOfRock = 10;
         [OverrideLabel("CD")] public float vortexCD = 10f;
-        [SerializeField]
+        
         private bool _canVortex = true;
         #endregion
 
@@ -50,7 +52,7 @@ namespace Mekaiju.AI
         public new void Start()
         {
             base.Start();
-            lastAttack = -1;
+            lastAttack = TeneborokAttack.None;
         }
 
         public override void Agro()
@@ -58,7 +60,7 @@ namespace Mekaiju.AI
             base.Agro();
             switch (lastAttack)
             {
-                case -1:
+                case TeneborokAttack.None:
                 {
                     if (Vector3.Distance(_target.transform.position, transform.position) <= hitCutRange && _canAttack)
                     {
@@ -70,7 +72,7 @@ namespace Mekaiju.AI
                     }
                     break;
                 }
-                case 1:
+                case TeneborokAttack.CoupTranchant:
                     {
                         if(Vector3.Distance(_target.transform.position, transform.position) <= vortexRange && _canAttack && _canVortex)
                         {
@@ -82,28 +84,38 @@ namespace Mekaiju.AI
                         }
                         break;
                     }
-                default: MoveTo(_target.transform.position, 8); break;
+                case TeneborokAttack.Stop:
+                    {
+                        LookTarget();
+                        break;
+                    }
+                default: MoveTo(_target.transform.position, 10); break;
             }
         }
 
         public void HitCut()
         {
             _canAttack = false;
-            lastAttack = 1;
+            lastAttack = TeneborokAttack.CoupTranchant;
             Attack(hitCutDamage, hitCutZoneCenter, hitCutZoneSize);
         }
-
 
         public void Vortex()
         {
             _canAttack = false;
             _canVortex = false;
-            lastAttack = 2;
+            lastAttack = TeneborokAttack.Stop;
             GameObject t_zone = Instantiate(gameObjectVortex, _target.transform.position, Quaternion.identity);
+            GravitationalZone t_gz = t_zone.GetComponent<GravitationalZone>();
+            t_gz.SetUp(vortextDamage, gameObjectRock, vortexRadius, vortexNumberOfRock, this);
             StartCoroutine(VortexCD());
             StartCoroutine(AttackCountdown());
         }
         
+        public void SetLastAttack(TeneborokAttack attack)
+        {
+            lastAttack = attack;
+        }
 
         IEnumerator VortexCD()
         {
@@ -125,10 +137,13 @@ namespace Mekaiju.AI
             {
                 Gizmos.color = colorForVortexRange;
                 Gizmos.DrawWireSphere(transform.position, vortexRange);
-                Gizmos.color = Color.white;
-                Gizmos.DrawWireCube(transform.position + transform.rotation * vortexZoneCenter, vortexZoneSize);
             }
         }
+    }
+
+    public enum TeneborokAttack
+    {
+        CoupTranchant, VortexAbyssal, Move, Stop, None
     }
 }
 
