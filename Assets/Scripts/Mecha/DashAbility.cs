@@ -27,6 +27,18 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        [SerializeField]
+        private Material _ghostMaterial;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [SerializeField]
+        private GameObject _speedVfx;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private bool _isAcitve;
 
         /// <summary>
@@ -37,12 +49,27 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private float _time;
+        private MeshTrailTut _ghost;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private GameObject _camera;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _elapedTime;
 
         public override void Initialize(MechaPartInstance p_self)
         {
-            _isAcitve = false;
-            _time = 0;
+            _isAcitve   = false;
+            _elapedTime = 0;
+
+            _ghost = p_self.Mecha.gameObject.AddComponent<MeshTrailTut>();
+            _ghost.mat = _ghostMaterial;
+
+            _camera = GameObject.FindGameObjectWithTag("MainCamera");
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -58,15 +85,20 @@ namespace Mekaiju
                     p_self.Mecha.ConsumeStamina(_consumption);
                     p_self.Mecha.Context.IsMovementOverrided = true;
 
-                    _isAcitve = true;
+                    _ghost.Trigger(_duration);
+                    var t_go = GameObject.Instantiate(_speedVfx, _camera.transform);
+                    t_go.transform.Translate(new(0, 0, 2f));
+
+                    _isAcitve   = true;
+                    _elapedTime = 0;
                     yield return new WaitUntil(() => 
                     {
-                        _time += Time.deltaTime;
-                        return _time >= _duration; 
+                        _elapedTime += Time.deltaTime;
+                        return _elapedTime >= _duration; 
                     });
                     _isAcitve = false;
-                    _time = 0;
 
+                    GameObject.Destroy(t_go);
                     p_self.Mecha.Context.IsMovementOverrided = false;
                 }
             }
@@ -79,7 +111,7 @@ namespace Mekaiju
             if (_isAcitve)
             {
                 Rigidbody t_rb  = p_self.Mecha.Context.Rigidbody;
-                Vector3   t_vel = _force * (1 - _time / _duration) * _direction;
+                Vector3   t_vel = _force * (1 - _elapedTime / _duration) * _direction;
                 t_rb.linearVelocity = new(t_vel.x, t_rb.linearVelocity.y, t_vel.z);
             }   
         }
