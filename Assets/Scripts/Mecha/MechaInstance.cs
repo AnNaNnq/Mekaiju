@@ -16,6 +16,9 @@ namespace Mekaiju
         public float LastAbilityTime = -1000f;
         public float LastDamageTime = -1000f;
 
+        public float SpeedModifier   = 1f;
+        public float DefenseModifier = 1f;
+
         public bool IsGrounded          = false;
         public bool IsMovementAltered   = false;
         public bool IsMovementOverrided = false;

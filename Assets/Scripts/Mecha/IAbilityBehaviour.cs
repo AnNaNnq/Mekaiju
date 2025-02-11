@@ -12,7 +12,8 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public virtual void Initialize() 
+        /// <param name="p_self"></param>
+        public virtual void Initialize(MechaPartInstance p_self) 
         {
             
         }
@@ -36,6 +37,14 @@ namespace Mekaiju
         /// <param name="p_target"></param>
         /// <returns></returns>
         public abstract IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual void Release()
+        {
+
+        }
 
         /// <summary>
         /// Must be called in <see cref="MonoBehviour.Update"/> to allow some common process.
