@@ -80,6 +80,14 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        public void ReleaseDefaultAbility()
+        {
+            _desc.DefaultAbility.Behaviour.Release();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
@@ -93,6 +101,14 @@ namespace Mekaiju
                     yield return _desc.SpecialAbility.Behaviour.Trigger(this, p_target, p_opt);    
                 }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ReleaseSpecialAbility()
+        {
+            _desc.SpecialAbility.Behaviour.Release();
         }
 
         private void Update()

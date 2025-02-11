@@ -39,6 +39,14 @@ namespace Mekaiju
         public abstract IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt);
 
         /// <summary>
+        /// 
+        /// </summary>
+        public virtual void Release()
+        {
+
+        }
+
+        /// <summary>
         /// Must be called in <see cref="MonoBehviour.Update"/> to allow some common process.
         /// </summary>
         /// <param name="p_self"></param>
