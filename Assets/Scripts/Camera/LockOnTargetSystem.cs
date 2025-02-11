@@ -35,13 +35,6 @@ namespace Mekaiju.LockOnTargetSystem
         private void Update()
         {
             DetectTargets();
-
-            // Changer de cible verrouillée (Touche J / K)
-            if (_isLockedOn && _potentialTargets.Count > 0)
-            {
-                if (Input.GetKeyDown(KeyCode.J)) ChangeTarget(-1);
-                if (Input.GetKeyDown(KeyCode.K)) ChangeTarget(1);
-            }
         }
 
         // Détecte les cibles proches dans la portée du Lock-On
@@ -82,7 +75,7 @@ namespace Mekaiju.LockOnTargetSystem
         }
 
         // Change la cible verrouillée actuelle
-        private void ChangeTarget(int direction)
+        public void ChangeTarget(int direction)
         {
             if (_potentialTargets.Count == 0) return;
 
