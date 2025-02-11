@@ -22,27 +22,22 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rigidbody;
     
     [Foldout("Movement Attributes")]
-    [SerializeField] private float _jumpForce = 5f;
-    [SerializeField] private float _dashForce = 20f;
-    [SerializeField] private float _dashDuration = 0.25f;
+    [SerializeField] private float _groundCheckRadius = 0.5f;
     [SerializeField] private float _baseSpeed = 5f;
-    private Vector3 _dashDirection;
     private float _speed;
     //[SerializeField] private float _cameraSpeed = 5f;
 
-    [Foldout("Movement Boolean")]
-    [SerializeField] bool _isGrounded;
-    [SerializeField] private bool _isDashing;
-    [SerializeField] private bool _isProtected;
-
+    [Foldout("Camera Attributes")]
     [SerializeField] private float _mouseSensitivity = 75f; 
     [SerializeField] private float _minVerticalAngle = -30f; 
     [SerializeField] private float _maxVerticalAngle = 80f; 
 
+    [Foldout("Movement Boolean")]
+    [SerializeField] bool _isGrounded;
+    [SerializeField] private bool _isProtected;
+
     [Foldout("Stamina Costs")]
     [SerializeField] private float _shieldCost = 2f;
-    [SerializeField] private float _jumpCost = 10f;
-    [SerializeField] private float _dashCost = 33f;
 
     private MechaInstance _instance;
     private BasicAI       _target;
@@ -184,29 +179,37 @@ public class PlayerController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, 0.3f, _groundLayerMask);
+        Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
         if (!_instance.Context.IsMovementOverrided)
         {
             _speed = _baseSpeed * _instance.Context.SpeedModifier;
 
-            Vector2 t_moveDir = _moveAction.ReadValue<Vector2>();
-            Vector3 t_vel;
+            if (_isGrounded)
+            {
+                Vector2 t_moveDir = _moveAction.ReadValue<Vector2>();
+                Vector3 t_vel;
 
-            t_vel  = _speed * t_moveDir.y * Time.fixedDeltaTime * transform.forward;
-            t_vel += _speed * t_moveDir.x * Time.fixedDeltaTime * transform.right;
+                t_vel  = _speed * t_moveDir.y * Time.fixedDeltaTime * transform.forward;
+                t_vel += _speed * t_moveDir.x * Time.fixedDeltaTime * transform.right;
 
-            _rigidbody.angularVelocity = Vector3.zero;
+                _rigidbody.angularVelocity = Vector3.zero;
 
-            _rigidbody.linearVelocity = t_vel;
-            _animator.SetFloat("WalkingSpeed",Mathf.Abs(t_vel.x)+Mathf.Abs(t_vel.z));
+                _rigidbody.linearVelocity = new(t_vel.x, _rigidbody.linearVelocity.y, t_vel.z);
+
+                _animator.SetFloat("WalkingSpeed", Mathf.Abs(_rigidbody.linearVelocity.x) + Mathf.Abs(_rigidbody.linearVelocity.z));
+            }
+            else
+            {
+                _animator.SetFloat("WalkingSpeed", 0);
+            }
         }
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(groundCheck.position, 0.3f);
+        Gizmos.DrawWireSphere(groundCheck.position, _groundCheckRadius);
     }
 }
