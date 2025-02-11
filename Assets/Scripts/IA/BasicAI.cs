@@ -21,7 +21,9 @@ namespace Mekaiju.AI
         [PositiveValueOnly] public float agroTriggerArea = 10f;
         [PositiveValueOnly] public float agroSpeed = 3.5f;
         [PositiveValueOnly][OverrideLabel("Attack Countdown (sec)")] public float attackCountdown = 0.2f;
-        
+
+
+        [SerializeField]
         protected bool _canAttack = true;
 
         [Foldout("Await")]

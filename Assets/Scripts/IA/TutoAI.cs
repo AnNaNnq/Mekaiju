@@ -2,10 +2,13 @@ using Mekaiju.Attribute;
 using MyBox;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
+
 
 namespace Mekaiju.AI
 {
-    public class TestAI : BasicAI
+    [RequireComponent(typeof(NavMeshAgent))]
+    public class TutoAI : BasicAI
     {
         #region Attaque de face
         [Foldout("Attaque de face")]
