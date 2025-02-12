@@ -227,6 +227,14 @@ public class PlayerController : MonoBehaviour
     {
         isLockedOn = !isLockedOn;
         _lockOnTargetSystem.ToggleLockOn(isLockedOn);
+        if (isLockedOn)
+        {
+            _lookAction.Disable();
+        }
+        else
+        {
+            _lookAction.Enable();
+        }
     }
 
     private IEnumerator DashCoroutine()
@@ -278,10 +286,6 @@ public class PlayerController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        print(_scrollAction.ReadValue<float>());
-
-
-
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, 0.3f, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
@@ -309,7 +313,6 @@ public class PlayerController : MonoBehaviour
             _rigidbody.linearVelocity = t_vel;
             _animator.SetFloat("WalkingSpeed",Mathf.Abs(t_vel.x)+Mathf.Abs(t_vel.z));
         }
-        //Debug.Log($"look: {t_lookDir}");
     }
 
     private void OnDrawGizmos()
