@@ -40,10 +40,10 @@ namespace Mekaiju
             _desc  = p_config;
             Health = p_config.Health;
 
-            _desc.DefaultAbility.Behaviour?.Initialize();
+            _desc.DefaultAbility.Behaviour?.Initialize(this);
             if (_desc.HasSpecial)
             {
-                _desc.SpecialAbility.Behaviour?.Initialize();
+                _desc.SpecialAbility.Behaviour?.Initialize(this);
             }
         }
 
@@ -54,7 +54,7 @@ namespace Mekaiju
         public void TakeDamage(float p_damage)
         {
             Mecha.Context.LastDamageTime = Time.time;
-            Health = Mathf.Max(0f, Health - p_damage);
+            Health = Mathf.Max(0f, Health - Mecha.Context.DefenseModifier * p_damage);
         }
 
         public void Heal(float p_heal)
@@ -80,6 +80,14 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        public void ReleaseDefaultAbility()
+        {
+            _desc.DefaultAbility.Behaviour.Release();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
@@ -93,6 +101,14 @@ namespace Mekaiju
                     yield return _desc.SpecialAbility.Behaviour.Trigger(this, p_target, p_opt);    
                 }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ReleaseSpecialAbility()
+        {
+            _desc.SpecialAbility.Behaviour.Release();
         }
 
         private void Update()
