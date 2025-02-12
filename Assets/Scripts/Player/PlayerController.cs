@@ -2,6 +2,7 @@ using Mekaiju;
 using Mekaiju.AI;
 using Mekaiju.LockOnTargetSystem;
 using MyBox;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -62,6 +63,23 @@ public class PlayerController : MonoBehaviour
         _target   = GameObject.Find("Kaiju").GetComponent<BasicAI>();
 
         _cameraPivot = transform.Find("CameraPivot");
+
+        GameObject t_go = GameObject.FindWithTag("MainCamera");
+        if (t_go)
+        {
+            if (t_go.TryGetComponent<CinemachineCamera>(out var t_comp))
+            {
+                t_comp.Target.TrackingTarget = _cameraPivot;
+            }
+            else
+            {
+                Debug.Log("MainCamera must have CinemachineCamera component!");
+            }
+        }
+        else
+        {
+            Debug.Log("Scene camera must have MainCamera tag!");
+        }
     }
 
     private void Start()
@@ -70,13 +88,11 @@ public class PlayerController : MonoBehaviour
         _lookAction = _playerActions.Player.Look;
         _scrollAction = _playerActions.Player.LockSwitch;
 
-
         _playerActions.Player.SwordAttack.performed += OnSwordAttack;
         _playerActions.Player.GunAttack.performed += OnGunAttack;
         _playerActions.Player.Shield.performed += OnShield;
         _playerActions.Player.Shield.canceled  += OnUnshield;
         _playerActions.Player.Jump.started += OnJump;
-
         _playerActions.Player.Dash.performed += OnDash;
 
         _instance.Context.MoveAction = _moveAction;
