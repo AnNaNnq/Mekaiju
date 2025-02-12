@@ -1,4 +1,5 @@
 using Mekaiju.AI;
+using System.Collections;
 using UnityEngine;
 
 public class RimVoid : MonoBehaviour
@@ -47,8 +48,16 @@ public class RimVoid : MonoBehaviour
         // Instancier le feu visuel
         GameObject _fire = Instantiate(_ai.gameObjectRimFire, transform.position, Quaternion.identity);
         RimVoidFire t_rvf = _fire.GetComponent<RimVoidFire>();
-        t_rvf.UpdateLineVisual(_line);
+        t_rvf.UpdateLineVisual(_line, _ai);
+        StartCoroutine(lifeTime());
 
+    }
+
+    IEnumerator lifeTime()
+    {
+        yield return new WaitForSeconds(_ai.rimDuration);
+        _ai.SetLastAttack(TeneborokAttack.RimVoid);
+        Destroy(gameObject);
     }
 
     public float GetGround(Vector3 pos)
