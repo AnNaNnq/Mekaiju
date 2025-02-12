@@ -1,7 +1,6 @@
 using Mekaiju.Attacks;
 using Mekaiju.Attribute;
 using MyBox;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -46,6 +45,7 @@ namespace Mekaiju.AI
         [SelectFromList(nameof(bodyParts))] public int rimBody;
         [OverrideLabel("Rim prefab")][OpenPrefabButton] public GameObject gameObjectRim;
         [OverrideLabel("Fire prefab")][OpenPrefabButton] public GameObject gameObjectRimFire;
+        [OverrideLabel("Duration (sec)")] public int rimDuration = 2;
         [OverrideLabel("CD")] public float rimCD = 10f;
 
         private bool _canRim = true;
@@ -176,7 +176,7 @@ namespace Mekaiju.AI
 
     public enum TeneborokAttack
     {
-        CoupTranchant, VortexAbyssal, Move, Stop, None
+        CoupTranchant, VortexAbyssal, RimVoid, Move, Stop, None
     }
 }
 
