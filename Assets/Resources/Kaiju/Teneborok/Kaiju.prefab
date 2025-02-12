@@ -597,18 +597,26 @@ MonoBehaviour:
   hitCutBody: 0
   hitCutZoneCenter: {x: 0, y: 0, z: 8}
   hitCutZoneSize: {x: 10, y: 10, z: 10}
-  vortextDamage: 10
-  vortexRange: 30
+  vortexDamage: 10
+  vortexRange: 45
   vortexBody: 0
   gameObjectVortex: {fileID: 1136635311529201712, guid: d7b6002c8c20e7945bed8cce40946338, type: 3}
   gameObjectRock: {fileID: 8298655363207905739, guid: 2683fcf5f6f70b149bb762da0f2dcb0f, type: 3}
   vortexRadius: 10
   vortexNumberOfRock: 10
   vortexCD: 10
+  rimDamage: 10
+  rimRange: 30
+  rimBody: 0
+  gameObjectRim: {fileID: 8796084795391207267, guid: f8a8dee523c18c645b5f8a61b77489eb, type: 3}
+  gameObjectRimFire: {fileID: 5250174984945250790, guid: d5a60c170b5ff834bab0dd7b9a00d95c, type: 3}
+  rimCD: 10
   debugHitCut: 0
   colorForHitCutRange: {r: 1, g: 0, b: 0, a: 1}
   debugVortex: 0
   colorForVortexRange: {r: 1, g: 0, b: 0, a: 1}
+  debugRim: 1
+  colorForRimRange: {r: 0, g: 0, b: 0, a: 1}
 --- !u!195 &3542776749811644157
 NavMeshAgent:
   m_ObjectHideFlags: 0

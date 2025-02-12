@@ -12,12 +12,12 @@ namespace Mekaiju.Attacks
         private int _nbRock = 10;
         private TeneborokAI _ai;
 
-        public void SetUp(int p_dmg, GameObject p_rock, float p_radius, int p_nbRock, TeneborokAI p_ai)
+        public void SetUp(TeneborokAI p_ai)
         {
-            _dmg = p_dmg;
-            _rock = p_rock;
-            _radius = p_radius;
-            _nbRock = p_nbRock;
+            _dmg = p_ai.vortexDamage;
+            _rock = p_ai.gameObjectRock;
+            _radius = p_ai.vortexRadius;
+            _nbRock = p_ai.vortexNumberOfRock;
             _ai = p_ai;
             StartCoroutine(rockFall());
         }
@@ -29,7 +29,7 @@ namespace Mekaiju.Attacks
             {
                 GameObject t_kaillou = Instantiate(_rock, GetRandomPointInCircle(_radius), Quaternion.identity);
                 FallRock t_fr = t_kaillou.GetComponent<FallRock>();
-                t_fr.SetUp(_dmg, _ai);
+                t_fr.SetUp(_ai);
                 Destroy(t_kaillou, 10f);
                 yield return new WaitForSeconds(0.2f);
             }

@@ -233,7 +233,7 @@ namespace Mekaiju.AI
             yield return new WaitForSeconds(defenseCoutdown);
             _canDefense = true;
             _currentHitsDefense = 0;
-            StartCoroutine(AttackCountdown());
+            AttackCooldown();
         }
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace Mekaiju.AI
 
             _agent.enabled = true;
             _agent.isStopped = false;
-            StartCoroutine(AttackCountdown());
+            AttackCooldown();
         }
 
         /// <summary>
@@ -293,7 +293,7 @@ namespace Mekaiju.AI
                 t_dist = Vector3.Distance(transform.position, _target.transform.position);
             }
             _canBigAttack = true;
-            StartCoroutine(AttackCountdown());
+            AttackCooldown();
         }
 
         /// <summary>
@@ -350,18 +350,8 @@ namespace Mekaiju.AI
             _agent.isStopped = false;
             _isCharging = false;
             _canCharge = false;
-            StartCoroutine(AttackCountdown());
-            StartCoroutine(ChargeCountdown());
-        }
-
-        /// <summary>
-        /// Time between 2 charges
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator ChargeCountdown()
-        {
-            yield return new WaitForSeconds(chargeCoutdown);
-            _canCharge = true;
+            AttackCooldown();
+            StartCoroutine(CooldownRoutine(chargeCoutdown, () => _canCharge = true));
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace Mekaiju.AI
 
         #region Vortex Abyssal
         [Foldout("Vortex Abyssal")]
-        [OverrideLabel("Damage")] public int vortextDamage = 10;
+        [OverrideLabel("Damage")] public int vortexDamage = 10;
         [OverrideLabel("Range")] public float vortexRange = 2f;
         [OverrideLabel("Body Part")]
         [SelectFromList(nameof(bodyParts))] public int vortexBody;
@@ -38,6 +38,19 @@ namespace Mekaiju.AI
         private bool _canVortex = true;
         #endregion
 
+        #region Fissure du Néant
+        [Foldout("Fissure du Néant")]
+        [OverrideLabel("Damage")] public int rimDamage = 10;
+        [OverrideLabel("Range")] public float rimRange = 2f;
+        [OverrideLabel("Body Part")]
+        [SelectFromList(nameof(bodyParts))] public int rimBody;
+        [OverrideLabel("Rim prefab")][OpenPrefabButton] public GameObject gameObjectRim;
+        [OverrideLabel("Fire prefab")][OpenPrefabButton] public GameObject gameObjectRimFire;
+        [OverrideLabel("CD")] public float rimCD = 10f;
+
+        private bool _canRim = true;
+        #endregion
+
         #region Pour les ld
         [Foldout("Debug")]
         [OverrideLabel("Show Gizmo For Hit Cut")]
@@ -46,6 +59,9 @@ namespace Mekaiju.AI
         [OverrideLabel("Show Gizmo For Vortex")]
         public bool debugVortex = false;
         [ConditionalField(nameof(debugVortex))] public Color colorForVortexRange;
+        [OverrideLabel("Show Gizmo For Vortex")]
+        public bool debugRim = false;
+        [ConditionalField(nameof(debugRim))] public Color colorForRimRange;
         #endregion
 
 
@@ -74,9 +90,14 @@ namespace Mekaiju.AI
                 }
                 case TeneborokAttack.CoupTranchant:
                     {
-                        if(Vector3.Distance(_target.transform.position, transform.position) <= vortexRange && _canAttack && _canVortex)
+                        if(Vector3.Distance(_target.transform.position, transform.position) <= vortexRange && _canAttack && _canVortex 
+                            && Vector3.Distance(_target.transform.position, transform.position) >= rimRange)
                         {
                             Vortex();
+                        }
+                        else if(Vector3.Distance(_target.transform.position, transform.position) <= rimRange && _canAttack && _canRim)
+                        {
+                            RimVoid();
                         }
                         else
                         {
@@ -86,6 +107,7 @@ namespace Mekaiju.AI
                     }
                 case TeneborokAttack.Stop:
                     {
+                        _agent.ResetPath();
                         LookTarget();
                         break;
                     }
@@ -107,20 +129,26 @@ namespace Mekaiju.AI
             lastAttack = TeneborokAttack.Stop;
             GameObject t_zone = Instantiate(gameObjectVortex, _target.transform.position, Quaternion.identity);
             GravitationalZone t_gz = t_zone.GetComponent<GravitationalZone>();
-            t_gz.SetUp(vortextDamage, gameObjectRock, vortexRadius, vortexNumberOfRock, this);
-            StartCoroutine(VortexCD());
-            StartCoroutine(AttackCountdown());
+            t_gz.SetUp(this);
+            StartCoroutine(CooldownRoutine(vortexCD, () => _canVortex = true));
+            AttackCooldown();
         }
         
+        public void RimVoid()
+        {
+            _canAttack = false;
+            _canRim = false;
+            lastAttack = TeneborokAttack.Stop;
+            GameObject t_rim = Instantiate(gameObjectRim, transform.position, Quaternion.identity);
+            RimVoid t_rv = t_rim.GetComponent<RimVoid>();
+            t_rv.SetUp(this);
+            StartCoroutine(CooldownRoutine(rimCD, () => _canRim = true));
+            AttackCooldown();
+        }
+
         public void SetLastAttack(TeneborokAttack attack)
         {
             lastAttack = attack;
-        }
-
-        IEnumerator VortexCD()
-        {
-            yield return new WaitForSeconds(vortexCD);
-            _canVortex = true;
         }
 
         private new void OnDrawGizmos()
@@ -137,6 +165,11 @@ namespace Mekaiju.AI
             {
                 Gizmos.color = colorForVortexRange;
                 Gizmos.DrawWireSphere(transform.position, vortexRange);
+            }
+            if (debugRim)
+            {
+                Gizmos.color = colorForRimRange;
+                Gizmos.DrawWireSphere(transform.position, rimRange);
             }
         }
     }
