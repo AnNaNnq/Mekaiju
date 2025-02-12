@@ -10,12 +10,26 @@ namespace Mekaiju.Pause
         [SerializeField] private GameObject _pauseMenu; // Pause panel
         [SerializeField] private GameObject _settingsMenu; // Settings panel
         [SerializeField] private Button _resumeButton; // Default selected button
+        [SerializeField] private AudioSource[] _uiAudioSources; // UI audio sources (menu sounds)
 
         private void Start()
         {
             _pauseMenu.SetActive(false); // Hide pause menu at start
             _settingsMenu.SetActive(false); // Hide settings menu at start
             LockCursor(); // Lock the cursor at the start
+
+            // Ensure UI sounds are not paused when the game is paused
+            if (_uiAudioSources != null)
+            {
+                foreach (AudioSource audioSource in _uiAudioSources)
+                {
+                    if (audioSource != null)
+                    {
+                        audioSource.ignoreListenerPause = true;
+                    }
+                }
+            }
+
         }
 
         private void Update()
