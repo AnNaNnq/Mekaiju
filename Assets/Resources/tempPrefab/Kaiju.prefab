@@ -409,7 +409,8 @@ MonoBehaviour:
   nbPhase: 2
   agroTriggerArea: 14.44
   agroSpeed: 3.32
-  attackCountdown: 0.2
+  attackCountdown: 0.01
+  _canAttack: 1
   awaitTriggerArea: 40
   awaitPlayerDistance: 25
   awaitSpeed: 3
@@ -454,7 +455,7 @@ MonoBehaviour:
   bigAttackDmg: 10
   bigAttackRange: 8
   bigBody: 0
-  bigEffect: {fileID: 11400000, guid: 79497b3c2bddd429984715566a0a88d2, type: 2}
+  effect: {fileID: 0}
   bigEffectDuration: 2
   bigCoutdown: 1
   bigZoneCenter: {x: 0, y: 1.16, z: 5.59}

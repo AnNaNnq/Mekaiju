@@ -7,8 +7,6 @@ using UnityEngine.AI;
 
 namespace Mekaiju.AI
 {
-    //Temps avant de follow le joueur lors de l'éloginement + Autre temps avant de retourner au nest
-    //Faire Agro
     public abstract class BasicAI : MonoBehaviour
     {
         [Foldout("General")]
@@ -22,7 +20,7 @@ namespace Mekaiju.AI
         [Foldout("Agro")]
         [PositiveValueOnly] public float agroTriggerArea = 10f;
         [PositiveValueOnly] public float agroSpeed = 3.5f;
-        [HideInInspector][PositiveValueOnly][OverrideLabel("Attack Countdown (sec)")] public float attackCountdown = 0.2f;
+        [PositiveValueOnly][OverrideLabel("Attack Countdown (sec)")] public float attackCountdown = 0.2f;
         
         protected bool _canAttack = true;
 
@@ -56,7 +54,7 @@ namespace Mekaiju.AI
         private int _dps = 0;
 
         /// <summary>
-        /// Initialisation des variables importantes
+        /// Initializing important variables
         /// </summary>
         protected void Start()
         {
@@ -67,6 +65,18 @@ namespace Mekaiju.AI
             textDPS.text = _dps.ToString();
             _totalStartHealth = GetTotalHealth();
             _currentPhase = 1;
+
+            // We add the BodyPartObject script to bodyParts objects if they don't already have it
+            foreach (BodyPart t_part in bodyParts)
+            {
+                foreach (GameObject t_obj in t_part.part)
+                {
+                    if (t_obj.GetComponent<BodyPartObject>() == null)
+                    {
+                        t_obj.AddComponent<BodyPartObject>();
+                    }
+                }
+            }
         }
 
         public int GetTotalHealth()
@@ -80,7 +90,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Activation des machines à états à chqaue frame
+        /// Activation of frame state machines
         /// </summary>
         protected void Update()
         {
@@ -89,14 +99,14 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Changement d'état
+        /// Change of state
         /// </summary>
         public void ChangeState()
         {
-            // Si l'ennemi n'est pas en mode agro on cherche à changer d'état (s'il est en agro il reste en agro)
+            // If the enemy is not in agro mode, we try to change its state (if it is in agro mode, it remains in agro mode).
             if (states != CombatStatesKaiju.Agro)
             {
-                // Si le joueur est dans la zone d'agro, on passe en mode agro
+                // If the player is in the agro zone, we switch to agro mode.
                 if (FindPlayer(agroTriggerArea))
                 {
                     states = CombatStatesKaiju.Agro;
@@ -104,38 +114,38 @@ namespace Mekaiju.AI
                 }
                 else
                 {
-                    // Si le joueur est dans la zone d'attente, on passe en mode attente
+                    // If the player is in the waiting area, we switch to waiting mode.
                     if (FindPlayer(awaitTriggerArea))
                     {
                         if (states != CombatStatesKaiju.Await)
                         {
                             if (_canSwitch)
                             {
-                                // On change d'état et de vitesse
+                                // Changing state and speed
                                 states = CombatStatesKaiju.Await;
                                 _agent.speed = awaitSpeed;
                             }
                             else
                             {
-                                // On a un temps de latence avant de passer en mode attente
+                                // There is a latency time before switching to standby mode.
                                 StartCoroutine(Countdown(timeBeforeAwait));
                             }
                         }
                     }
                     else
                     {
-                        // Si le joueur n'est pas dans la zone d'attente, on passe en mode normal
+                        // If the player is not in the waiting area, we switch to normal mode.
                         if (states != CombatStatesKaiju.Normal)
                         {
                             if (_canSwitch)
                             {
-                                // On change d'état et de vitesse
+                                // Changing state and speed
                                 states = CombatStatesKaiju.Normal;
                                 _agent.speed = normalSpeed;
                             }
                             else
                             {
-                                // On a un temps de latence avant de passer en mode normal
+                                // There is a delay before switching to normal mode
                                 StartCoroutine(Countdown(timeBeforeNormal));
                             }
                         }
@@ -146,11 +156,11 @@ namespace Mekaiju.AI
 
 
         /// <summary>
-        /// Pour déplacer le Kaiju
+        /// To move the Kaiju
         /// </summary>
         public void AIMove()
         {
-            // Si on est en attente, on se dirige vers le joueur, tout en restant a distance
+            // If you are waiting, you move towards the player, but keep your distance.
             if (states == CombatStatesKaiju.Await)
             {
                 _agent.destination = _target.transform.position;
@@ -158,7 +168,7 @@ namespace Mekaiju.AI
 
                 _canSwitch = false;
             }
-            // Si on est en mode normal, on se dirige vers le nid
+            // If in normal mode, we head for the nest
             else if (states == CombatStatesKaiju.Normal)
             {
                 _agent.SetDestination(nest.position);
@@ -168,7 +178,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// La machine a état
+        /// The state machine
         /// </summary>
         public void CombatStatesMachine()
         {
@@ -185,7 +195,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Permet de voir si le joueur est à une certaine range
+        /// Shows whether the player is at a certain range
         /// </summary>
         /// <param name="p_range"></param>
         /// <returns></returns>
@@ -205,7 +215,7 @@ namespace Mekaiju.AI
 
 
         /// <summary>
-        /// Fait reculer le Kaiju tout en regardant le joueur
+        /// Makes the Kaiju move backwards while looking at the player
         /// </summary>
         /// <param name="p_pos"></param>
         /// <param name="p_stopping"></param>
@@ -217,7 +227,7 @@ namespace Mekaiju.AI
 
 
         /// <summary>
-        /// Fait avancer le Kaiju vers une position donnée
+        /// Moves the Kaiju to a given position
         /// </summary>
         /// <param name="p_pos"></param>
         /// <param name="p_stopping"></param>
@@ -229,14 +239,14 @@ namespace Mekaiju.AI
 
 
         /// <summary>
-        /// Force le Kaiju a regarder le joueur
+        /// Forces the Kaiju to look at the player
         /// </summary>
         public void LookTarget()
         {
             Vector3 t_direction = _target.transform.position - transform.position;
-            t_direction.y = 0; // On ignore la composante Y pour éviter l'inclinaison
+            t_direction.y = 0; // Ignore the Y component to avoid tilting
 
-            // Vérifier que la direction n'est pas nulle pour éviter des erreurs
+            // Check that direction is not zero to avoid errors
             if (t_direction != Vector3.zero)
             {
                 Quaternion t_targetRotation = Quaternion.LookRotation(t_direction);
@@ -245,20 +255,20 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Récupérer la position derrière le Kaiju
+        /// Recover the position behind the Kaiju
         /// </summary>
         /// <param name="p_distance"></param>
         /// <returns></returns>
         public Vector3 GetPositionBehind(float p_distance)
         {
-            // On prend la direction vers la target et on l'inverse
+            // Take the target direction and reverse it
             Vector3 direction = (transform.position - _target.transform.position).normalized;
             return transform.position + direction * p_distance;
         }
 
 
         /// <summary>
-        /// Attaque le joueur
+        /// Attack the player
         /// </summary>
         /// <param name="p_damage"></param>
         /// <param name="attackCenter"></param>
@@ -267,35 +277,40 @@ namespace Mekaiju.AI
         /// <param name="p_effectTime"></param>
         public void Attack(int p_damage, Vector3 attackCenter, Vector3 attackSize, Effect p_effect = null, float p_effectTime = 0)
         {
-            // On vérifie si on peut attaquer
+            StartCoroutine(AttackCountdown());
+            // We check if we can attack
             Collider[] t_collisions = Physics.OverlapBox(
-                transform.position + transform.rotation * attackCenter, // Appliquer la rotation à l'offset
-                attackSize / 2,                                         // Demi-taille de la boîte
-                transform.rotation,                                     // Rotation de la boîte
-                LayerMask.GetMask("Player")                             // Layer ciblé
+                transform.position + transform.rotation * attackCenter, // Apply rotation to offset
+                attackSize / 2,                                         // Half box size
+                transform.rotation,                                     // Box rotation
+                LayerMask.GetMask("Player")                             // Targeted layer
             );
-            // Si on a touché le joueur
+            // If we hit the player
             if (t_collisions.Length > 0)
             {
                 _dps += p_damage;
                 textDPS.text = _dps.ToString();
-                //Applique un effet s'il y en a
-                if(p_effect != null)
+                // Apply an effect if available
+                if (p_effect != null)
                 {
                     MechaInstance t_mecha = t_collisions[0].GetComponent<MechaInstance>();
                     t_mecha.AddEffect(p_effect, p_effectTime);
                 }
             }
-
         }
 
-        public void TakeDamage(int p_damage, GameObject p_tuchObject)
+        /// <summary>
+        /// Makes the kaiju take damage on the right part of the body
+        /// </summary>
+        /// <param name="p_damage"></param>
+        /// <param name="p_tuchObject"></param>
+        public virtual void TakeDamage(int p_damage, GameObject p_tuchObject)
         {
             if (states != CombatStatesKaiju.Agro) states = CombatStatesKaiju.Agro;
 
             BodyPart t_bodyPart = GetBodyPartWithGameObject(p_tuchObject);
             t_bodyPart.health -= p_damage;
-            if(t_bodyPart.health <= 0)
+            if (t_bodyPart.health <= 0)
             {
                 t_bodyPart.isDestroyed = true;
                 t_bodyPart.health = 0;
@@ -314,6 +329,10 @@ namespace Mekaiju.AI
             }
         }
 
+        /// <summary>
+        /// Check if the Kaiju is dead
+        /// </summary>
+        /// <returns></returns>
         public bool IsDead()
         {
             foreach (BodyPart t_part in bodyParts)
@@ -326,6 +345,11 @@ namespace Mekaiju.AI
             return true;
         }
 
+        /// <summary>
+        /// Get the body part with the GameObject
+        /// </summary>
+        /// <param name="p_object"></param>
+        /// <returns></returns>
         public BodyPart GetBodyPartWithGameObject(GameObject p_object)
         {
             foreach (BodyPart t_part in bodyParts)
@@ -343,12 +367,12 @@ namespace Mekaiju.AI
 
 
         /// <summary>
-        /// Fonction virtuel pour le combat
+        /// Virtual combat function
         /// </summary>
         public virtual void Agro() {}
 
         /// <summary>
-        /// 
+        /// Countdown function for switching states
         /// </summary>
         /// <param name="p_timer"></param>
         /// <returns></returns>
@@ -360,7 +384,7 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// 
+        /// Countdown function for attacking
         /// </summary>
         /// <returns></returns>
         public IEnumerator AttackCountdown()

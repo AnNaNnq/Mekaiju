@@ -25,8 +25,8 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
-        public int Health { get; private set; }
+        [field: SerializeField]
+        public float Health { get; private set; }
 
         /// <summary>
         /// 
@@ -40,11 +40,26 @@ namespace Mekaiju
             _desc  = p_config;
             Health = p_config.Health;
 
-            _desc.DefaultAbility.Behaviour?.Initialize();
+            _desc.DefaultAbility.Behaviour?.Initialize(this);
             if (_desc.HasSpecial)
             {
-                _desc.SpecialAbility.Behaviour?.Initialize();
+                _desc.SpecialAbility.Behaviour?.Initialize(this);
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p_damage"></param>
+        public void TakeDamage(float p_damage)
+        {
+            Mecha.Context.LastDamageTime = Time.time;
+            Health = Mathf.Max(0f, Health - Mecha.Context.DefenseModifier * p_damage);
+        }
+
+        public void Heal(float p_heal)
+        {
+            Health = Mathf.Min(_desc.Health, Health + p_heal);
         }
 
         /// <summary>
@@ -53,7 +68,7 @@ namespace Mekaiju
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
-        public IEnumerator TriggerDefaultAbility(BasicAI p_target, object p_opt)
+        public IEnumerator TriggerDefaultAbility(BodyPartObject p_target, object p_opt)
         {
             if (Mecha.CanExecuteAbility(_desc.DefaultAbility.Behaviour.Consumption(p_opt)))
             {
@@ -65,10 +80,18 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        public void ReleaseDefaultAbility()
+        {
+            _desc.DefaultAbility.Behaviour.Release();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
-        public IEnumerator TriggerSpecialAbility(BasicAI p_target, object p_opt)
+        public IEnumerator TriggerSpecialAbility(BodyPartObject p_target, object p_opt)
         {   
             if (_desc.HasSpecial)
             {
@@ -77,6 +100,32 @@ namespace Mekaiju
                     Mecha.Context.LastAbilityTime = Time.time;
                     yield return _desc.SpecialAbility.Behaviour.Trigger(this, p_target, p_opt);    
                 }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ReleaseSpecialAbility()
+        {
+            _desc.SpecialAbility.Behaviour.Release();
+        }
+
+        private void Update()
+        {
+            _desc.DefaultAbility.Behaviour?.Tick(this);
+            if (_desc.SpecialAbility)
+            {
+                _desc.SpecialAbility.Behaviour?.Tick(this);
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            _desc.DefaultAbility.Behaviour?.FixedTick(this);
+            if (_desc.SpecialAbility)
+            {
+                _desc.SpecialAbility.Behaviour?.FixedTick(this);
             }
         }
 
