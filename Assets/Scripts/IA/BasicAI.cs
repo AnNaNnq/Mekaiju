@@ -279,7 +279,7 @@ namespace Mekaiju.AI
         /// <param name="p_effectTime"></param>
         public void Attack(int p_damage, Vector3 attackCenter, Vector3 attackSize, Effect p_effect = null, float p_effectTime = 0)
         {
-            StartCoroutine(AttackCountdown());
+            AttackCooldown();
             // We check if we can attack
             Collider[] t_collisions = Physics.OverlapBox(
                 transform.position + transform.rotation * attackCenter, // Apply rotation to offset
@@ -300,6 +300,11 @@ namespace Mekaiju.AI
                     t_mecha.AddEffect(p_effect, p_effectTime);
                 }
             }
+        }
+
+        public Vector3 GetTargetPos()
+        {
+            return _target.transform.position;
         }
 
         public void AddDps(int p_dps)
@@ -392,14 +397,19 @@ namespace Mekaiju.AI
             _canSwitch = true;
         }
 
+        public void AttackCooldown()
+        {
+            StartCoroutine(CooldownRoutine(attackCountdown, () => _canAttack = true));
+        }
+
         /// <summary>
-        /// Countdown function for attacking
+        /// Countdown function
         /// </summary>
         /// <returns></returns>
-        public IEnumerator AttackCountdown()
+        public IEnumerator CooldownRoutine(float cooldown, System.Action onCooldownEnd)
         {
-            yield return new WaitForSeconds(attackCountdown);
-            _canAttack = true;
+            yield return new WaitForSeconds(cooldown);
+            onCooldownEnd?.Invoke();
         }
 
 
