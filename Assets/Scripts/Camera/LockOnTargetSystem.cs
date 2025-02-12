@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Mekaiju.LockOnTargetSystem
 {
@@ -125,6 +124,11 @@ namespace Mekaiju.LockOnTargetSystem
                 Gizmos.DrawWireCube(target.position, new Vector3(2f, 2f, 2f));
             }
 
+        }
+
+        public BodyPartObject GetTargetBodyPartObject()
+        {
+            return _currentTarget.gameObject.GetComponent<BodyPartObject>();
         }
     }
 }

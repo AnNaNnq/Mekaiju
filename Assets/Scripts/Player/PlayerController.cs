@@ -178,6 +178,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
+=======
+    private void OnLock(InputAction.CallbackContext p_context)
+    {
+        isLockedOn = !isLockedOn;
+        _lockOnTargetSystem.ToggleLockOn(isLockedOn);
+        if (isLockedOn)
+        {
+            _lookAction.Disable();
+        }
+        else
+        {
+            _lookAction.Enable();
+        }
+    }
+
+>>>>>>> b1b3882 (blocked mouse input when locked)
     private IEnumerator DashCoroutine()
     {
         _isDashing = true;
@@ -209,9 +226,12 @@ public class PlayerController : MonoBehaviour
             _rigidbody.linearVelocity = t_vel;
             _animator.SetFloat("WalkingSpeed",Mathf.Abs(t_vel.x)+Mathf.Abs(t_vel.z));
         }
+<<<<<<< HEAD
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>();
         //Debug.Log($"look: {t_lookDir}");
+=======
+>>>>>>> b1b3882 (blocked mouse input when locked)
     }
 
     private void OnDrawGizmos()
