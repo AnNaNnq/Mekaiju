@@ -16,7 +16,7 @@ namespace MyBox.Internal
 		{
 			if (!EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isPlaying) return;
 			
-			var components = Object.FindObjectsOfType<Component>();
+			var components = Object.FindObjectsByType<Component>(FindObjectsSortMode.None);
 			foreach (var component in components)
 			{
 				foreach (var attribute in component.GetType().GetCustomAttributes(true))

@@ -84,7 +84,7 @@ namespace MyBox.EditorTools
 
 		public void SetLayerMask(LayerMask mask)
 		{
-			_useMask = true;
+			// _useMask = true;
 			_mask = mask;
 		}
 
@@ -98,7 +98,7 @@ namespace MyBox.EditorTools
 		private readonly Action<Vector3> _onClick;
 
 		private bool _enabled;
-		private bool _useMask;
+		// private bool _useMask;
 		private LayerMask _mask;
 		private bool _usePlane;
 		private Plane _plane;

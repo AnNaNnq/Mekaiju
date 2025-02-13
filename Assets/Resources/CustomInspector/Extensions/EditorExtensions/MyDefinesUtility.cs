@@ -27,7 +27,8 @@ namespace MyBox.EditorTools
 			}
 		}
 
-		public static bool AddDefine(string define)
+        [Obsolete]
+        public static bool AddDefine(string define)
 		{
 			var added = false;
 
@@ -47,7 +48,8 @@ namespace MyBox.EditorTools
 			return added;
 		}
 
-		public static bool RemoveDefine(string define)
+        [Obsolete]
+        public static bool RemoveDefine(string define)
 		{
 			var removed = false;
 
