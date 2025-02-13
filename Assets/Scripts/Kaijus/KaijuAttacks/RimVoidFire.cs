@@ -39,7 +39,7 @@ public class RimVoidFire : MonoBehaviour
 
     IEnumerator DestroyWall()
     {
-        yield return new WaitForSeconds(_ai.rimDuration);
+        yield return new WaitForSeconds(_ai.rimVoidDuration);
         while (gameObject.transform.localScale.y >= 0)
         {
             yield return new WaitForSeconds(0.01f);

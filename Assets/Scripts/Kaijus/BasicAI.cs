@@ -84,6 +84,11 @@ namespace Mekaiju.AI
             }
         }
 
+        public float GetTargetDistance()
+        {
+            return Vector3.Distance(_target.transform.position, transform.position);
+        }
+
         public int GetTotalHealth()
         {
             int t_health = 0;
