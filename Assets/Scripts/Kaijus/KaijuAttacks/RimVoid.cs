@@ -12,6 +12,8 @@ public class RimVoid : MonoBehaviour
     public int pointCount = 10;
     private List<Vector3> _firePos = new List<Vector3>();
 
+    private Modifier _speedMod;
+
     bool _damagable = false;
 
     public void SetUp(TeneborokAI p_teneborokAI)
@@ -32,14 +34,14 @@ public class RimVoid : MonoBehaviour
         // Calculer la direction entre l'AI et la cible
         Vector3 t_directionToTarget = (t_endPos - t_startPos).normalized;
 
-        // Calculer la position finale en fonction de la portée max
+        // Calculer la position finale en fonction de la portï¿½e max
         Vector3 t_finalPos = t_endPos + t_directionToTarget * (_ai.rimRange - Vector3.Distance(t_startPos, t_endPos));
 
-        // Distance avant et après la cible
+        // Distance avant et aprï¿½s la cible
         float distanceToTarget = Vector3.Distance(t_startPos, t_endPos);
         float distanceAfterTarget = Vector3.Distance(t_endPos, t_finalPos);
 
-        // Calculer la répartition des points
+        // Calculer la rï¿½partition des points
         int pointsBefore = Mathf.RoundToInt((distanceToTarget / (distanceToTarget + distanceAfterTarget)) * pointCount);
         int pointsAfter = pointCount - pointsBefore; // Assurer le total
 
@@ -57,10 +59,10 @@ public class RimVoid : MonoBehaviour
             _firePos.Add(t_interpolatedPos);
         }
 
-        // Tracer les points après la cible
+        // Tracer les points aprï¿½s la cible
         for (int i = 0; i < pointsAfter; i++)
         {
-            float t = (float)i / (pointsAfter - 1); // Interpolation après la cible
+            float t = (float)i / (pointsAfter - 1); // Interpolation aprï¿½s la cible
             Vector3 t_extendedPos = Vector3.Lerp(t_endPos, t_finalPos, t);
             t_extendedPos.y = GetGround(t_extendedPos); // Ajuster la hauteur au sol
             _line.SetPosition(pointsBefore + i, t_extendedPos);
@@ -102,7 +104,7 @@ public class RimVoid : MonoBehaviour
         {
             lineCollider = _line.gameObject.AddComponent<BoxCollider>();
         }
-        lineCollider.size = Vector3.zero; // Début à zéro
+        lineCollider.size = Vector3.zero; // Dï¿½but ï¿½ zï¿½ro
 
         Vector3 firstPoint = _firePos[0]; // Premier point du mur
 
@@ -110,7 +112,7 @@ public class RimVoid : MonoBehaviour
         {
             SpawnFire(t_point);
 
-            // Mettre à jour le collider avec la partie visible
+            // Mettre ï¿½ jour le collider avec la partie visible
             UpdateColliderProgressively(lineCollider, firstPoint, t_point);
 
             yield return new WaitForSeconds(0.01f);
@@ -145,8 +147,8 @@ public class RimVoid : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-            //Temporaire à changer quant le systeme d'effet sera mis à jour
-            t_mecha.Context.SpeedModifier /= 2;
+            //Temporaire ï¿½ changer quant le systeme d'effet sera mis ï¿½ jour
+            _speedMod = t_mecha.Context.Modifiers[ModifierTarget.Speed].Add(0.5f);
             _damagable = true;
             StartCoroutine(Damage(t_mecha));
         }
@@ -157,8 +159,8 @@ public class RimVoid : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-            //Temporaire à changer quant le systeme d'effet sera mis à jour
-            t_mecha.Context.SpeedModifier *= 2;
+            //Temporaire ï¿½ changer quant le systeme d'effet sera mis ï¿½ jour
+            t_mecha.Context.Modifiers[ModifierTarget.Speed].Remove(_speedMod);
             _damagable = false;
         }
     }
