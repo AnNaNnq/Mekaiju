@@ -131,7 +131,6 @@ namespace Mekaiju.AI
             GravitationalZone t_gz = t_zone.GetComponent<GravitationalZone>();
             t_gz.SetUp(this);
             StartCoroutine(CooldownRoutine(vortexCD, () => _canVortex = true));
-            AttackCooldown();
         }
         
         public void RimVoid()
@@ -143,7 +142,6 @@ namespace Mekaiju.AI
             RimVoid t_rv = t_rim.GetComponent<RimVoid>();
             t_rv.SetUp(this);
             StartCoroutine(CooldownRoutine(rimCD, () => _canRim = true));
-            AttackCooldown();
         }
 
         public void SetLastAttack(TeneborokAttack attack)

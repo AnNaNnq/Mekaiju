@@ -33,6 +33,7 @@ namespace Mekaiju.Attacks
                 Destroy(t_kaillou, 10f);
                 yield return new WaitForSeconds(0.2f);
             }
+            _ai.AttackCooldown();
             _ai.SetLastAttack(TeneborokAttack.VortexAbyssal);
             Destroy(gameObject);
         }

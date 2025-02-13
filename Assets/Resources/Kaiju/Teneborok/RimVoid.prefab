@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4827001233484795149}
   - component: {fileID: 8472602267617861950}
   - component: {fileID: 2309978042432054668}
+  - component: {fileID: 7789038178114152982}
   m_Layer: 0
   m_Name: RimVoid
   m_TagString: Untagged
@@ -153,3 +154,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointCount: 50
+--- !u!65 &7789038178114152982
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8796084795391207267}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 11, y: 3, z: 1}
+  m_Center: {x: -23.687181, y: 19.144825, z: 20.295475}
