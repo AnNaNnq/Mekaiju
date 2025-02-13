@@ -28,7 +28,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private Material _ghostMaterial;
+        private MeshTrailConfig _meshTrailConfig;
 
         /// <summary>
         /// 
@@ -67,7 +67,7 @@ namespace Mekaiju
             _elapedTime = 0;
 
             _ghost = p_self.Mecha.gameObject.AddComponent<MeshTrailTut>();
-            _ghost.mat = _ghostMaterial;
+            _ghost.config = _meshTrailConfig;
 
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
         }
