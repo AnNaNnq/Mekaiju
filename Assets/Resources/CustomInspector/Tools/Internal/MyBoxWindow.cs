@@ -108,7 +108,8 @@ namespace MyBox.Internal
 
 		private bool GuiEnabledGlobal => !EditorApplication.isCompiling;
 
-		private void OnGUI()
+        [System.Obsolete]
+        private void OnGUI()
 		{
 			GUI.enabled = GuiEnabledGlobal;
 			wantsMouseMove = true;
@@ -294,8 +295,9 @@ namespace MyBox.Internal
 				GUILayout.FlexibleSpace();
 			}
 		}
-		
-		private void DrawInspectorOverrideSetting()
+
+        [System.Obsolete]
+        private void DrawInspectorOverrideSetting()
 		{
 			const string define = "MYBOX_DISABLE_INSPECTOR_OVERRIDE";
 			var label = new GUIContent("Inspector override: ", 
@@ -332,8 +334,9 @@ namespace MyBox.Internal
 				else MyDefinesUtility.AddDefine(define);
 			}
 		}
-		
-		private void DrawUnityEventOverrideSetting()
+
+        [System.Obsolete]
+        private void DrawUnityEventOverrideSetting()
 		{
 			const string define = "MYBOX_DISABLE_UNITYEVENT_OVERRIDE";
 			var label = new GUIContent("UnityEvent override: ", 
