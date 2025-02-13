@@ -64,6 +64,17 @@ namespace Mekaiju.AI
         [OverrideLabel("Attack zone size")] public Vector3 snakeStrikeZoneSize;
         #endregion
 
+        #region Rayon Apocalypse
+        [Foldout("Rayon Apocalypse")]
+        [OverrideLabel("Damage")] public int doomsdayRayDamage = 10;
+        [OverrideLabel("Range")] public float doomsdayRayRange = 2f;
+        [OverrideLabel("Body Part")]
+        [SelectFromList(nameof(bodyParts))] public int doomsdayRayBody;
+        [OverrideLabel("CD")] public float doomsdayRayCooldown = 10f;
+
+        private bool _canDoomsdayRay = true;
+        #endregion
+
         #region Pour les ld
         [Foldout("Debug")]
         [OverrideLabel("Show Gizmo For Hit Cut")]
@@ -78,6 +89,9 @@ namespace Mekaiju.AI
         [OverrideLabel("Show Gizmo For Snake Strike")]
         public bool debugSnakeStrike = false;
         [ConditionalField(nameof(debugSnakeStrike))] public Color colorForSnakeStrikeRange;
+        [OverrideLabel("Show Gizmo For Doomsday Ray")]
+        public bool debugDoomsdayRay = false;
+        [ConditionalField(nameof(debugDoomsdayRay))] public Color colorForDoomsdayRayeRange;
         #endregion
 
         #region Time For Animation
@@ -101,6 +115,15 @@ namespace Mekaiju.AI
         public override void Agro()
         {
             base.Agro();
+            if(_currentPhase == 1)
+            {
+                FirstPhase();
+            }
+            
+        }
+
+        public void FirstPhase()
+        {
             switch (lastAttack)
             {
                 case TeneborokAttack.None:
@@ -128,7 +151,7 @@ namespace Mekaiju.AI
                         {
                             RimVoid();
                         }
-                        else if(GetTargetDistance() <= snakeStrikeRange && _canAttack)
+                        else if (GetTargetDistance() <= snakeStrikeRange && _canAttack)
                         {
                             _animator.SetTrigger("FrappeSerpent");
                             StartCoroutine(SnakeStrik());
@@ -136,6 +159,18 @@ namespace Mekaiju.AI
                         else
                         {
                             MoveTo(_target.transform.position, abyssalVortexRange);
+                        }
+                        break;
+                    }
+                case TeneborokAttack.SnakeStrike:
+                    {
+                        if(GetTargetDistance() <= doomsdayRayRange && _canAttack && _canDoomsdayRay)
+                        {
+                            DoomsdayRay();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, doomsdayRayRange);
                         }
                         break;
                     }
@@ -189,6 +224,12 @@ namespace Mekaiju.AI
             StartCoroutine(CooldownRoutine(rimVoidCooldown, () => _canRimVoid = true));
         }
 
+        public void DoomsdayRay()
+        {
+            _canDoomsdayRay = false;
+            _canAttack = false;
+        }
+
         public void SetLastAttack(TeneborokAttack attack)
         {
             lastAttack = attack;
@@ -220,14 +261,18 @@ namespace Mekaiju.AI
                 Gizmos.DrawWireSphere(transform.position, snakeStrikeRange);
                 Gizmos.color = Color.white;
                 Gizmos.DrawWireCube(transform.position + transform.rotation * snakeStrikeZoneCenter, snakeStrikeZoneSize);
-
+            }
+            if (debugDoomsdayRay)
+            {
+                Gizmos.color = colorForDoomsdayRayeRange;
+                Gizmos.DrawWireSphere(transform.position, doomsdayRayRange);
             }
         }
     }
 
     public enum TeneborokAttack
     {
-        SharpBlow, AbyssalVortex, RimVoid, SnakeStrike, Move, Stop, None
+        SharpBlow, AbyssalVortex, RimVoid, SnakeStrike, DoomsdayRay, Move, Stop, None
     }
 }
 
