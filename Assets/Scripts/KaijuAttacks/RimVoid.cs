@@ -1,5 +1,6 @@
 using Mekaiju.AI;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RimVoid : MonoBehaviour
@@ -7,6 +8,7 @@ public class RimVoid : MonoBehaviour
     private TeneborokAI _ai;
     private LineRenderer _line;
     public int pointCount = 10;
+    private List<Vector3> _firePos = new List<Vector3>();
 
     public void SetUp(TeneborokAI p_teneborokAI)
     {
@@ -17,44 +19,60 @@ public class RimVoid : MonoBehaviour
         Vector3 t_endPos = _ai.GetTargetPos();
 
         // Calculer la direction entre l'AI et la cible
-        Vector3 directionToTarget = (t_endPos - t_startPos).normalized;
+        Vector3 t_directionToTarget = (t_endPos - t_startPos).normalized;
 
-        // Calculer la position finale de la ligne en fonction de la portée max
-        Vector3 finalPos = t_endPos + directionToTarget * (_ai.rimRange - Vector3.Distance(t_startPos, t_endPos));
+        // Calculer la position finale en fonction de la portée max
+        Vector3 t_finalPos = t_endPos + t_directionToTarget * (_ai.rimRange - Vector3.Distance(t_startPos, t_endPos));
 
-        // Calculer le nombre total de points pour la ligne
-        int totalPoints = pointCount + 5; // Ajouter quelques points supplémentaires pour la partie derrière
+        // Distance avant et après la cible
+        float distanceToTarget = Vector3.Distance(t_startPos, t_endPos);
+        float distanceAfterTarget = Vector3.Distance(t_endPos, t_finalPos);
 
-        _line.positionCount = totalPoints;
+        // Calculer la répartition des points
+        int pointsBefore = Mathf.RoundToInt((distanceToTarget / (distanceToTarget + distanceAfterTarget)) * pointCount);
+        int pointsAfter = pointCount - pointsBefore; // Assurer le total
 
-        // Tracer les points depuis l'AI jusqu'à la cible, puis vers la portée max
-        for (int i = 0; i < pointCount; i++)
+        _line.positionCount = pointCount;
+
+        _firePos.Clear();
+
+        // Tracer les points avant la cible
+        for (int i = 0; i < pointsBefore; i++)
         {
-            float t = (float)i / (pointCount - 1); // Interpolation entre l'AI et la cible
-            Vector3 interpolatedPos = Vector3.Lerp(t_startPos, t_endPos, t);
-            interpolatedPos.y = GetGround(interpolatedPos); // Ajuster la hauteur au sol
-            _line.SetPosition(i, interpolatedPos);
+            float t = (float)i / (pointsBefore - 1); // Interpolation entre l'AI et la cible
+            Vector3 t_interpolatedPos = Vector3.Lerp(t_startPos, t_endPos, t);
+            t_interpolatedPos.y = GetGround(t_interpolatedPos); // Ajuster la hauteur au sol
+            _line.SetPosition(i, t_interpolatedPos);
+            _firePos.Add(t_interpolatedPos);
         }
 
-        // Tracer les points au-delà de la cible jusqu'à la portée max
-        for (int i = pointCount; i < totalPoints; i++)
+        // Tracer les points après la cible
+        for (int i = 0; i < pointsAfter; i++)
         {
-            float t = (float)(i - pointCount) / (totalPoints - pointCount - 1); // Interpolation après la cible
-            Vector3 extendedPos = Vector3.Lerp(t_endPos, finalPos, t);
-            extendedPos.y = GetGround(extendedPos); // Ajuster la hauteur au sol
-            _line.SetPosition(i, extendedPos);
+            float t = (float)i / (pointsAfter - 1); // Interpolation après la cible
+            Vector3 t_extendedPos = Vector3.Lerp(t_endPos, t_finalPos, t);
+            t_extendedPos.y = GetGround(t_extendedPos); // Ajuster la hauteur au sol
+            _line.SetPosition(pointsBefore + i, t_extendedPos);
+            _firePos.Add(t_extendedPos);
         }
 
-        // Instancier le feu visuel
-        GameObject _fire = Instantiate(_ai.gameObjectRimFire, transform.position, Quaternion.identity);
-        RimVoidFire t_rvf = _fire.GetComponent<RimVoidFire>();
-        t_rvf.UpdateLineVisual(_line, _ai);
         StartCoroutine(lifeTime());
+    }
 
+    public void SpawnFire(Vector3 p_point)
+    {
+        GameObject t_fire = Instantiate(_ai.gameObjectRimFire, p_point, Quaternion.identity);
+        RimVoidFire t_rvf = t_fire.GetComponent<RimVoidFire>();
+        t_rvf.UpdateLineVisual(_line, _ai);
     }
 
     IEnumerator lifeTime()
     {
+        foreach(Vector3 t_point in _firePos)
+        {
+            SpawnFire(t_point);
+            yield return new WaitForSeconds(0.01f);
+        }
         yield return new WaitForSeconds(_ai.rimDuration);
         _ai.SetLastAttack(TeneborokAttack.RimVoid);
         Destroy(gameObject);
