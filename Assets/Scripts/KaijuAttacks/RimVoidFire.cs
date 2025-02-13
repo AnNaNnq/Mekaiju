@@ -9,8 +9,6 @@ public class RimVoidFire : MonoBehaviour
 
     TeneborokAI _ai;
 
-    bool _damagable = false;
-
     public void UpdateLineVisual(LineRenderer p_line, TeneborokAI p_ai)
     {
         _ai = p_ai;
@@ -41,7 +39,7 @@ public class RimVoidFire : MonoBehaviour
 
     IEnumerator DestroyWall()
     {
-        yield return new WaitForSeconds(_ai.rimDuration - 1);
+        yield return new WaitForSeconds(_ai.rimDuration);
         while (gameObject.transform.localScale.y >= 0)
         {
             yield return new WaitForSeconds(0.01f);
@@ -49,33 +47,5 @@ public class RimVoidFire : MonoBehaviour
             gameObject.transform.localScale = new Vector3(t_scale.x, t_scale.y - 0.5f, t_scale.z);
         }
         Destroy(gameObject);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-            _damagable = true;
-            StartCoroutine(Damage(t_mecha));
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            _damagable = false;
-        }
-    }
-
-    IEnumerator Damage(MechaInstance p_mecha)
-    {
-        while (_damagable)
-        {
-            p_mecha.TakeDamage(_ai.rimDamage);
-            _ai.AddDps(_ai.rimDamage);
-            yield return new WaitForSeconds(0.1f);
-        }
     }
 }

@@ -1,6 +1,8 @@
+using Mekaiju;
 using Mekaiju.AI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class RimVoid : MonoBehaviour
@@ -10,10 +12,19 @@ public class RimVoid : MonoBehaviour
     public int pointCount = 10;
     private List<Vector3> _firePos = new List<Vector3>();
 
+    bool _damagable = false;
+
     public void SetUp(TeneborokAI p_teneborokAI)
     {
         _ai = p_teneborokAI;
         _line = GetComponent<LineRenderer>();
+        BoxCollider t_lineCollider = _line.GetComponent<BoxCollider>();
+
+        // Ajouter un BoxCollider s'il n'existe pas encore
+        if (t_lineCollider == null)
+        {
+            t_lineCollider = _line.gameObject.AddComponent<BoxCollider>();
+        }
 
         Vector3 t_startPos = _ai.transform.position;
         Vector3 t_endPos = _ai.GetTargetPos();
@@ -59,6 +70,22 @@ public class RimVoid : MonoBehaviour
         StartCoroutine(lifeTime());
     }
 
+    void UpdateColliderProgressively(BoxCollider collider, Vector3 start, Vector3 currentEnd)
+    {
+        Vector3 midPoint = (start + currentEnd) / 2f; // Position centrale du collider
+        float length = Vector3.Distance(start, currentEnd); // Longueur actuelle de la ligne
+        float thickness = 0.2f; // Ajuste selon besoin
+
+        collider.center = collider.transform.InverseTransformPoint(midPoint);
+        collider.size = new Vector3(thickness, 20, length);
+        collider.center = new Vector3(0, 0, collider.center.z);
+
+        // Orienter le collider pour suivre la direction actuelle de la ligne
+        collider.transform.rotation = Quaternion.LookRotation(currentEnd - start);
+    }
+
+
+
     public void SpawnFire(Vector3 p_point)
     {
         GameObject t_fire = Instantiate(_ai.gameObjectRimFire, p_point, Quaternion.identity);
@@ -68,13 +95,34 @@ public class RimVoid : MonoBehaviour
 
     IEnumerator lifeTime()
     {
-        foreach(Vector3 t_point in _firePos)
+        BoxCollider lineCollider = _line.GetComponent<BoxCollider>();
+
+        // Initialiser le collider avec une taille minimale
+        if (lineCollider == null)
+        {
+            lineCollider = _line.gameObject.AddComponent<BoxCollider>();
+        }
+        lineCollider.size = Vector3.zero; // Début à zéro
+
+        Vector3 firstPoint = _firePos[0]; // Premier point du mur
+
+        foreach (Vector3 t_point in _firePos)
         {
             SpawnFire(t_point);
+
+            // Mettre à jour le collider avec la partie visible
+            UpdateColliderProgressively(lineCollider, firstPoint, t_point);
+
             yield return new WaitForSeconds(0.01f);
         }
-        yield return new WaitForSeconds(_ai.rimDuration);
+
+        _ai.AttackCooldown();
         _ai.SetLastAttack(TeneborokAttack.RimVoid);
+
+        yield return new WaitForSeconds(_ai.rimDuration);
+        lineCollider.enabled = false;
+
+        yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }
 
@@ -90,5 +138,38 @@ public class RimVoid : MonoBehaviour
         }
 
         return 0;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            MechaInstance t_mecha = other.GetComponent<MechaInstance>();
+            //Temporaire à changer quant le systeme d'effet sera mis à jour
+            t_mecha.Context.SpeedModifier /= 2;
+            _damagable = true;
+            StartCoroutine(Damage(t_mecha));
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            MechaInstance t_mecha = other.GetComponent<MechaInstance>();
+            //Temporaire à changer quant le systeme d'effet sera mis à jour
+            t_mecha.Context.SpeedModifier *= 2;
+            _damagable = false;
+        }
+    }
+
+    IEnumerator Damage(MechaInstance p_mecha)
+    {
+        while (_damagable)
+        {
+            p_mecha.TakeDamage(_ai.rimDamage);
+            _ai.AddDps(_ai.rimDamage);
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 }
