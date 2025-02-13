@@ -169,7 +169,7 @@ public class RimVoid : MonoBehaviour
         {
             p_mecha.TakeDamage(_ai.rimDamage);
             _ai.AddDps(_ai.rimDamage);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(_ai.rimHitCooldown);
         }
     }
 }

@@ -43,6 +43,8 @@ namespace Mekaiju.AI
 
         private bool _canSwitch = false;
 
+        protected Animator _animator;
+
         protected int _currentPhase = 1;
 
         private int _totalStartHealth;
@@ -61,6 +63,7 @@ namespace Mekaiju.AI
         protected void Start()
         {
             _agent = GetComponent<NavMeshAgent>();
+            _animator = GetComponent<Animator>();
             states = CombatStatesKaiju.Normal;
             _target = GameObject.FindGameObjectWithTag(targetTag);
             StartCoroutine(ShowDPS());
@@ -98,6 +101,7 @@ namespace Mekaiju.AI
         {
             ChangeState();
             CombatStatesMachine();
+            _animator.SetBool("CanAttack", _canAttack);
         }
 
         /// <summary>
@@ -155,7 +159,6 @@ namespace Mekaiju.AI
                 }
             }
         }
-
 
         /// <summary>
         /// To move the Kaiju

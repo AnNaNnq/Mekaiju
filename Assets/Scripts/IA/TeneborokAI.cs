@@ -1,12 +1,14 @@
 using Mekaiju.Attacks;
 using Mekaiju.Attribute;
 using MyBox;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Mekaiju.AI
 {
     [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(Animator))]
     public class TeneborokAI : BasicAI
     {
         [SerializeField]
@@ -46,6 +48,7 @@ namespace Mekaiju.AI
         [OverrideLabel("Rim prefab")][OpenPrefabButton] public GameObject gameObjectRim;
         [OverrideLabel("Fire prefab")][OpenPrefabButton] public GameObject gameObjectRimFire;
         [OverrideLabel("Duration (sec)")] public int rimDuration = 2;
+        [OverrideLabel("Hit cooldown (sec)")] public float rimHitCooldown = 0.1f;
         [OverrideLabel("CD")] public float rimCD = 10f;
 
         private bool _canRim = true;
@@ -64,11 +67,21 @@ namespace Mekaiju.AI
         [ConditionalField(nameof(debugRim))] public Color colorForRimRange;
         #endregion
 
+        #region Time For Animation
+        [Foldout("Time For Animation")]
+        public float timeForCoupTranchant = 0.2f;
+        #endregion
 
         public new void Start()
         {
             base.Start();
             lastAttack = TeneborokAttack.None;
+        }
+
+        private new void Update()
+        {
+            base.Update();
+
         }
 
         public override void Agro()
@@ -80,7 +93,8 @@ namespace Mekaiju.AI
                 {
                     if (Vector3.Distance(_target.transform.position, transform.position) <= hitCutRange && _canAttack)
                     {
-                        HitCut();
+                        _animator.SetTrigger("CoupTranchant");
+                        StartCoroutine(HitCut());
                     }
                     else
                     {
@@ -115,10 +129,13 @@ namespace Mekaiju.AI
             }
         }
 
-        public void HitCut()
+        IEnumerator HitCut()
         {
             _canAttack = false;
-            lastAttack = TeneborokAttack.CoupTranchant;
+            Debug.Log("caca");
+            yield return new WaitForSeconds(timeForCoupTranchant);
+            Debug.Log("pipi");
+            lastAttack = TeneborokAttack.Stop;
             Attack(hitCutDamage, hitCutZoneCenter, hitCutZoneSize);
         }
 
