@@ -116,8 +116,8 @@ namespace Mekaiju
             // _effects = new();
             _effects = new()
             {
-                new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
-                new(Resources.Load<Effect>("Mecha/Effect/Heal")),
+                new(Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
+                new(Resources.Load<Effect>("Mecha/Objects/Effect/Heal")),
             };
 
             Stamina = Desc.Stamina;
