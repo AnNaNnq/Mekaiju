@@ -60,11 +60,28 @@ public class PlayerController : MonoBehaviour
         _groundLayerMask = LayerMask.GetMask("Walkable");
 
         _instance = GetComponent<MechaInstance>();
-        _target   = GameObject.Find("Kaiju").GetComponent<BasicAI>();
 
         _cameraPivot = transform.Find("CameraPivot");
 
-        GameObject t_go = GameObject.FindWithTag("MainCamera");
+        GameObject t_go;
+        t_go = GameObject.FindWithTag("Kaiju");
+        if (t_go)
+        {
+            if (t_go.TryGetComponent<BasicAI>(out var t_comp))
+            {
+                _target = t_comp;
+            }
+            else
+            {
+                Debug.Log("Kaiju must have BasicAI inherited component!");
+            }
+        }
+        else
+        {
+            Debug.Log("Kaiju must have Kaiju tag!");
+        }
+
+        t_go = GameObject.FindWithTag("MainCamera");
         if (t_go)
         {
             if (t_go.TryGetComponent<CinemachineCamera>(out var t_comp))
