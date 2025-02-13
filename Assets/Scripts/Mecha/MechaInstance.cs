@@ -15,8 +15,10 @@ namespace Mekaiju
     {
         public float LastAbilityTime = -1000f;
 
-        public float SpeedModifier   = 1f;
-        public float DefenseModifier = 1f;
+        // public float SpeedModifier   = 1f;
+        // public float DefenseModifier = 1f;
+
+        public EnumArray<ModifierTarget, ModifierCollection> Modifiers = new(() => new());
 
         public bool IsGrounded          = false;
         public bool IsMovementAltered   = false;
@@ -124,7 +126,8 @@ namespace Mekaiju
             Context = new()
             {
                 Animator  = GetComponent<Animator>(),
-                Rigidbody = GetComponent<Rigidbody>()
+                Rigidbody = GetComponent<Rigidbody>(),
+                // Modifiers  = new()
             };
         }
 

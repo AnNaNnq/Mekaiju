@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Mekaiju.Utils
@@ -17,6 +18,20 @@ namespace Mekaiju.Utils
     {
         [SerializeField]
         private List<TValue> _array = new(Enumerable.Repeat<TValue>(default, Enum.GetValues(typeof(TKey)).Length));
+
+
+        public EnumArray()
+        {
+            _array = new(Enumerable.Repeat<TValue>(default, Enum.GetValues(typeof(TKey)).Length));
+        }
+
+        public EnumArray(Func<TValue> p_cst)
+        {
+            for (int i = 0; i < _array.Count; i++)
+            {
+                _array[i] = p_cst();
+            }
+        }
 
         public TValue this[TKey key]
         {

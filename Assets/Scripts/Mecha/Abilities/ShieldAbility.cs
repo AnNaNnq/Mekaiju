@@ -78,8 +78,10 @@ namespace Mekaiju
                 p_self.Mecha.Context.Animator.SetBool("IsShielding", true);
                 
                 // TODO: rework if other modifier
-                p_self.Mecha.Context.SpeedModifier   = _speedModifier;
-                p_self.Mecha.Context.DefenseModifier = _defenseModifier;
+                var t_sMod = p_self.Mecha.Context.Modifiers[ModifierTarget.Speed]  .Add(_speedModifier);
+                var t_dMod = p_self.Mecha.Context.Modifiers[ModifierTarget.Defense].Add(_defenseModifier);
+                // p_self.Mecha.Context.SpeedModifier   = _speedModifier;
+                // p_self.Mecha.Context.DefenseModifier = _defenseModifier;
 
                 p_self.Mecha.Context.IsMovementAltered = true;
 
@@ -94,8 +96,10 @@ namespace Mekaiju
 
                 p_self.Mecha.Context.Animator.SetBool("IsShielding", false);
                 // TODO: rework if other modifier
-                p_self.Mecha.Context.SpeedModifier   = 1f;
-                p_self.Mecha.Context.DefenseModifier = 1f;
+                // p_self.Mecha.Context.SpeedModifier   = 1f;
+                // p_self.Mecha.Context.DefenseModifier = 1f;
+                p_self.Mecha.Context.Modifiers[ModifierTarget.Speed]  .Remove(t_sMod);
+                p_self.Mecha.Context.Modifiers[ModifierTarget.Defense].Remove(t_dMod);
 
                 p_self.Mecha.Context.IsMovementAltered = false;
                 
