@@ -33,7 +33,7 @@ public class RimVoid : MonoBehaviour
         Vector3 t_directionToTarget = (t_endPos - t_startPos).normalized;
 
         // Calculer la position finale en fonction de la portée max
-        Vector3 t_finalPos = t_endPos + t_directionToTarget * (_ai.rimRange - Vector3.Distance(t_startPos, t_endPos));
+        Vector3 t_finalPos = t_endPos + t_directionToTarget * (_ai.rimVoideRange - Vector3.Distance(t_startPos, t_endPos));
 
         // Distance avant et après la cible
         float distanceToTarget = Vector3.Distance(t_startPos, t_endPos);
@@ -88,7 +88,7 @@ public class RimVoid : MonoBehaviour
 
     public void SpawnFire(Vector3 p_point)
     {
-        GameObject t_fire = Instantiate(_ai.gameObjectRimFire, p_point, Quaternion.identity);
+        GameObject t_fire = Instantiate(_ai.gameObjectRimVoidFire, p_point, Quaternion.identity);
         RimVoidFire t_rvf = t_fire.GetComponent<RimVoidFire>();
         t_rvf.UpdateLineVisual(_line, _ai);
     }
@@ -119,7 +119,7 @@ public class RimVoid : MonoBehaviour
         _ai.AttackCooldown();
         _ai.SetLastAttack(TeneborokAttack.RimVoid);
 
-        yield return new WaitForSeconds(_ai.rimDuration);
+        yield return new WaitForSeconds(_ai.rimVoidDuration);
         lineCollider.enabled = false;
 
         yield return new WaitForSeconds(1f);
@@ -167,9 +167,9 @@ public class RimVoid : MonoBehaviour
     {
         while (_damagable)
         {
-            p_mecha.TakeDamage(_ai.rimDamage);
-            _ai.AddDps(_ai.rimDamage);
-            yield return new WaitForSeconds(_ai.rimHitCooldown);
+            p_mecha.TakeDamage(_ai.rimVoidDamage);
+            _ai.AddDps(_ai.rimVoidDamage);
+            yield return new WaitForSeconds(_ai.rimVoidHitCooldown);
         }
     }
 }

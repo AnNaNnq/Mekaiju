@@ -14,10 +14,10 @@ namespace Mekaiju.Attacks
 
         public void SetUp(TeneborokAI p_ai)
         {
-            _dmg = p_ai.vortexDamage;
+            _dmg = p_ai.abyssalVortexDamage;
             _rock = p_ai.gameObjectRock;
-            _radius = p_ai.vortexRadius;
-            _nbRock = p_ai.vortexNumberOfRock;
+            _radius = p_ai.abyssalVortexRadius;
+            _nbRock = p_ai.abyssalVortexNumberOfRock;
             _ai = p_ai;
             StartCoroutine(rockFall());
         }
@@ -34,7 +34,7 @@ namespace Mekaiju.Attacks
                 yield return new WaitForSeconds(0.2f);
             }
             _ai.AttackCooldown();
-            _ai.SetLastAttack(TeneborokAttack.VortexAbyssal);
+            _ai.SetLastAttack(TeneborokAttack.AbyssalVortex);
             Destroy(gameObject);
         }
 

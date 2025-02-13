@@ -16,60 +16,74 @@ namespace Mekaiju.AI
 
         #region Coup tranchant
         [Foldout("Coup tranchant")]
-        [OverrideLabel("Damage")] public int hitCutDamage = 10;
-        [OverrideLabel("Range")] public float hitCutRange = 2f;
+        [OverrideLabel("Damage")] public int sharpBlowDamage = 10;
+        [OverrideLabel("Range")] public float sharpBlowRange = 2f;
         [OverrideLabel("Body Part")]
-        [SelectFromList(nameof(bodyParts))] public int hitCutBody;
-        [OverrideLabel("Attack zone center")] public Vector3 hitCutZoneCenter;
-        [OverrideLabel("Attack zone size")] public Vector3 hitCutZoneSize;
+        [SelectFromList(nameof(bodyParts))] public int sharpBlowBody;
+        [OverrideLabel("Attack zone center")] public Vector3 sharpBlowZoneCenter;
+        [OverrideLabel("Attack zone size")] public Vector3 sharpBlowZoneSize;
         #endregion
 
         #region Vortex Abyssal
         [Foldout("Vortex Abyssal")]
-        [OverrideLabel("Damage")] public int vortexDamage = 10;
-        [OverrideLabel("Range")] public float vortexRange = 2f;
+        [OverrideLabel("Damage")] public int abyssalVortexDamage = 10;
+        [OverrideLabel("Range")] public float abyssalVortexRange = 2f;
         [OverrideLabel("Body Part")]
-        [SelectFromList(nameof(bodyParts))] public int vortexBody;
-        [OverrideLabel("Gravitational zone prefab")][OpenPrefabButton] public GameObject gameObjectVortex;
+        [SelectFromList(nameof(bodyParts))] public int abyssalVortexBody;
+        [OverrideLabel("Gravitational zone prefab")][OpenPrefabButton] public GameObject gameObjectAbyssalVortex;
         [OverrideLabel("Kaillou prefab")][OpenPrefabButton] public GameObject gameObjectRock;
-        [OverrideLabel("Vortex Radius")] public float vortexRadius = 10f;
-        [OverrideLabel("Number of rock")] public int vortexNumberOfRock = 10;
-        [OverrideLabel("CD")] public float vortexCD = 10f;
-        
-        private bool _canVortex = true;
+        [OverrideLabel("Vortex Radius")] public float abyssalVortexRadius = 10f;
+        [OverrideLabel("Number of rock")] public int abyssalVortexNumberOfRock = 10;
+        [OverrideLabel("CD")] public float abyssalVortexCooldown = 10f;
+
+        private bool _canAbyssalVortex = true;
         #endregion
 
         #region Fissure du Néant
         [Foldout("Fissure du Néant")]
-        [OverrideLabel("Damage")] public int rimDamage = 10;
-        [OverrideLabel("Range")] public float rimRange = 2f;
+        [OverrideLabel("Damage")] public int rimVoidDamage = 10;
+        [OverrideLabel("Range")] public float rimVoideRange = 2f;
         [OverrideLabel("Body Part")]
-        [SelectFromList(nameof(bodyParts))] public int rimBody;
-        [OverrideLabel("Rim prefab")][OpenPrefabButton] public GameObject gameObjectRim;
-        [OverrideLabel("Fire prefab")][OpenPrefabButton] public GameObject gameObjectRimFire;
-        [OverrideLabel("Duration (sec)")] public int rimDuration = 2;
-        [OverrideLabel("Hit cooldown (sec)")] public float rimHitCooldown = 0.1f;
-        [OverrideLabel("CD")] public float rimCD = 10f;
+        [SelectFromList(nameof(bodyParts))] public int rimVoidBody;
+        [OverrideLabel("Rim prefab")][OpenPrefabButton] public GameObject gameObjectRimVoid;
+        [OverrideLabel("Fire prefab")][OpenPrefabButton] public GameObject gameObjectRimVoidFire;
+        [OverrideLabel("Duration (sec)")] public int rimVoidDuration = 2;
+        [OverrideLabel("Hit cooldown (sec)")] public float rimVoidHitCooldown = 0.1f;
+        [OverrideLabel("CD")] public float rimVoidCooldown = 10f;
 
-        private bool _canRim = true;
+        private bool _canRimVoid = true;
+        #endregion
+
+        #region Frappe du serpent
+        [Foldout("Frappe du serpent")]
+        [OverrideLabel("Damage")] public int snakeStrikeDamage = 10;
+        [OverrideLabel("Range")] public float snakeStrikeRange = 2f;
+        [OverrideLabel("Body Part")]
+        [SelectFromList(nameof(bodyParts))] public int snakeStrikeBody;
+        [OverrideLabel("Attack zone center")] public Vector3 snakeStrikeZoneCenter;
+        [OverrideLabel("Attack zone size")] public Vector3 snakeStrikeZoneSize;
         #endregion
 
         #region Pour les ld
         [Foldout("Debug")]
         [OverrideLabel("Show Gizmo For Hit Cut")]
-        public bool debugHitCut = false;
-        [ConditionalField(nameof(debugHitCut))] public Color colorForHitCutRange;
-        [OverrideLabel("Show Gizmo For Vortex")]
-        public bool debugVortex = false;
-        [ConditionalField(nameof(debugVortex))] public Color colorForVortexRange;
-        [OverrideLabel("Show Gizmo For Vortex")]
-        public bool debugRim = false;
-        [ConditionalField(nameof(debugRim))] public Color colorForRimRange;
+        public bool debugSharpBlow = false;
+        [ConditionalField(nameof(debugSharpBlow))] public Color colorForSharpBlowRange;
+        [OverrideLabel("Show Gizmo For Abyssal Vortex")]
+        public bool debugAbyssalVortex = false;
+        [ConditionalField(nameof(debugAbyssalVortex))] public Color colorForAbyssalVortexRange;
+        [OverrideLabel("Show Gizmo For Rim Void")]
+        public bool debugRimVoid = false;
+        [ConditionalField(nameof(debugRimVoid))] public Color colorForRimVoidRange;
+        [OverrideLabel("Show Gizmo For Snake Strike")]
+        public bool debugSnakeStrike = false;
+        [ConditionalField(nameof(debugSnakeStrike))] public Color colorForSnakeStrikeRange;
         #endregion
 
         #region Time For Animation
         [Foldout("Time For Animation")]
-        public float timeForCoupTranchant = 0.2f;
+        public float timeForSharpBlow = 0.2f;
+        public float timeForSnakeStrike = 0.1f;
         #endregion
 
         public new void Start()
@@ -90,32 +104,38 @@ namespace Mekaiju.AI
             switch (lastAttack)
             {
                 case TeneborokAttack.None:
-                {
-                    if (Vector3.Distance(_target.transform.position, transform.position) <= hitCutRange && _canAttack)
                     {
-                        _animator.SetTrigger("CoupTranchant");
-                        StartCoroutine(HitCut());
-                    }
-                    else
-                    {
-                        MoveTo(_target.transform.position, hitCutRange);
-                    }
-                    break;
-                }
-                case TeneborokAttack.CoupTranchant:
-                    {
-                        if(Vector3.Distance(_target.transform.position, transform.position) <= vortexRange && _canAttack && _canVortex 
-                            && Vector3.Distance(_target.transform.position, transform.position) >= rimRange)
+                        if (GetTargetDistance() <= sharpBlowRange && _canAttack)
                         {
-                            Vortex();
-                        }
-                        else if(Vector3.Distance(_target.transform.position, transform.position) <= rimRange && _canAttack && _canRim)
-                        {
-                            RimVoid();
+                            _animator.SetTrigger("CoupTranchant");
+                            StartCoroutine(SharpBlow());
                         }
                         else
                         {
-                            MoveTo(_target.transform.position, vortexRange);
+                            MoveTo(_target.transform.position, sharpBlowRange);
+                        }
+                        break;
+                    }
+                case TeneborokAttack.SharpBlow:
+                    {
+                        if (GetTargetDistance() <= abyssalVortexRange && _canAttack && _canAbyssalVortex
+                            && GetTargetDistance() >= rimVoideRange)
+                        {
+                            AbyssalVortex();
+                        }
+                        else if (GetTargetDistance() <= rimVoideRange && _canAttack && _canRimVoid
+                            && GetTargetDistance() >= snakeStrikeRange)
+                        {
+                            RimVoid();
+                        }
+                        else if(GetTargetDistance() <= snakeStrikeRange && _canAttack)
+                        {
+                            _animator.SetTrigger("FrappeSerpent");
+                            StartCoroutine(SnakeStrik());
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, abyssalVortexRange);
                         }
                         break;
                     }
@@ -129,36 +149,44 @@ namespace Mekaiju.AI
             }
         }
 
-        IEnumerator HitCut()
+        IEnumerator SnakeStrik()
         {
-            _canAttack = false;
-            Debug.Log("caca");
-            yield return new WaitForSeconds(timeForCoupTranchant);
-            Debug.Log("pipi");
             lastAttack = TeneborokAttack.Stop;
-            Attack(hitCutDamage, hitCutZoneCenter, hitCutZoneSize);
+            _canAttack = false;
+            yield return new WaitForSeconds(timeForSnakeStrike);
+            lastAttack = TeneborokAttack.SnakeStrike;
+            Attack(snakeStrikeDamage, snakeStrikeZoneCenter, snakeStrikeZoneSize);
         }
 
-        public void Vortex()
+        IEnumerator SharpBlow()
+        {
+            lastAttack = TeneborokAttack.Stop;
+            _canAttack = false;
+            yield return new WaitForSeconds(timeForSharpBlow);
+            lastAttack = TeneborokAttack.SharpBlow;
+            Attack(sharpBlowDamage, sharpBlowZoneCenter, sharpBlowZoneSize);
+        }
+
+        public void AbyssalVortex()
         {
             _canAttack = false;
-            _canVortex = false;
+            _canAbyssalVortex = false;
             lastAttack = TeneborokAttack.Stop;
-            GameObject t_zone = Instantiate(gameObjectVortex, _target.transform.position, Quaternion.identity);
+            GameObject t_zone = Instantiate(gameObjectAbyssalVortex, _target.transform.position, Quaternion.identity);
             GravitationalZone t_gz = t_zone.GetComponent<GravitationalZone>();
             t_gz.SetUp(this);
-            StartCoroutine(CooldownRoutine(vortexCD, () => _canVortex = true));
+            StartCoroutine(CooldownRoutine(abyssalVortexCooldown, () => _canAbyssalVortex = true));
         }
-        
+
         public void RimVoid()
         {
             _canAttack = false;
-            _canRim = false;
+            _canRimVoid = false;
             lastAttack = TeneborokAttack.Stop;
-            GameObject t_rim = Instantiate(gameObjectRim, transform.position, Quaternion.identity);
+            GameObject t_rim = Instantiate(gameObjectRimVoid, transform.position, Quaternion.identity);
             RimVoid t_rv = t_rim.GetComponent<RimVoid>();
             t_rv.SetUp(this);
-            StartCoroutine(CooldownRoutine(rimCD, () => _canRim = true));
+            StartCoroutine(CooldownRoutine(rimVoidCooldown, () => _canRimVoid = true));
         }
 
         public void SetLastAttack(TeneborokAttack attack)
@@ -169,29 +197,37 @@ namespace Mekaiju.AI
         private new void OnDrawGizmos()
         {
             base.OnDrawGizmos();
-            if (debugHitCut)
+            if (debugSharpBlow)
             {
-                Gizmos.color = colorForHitCutRange;
-                Gizmos.DrawWireSphere(transform.position, hitCutRange);
+                Gizmos.color = colorForSharpBlowRange;
+                Gizmos.DrawWireSphere(transform.position, sharpBlowRange);
                 Gizmos.color = Color.white;
-                Gizmos.DrawWireCube(transform.position + transform.rotation * hitCutZoneCenter, hitCutZoneSize);
+                Gizmos.DrawWireCube(transform.position + transform.rotation * sharpBlowZoneCenter, sharpBlowZoneSize);
             }
-            if (debugVortex)
+            if (debugAbyssalVortex)
             {
-                Gizmos.color = colorForVortexRange;
-                Gizmos.DrawWireSphere(transform.position, vortexRange);
+                Gizmos.color = colorForAbyssalVortexRange;
+                Gizmos.DrawWireSphere(transform.position, abyssalVortexRange);
             }
-            if (debugRim)
+            if (debugRimVoid)
             {
-                Gizmos.color = colorForRimRange;
-                Gizmos.DrawWireSphere(transform.position, rimRange);
+                Gizmos.color = colorForRimVoidRange;
+                Gizmos.DrawWireSphere(transform.position, rimVoideRange);
+            }
+            if (debugSnakeStrike)
+            {
+                Gizmos.color = colorForSnakeStrikeRange;
+                Gizmos.DrawWireSphere(transform.position, snakeStrikeRange);
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireCube(transform.position + transform.rotation * snakeStrikeZoneCenter, snakeStrikeZoneSize);
+
             }
         }
     }
 
     public enum TeneborokAttack
     {
-        CoupTranchant, VortexAbyssal, RimVoid, Move, Stop, None
+        SharpBlow, AbyssalVortex, RimVoid, SnakeStrike, Move, Stop, None
     }
 }
 

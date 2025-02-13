@@ -9,7 +9,7 @@ public class FallRock : MonoBehaviour
 
     public void SetUp(TeneborokAI p_ai)
     {
-        _dmg = p_ai.vortexDamage;
+        _dmg = p_ai.abyssalVortexDamage;
         _ia = p_ai;
     }
 
