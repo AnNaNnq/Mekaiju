@@ -1,0 +1,10 @@
+using UnityEngine;
+
+[System.Serializable]
+public class BodyPart
+{
+    public string nom;
+    public GameObject[] part;
+    public int health;
+    public bool isDestroyed;
+}
