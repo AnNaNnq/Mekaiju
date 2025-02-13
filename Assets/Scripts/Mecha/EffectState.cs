@@ -46,6 +46,11 @@ namespace Mekaiju
             _elapsed = 0f;
         }
 
+        public Effect GetEffect()
+        {
+            return _effect;
+        }
+
         public StatefullEffect(Effect p_effect) : this(p_effect, -1)
         {        
 
@@ -63,6 +68,14 @@ namespace Mekaiju
 
                 _effect.Behaviour.Tick(p_self);
                 _elapsed += Time.deltaTime;
+            }
+        }
+        
+        public void FixedTick(MechaInstance p_self)
+        {
+            if (_time < 0 || _elapsed < _time)
+            {
+                _effect.Behaviour.FixedTick(p_self);
             }
         }
     }

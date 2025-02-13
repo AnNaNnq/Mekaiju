@@ -17,10 +17,14 @@ MonoBehaviour:
   <Prefab>k__BackingField: {fileID: 7356328789365181207, guid: 6bb313dd8a4b3485ab6b9c8e7fa6fcee, type: 3}
   <Target>k__BackingField: 4
   <Behaviour>k__BackingField:
-    rid: 2512019086619443260
+    rid: 2512019247687794750
   references:
     version: 2
     RefIds:
-    - rid: 2512019086619443260
-      type: {class: EmptyAbility, ns: , asm: Assembly-CSharp}
-      data: 
+    - rid: 2512019247687794750
+      type: {class: LegsCompoundAbility, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        _abilities:
+          _array:
+          - {fileID: 11400000, guid: 91ffdedc6e8784a359d9b8c4d8a498ac, type: 2}
+          - {fileID: 11400000, guid: ff9124bec67854bf9921cbf70c61e448, type: 2}

@@ -43,7 +43,16 @@ namespace Mekaiju
                 Debug.LogWarning("You must provide a prefab for each mecha ability.");
 
             if (Behaviour == null)
+            {
                 Debug.LogWarning("You must provide a behaviour for each mecha ability.");
+            }
+            else
+            {
+                if (typeof(ICompoundAbility).IsAssignableFrom(Behaviour.GetType()))
+                {
+                    (Behaviour as ICompoundAbility).CheckAbilityLoop(this);
+                }
+            }
         }
     }
     
