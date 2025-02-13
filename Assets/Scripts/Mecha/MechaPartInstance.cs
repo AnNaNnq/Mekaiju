@@ -53,8 +53,10 @@ namespace Mekaiju
         /// <param name="p_damage"></param>
         public void TakeDamage(float p_damage)
         {
+            var t_damage = Mecha.Context.Modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
+            
             Mecha.Context.LastDamageTime = Time.time;
-            Health = Mathf.Max(0f, Health - Mecha.Context.DefenseModifier * p_damage);
+            Health = Mathf.Max(0f, Health - t_damage);
         }
 
         public void Heal(float p_heal)

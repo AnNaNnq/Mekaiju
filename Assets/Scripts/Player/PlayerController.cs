@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     [Foldout("Movement Attributes")]
     [SerializeField] private float _groundCheckRadius = 0.5f;
     [SerializeField] private float _baseSpeed = 5f;
-    private float _speed;
+    [SerializeField] private float _speed;
 
 
     [Foldout("Camera Attributes")]
@@ -252,7 +252,8 @@ public class PlayerController : MonoBehaviour
 
         if (!_instance.Context.IsMovementOverrided)
         {
-            _speed = _baseSpeed * _instance.Context.SpeedModifier;
+            _speed = _instance.Context.Modifiers[ModifierTarget.Speed]?.ComputeValue(_baseSpeed) ?? _baseSpeed;
+            // _speed = _baseSpeed * _instance.Context.SpeedModifier;
 
             if (_isGrounded)
             {
