@@ -20,35 +20,71 @@ namespace Mekaiju.Internal
             EditorGUI.BeginProperty(position, label, property);
 
             // Calcul des positions
-            Rect objectFieldRect = new Rect(position.x, position.y, position.width - 30, position.height);
-            Rect buttonRect = new Rect(position.x + position.width - 25, position.y, 25, position.height);
+            float buttonWidth = 25;
+            Rect objectFieldRect = new Rect(position.x, position.y, position.width - (buttonWidth * 2 + 5), position.height);
+            Rect openButtonRect = new Rect(position.x + position.width - (buttonWidth * 2 + 5), position.y, buttonWidth, position.height);
+            Rect showInProjectButtonRect = new Rect(position.x + position.width - buttonWidth, position.y, buttonWidth, position.height);
 
             // Affichage du champ GameObject
             EditorGUI.PropertyField(objectFieldRect, property, label);
 
-            // Bouton d'ouverture
-            if (GUI.Button(buttonRect, "🔍"))
+            // Bouton d'ouverture de la prefab
+            if (GUI.Button(openButtonRect, "🔍"))
             {
-                GameObject prefab = property.objectReferenceValue as GameObject;
-                if (prefab != null)
-                {
-                    string assetPath = AssetDatabase.GetAssetPath(prefab);
-                    if (!string.IsNullOrEmpty(assetPath))
-                    {
-                        AssetDatabase.OpenAsset(prefab);
-                    }
-                    else
-                    {
-                        Debug.LogWarning("L'objet sélectionné n'est pas une prefab valide.");
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning("Aucune prefab assignée.");
-                }
+                OpenPrefab(property);
+            }
+
+            // Bouton pour afficher dans le projet
+            if (GUI.Button(showInProjectButtonRect, "📂"))
+            {
+                ShowPrefabInProject(property);
             }
 
             EditorGUI.EndProperty();
+        }
+
+        private void OpenPrefab(SerializedProperty property)
+        {
+            GameObject prefab = property.objectReferenceValue as GameObject;
+            if (prefab != null)
+            {
+                string assetPath = AssetDatabase.GetAssetPath(prefab);
+                if (!string.IsNullOrEmpty(assetPath))
+                {
+                    AssetDatabase.OpenAsset(prefab);
+                }
+                else
+                {
+                    Debug.LogWarning("L'objet sélectionné n'est pas une prefab valide.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Aucune prefab assignée.");
+            }
+        }
+
+        private void ShowPrefabInProject(SerializedProperty property)
+        {
+            UnityEngine.Object prefab = property.objectReferenceValue;
+            if (prefab != null)
+            {
+                string assetPath = AssetDatabase.GetAssetPath(prefab);
+                if (!string.IsNullOrEmpty(assetPath))
+                {
+                    UnityEngine.Object obj = AssetDatabase.LoadMainAssetAtPath(assetPath);
+                    EditorGUIUtility.PingObject(obj);
+                    Selection.activeObject = obj;
+                }
+                else
+                {
+                    Debug.LogWarning("L'objet sélectionné n'est pas une prefab valide.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Aucune prefab assignée.");
+            }
         }
     }
 }

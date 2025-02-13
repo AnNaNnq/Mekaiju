@@ -21,17 +21,10 @@ public class RimVoidFire : MonoBehaviour
         Vector3 startPos = p_line.GetPosition(0);
         Vector3 endPos = p_line.GetPosition(pointCount - 1);
 
-        // Placer l'objet au centre de la ligne
-        Vector3 midPoint = (startPos + endPos) / 2f;
-        gameObject.transform.position = midPoint;
-
         // Calculer l'orientation
         Vector3 direction = (endPos - startPos).normalized;
         gameObject.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
 
-        // Ajuster la taille (largeur et longueur)
-        float length = Vector3.Distance(startPos, endPos);
-        gameObject.transform.localScale = new Vector3(0.2f, 0.1f, length); // 0.2f = épaisseur
         StartCoroutine(GrowthWall());
         StartCoroutine(DestroyWall());
     }
