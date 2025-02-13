@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Mekaiju.AI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,10 +7,9 @@ namespace Mekaiju.LockOnTargetSystem
 {
     public class LockOnTargetSystem : MonoBehaviour
     {
+
         [Header("Références")]
-        public Camera playerCamera; // Caméra pour viser
-        public float maxLockRange = 100f; // Portée du rayon
-        public LayerMask targetLayerMask; // Masque de couche pour les cibles valides
+        [SerializeField] private LayerMask _targetLayerMask; // Masque de couche pour les cibles valides
 
         [Header("Paramètres de Lock-On")]
         public float lockOnRange = 100f; // Portée du Lock-On
@@ -26,7 +26,6 @@ namespace Mekaiju.LockOnTargetSystem
         private bool _isLockedOn = false; // État du Lock-On
 
         private Transform _cameraPivot;
-
         private void Start()
         {
             _cameraPivot = transform.Find("CameraPivot");
@@ -35,25 +34,12 @@ namespace Mekaiju.LockOnTargetSystem
         private void Update()
         {
             DetectTargets();
-
-            // Activer/Désactiver le Lock-On (Touche L)
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                ToggleLockOn();
-            }
-
-            // Changer de cible verrouillée (Touche J / K)
-            if (_isLockedOn && _potentialTargets.Count > 0)
-            {
-                if (Input.GetKeyDown(KeyCode.J)) ChangeTarget(-1);
-                if (Input.GetKeyDown(KeyCode.K)) ChangeTarget(1);
-            }
         }
 
         // Détecte les cibles proches dans la portée du Lock-On
         private void DetectTargets()
         {
-            Collider[] hits = Physics.OverlapSphere(transform.position, lockOnRange, targetLayerMask);
+            Collider[] hits = Physics.OverlapSphere(transform.position, lockOnRange, _targetLayerMask);
             _potentialTargets.Clear();
 
             foreach (Collider hit in hits)
@@ -68,11 +54,11 @@ namespace Mekaiju.LockOnTargetSystem
         }
 
         // Active ou désactive le Lock-On
-        private void ToggleLockOn()
+        public void ToggleLockOn(bool p_isLockedOn)
         {
-            if (!_isLockedOn && _potentialTargets.Count > 0)
+            if (p_isLockedOn && _potentialTargets.Count > 0)
             {
-                _isLockedOn = true;
+                _isLockedOn = p_isLockedOn;
                 _targetIndex = 0;
                 _lockedTarget = _potentialTargets[_targetIndex];
                 Debug.Log("Lock-On activé sur : " + _lockedTarget.name);
@@ -80,7 +66,7 @@ namespace Mekaiju.LockOnTargetSystem
             }
             else
             {
-                _isLockedOn = false;
+                _isLockedOn = p_isLockedOn;
                 _lockedTarget = null;
                 Debug.Log("Lock-On désactivé");
                 StopAllCoroutines();
@@ -88,7 +74,7 @@ namespace Mekaiju.LockOnTargetSystem
         }
 
         // Change la cible verrouillée actuelle
-        private void ChangeTarget(int direction)
+        public void ChangeTarget(int direction)
         {
             if (_potentialTargets.Count == 0) return;
 
@@ -138,6 +124,11 @@ namespace Mekaiju.LockOnTargetSystem
                 Gizmos.DrawWireCube(target.position, new Vector3(2f, 2f, 2f));
             }
 
+        }
+
+        public BodyPartObject GetTargetBodyPartObject()
+        {
+            return _currentTarget.gameObject.GetComponent<BodyPartObject>();
         }
     }
 }

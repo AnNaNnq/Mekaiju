@@ -21,7 +21,9 @@ namespace Mekaiju.AI
         [PositiveValueOnly] public float agroTriggerArea = 10f;
         [PositiveValueOnly] public float agroSpeed = 3.5f;
         [PositiveValueOnly][OverrideLabel("Attack Countdown (sec)")] public float attackCountdown = 0.2f;
-        
+
+
+        [SerializeField]
         protected bool _canAttack = true;
 
         [Foldout("Await")]
@@ -41,6 +43,8 @@ namespace Mekaiju.AI
 
         private bool _canSwitch = false;
 
+        protected Animator _animator;
+
         protected int _currentPhase = 1;
 
         private int _totalStartHealth;
@@ -51,7 +55,7 @@ namespace Mekaiju.AI
         public TextMeshProUGUI textDPS;
 
 
-        private int _dps = 0;
+        protected int _dps = 0;
 
         /// <summary>
         /// Initializing important variables
@@ -59,6 +63,7 @@ namespace Mekaiju.AI
         protected void Start()
         {
             _agent = GetComponent<NavMeshAgent>();
+            _animator = GetComponent<Animator>();
             states = CombatStatesKaiju.Normal;
             _target = GameObject.FindGameObjectWithTag(targetTag);
             StartCoroutine(ShowDPS());
@@ -96,6 +101,7 @@ namespace Mekaiju.AI
         {
             ChangeState();
             CombatStatesMachine();
+            _animator.SetBool("CanAttack", _canAttack);
         }
 
         /// <summary>
@@ -153,7 +159,6 @@ namespace Mekaiju.AI
                 }
             }
         }
-
 
         /// <summary>
         /// To move the Kaiju
@@ -277,7 +282,7 @@ namespace Mekaiju.AI
         /// <param name="p_effectTime"></param>
         public void Attack(int p_damage, Vector3 attackCenter, Vector3 attackSize, Effect p_effect = null, float p_effectTime = 0)
         {
-            StartCoroutine(AttackCountdown());
+            AttackCooldown();
             // We check if we can attack
             Collider[] t_collisions = Physics.OverlapBox(
                 transform.position + transform.rotation * attackCenter, // Apply rotation to offset
@@ -288,15 +293,27 @@ namespace Mekaiju.AI
             // If we hit the player
             if (t_collisions.Length > 0)
             {
+                MechaInstance t_mecha = t_collisions[0].GetComponent<MechaInstance>();
+                t_mecha.TakeDamage(p_damage);
                 _dps += p_damage;
                 textDPS.text = _dps.ToString();
                 // Apply an effect if available
                 if (p_effect != null)
                 {
-                    MechaInstance t_mecha = t_collisions[0].GetComponent<MechaInstance>();
                     t_mecha.AddEffect(p_effect, p_effectTime);
                 }
             }
+        }
+
+        public Vector3 GetTargetPos()
+        {
+            return _target.transform.position;
+        }
+
+        public void AddDps(int p_dps)
+        {
+            _dps += p_dps;
+            textDPS.text = _dps.ToString();
         }
 
         /// <summary>
@@ -383,14 +400,19 @@ namespace Mekaiju.AI
             _canSwitch = true;
         }
 
+        public void AttackCooldown()
+        {
+            StartCoroutine(CooldownRoutine(attackCountdown, () => _canAttack = true));
+        }
+
         /// <summary>
-        /// Countdown function for attacking
+        /// Countdown function
         /// </summary>
         /// <returns></returns>
-        public IEnumerator AttackCountdown()
+        public IEnumerator CooldownRoutine(float cooldown, System.Action onCooldownEnd)
         {
-            yield return new WaitForSeconds(attackCountdown);
-            _canAttack = true;
+            yield return new WaitForSeconds(cooldown);
+            onCooldownEnd?.Invoke();
         }
 
 

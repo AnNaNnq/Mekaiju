@@ -1,6 +1,8 @@
 using Mekaiju;
 using Mekaiju.AI;
+using Mekaiju.LockOnTargetSystem;
 using MyBox;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,24 +10,26 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public Transform groundCheck;
-    public Transform camera;
 
     public Transform _cameraPivot;
 
     private Animator _animator;
 
     private MechaPlayerActions _playerActions; // NewInputSystem reference
+    [SerializeField] private LockOnTargetSystem _lockOnTargetSystem;
 
     private InputAction _moveAction;
     private InputAction _lookAction;
+    private InputAction _scrollAction;
 
     private Rigidbody _rigidbody;
+
     
     [Foldout("Movement Attributes")]
     [SerializeField] private float _groundCheckRadius = 0.5f;
     [SerializeField] private float _baseSpeed = 5f;
     private float _speed;
-    //[SerializeField] private float _cameraSpeed = 5f;
+
 
     [Foldout("Camera Attributes")]
     [SerializeField] private float _mouseSensitivity = 75f; 
@@ -41,6 +45,10 @@ public class PlayerController : MonoBehaviour
 
     private LayerMask _groundLayerMask;
 
+    //Public variables
+    public bool isLockedOn = false;
+    public float scroll;
+
     private void Awake()
     {
         _playerActions = new MechaPlayerActions();
@@ -55,12 +63,30 @@ public class PlayerController : MonoBehaviour
         _target   = GameObject.Find("Kaiju").GetComponent<BasicAI>();
 
         _cameraPivot = transform.Find("CameraPivot");
+
+        GameObject t_go = GameObject.FindWithTag("MainCamera");
+        if (t_go)
+        {
+            if (t_go.TryGetComponent<CinemachineCamera>(out var t_comp))
+            {
+                t_comp.Target.TrackingTarget = _cameraPivot;
+            }
+            else
+            {
+                Debug.Log("MainCamera must have CinemachineCamera component!");
+            }
+        }
+        else
+        {
+            Debug.Log("Scene camera must have MainCamera tag!");
+        }
     }
 
     private void Start()
     {
         _moveAction = _playerActions.Player.Move;
         _lookAction = _playerActions.Player.Look;
+        _scrollAction = _playerActions.Player.LockSwitch;
 
         _playerActions.Player.SwordAttack.performed += OnSwordAttack;
         _playerActions.Player.GunAttack.performed += OnGunAttack;
@@ -76,11 +102,15 @@ public class PlayerController : MonoBehaviour
     {
         _playerActions.Player.Move.Enable();
         _playerActions.Player.Look.Enable();
+        _playerActions.Player.LockSwitch.Enable();
         _playerActions.Player.SwordAttack.Enable();
         _playerActions.Player.GunAttack.Enable();
         _playerActions.Player.Shield.Enable();
         _playerActions.Player.Jump.Enable();
         _playerActions.Player.Dash.Enable();
+
+        _playerActions.Player.Lock.performed += OnLock;
+        _playerActions.Player.Lock.Enable();
 
     }
 
@@ -88,11 +118,13 @@ public class PlayerController : MonoBehaviour
     {
         _playerActions.Player.Move.Disable();
         _playerActions.Player.Look.Disable();
+        _playerActions.Player.LockSwitch.Disable();
         _playerActions.Player.SwordAttack.Disable();
         _playerActions.Player.GunAttack.Disable();
         _playerActions.Player.Shield.Disable();
         _playerActions.Player.Jump.Disable();
         _playerActions.Player.Dash.Disable();
+        _playerActions.Player.Lock.Disable();
     }
 
     private BodyPartObject PickRandomTargetPart()
@@ -146,6 +178,20 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(_instance[MechaPart.Legs].TriggerDefaultAbility(null, LegsSelector.Jump));
     }
 
+    private void OnLock(InputAction.CallbackContext p_context)
+    {
+        isLockedOn = !isLockedOn;
+        _lockOnTargetSystem.ToggleLockOn(isLockedOn);
+        if (isLockedOn)
+        {
+            _lookAction.Disable();
+        }
+        else
+        {
+            _lookAction.Enable();
+        }
+    }
+
     private void OnDash(InputAction.CallbackContext p_context)
     {
         StartCoroutine(_instance[MechaPart.Legs].TriggerDefaultAbility(null, LegsSelector.Dash));
@@ -172,6 +218,14 @@ public class PlayerController : MonoBehaviour
         var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x - t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
         var t_delta = t_clamp - _cameraPivot.eulerAngles.x;
         _cameraPivot.Rotate(Vector3.right * t_delta);
+
+
+        int t_scrollValue = (int)_scrollAction.ReadValue<float>();
+
+        if (t_scrollValue != 0 && isLockedOn) 
+        {
+            _lockOnTargetSystem.ChangeTarget(t_scrollValue);
+        }
     }
     
     private void FixedUpdate()

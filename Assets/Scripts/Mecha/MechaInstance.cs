@@ -179,9 +179,10 @@ namespace Mekaiju
         /// The effect will remain active indefinitely until it is manually removed.
         /// </summary>
         /// <param name="p_effect">The effect to be added.</param>
-        public void AddEffect(Effect p_effect)
+        public StatefullEffect AddEffect(Effect p_effect)
         {
             _effects.Add(new(p_effect));
+            return _effects[^1];
         }
 
         /// <summary>
@@ -189,9 +190,15 @@ namespace Mekaiju
         /// </summary>
         /// <param name="p_effect">The effect to be added.</param>
         /// <param name="p_time">The duration of the effect in seconds.</param>
-        public void AddEffect(Effect p_effect, float p_time)
+        public StatefullEffect AddEffect(Effect p_effect, float p_time)
         {
             _effects.Add(new(p_effect, p_time));
+            return _effects[^1];
+        }
+
+        public void RemoveEffect(StatefullEffect p_effect)
+        {
+            _effects.Remove(p_effect);
         }
 
         /// <summary>
