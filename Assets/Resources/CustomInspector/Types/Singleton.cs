@@ -9,7 +9,7 @@ namespace MyBox
 		{
 			get
 			{
-				if (_instance == null) _instance = FindObjectOfType<T>();
+				if (_instance == null) _instance = FindFirstObjectByType<T>();
 				if (_instance == null) Debug.LogError("Singleton of type : " + typeof(T).Name + " not found on scene");
 
 				return _instance;

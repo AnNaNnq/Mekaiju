@@ -1,62 +1,60 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class MeshTrailTut : MonoBehaviour
+namespace Mekaiju
 {
-    [Header("Mesh Related")]
-    public float meshRefreshRate = 0.075f;
-    public float meshDestroyDelay = 1f;
-    public Transform positionToSpawn;
-
-    [Header("Shader Related")]
-    public Material mat;
-
-    public VisualEffectAsset asset;
-
-    private bool isTrailActive;
-    private SkinnedMeshRenderer[] skinnedMeshRenderers;
-
-    void Awake()
+    [Serializable]
+    public class MeshTrailConfig
     {
-        positionToSpawn = transform;
+        [Header("Mesh related")]
+        public float refreshRate  = 0.075f;
+        public float destroyDelay = 1f;
+
+        [Header("Shader related")]
+        public Material material;
     }
 
-    public void Trigger(float time)
+    public class MeshTrailTut : MonoBehaviour
     {
-        StartCoroutine(ActivateTrail(time));
-    }
+        public MeshTrailConfig config;
 
-    private IEnumerator ActivateTrail(float timeActive)
-    {
-        float totalTime = timeActive;
-        while (timeActive > 0)
+        private SkinnedMeshRenderer[] _skinnedMeshRenderers;
+
+        public void Trigger(float time)
         {
-            timeActive -= meshRefreshRate;
-
-            if (skinnedMeshRenderers == null)
-                skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
-
-            for (int i = 0; i < skinnedMeshRenderers.Length; i++)
-            {
-                GameObject gObj = new GameObject();
-
-                gObj.transform.SetPositionAndRotation(positionToSpawn.position, positionToSpawn.rotation);
-
-                MeshRenderer mr = gObj.AddComponent<MeshRenderer>();
-                MeshFilter mf = gObj.AddComponent<MeshFilter>();
-
-                mat.SetFloat("_Progress", (totalTime - timeActive) / totalTime);
-                Mesh mesh = new Mesh();
-                skinnedMeshRenderers[i].BakeMesh(mesh);
-
-                mf.mesh = mesh;
-                mr.material = mat;
-
-                Destroy(gObj, meshDestroyDelay);
-            }
-            yield return new WaitForSeconds(meshRefreshRate);
+            StartCoroutine(_ActivateTrail(time));
         }
-        isTrailActive = false;
+
+        private IEnumerator _ActivateTrail(float time)
+        {
+            float t_totalTime = time;
+            while (time > 0)
+            {
+                time -= config.refreshRate;
+                _skinnedMeshRenderers ??= GetComponentsInChildren<SkinnedMeshRenderer>();
+
+                for (int i = 0; i < _skinnedMeshRenderers.Length; i++)
+                {
+                    GameObject t_go = new GameObject();
+
+                    t_go.transform.SetPositionAndRotation(transform.position, transform.rotation);
+
+                    MeshRenderer t_mr = t_go.AddComponent<MeshRenderer>();
+                    MeshFilter   t_mf = t_go.AddComponent<MeshFilter>();
+
+                    config.material.SetFloat("_Progress", (t_totalTime - time) / t_totalTime);
+                    Mesh mesh = new Mesh();
+                    _skinnedMeshRenderers[i].BakeMesh(mesh);
+
+                    t_mf.mesh     = mesh;
+                    t_mr.material = config.material;
+
+                    Destroy(t_go, config.destroyDelay);
+                }
+                yield return new WaitForSeconds(config.refreshRate);
+            }
+        }
     }
 }
