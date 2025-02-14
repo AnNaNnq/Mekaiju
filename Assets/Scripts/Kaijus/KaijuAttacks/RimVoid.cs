@@ -14,7 +14,7 @@ namespace Mekaiju.AI.Attack
         public int pointCount = 10;
         private List<Vector3> _firePos = new List<Vector3>();
 
-        private Modifier _speedMod;
+        private StatefullEffect _speedMod;
 
         bool _damagable = false;
 
@@ -135,7 +135,7 @@ namespace Mekaiju.AI.Attack
             if (other.CompareTag("Player"))
             {
                 MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-                _speedMod = t_mecha.Context.Modifiers[_ai.rimVoidEffect].Add(-1 * (_ai.modifierValue / 100));
+                _speedMod = t_mecha.AddEffect(_ai.rimVoidEffect);
                 _damagable = true;
                 StartCoroutine(Damage(t_mecha));
             }
@@ -146,7 +146,7 @@ namespace Mekaiju.AI.Attack
             if (other.CompareTag("Player"))
             {
                 MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-                t_mecha.Context.Modifiers[_ai.rimVoidEffect].Remove(_speedMod);
+                t_mecha.RemoveEffect(_speedMod);
                 _damagable = false;
             }
         }
