@@ -1,5 +1,7 @@
 using Mekaiju.Attacks;
 using Mekaiju.Attribute;
+using Mekaiju.Utils;
+using Mekaiju.AI.Attack;
 using MyBox;
 using System.Collections;
 using UnityEngine;
@@ -73,6 +75,10 @@ namespace Mekaiju.AI
         [OverrideLabel("Body Part")]
         [SelectFromList(nameof(bodyParts))] public int doomsdayRayBody;
         [OverrideLabel("CD")] public float doomsdayRayCooldown = 10f;
+        [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject gameObjectDoomsdayRay;
+        [OverrideLabel("Start")][FocusObject] public Transform doomsdayRayStart;
+        [OverrideLabel("Ray Speed")] public float doomsdayRaySpeed = 10f;
+        [OverrideLabel("Duration (sec)")] public float doomsdayRayDuration = 5f;
 
         private bool _canDoomsdayRay = true;
         #endregion
@@ -168,7 +174,7 @@ namespace Mekaiju.AI
                     {
                         if(GetTargetDistance() <= doomsdayRayRange && _canAttack && _canDoomsdayRay)
                         {
-                            DoomsdayRay();
+                            StartCoroutine(DoomsdayRay());
                         }
                         else
                         {
@@ -226,10 +232,18 @@ namespace Mekaiju.AI
             StartCoroutine(CooldownRoutine(rimVoidCooldown, () => _canRimVoid = true));
         }
 
-        public void DoomsdayRay()
+        IEnumerator DoomsdayRay()
         {
             _canDoomsdayRay = false;
             _canAttack = false;
+            lastAttack = TeneborokAttack.Stop;
+            Vector3 t_pos = new Vector3(transform.position.x, UtilsFunctions.GetGround(transform.position), transform.position.z) + (transform.forward * 10);
+            GameObject t_doomsday = Instantiate(gameObjectDoomsdayRay, t_pos, Quaternion.identity);
+            DoomsdayRay t_dr = t_doomsday.GetComponent<DoomsdayRay>();
+            t_dr.SetUp(doomsdayRayStart, this);
+            yield return new WaitForSeconds(doomsdayRayDuration);
+            lastAttack = TeneborokAttack.DoomsdayRay;
+            Destroy(t_doomsday);
         }
 
         public void SetLastAttack(TeneborokAttack attack)
