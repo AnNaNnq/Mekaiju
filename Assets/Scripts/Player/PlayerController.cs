@@ -46,8 +46,8 @@ public class PlayerController : MonoBehaviour
     private LayerMask _groundLayerMask;
 
     //Public variables
-    public bool isLockedOn = false;
-    public float scroll;
+    [HideInInspector] public bool isLockedOn = false;
+    [HideInInspector] public float scroll;
 
     private void Awake()
     {
