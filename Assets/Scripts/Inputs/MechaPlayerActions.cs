@@ -107,6 +107,15 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Head"",
+                    ""type"": ""Button"",
+                    ""id"": ""e7e44229-06a3-44dd-9a14-1a8aa25142bd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -250,6 +259,17 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""LockSwitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2648d9c9-03c1-4fdb-8786-5a41e6ef7a0a"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Head"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -846,6 +866,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Lock = m_Player.FindAction("Lock", throwIfNotFound: true);
         m_Player_LockSwitch = m_Player.FindAction("LockSwitch", throwIfNotFound: true);
+        m_Player_Head = m_Player.FindAction("Head", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -934,6 +955,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Lock;
     private readonly InputAction m_Player_LockSwitch;
+    private readonly InputAction m_Player_Head;
     public struct PlayerActions
     {
         private @MechaPlayerActions m_Wrapper;
@@ -947,6 +969,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Lock => m_Wrapper.m_Player_Lock;
         public InputAction @LockSwitch => m_Wrapper.m_Player_LockSwitch;
+        public InputAction @Head => m_Wrapper.m_Player_Head;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -983,6 +1006,9 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @LockSwitch.started += instance.OnLockSwitch;
             @LockSwitch.performed += instance.OnLockSwitch;
             @LockSwitch.canceled += instance.OnLockSwitch;
+            @Head.started += instance.OnHead;
+            @Head.performed += instance.OnHead;
+            @Head.canceled += instance.OnHead;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1014,6 +1040,9 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @LockSwitch.started -= instance.OnLockSwitch;
             @LockSwitch.performed -= instance.OnLockSwitch;
             @LockSwitch.canceled -= instance.OnLockSwitch;
+            @Head.started -= instance.OnHead;
+            @Head.performed -= instance.OnHead;
+            @Head.canceled -= instance.OnHead;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1205,6 +1234,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnLock(InputAction.CallbackContext context);
         void OnLockSwitch(InputAction.CallbackContext context);
+        void OnHead(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

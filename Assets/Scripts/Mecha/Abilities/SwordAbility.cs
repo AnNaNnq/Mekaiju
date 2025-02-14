@@ -76,10 +76,12 @@ namespace Mekaiju
                 var t_dist = Vector3.Distance(p_self.transform.position, t_tpos);
                 if (t_dist < _reachDistance)
                 {
-                    p_target.TakeDamage(_damage);
+                    // TODO: remove cast
+                    var t_damage = p_self.Mecha.Context.Modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
+                    p_target.TakeDamage((int)t_damage);
                     if (DebugInfo.Instance)
                     {
-                        DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Sword, _damage.ToString(), 1f);
+                        DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Sword, t_damage.ToString(), 1f);
                     }
                 }
 

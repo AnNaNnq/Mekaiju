@@ -7,7 +7,7 @@ namespace Mekaiju
 {
     public enum ModifierTarget
     {
-        Speed, Defense
+        Speed, Defense, Damage
     }
 
     [Serializable]
