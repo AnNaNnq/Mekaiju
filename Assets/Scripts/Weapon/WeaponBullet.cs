@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.VFX;
 
+[RequireComponent(typeof(Rigidbody))]
 public class WeaponBullet : MonoBehaviour
 {
     public UnityEvent<Collision> OnCollide;
@@ -11,13 +13,15 @@ public class WeaponBullet : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision p_collision)
     {
-        OnCollide.Invoke(collision);
+        OnCollide.Invoke(p_collision);
     }
 
-    public void Launch(Vector3 velocity)
+    public void Launch(Vector3 p_velocity, Vector3 p_direction)
     {
-        _rb.linearVelocity = velocity;
+        _rb.linearVelocity = p_velocity;
+        transform.rotation = Quaternion.LookRotation(p_direction);
+        transform.Rotate(new (0, 90, 0));
     }
 }
