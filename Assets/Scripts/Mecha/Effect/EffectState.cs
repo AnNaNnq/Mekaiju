@@ -15,8 +15,13 @@ namespace Mekaiju
     /// 
     /// </summary>
     [Serializable]
-    public class StatefullEffect
+    public class StatefullEffect : IDisposable
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        private MechaInstance _target;
+
         /// <summary>
         /// 
         /// </summary>
@@ -37,46 +42,58 @@ namespace Mekaiju
         /// </summary>
         public EffectState State { get; private set; }
 
-        public StatefullEffect(Effect p_effect, float p_time)
+        public StatefullEffect(MechaInstance p_target, Effect p_effect, float p_time)
         {
             State = EffectState.Inactive;
 
+            _target  = p_target; 
             _effect  = p_effect;
             _time    = p_time;
             _elapsed = 0f;
+
+            _effect.Behaviour?.OnAdd(p_target);
         }
 
-        public Effect GetEffect()
-        {
-            return _effect;
-        }
-
-        public StatefullEffect(Effect p_effect) : this(p_effect, -1)
+        public StatefullEffect(MechaInstance p_target, Effect p_effect) : this(p_target, p_effect, -1)
         {        
 
         }
 
-        public void Tick(MechaInstance p_self)
+        public void Tick()
         {
-            if (_time > 0 && _elapsed > _time)
+            if (State != EffectState.Expired)
             {
-                State = EffectState.Expired;
-            }
-            else
-            {
-                State = EffectState.Active;
+                if (_time > 0 && _elapsed > _time)
+                {
+                    State = EffectState.Expired;
+                    _effect.Behaviour?.OnRemove(_target);
+                }
+                else
+                {
+                    State = EffectState.Active;
 
-                _effect.Behaviour.Tick(p_self);
-                _elapsed += Time.deltaTime;
+                    _effect.Behaviour.Tick(_target);
+                    _elapsed += Time.deltaTime;
+                }
             }
         }
         
-        public void FixedTick(MechaInstance p_self)
+        public void FixedTick()
         {
             if (_time < 0 || _elapsed < _time)
             {
-                _effect.Behaviour.FixedTick(p_self);
+                _effect.Behaviour.FixedTick(_target);
             }
+        }
+
+        ~StatefullEffect()
+        {
+            _effect.Behaviour?.OnRemove(_target);    
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
     }
 }

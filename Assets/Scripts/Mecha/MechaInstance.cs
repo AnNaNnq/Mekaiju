@@ -16,8 +16,10 @@ namespace Mekaiju
         public float LastAbilityTime = -1000f;
         public float LastDamageTime = -1000f;
 
-        public float SpeedModifier   = 1f;
-        public float DefenseModifier = 1f;
+        // public float SpeedModifier   = 1f;
+        // public float DefenseModifier = 1f;
+
+        public EnumArray<ModifierTarget, ModifierCollection> Modifiers = new(() => new());
 
         public bool IsGrounded          = false;
         public bool IsMovementAltered   = false;
@@ -116,8 +118,8 @@ namespace Mekaiju
             // _effects = new();
             _effects = new()
             {
-                new(Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
-                new(Resources.Load<Effect>("Mecha/Objects/Effect/Heal")),
+                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
+                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal"), 10),
             };
 
             Stamina = Desc.Stamina;
@@ -125,19 +127,20 @@ namespace Mekaiju
             Context = new()
             {
                 Animator  = GetComponent<Animator>(),
-                Rigidbody = GetComponent<Rigidbody>()
+                Rigidbody = GetComponent<Rigidbody>(),
+                // Modifiers  = new()
             };
         }
 
         private void Update()
         {            
-            _effects.ForEach  (effect => effect.Tick(this));
+            _effects.ForEach  (effect => effect.Tick());
             _effects.RemoveAll(effect => effect.State == EffectState.Expired);
         }
 
         private void FixedUpdate()
         {
-            _effects.ForEach(effect => effect.FixedTick(this));
+            _effects.ForEach(effect => effect.FixedTick());
         }
 
         /// <summary>
@@ -181,7 +184,7 @@ namespace Mekaiju
         /// <param name="p_effect">The effect to be added.</param>
         public StatefullEffect AddEffect(Effect p_effect)
         {
-            _effects.Add(new(p_effect));
+            _effects.Add(new(this, p_effect));
             return _effects[^1];
         }
 
@@ -192,7 +195,7 @@ namespace Mekaiju
         /// <param name="p_time">The duration of the effect in seconds.</param>
         public StatefullEffect AddEffect(Effect p_effect, float p_time)
         {
-            _effects.Add(new(p_effect, p_time));
+            _effects.Add(new(this, p_effect, p_time));
             return _effects[^1];
         }
 

@@ -27,5 +27,8 @@ MonoBehaviour:
         _force: 50
         _duration: 0.5
         _consumption: 5
-        _ghostMaterial: {fileID: -876546973899608171, guid: eda1e64517cca074782659ab3569707f, type: 3}
+        _meshTrailConfig:
+          refreshRate: 0.075
+          destroyDelay: 1
+          material: {fileID: -876546973899608171, guid: eda1e64517cca074782659ab3569707f, type: 3}
         _speedVfx: {fileID: 4796063517896905453, guid: 1026ad1c8924c4fad997c86a5afd79a4, type: 3}

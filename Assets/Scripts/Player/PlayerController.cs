@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     [Foldout("Movement Attributes")]
     [SerializeField] private float _groundCheckRadius = 0.5f;
     [SerializeField] private float _baseSpeed = 5f;
-    private float _speed;
+    [SerializeField] private float _speed;
 
 
     [Foldout("Camera Attributes")]
@@ -60,11 +60,28 @@ public class PlayerController : MonoBehaviour
         _groundLayerMask = LayerMask.GetMask("Walkable");
 
         _instance = GetComponent<MechaInstance>();
-        _target   = GameObject.Find("Kaiju").GetComponent<BasicAI>();
 
         _cameraPivot = transform.Find("CameraPivot");
 
-        GameObject t_go = GameObject.FindWithTag("MainCamera");
+        GameObject t_go;
+        t_go = GameObject.FindWithTag("Kaiju");
+        if (t_go)
+        {
+            if (t_go.TryGetComponent<BasicAI>(out var t_comp))
+            {
+                _target = t_comp;
+            }
+            else
+            {
+                Debug.Log("Kaiju must have BasicAI inherited component!");
+            }
+        }
+        else
+        {
+            Debug.Log("Kaiju must have Kaiju tag!");
+        }
+
+        t_go = GameObject.FindWithTag("MainCamera");
         if (t_go)
         {
             if (t_go.TryGetComponent<CinemachineCamera>(out var t_comp))
@@ -90,6 +107,7 @@ public class PlayerController : MonoBehaviour
 
         _playerActions.Player.SwordAttack.performed += OnSwordAttack;
         _playerActions.Player.GunAttack.performed += OnGunAttack;
+        _playerActions.Player.Head.performed += OnHead;
         _playerActions.Player.Shield.performed += OnShield;
         _playerActions.Player.Shield.canceled  += OnUnshield;
         _playerActions.Player.Jump.started += OnJump;
@@ -107,6 +125,7 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Look.Enable();
         _playerActions.Player.LockSwitch.Enable();
         _playerActions.Player.SwordAttack.Enable();
+        _playerActions.Player.Head.Enable();
         _playerActions.Player.GunAttack.Enable();
         _playerActions.Player.Shield.Enable();
         _playerActions.Player.Jump.Enable();
@@ -124,6 +143,7 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.LockSwitch.Disable();
         _playerActions.Player.SwordAttack.Disable();
         _playerActions.Player.GunAttack.Disable();
+        _playerActions.Player.Head.Disable();
         _playerActions.Player.Shield.Disable();
         _playerActions.Player.Jump.Disable();
         _playerActions.Player.Dash.Disable();
@@ -164,6 +184,11 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(_instance[MechaPart.RightArm].TriggerDefaultAbility(PickRandomTargetPart(), null));
         }
+    }
+
+    private void OnHead(InputAction.CallbackContext p_context)
+    {
+        StartCoroutine(_instance[MechaPart.Head].TriggerDefaultAbility(null, null));
     }
     
     private void OnShield(InputAction.CallbackContext p_context)
@@ -238,7 +263,8 @@ public class PlayerController : MonoBehaviour
 
         if (!_instance.Context.IsMovementOverrided)
         {
-            _speed = _baseSpeed * _instance.Context.SpeedModifier;
+            _speed = _instance.Context.Modifiers[ModifierTarget.Speed]?.ComputeValue(_baseSpeed) ?? _baseSpeed;
+            // _speed = _baseSpeed * _instance.Context.SpeedModifier;
 
             if (_isGrounded)
             {
