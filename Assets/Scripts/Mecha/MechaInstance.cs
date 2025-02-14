@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Mekaiju.AI;
+using System.Linq;
 using Mekaiju.Utils;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Mekaiju
 {
@@ -14,6 +14,21 @@ namespace Mekaiju
     public class InstanceContext
     {
         public float LastAbilityTime = -1000f;
+        public float LastDamageTime = -1000f;
+
+        // public float SpeedModifier   = 1f;
+        // public float DefenseModifier = 1f;
+
+        public EnumArray<ModifierTarget, ModifierCollection> Modifiers = new(() => new());
+
+        public bool IsGrounded          = false;
+        public bool IsMovementAltered   = false;
+        public bool IsMovementOverrided = false;
+
+        public InputAction MoveAction;
+
+        public Animator  Animator;
+        public Rigidbody Rigidbody;
     }
 
 
@@ -42,19 +57,34 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
-        private float _health;
+        public float Health 
+        { 
+            get
+            {
+                return _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.Health; });
+            } 
+        }
 
         /// <summary>
         /// 
         /// </summary>
         [SerializeField]
-        private float _stamina;
+        public float Stamina { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
         public InstanceContext Context { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p_part"></param>
+        /// <returns></returns>
+        public MechaPartInstance this[MechaPart p_part]
+        {
+            get => _parts[p_part];
+        }
 
         private void Start()
         {
@@ -74,7 +104,7 @@ namespace Mekaiju
                     var t_go = Instantiate(part.DefaultAbility.Prefab, t_tr);
 
                     var t_inst = t_go.AddComponent<MechaPartInstance>();
-                    t_inst.Initialize(part);
+                    t_inst.Initialize(this, part);
 
                     t_tr.gameObject.SetActive(true);
 
@@ -83,25 +113,34 @@ namespace Mekaiju
             );
 
             // TODO: remove
-            t_main.SetActive(false);
+            // t_main.SetActive(false);
 
             // _effects = new();
             _effects = new()
             {
-                new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
-                new(Resources.Load<Effect>("Mecha/Effect/Bleeding"), 10f)
+                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
+                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal"), 10),
             };
 
-            _health  = Desc.Health;
-            _stamina = Desc.Stamina;
+            Stamina = Desc.Stamina;
 
-            Context = new();
+            Context = new()
+            {
+                Animator  = GetComponent<Animator>(),
+                Rigidbody = GetComponent<Rigidbody>(),
+                // Modifiers  = new()
+            };
         }
 
         private void Update()
         {            
-            _effects.ForEach  (effect => effect.Tick(this));
+            _effects.ForEach  (effect => effect.Tick());
             _effects.RemoveAll(effect => effect.State == EffectState.Expired);
+        }
+
+        private void FixedUpdate()
+        {
+            _effects.ForEach(effect => effect.FixedTick());
         }
 
         /// <summary>
@@ -110,7 +149,7 @@ namespace Mekaiju
         /// <returns></returns>
         public bool IsAlive()
         {
-            return _health > 0;
+            return Health > 0;
         }
 
         /// <summary>
@@ -119,16 +158,50 @@ namespace Mekaiju
         /// <param name="p_damage"></param>
         public void TakeDamage(float p_damage)
         {
-            _health = Math.Max(0, _health - p_damage);
+            foreach (var t_part in _parts)
+            {
+                // TODO: Maybe not divide
+                t_part.TakeDamage(p_damage / _parts.Count());    
+            }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="p_effect"></param>
-        public void AddEffect(Effect p_effect, float p_time)
+        /// <param name="p_amount"></param>
+        public void Heal(float p_amount)
         {
-            _effects.Add(new(p_effect, p_time));
+            foreach (var t_part in _parts)
+            {
+                t_part.Heal(p_amount);
+            }
+        }
+
+        /// <summary>
+        /// Adds a new effect to the list of active effects without a timeout. 
+        /// The effect will remain active indefinitely until it is manually removed.
+        /// </summary>
+        /// <param name="p_effect">The effect to be added.</param>
+        public StatefullEffect AddEffect(Effect p_effect)
+        {
+            _effects.Add(new(this, p_effect));
+            return _effects[^1];
+        }
+
+        /// <summary>
+        /// Adds a new effect to the list of active effects, with a specified duration.
+        /// </summary>
+        /// <param name="p_effect">The effect to be added.</param>
+        /// <param name="p_time">The duration of the effect in seconds.</param>
+        public StatefullEffect AddEffect(Effect p_effect, float p_time)
+        {
+            _effects.Add(new(this, p_effect, p_time));
+            return _effects[^1];
+        }
+
+        public void RemoveEffect(StatefullEffect p_effect)
+        {
+            _effects.Remove(p_effect);
         }
 
         /// <summary>
@@ -138,41 +211,25 @@ namespace Mekaiju
         /// <returns></returns>
         public bool CanExecuteAbility(float p_consumption)
         {
-            return _stamina - p_consumption > 0;
+            return Stamina - p_consumption > 0;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="amount"></param>
+        /// <param name="p_amount"></param>
         public void RestoreStamina(float p_amount)
         {
-            _stamina = Math.Min(Desc.Stamina, _stamina + p_amount);
+            Stamina = Math.Min(Desc.Stamina, Stamina + p_amount);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="amount"></param>
+        /// <param name="p_amount"></param>
         public void ConsumeStamina(float p_amount)
         {
-            _stamina = Math.Max(0, _stamina - p_amount);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_consumption"></param>
-        /// <param name="p_part"></param>
-        /// <param name="p_target"></param>
-        /// <returns></returns>
-        public IEnumerator ExecuteAbility(MechaPart p_part, BasicAI p_target, object p_opt)
-        {
-            if (CanExecuteAbility(_parts[p_part].Ability.Behaviour.Consumption(p_opt)))
-            {
-                Context.LastAbilityTime = Time.time;
-                yield return _parts[p_part].Ability.Behaviour.Trigger(this, p_target, p_opt);
-            }
+            Stamina = Math.Max(0, Stamina - p_amount);
         }
     }
 
