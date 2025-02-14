@@ -146,7 +146,7 @@ public class RimVoid : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-            _speedMod = t_mecha.Context.Modifiers[_ai.rimVoidEffect].Add(0.5f);
+            _speedMod = t_mecha.Context.Modifiers[_ai.rimVoidEffect].Add(_ai.modifierValue / 100);
             _damagable = true;
             StartCoroutine(Damage(t_mecha));
         }
