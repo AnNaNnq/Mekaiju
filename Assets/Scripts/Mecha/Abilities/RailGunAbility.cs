@@ -106,10 +106,12 @@ namespace Mekaiju
                 // Check new position of BasicAI ?
                 if (t_hasCollide)
                 {
-                    p_target.TakeDamage(_damage);
+                    // TODO: remove cast
+                    var t_damage = p_self.Mecha.Context.Modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
+                    p_target.TakeDamage((int)t_damage);
                     if (DebugInfo.Instance)
                     {
-                        DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Gun, _damage.ToString(), 0.5f);
+                        DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Gun, t_damage.ToString(), 0.5f);
                     }
                 }
                 GameObject.Destroy(t_go);
