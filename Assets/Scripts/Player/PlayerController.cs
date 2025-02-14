@@ -107,6 +107,7 @@ public class PlayerController : MonoBehaviour
 
         _playerActions.Player.SwordAttack.performed += OnSwordAttack;
         _playerActions.Player.GunAttack.performed += OnGunAttack;
+        _playerActions.Player.Head.performed += OnHead;
         _playerActions.Player.Shield.performed += OnShield;
         _playerActions.Player.Shield.canceled  += OnUnshield;
         _playerActions.Player.Jump.started += OnJump;
@@ -121,6 +122,7 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Look.Enable();
         _playerActions.Player.LockSwitch.Enable();
         _playerActions.Player.SwordAttack.Enable();
+        _playerActions.Player.Head.Enable();
         _playerActions.Player.GunAttack.Enable();
         _playerActions.Player.Shield.Enable();
         _playerActions.Player.Jump.Enable();
@@ -138,6 +140,7 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.LockSwitch.Disable();
         _playerActions.Player.SwordAttack.Disable();
         _playerActions.Player.GunAttack.Disable();
+        _playerActions.Player.Head.Disable();
         _playerActions.Player.Shield.Disable();
         _playerActions.Player.Jump.Disable();
         _playerActions.Player.Dash.Disable();
@@ -178,6 +181,11 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(_instance[MechaPart.RightArm].TriggerDefaultAbility(PickRandomTargetPart(), null));
         }
+    }
+
+    private void OnHead(InputAction.CallbackContext p_context)
+    {
+        StartCoroutine(_instance[MechaPart.Head].TriggerDefaultAbility(null, null));
     }
     
     private void OnShield(InputAction.CallbackContext p_context)
