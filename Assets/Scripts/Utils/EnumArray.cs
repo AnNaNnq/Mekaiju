@@ -96,6 +96,14 @@ namespace Mekaiju.Utils
             }
             return t_ret;
         }
+
+        public static void ForEach<K, V>(this EnumArray<K, V> self, Action<K, V> func) where K: Enum
+        {
+            foreach (var (i, v) in self.Select<V, (int, V)>((v, i) => (i, v)))
+            {
+                func((K)Enum.ToObject(typeof(K), i), v);
+            }
+        }
     }
 
 }
