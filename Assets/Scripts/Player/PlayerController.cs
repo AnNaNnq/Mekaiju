@@ -114,6 +114,9 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Dash.performed += OnDash;
 
         _instance.Context.MoveAction = _moveAction;
+
+        Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
+        Cursor.visible = false; // Make the cursor invisible during gameplay
     }
 
     private void OnEnable()
