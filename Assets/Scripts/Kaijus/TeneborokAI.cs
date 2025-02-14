@@ -49,6 +49,7 @@ namespace Mekaiju.AI
         [OverrideLabel("Fire prefab")][OpenPrefabButton] public GameObject gameObjectRimVoidFire;
         [OverrideLabel("Duration (sec)")] public int rimVoidDuration = 2;
         [OverrideLabel("Hit cooldown (sec)")] public float rimVoidHitCooldown = 0.1f;
+        [OverrideLabel("Modifier")] public ModifierTarget rimVoidEffect;
         [OverrideLabel("CD")] public float rimVoidCooldown = 10f;
 
         private bool _canRimVoid = true;
