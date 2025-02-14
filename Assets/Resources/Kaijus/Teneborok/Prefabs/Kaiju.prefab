@@ -598,7 +598,7 @@ MonoBehaviour:
   sharpBlowZoneCenter: {x: 0, y: 0, z: 8}
   sharpBlowZoneSize: {x: 10, y: 10, z: 10}
   abyssalVortexDamage: 10
-  abyssalVortexRange: 30
+  abyssalVortexRange: 40
   abyssalVortexBody: 0
   gameObjectAbyssalVortex: {fileID: 1136635311529201712, guid: d7b6002c8c20e7945bed8cce40946338, type: 3}
   gameObjectRock: {fileID: 8298655363207905739, guid: 2683fcf5f6f70b149bb762da0f2dcb0f, type: 3}
@@ -606,12 +606,14 @@ MonoBehaviour:
   abyssalVortexNumberOfRock: 10
   abyssalVortexCooldown: 10
   rimVoidDamage: 10
-  rimVoideRange: 40
+  rimVoideRange: 30
   rimVoidBody: 0
   gameObjectRimVoid: {fileID: 8796084795391207267, guid: f8a8dee523c18c645b5f8a61b77489eb, type: 3}
   gameObjectRimVoidFire: {fileID: 5250174984945250790, guid: d5a60c170b5ff834bab0dd7b9a00d95c, type: 3}
   rimVoidDuration: 2
   rimVoidHitCooldown: 0.1
+  rimVoidEffect: 0
+  modifierValue: 50
   rimVoidCooldown: 10
   snakeStrikeDamage: 10
   snakeStrikeRange: 10
@@ -622,7 +624,11 @@ MonoBehaviour:
   doomsdayRayRange: 45
   doomsdayRayBody: 0
   doomsdayRayCooldown: 10
-  debugSharpBlow: 1
+  gameObjectDoomsdayRay: {fileID: 4720256673585378873, guid: 47dcc4d36c6ae6c4995aa35ff010f77b, type: 3}
+  doomsdayRayStart: {fileID: 594123353144874}
+  doomsdayRaySpeed: 5
+  doomsdayRayDuration: 5
+  debugSharpBlow: 0
   colorForSharpBlowRange: {r: 1, g: 0, b: 0, a: 1}
   debugAbyssalVortex: 0
   colorForAbyssalVortexRange: {r: 1, g: 0.92988515, b: 0, a: 1}
@@ -630,7 +636,7 @@ MonoBehaviour:
   colorForRimVoidRange: {r: 0, g: 0, b: 0, a: 1}
   debugSnakeStrike: 0
   colorForSnakeStrikeRange: {r: 0.96760225, g: 0, b: 1, a: 1}
-  debugDoomsdayRay: 0
+  debugDoomsdayRay: 1
   colorForDoomsdayRayeRange: {r: 0, g: 0, b: 0, a: 1}
   timeForSharpBlow: 0.2
   timeForSnakeStrike: 0.1
