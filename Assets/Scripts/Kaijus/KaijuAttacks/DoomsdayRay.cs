@@ -27,7 +27,7 @@ namespace Mekaiju.AI.Attack
             Vector3 pos = new Vector3(_ai.GetTargetPos().x, UtilsFunctions.GetGround(_ai.GetTargetPos()), _ai.GetTargetPos().z);
             transform.position = Vector3.MoveTowards(transform.position, _ai.GetTargetPos(), _ai.doomsdayRaySpeed * Time.deltaTime);
             SetRay();
-        }
+        } 
 
         public void SetRay()
         {
