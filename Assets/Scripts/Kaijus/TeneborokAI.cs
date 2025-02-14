@@ -244,6 +244,7 @@ namespace Mekaiju.AI
             yield return new WaitForSeconds(doomsdayRayDuration);
             lastAttack = TeneborokAttack.DoomsdayRay;
             Destroy(t_doomsday);
+            StartCoroutine(CooldownRoutine(doomsdayRayCooldown, () => _canDoomsdayRay = true));
         }
 
         public void SetLastAttack(TeneborokAttack attack)
