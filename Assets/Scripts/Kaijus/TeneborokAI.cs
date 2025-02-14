@@ -50,6 +50,7 @@ namespace Mekaiju.AI
         [OverrideLabel("Duration (sec)")] public int rimVoidDuration = 2;
         [OverrideLabel("Hit cooldown (sec)")] public float rimVoidHitCooldown = 0.1f;
         [OverrideLabel("Modifier")] public ModifierTarget rimVoidEffect;
+        [OverrideLabel("Modifier value (%)")] [Tooltip("Enleve x% à la stat affecter")] public float modifierValue = 50f;
         [OverrideLabel("CD")] public float rimVoidCooldown = 10f;
 
         private bool _canRimVoid = true;
