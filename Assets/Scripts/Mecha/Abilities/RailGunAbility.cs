@@ -87,7 +87,7 @@ namespace Mekaiju
                 var t_go = GameObject.Instantiate(_projectile);
                 var t_wb = t_go.GetComponent<WeaponBullet>();
 
-                t_wb.transform.position = p_self.transform.position + new Vector3(0, 2f, 2f);
+                t_wb.transform.position = p_self.transform.position + new Vector3(0, 2.5f, 0) + (2 * p_self.Mecha.transform.forward);
                 t_wb.OnCollide.AddListener(
                     collision => {
                         if (collision.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
@@ -96,7 +96,7 @@ namespace Mekaiju
                         }
                     }
                 );
-                t_wb.Launch(p_self.transform.forward.normalized * _travelTime);
+                t_wb.Launch(p_self.transform.forward.normalized * _travelTime, p_self.Mecha.transform.forward);
                 
 
                 // Wait for bullet travel
