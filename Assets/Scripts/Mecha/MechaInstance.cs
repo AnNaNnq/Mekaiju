@@ -14,10 +14,7 @@ namespace Mekaiju
     public class InstanceContext
     {
         public float LastAbilityTime = -1000f;
-        public float LastDamageTime = -1000f;
-
-        // public float SpeedModifier   = 1f;
-        // public float DefenseModifier = 1f;
+        public float LastDamageTime  = -1000f;
 
         public EnumArray<ModifierTarget, ModifierCollection> Modifiers = new(() => new());
 
@@ -95,15 +92,18 @@ namespace Mekaiju
 
             _parts = Desc.Parts.Select((key, part) => 
                 {
-                    var t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
-                    Debug.Assert(t_tr);
+                    Transform  t_tr;
+                    GameObject t_go;
+                    MechaPartInstance t_inst;
 
+                    t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
+                    Debug.Assert(t_tr, $"Unable to find an anchor for {Enum.GetName(typeof(MechaPart), key)}!");
                     t_tr.gameObject.SetActive(false);
 
-                    Debug.Assert(part.Ability.Prefab);
-                    var t_go = Instantiate(part.Ability.Prefab, t_tr);
+                    t_go = t_tr.Find(part.Ability.ObjectName).gameObject;
+                    Debug.Assert(t_go, $"Unable to find the GameObject associated to the ability {part.Ability.name}!");
 
-                    var t_inst = t_go.AddComponent<MechaPartInstance>();
+                    t_inst = t_go.AddComponent<MechaPartInstance>();
                     t_inst.Initialize(this, part);
 
                     t_tr.gameObject.SetActive(true);
@@ -111,9 +111,6 @@ namespace Mekaiju
                     return t_inst;
                 }
             );
-
-            // TODO: remove
-            // t_main.SetActive(false);
 
             _effects = new()
             {
