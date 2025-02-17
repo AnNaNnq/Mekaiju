@@ -212,6 +212,7 @@ MonoBehaviour:
   _lockOnTargetSystem: {fileID: 5855820826959060527}
   _groundCheckRadius: 0.5
   _baseSpeed: 250
+  _speed: 0
   _mouseSensitivity: 50
   _minVerticalAngle: -30
   _maxVerticalAngle: 80
@@ -298,7 +299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   lockOnRange: 100
   lockOnRotationSpeed: 10
   lockOnDistance: 3
