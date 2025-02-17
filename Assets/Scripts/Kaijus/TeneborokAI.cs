@@ -82,6 +82,18 @@ namespace Mekaiju.AI
         private bool _canDoomsdayRay = true;
         #endregion
 
+        #region Tempete obscurante
+        [Foldout("Tempete obscurante")]
+        [OverrideLabel("Range")] public float darkeningStormRange = 2f;
+        [OverrideLabel("Body Part")]
+        [SelectFromList(nameof(bodyParts))] public int darkeningStormBody;
+        [OverrideLabel("CD")] public float darkeningStormCooldown = 10f;
+        [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject gameObjectDarkeningStorm;
+        [OverrideLabel("Duration (sec)")] public float darkeningStormDuration = 5f;
+
+        private bool _canDarkeningStorm = true;
+        #endregion
+
         #region Pour les ld
         [Foldout("Debug")]
         [OverrideLabel("Show Gizmo For Hit Cut")]
@@ -99,6 +111,9 @@ namespace Mekaiju.AI
         [OverrideLabel("Show Gizmo For Doomsday Ray")]
         public bool debugDoomsdayRay = false;
         [ConditionalField(nameof(debugDoomsdayRay))] public Color colorForDoomsdayRayeRange;
+        [OverrideLabel("Show Gizmo For Darkening Duration")]
+        public bool debugDarkeningDuration = false;
+        [ConditionalField(nameof(debugDarkeningDuration))] public Color colorForDarkeningDurationRange;
         #endregion
 
         #region Time For Animation
@@ -171,9 +186,14 @@ namespace Mekaiju.AI
                     }
                 case TeneborokAttack.SnakeStrike:
                     {
-                        if(GetTargetDistance() <= doomsdayRayRange && _canAttack && _canDoomsdayRay)
+                        if(GetTargetDistance() <= doomsdayRayRange && _canAttack && _canDoomsdayRay
+                            && GetTargetDistance() >= darkeningStormRange)
                         {
                             StartCoroutine(DoomsdayRay());
+                        }
+                        else if(GetTargetDistance() <= darkeningStormRange && _canAttack && _canDarkeningStorm)
+                        {
+                            DarkeningStorm();
                         }
                         else
                         {
@@ -207,6 +227,17 @@ namespace Mekaiju.AI
             yield return new WaitForSeconds(timeForSharpBlow);
             lastAttack = TeneborokAttack.SharpBlow;
             Attack(sharpBlowDamage, sharpBlowZoneCenter, sharpBlowZoneSize);
+        }
+
+        public void DarkeningStorm()
+        {
+            _canAttack = false;
+            _canDarkeningStorm = false;
+            GameObject t_darkeningStorm = Instantiate(gameObjectDarkeningStorm, transform.position, Quaternion.identity);
+            lastAttack = TeneborokAttack.DarkeningStorm;
+            Destroy(t_darkeningStorm, darkeningStormDuration);
+            StartCoroutine(CooldownRoutine(darkeningStormCooldown, () => _canDarkeningStorm = true));
+            AttackCooldown();
         }
 
         public void AbyssalVortex()
@@ -283,12 +314,17 @@ namespace Mekaiju.AI
                 Gizmos.color = colorForDoomsdayRayeRange;
                 Gizmos.DrawWireSphere(transform.position, doomsdayRayRange);
             }
+            if (debugDarkeningDuration)
+            {
+                Gizmos.color = colorForDarkeningDurationRange;
+                Gizmos.DrawWireSphere(transform.position, darkeningStormRange);
+            }
         }
     }
 
     public enum TeneborokAttack
     {
-        SharpBlow, AbyssalVortex, RimVoid, SnakeStrike, DoomsdayRay, Move, Stop, None
+        SharpBlow, AbyssalVortex, RimVoid, SnakeStrike, DoomsdayRay, DarkeningStorm, Move, Stop, None
     }
 }
 
