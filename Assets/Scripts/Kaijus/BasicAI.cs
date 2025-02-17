@@ -44,7 +44,7 @@ namespace Mekaiju.AI
         private bool _canSwitch = false;
 
         protected Animator _animator;
-
+        [SerializeField]
         protected int _currentPhase = 1;
 
         private int _totalStartHealth;
@@ -349,6 +349,11 @@ namespace Mekaiju.AI
                 Debug.Log("Dead");
                 Destroy(gameObject);
             }
+        }
+
+        public virtual void ChangePhase()
+        {
+            _currentPhase++;
         }
 
         /// <summary>

@@ -41,9 +41,11 @@ namespace Mekaiju.AI.Attack
                 {
                     _damagable = false;
                     _ai.AddDps(_ai.doomsdayRayDamage);
-                    MechaInstance _mecha = hit.collider.GetComponent<MechaInstance>();
-                    _mecha.TakeDamage(_ai.doomsdayRayDamage);
-                    StartCoroutine(DamagableCooldown());
+                    if (hit.collider.TryGetComponent(out MechaInstance _mecha))
+                    {
+                        _mecha.TakeDamage(_ai.doomsdayRayDamage);
+                        StartCoroutine(DamagableCooldown());
+                    }
                 }
             }
         }

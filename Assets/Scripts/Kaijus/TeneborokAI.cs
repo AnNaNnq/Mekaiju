@@ -25,6 +25,7 @@ namespace Mekaiju.AI
         [SelectFromList(nameof(bodyParts))] public int sharpBlowBody;
         [OverrideLabel("Attack zone center")] public Vector3 sharpBlowZoneCenter;
         [OverrideLabel("Attack zone size")] public Vector3 sharpBlowZoneSize;
+        [OverrideLabel("Second Attack Damage")] public int sharpBlowSecondAttackDamage = 20;
         #endregion
 
         #region Vortex Abyssal
@@ -120,6 +121,7 @@ namespace Mekaiju.AI
         #region Time For Animation
         [Foldout("Time For Animation")]
         public float timeForSharpBlow = 0.2f;
+        public float timeForSecondAttackSharpblow = 0.1f;
         public float timeForSnakeStrike = 0.1f;
         #endregion
 
@@ -152,7 +154,17 @@ namespace Mekaiju.AI
             {
                 FirstPhase();
             }
+            else
+            {
+                SecondPhase();
+            }
             
+        }
+
+        public override void ChangePhase()
+        {
+            base.ChangePhase();
+            lastAttack = TeneborokAttack.None;
         }
 
         public void FirstPhase()
@@ -300,10 +312,35 @@ namespace Mekaiju.AI
             }
         }
 
+        public void SecondPhase()
+        {
+            switch (lastAttack)
+            {
+                case TeneborokAttack.None:
+                    {
+                        if (CanUseAttack(TeneborokAttack.SharpBlow))
+                        {
+                            SharpBlowUpgrade();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, sharpBlowRange);
+                        }
+                        break;
+                    }
+            }
+        }
+
         public void SharpBlow()
         {
             _animator.SetTrigger("CoupTranchant");
             StartCoroutine(IESharpBlow());
+        }
+
+        public void SharpBlowUpgrade()
+        {
+            _animator.SetTrigger("CoupTranchant+");
+            StartCoroutine(IESharpBlowUpgrad());
         }
 
         public void SnakeStrike()
@@ -328,6 +365,17 @@ namespace Mekaiju.AI
             yield return new WaitForSeconds(timeForSharpBlow);
             lastAttack = TeneborokAttack.SharpBlow;
             Attack(sharpBlowDamage, sharpBlowZoneCenter, sharpBlowZoneSize);
+        }
+
+        IEnumerator IESharpBlowUpgrad()
+        {
+            lastAttack = TeneborokAttack.Stop;
+            _canAttack = false;
+            yield return new WaitForSeconds(timeForSharpBlow);
+            Attack(sharpBlowDamage, sharpBlowZoneCenter, sharpBlowZoneSize);
+            yield return new WaitForSeconds(timeForSecondAttackSharpblow);
+            Attack(sharpBlowSecondAttackDamage, sharpBlowZoneCenter, sharpBlowZoneSize);
+            lastAttack = TeneborokAttack.SharpBlow;
         }
 
         public void DarkeningStorm()
