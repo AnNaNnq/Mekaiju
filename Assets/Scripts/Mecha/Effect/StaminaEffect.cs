@@ -11,6 +11,6 @@ public class StaminaEffect : IEffectBehaviour
     public override void Tick(MechaInstance self)
     {
         if (Time.time - self.Context.LastAbilityTime > 2f)
-            self.RestoreStamina(_percentPerSec * self.Desc.Stamina * Time.deltaTime);
+            self.RestoreStamina(_percentPerSec * self.config.desc.Stamina * Time.deltaTime);
     }
 }
