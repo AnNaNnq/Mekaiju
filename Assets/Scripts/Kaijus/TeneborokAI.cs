@@ -328,6 +328,26 @@ namespace Mekaiju.AI
                         }
                         break;
                     }
+                case TeneborokAttack.SharpBlow: 
+                    {
+                        if(CanUseAttack(TeneborokAttack.AbyssalVortex, attackData, rimVoideRange))
+                        {
+                            AbyssalVortex();
+                        }
+                        else if (CanUseAttack(TeneborokAttack.RimVoid, attackData, snakeStrikeRange))
+                        {
+                            RimVoid();
+                        }
+                        else if (CanUseAttack(TeneborokAttack.SnakeStrike, attackData))
+                        {
+                            SnakeStrike();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, abyssalVortexRange);
+                        }
+                        break;
+                    }
             }
         }
 
