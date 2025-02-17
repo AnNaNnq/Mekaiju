@@ -59,6 +59,20 @@ namespace Mekaiju
             };
         }
 
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            if (typeof(E).IsAssignableFrom(p_opt.GetType()))
+            {
+                Ability t_ability = _abilities[(E)p_opt];
+                if (t_ability)
+                {
+                    return t_ability.Behaviour?.IsAvailable(p_self, null) ?? false;
+                }
+            }
+
+            return false;
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (typeof(E).IsAssignableFrom(p_opt.GetType()))
@@ -95,26 +109,6 @@ namespace Mekaiju
                 {
                     t_ability.Behaviour?.FixedTick(p_self);
                 }
-            }
-        }
-
-        public override float Consumption(object p_opt)
-        {
-            if (typeof(E).IsAssignableFrom(p_opt.GetType()))
-            {
-                Ability t_ability = _abilities[(E)p_opt];
-                if (t_ability)
-                {
-                    return t_ability.Behaviour?.Consumption(null) ?? float.PositiveInfinity;
-                }
-                else
-                {
-                    return float.PositiveInfinity;
-                }
-            }
-            else
-            {
-                return float.PositiveInfinity;
             }
         }
     }

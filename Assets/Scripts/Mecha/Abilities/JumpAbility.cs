@@ -31,9 +31,14 @@ namespace Mekaiju
             _requested = false;
         }
 
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return p_self.Mecha.Context.IsGrounded && !_requested && p_self.Mecha.Stamina - _consumption >= 0f;
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {  
-            if (p_self.Mecha.Context.IsGrounded && !_requested)
+            if (IsAvailable(p_self, p_opt))
             {
                 p_self.Mecha.ConsumeStamina(_consumption);
                 _requested = true;
@@ -49,11 +54,6 @@ namespace Mekaiju
                 p_self.Mecha.Context.Rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
                 _requested = false;
             }
-        }
-
-        public override float Consumption(object p_opt)
-        {
-            return _consumption;
         }
     }
 }

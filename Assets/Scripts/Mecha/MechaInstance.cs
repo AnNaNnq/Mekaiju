@@ -206,9 +206,9 @@ namespace Mekaiju
         }
 
         /// <summary>
-        /// Remove 
+        /// Remove an effect.
         /// </summary>
-        /// <param name="p_effect"></param>
+        /// <param name="p_effect">The effect to remove.</param>
         public void RemoveEffect(IDisposable p_effect)
         {
             if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
@@ -216,16 +216,6 @@ namespace Mekaiju
                 _effects.Remove((StatefullEffect)p_effect);
                 p_effect.Dispose();
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_consumption"></param>
-        /// <returns></returns>
-        public bool CanExecuteAbility(float p_consumption)
-        {
-            return Stamina - p_consumption > 0;
         }
 
         /// <summary>

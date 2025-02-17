@@ -72,9 +72,19 @@ namespace Mekaiju
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
         }
 
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return (
+                !_isAcitve && 
+                !p_self.Mecha.Context.IsMovementAltered && 
+                p_self.Mecha.Stamina - _consumption >= 0f &&
+                Mathf.Abs(p_self.Mecha.Context.MoveAction.ReadValue<Vector2>().magnitude) > 0    
+            );
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
-            if (!_isAcitve && !p_self.Mecha.Context.IsMovementAltered)
+            if (IsAvailable(p_self, p_opt))
             {
                 Vector2   t_input     = p_self.Mecha.Context.MoveAction.ReadValue<Vector2>();
                 Transform t_transform = p_self.Mecha.transform;
@@ -114,11 +124,6 @@ namespace Mekaiju
                 Vector3   t_vel = _force * (1 - _elapedTime / _duration) * _direction;
                 t_rb.linearVelocity = new(t_vel.x, t_rb.linearVelocity.y, t_vel.z);
             }   
-        }
-
-        public override float Consumption(object p_opt)
-        {
-            return _consumption;
         }
     }
 }
