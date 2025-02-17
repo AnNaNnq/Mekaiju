@@ -233,9 +233,60 @@ namespace Mekaiju.AI
                     }
                 case TeneborokAttack.DoomsdayRay:
                     {
-                        if(GetTargetDistance() <= darkeningStormRange)
+                        if(CanUseAttack(TeneborokAttack.DoomsdayRay, rimVoideRange))
                         {
-
+                            StartCoroutine(DoomsdayRay());
+                        }else if(CanUseAttack(TeneborokAttack.RimVoid, sharpBlowRange))
+                        {
+                            RimVoid();
+                        }
+                        else if (CanUseAttack(TeneborokAttack.SharpBlow))
+                        {
+                            SharpBlow();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, doomsdayRayRange);
+                        }
+                        break;
+                    }
+                case TeneborokAttack.RimVoid:
+                    {
+                        if(CanUseAttack(TeneborokAttack.DarkeningStorm, abyssalVortexRange))
+                        {
+                            DarkeningStorm();
+                        }
+                        else if(CanUseAttack(TeneborokAttack.AbyssalVortex, sharpBlowRange))
+                        {
+                            AbyssalVortex();
+                        }
+                        else if (CanUseAttack(TeneborokAttack.SharpBlow))
+                        {
+                            SharpBlow();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, abyssalVortexRange);
+                        }
+                        break;
+                    }
+                case TeneborokAttack.AbyssalVortex:
+                    {
+                        if(CanUseAttack(TeneborokAttack.DoomsdayRay, rimVoideRange))
+                        {
+                            StartCoroutine(DoomsdayRay());
+                        }
+                        else if(CanUseAttack(TeneborokAttack.RimVoid, snakeStrikeRange))
+                        {
+                            RimVoid();
+                        }
+                        else if (CanUseAttack(TeneborokAttack.SharpBlow))
+                        {
+                            SharpBlow();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, doomsdayRayRange);
                         }
                         break;
                     }
