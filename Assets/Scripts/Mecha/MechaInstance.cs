@@ -39,7 +39,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public MechaDesc Desc;
+        public MechaConfig config { get; private set; }
 
         /// <summary>
         /// 
@@ -67,7 +67,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
+        [field: SerializeField]
         public float Stamina { get; private set; }
 
         /// <summary>
@@ -87,20 +87,25 @@ namespace Mekaiju
 
         private void Start()
         {
-            // Desc = GameManager.Instance.PData.Mecha;
+            Debug.Assert(GameManager.Instance, "Missing GameManager. Please add one!");
+            config = GameManager.Instance.playerData.mechaConfig;
 
-            Debug.Assert(Desc.Prefab);
-            var t_main = Instantiate(Desc.Prefab, transform);
+            var t_main = Instantiate(config.desc.Prefab, transform);
 
-            _parts = Desc.Parts.Select((key, part) => 
+            _parts = config.parts.Select((key, part) => 
                 {
                     var t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
                     Debug.Assert(t_tr);
 
                     t_tr.gameObject.SetActive(false);
 
+<<<<<<< HEAD
                     Debug.Assert(part.Ability.Prefab);
                     var t_go = Instantiate(part.Ability.Prefab, t_tr);
+=======
+                    t_go = t_tr.Find(part.ability.ObjectName).gameObject;
+                    Debug.Assert(t_go, $"Unable to find the GameObject associated to the ability {part.ability.name}!");
+>>>>>>> f6493d6 (feat: allow capacity change)
 
                     var t_inst = t_go.AddComponent<MechaPartInstance>();
                     t_inst.Initialize(this, part);
@@ -121,7 +126,7 @@ namespace Mekaiju
                 new(Resources.Load<Effect>("Mecha/Effect/Health")),
             };
 
-            Stamina = Desc.Stamina;
+            Stamina = config.desc.Stamina;
 
             Context = new()
             {
@@ -219,7 +224,7 @@ namespace Mekaiju
         /// <param name="p_amount"></param>
         public void RestoreStamina(float p_amount)
         {
-            Stamina = Math.Min(Desc.Stamina, Stamina + p_amount);
+            Stamina = Math.Min(config.desc.Stamina, Stamina + p_amount);
         }
 
         /// <summary>

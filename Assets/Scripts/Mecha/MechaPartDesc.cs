@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Mekaiju
@@ -16,6 +15,12 @@ namespace Mekaiju
         /// </summary>
         [field: SerializeField]
         public float Health { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [field: SerializeField, Tooltip("Specify whether the ability can be replaced by a recoverable one")]
+        public bool isAbilityReplaceable { get; private set; }
 
         /// <summary>
         /// 

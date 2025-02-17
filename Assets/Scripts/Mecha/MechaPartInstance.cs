@@ -20,7 +20,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private MechaPartDesc _desc;
+        private MechaPartConfig _config;
 
         /// <summary>
         /// 
@@ -33,14 +33,14 @@ namespace Mekaiju
         /// </summary>
         /// <param name="p_inst"></param>
         /// <param name="p_config"></param>
-        public void Initialize(MechaInstance p_inst, MechaPartDesc p_config)
+        public void Initialize(MechaInstance p_inst, MechaPartConfig p_config)
         {
             Mecha   = p_inst;
 
-            _desc  = p_config;
-            Health = p_config.Health;
+            _config = p_config;
+            Health = p_config.desc.Health;
 
-            _desc.Ability.Behaviour?.Initialize(this);
+            _config.ability.Behaviour?.Initialize(this);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Mekaiju
 
         public void Heal(float p_heal)
         {
-            Health = Mathf.Min(_desc.Health, Health + p_heal);
+            Health = Mathf.Min(_config.desc.Health, Health + p_heal);
         }
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace Mekaiju
         /// <returns></returns>
         public IEnumerator TriggerAbility(BodyPartObject p_target, object p_opt)
         {
-            if (_desc.Ability.Behaviour.IsAvailable(this, p_opt))
+            if (_config.ability.Behaviour.IsAvailable(this, p_opt))
             {
                 Mecha.Context.LastAbilityTime = Time.time;
-                yield return _desc.Ability.Behaviour.Trigger(this, p_target, p_opt);
+                yield return _config.ability.Behaviour.Trigger(this, p_target, p_opt);
             }
         }
 
@@ -80,17 +80,17 @@ namespace Mekaiju
         /// </summary>
         public void ReleaseAbility()
         {
-            _desc.Ability.Behaviour.Release();
+            _config.ability.Behaviour.Release();
         }
 
         private void Update()
         {
-            _desc.Ability.Behaviour?.Tick(this);
+            _config.ability.Behaviour?.Tick(this);
         }
 
         private void FixedUpdate()
         {
-            _desc.Ability.Behaviour?.FixedTick(this);
+            _config.ability.Behaviour?.FixedTick(this);
         }
 
     }

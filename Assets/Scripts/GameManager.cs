@@ -13,7 +13,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public PlayerData PData { get; private set; }
+        public PlayerData playerData { get; private set; }
 
         private void Awake()
         {
@@ -21,7 +21,7 @@ namespace Mekaiju
             if (Instance == null)
             {
                 Instance = this;
-                PData    = new();
+                playerData = new();
 
 
                 DontDestroyOnLoad(gameObject);
