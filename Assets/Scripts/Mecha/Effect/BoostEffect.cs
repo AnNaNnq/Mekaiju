@@ -24,14 +24,14 @@ namespace Mekaiju
         public override void OnAdd(MechaInstance p_self)
         {
             _modifiers.ForEach((t_key, t_value) => {
-                _modifierRefs[t_key] = p_self.Context.Modifiers[t_key].Add(t_value);
+                _modifierRefs[t_key] = p_self.context.modifiers[t_key].Add(t_value);
             });
         }
 
         public override void OnRemove(MechaInstance p_self)
         {
             _modifierRefs.ForEach((t_key, t_ref) => {
-                p_self.Context.Modifiers[t_key].Remove(t_ref);
+                p_self.context.modifiers[t_key].Remove(t_ref);
             });
         }
     }

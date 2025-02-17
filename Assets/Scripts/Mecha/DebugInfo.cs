@@ -71,16 +71,16 @@ public class DebugInfo : MonoBehaviour
 
     private void _SetStamina()
     {
-        _staminaField.text = $"{_inst.Stamina:0.00}";
+        _staminaField.text = $"{_inst.stamina:0.00}";
     }
 
     private void _SetHealth()
     {
-        _healthField.text = $"{_inst.Health:0.00}";
-        _lArmHealthField.text = $"{_inst[MechaPart.LeftArm].Health:0.00}";
-        _rArmHealthField.text = $"{_inst[MechaPart.RightArm].Health:0.00}";
-        _headHealthField.text = $"{_inst[MechaPart.Head].Health:0.00}";
-        _chestHealthField.text = $"{_inst[MechaPart.Chest].Health:0.00}";
-        _legsHealthField.text = $"{_inst[MechaPart.Legs].Health:0.00}";
+        _healthField.text = $"{_inst.health:0.00}";
+        _lArmHealthField.text = $"{_inst[MechaPart.LeftArm].health:0.00}";
+        _rArmHealthField.text = $"{_inst[MechaPart.RightArm].health:0.00}";
+        _headHealthField.text = $"{_inst[MechaPart.Head].health:0.00}";
+        _chestHealthField.text = $"{_inst[MechaPart.Chest].health:0.00}";
+        _legsHealthField.text = $"{_inst[MechaPart.Legs].health:0.00}";
     }
 }

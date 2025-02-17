@@ -21,7 +21,7 @@ namespace Mekaiju
         public MechaConfig(MechaDesc p_desc)
         {
             desc  = p_desc;
-            parts = p_desc.Parts.Select((t_key, t_desc) => new MechaPartConfig(t_desc));
+            parts = p_desc.parts.Select((t_key, t_desc) => new MechaPartConfig(t_desc));
         }
     }
 }

@@ -1,4 +1,5 @@
 using Mekaiju.Attributes;
+using MyBox;
 using UnityEngine;
 
 namespace Mekaiju
@@ -11,43 +12,37 @@ namespace Mekaiju
         /// 
         /// </summary>
         [field: SerializeField]
-        public string Name { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [field: SerializeField]
-        public string Description { get; private set; }
+        public string description { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
         [field: SerializeField, Tooltip("Assiciated GameObeject name in mecha mesh tree")]
-        public string ObjectName { get; private set; }
+        public string objectName { get; private set; }
         
         /// <summary>
         /// 
         /// </summary>
         [field: SerializeField]
-        public MechaPart Target { get; private set; }
+        public MechaPart target { get; private set; }
         
         /// <summary>
         /// 
         /// </summary>
         [field: SerializeReference, SubclassPicker]
-        public IAbilityBehaviour Behaviour { get; private set; }
+        public IAbilityBehaviour behaviour { get; private set; }
 
         public void OnValidate()
         {
-            if (Behaviour == null)
+            if (behaviour == null)
             {
                 Debug.LogWarning("You must provide a behaviour for each mecha ability.");
             }
             else
             {
-                if (typeof(ICompoundAbility).IsAssignableFrom(Behaviour.GetType()))
+                if (typeof(ICompoundAbility).IsAssignableFrom(behaviour.GetType()))
                 {
-                    (Behaviour as ICompoundAbility).CheckAbilityLoop(this);
+                    (behaviour as ICompoundAbility).CheckAbilityLoop(this);
                 }
             }
         }

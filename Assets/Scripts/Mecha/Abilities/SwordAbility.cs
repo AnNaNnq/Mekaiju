@@ -51,7 +51,7 @@ namespace Mekaiju
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return Time.time - _lastTriggerTime >= _minTimeBetweenFire && p_self.Mecha.Stamina - _consumption >= 0f;
+            return Time.time - _lastTriggerTime >= _minTimeBetweenFire && p_self.mecha.stamina - _consumption >= 0f;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -63,9 +63,9 @@ namespace Mekaiju
                 _lastTriggerTime = t_now;
 
                 // TODO: Launch animation
-                p_self.Mecha.Context.Animator.SetTrigger("swordAttack");
+                p_self.mecha.context.animator.SetTrigger("swordAttack");
 
-                p_self.Mecha.ConsumeStamina(_consumption);
+                p_self.mecha.ConsumeStamina(_consumption);
 
                 // Compute travel time
                 var t_tpos = p_target.transform.position;
@@ -73,7 +73,7 @@ namespace Mekaiju
                 if (t_dist < _reachDistance)
                 {
                     // TODO: remove cast
-                    var t_damage = p_self.Mecha.Context.Modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
+                    var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
                     p_target.TakeDamage((int)t_damage);
                     if (DebugInfo.Instance)
                     {

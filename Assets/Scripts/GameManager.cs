@@ -8,7 +8,19 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public static GameManager Instance { get; private set; }
+        private static GameManager _instance;
+        public  static GameManager instance 
+        { 
+            get
+            {
+                if (!_instance)
+                {
+                    Debug.LogError("Missing GameManager.");
+                }
+
+                return _instance;
+            }
+        }
 
         /// <summary>
         /// 
@@ -18,15 +30,15 @@ namespace Mekaiju
         private void Awake()
         {
             // Singleton pattern to ensure only one instance of GameManager exists.
-            if (Instance == null)
+            if (_instance == null)
             {
-                Instance = this;
+                _instance = this;
                 playerData = new();
 
 
                 DontDestroyOnLoad(gameObject);
             }
-            else if (Instance != this)
+            else if (_instance != this)
             {
                 Destroy(gameObject);
             }
