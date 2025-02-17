@@ -6,6 +6,7 @@ using MyBox;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 namespace Mekaiju.AI
 {
@@ -82,6 +83,18 @@ namespace Mekaiju.AI
         private bool _canDoomsdayRay = true;
         #endregion
 
+        #region Tempete obscurante
+        [Foldout("Tempete obscurante")]
+        [OverrideLabel("Range")] public float darkeningStormRange = 2f;
+        [OverrideLabel("Body Part")]
+        [SelectFromList(nameof(bodyParts))] public int darkeningStormBody;
+        [OverrideLabel("CD")] public float darkeningStormCooldown = 10f;
+        [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject gameObjectDarkeningStorm;
+        [OverrideLabel("Duration (sec)")] public float darkeningStormDuration = 5f;
+
+        private bool _canDarkeningStorm = true;
+        #endregion
+
         #region Pour les ld
         [Foldout("Debug")]
         [OverrideLabel("Show Gizmo For Hit Cut")]
@@ -99,6 +112,9 @@ namespace Mekaiju.AI
         [OverrideLabel("Show Gizmo For Doomsday Ray")]
         public bool debugDoomsdayRay = false;
         [ConditionalField(nameof(debugDoomsdayRay))] public Color colorForDoomsdayRayeRange;
+        [OverrideLabel("Show Gizmo For Darkening Duration")]
+        public bool debugDarkeningDuration = false;
+        [ConditionalField(nameof(debugDarkeningDuration))] public Color colorForDarkeningDurationRange;
         #endregion
 
         #region Time For Animation
@@ -107,10 +123,20 @@ namespace Mekaiju.AI
         public float timeForSnakeStrike = 0.1f;
         #endregion
 
+        private Dictionary<TeneborokAttack, (float range, bool canAttack)> attackData = new Dictionary<TeneborokAttack, (float, bool)> { };
         public new void Start()
         {
             base.Start();
             lastAttack = TeneborokAttack.None;
+            attackData = new Dictionary<TeneborokAttack, (float, bool)>
+            {
+                { TeneborokAttack.AbyssalVortex, (abyssalVortexRange, _canAbyssalVortex) },
+                { TeneborokAttack.DoomsdayRay, (doomsdayRayRange, _canDoomsdayRay) },
+                { TeneborokAttack.SharpBlow, (sharpBlowRange, true) },
+                { TeneborokAttack.RimVoid, (rimVoideRange, _canRimVoid) },
+                { TeneborokAttack.SnakeStrike, (snakeStrikeRange, true) },
+                { TeneborokAttack.DarkeningStorm, (darkeningStormRange, _canDarkeningStorm) }
+            };
         }
 
         private new void Update()
@@ -135,10 +161,9 @@ namespace Mekaiju.AI
             {
                 case TeneborokAttack.None:
                     {
-                        if (GetTargetDistance() <= sharpBlowRange && _canAttack)
+                        if (CanUseAttack(TeneborokAttack.SharpBlow))
                         {
-                            _animator.SetTrigger("CoupTranchant");
-                            StartCoroutine(SharpBlow());
+                            SharpBlow();
                         }
                         else
                         {
@@ -148,20 +173,17 @@ namespace Mekaiju.AI
                     }
                 case TeneborokAttack.SharpBlow:
                     {
-                        if (GetTargetDistance() <= abyssalVortexRange && _canAttack && _canAbyssalVortex
-                            && GetTargetDistance() >= rimVoideRange)
+                        if (CanUseAttack(TeneborokAttack.AbyssalVortex, rimVoideRange))
                         {
                             AbyssalVortex();
                         }
-                        else if (GetTargetDistance() <= rimVoideRange && _canAttack && _canRimVoid
-                            && GetTargetDistance() >= snakeStrikeRange)
+                        else if (CanUseAttack(TeneborokAttack.RimVoid, snakeStrikeRange))
                         {
                             RimVoid();
                         }
-                        else if (GetTargetDistance() <= snakeStrikeRange && _canAttack)
+                        else if (CanUseAttack(TeneborokAttack.SnakeStrike))
                         {
-                            _animator.SetTrigger("FrappeSerpent");
-                            StartCoroutine(SnakeStrik());
+                            SnakeStrik();
                         }
                         else
                         {
@@ -171,9 +193,96 @@ namespace Mekaiju.AI
                     }
                 case TeneborokAttack.SnakeStrike:
                     {
-                        if(GetTargetDistance() <= doomsdayRayRange && _canAttack && _canDoomsdayRay)
+                        if(CanUseAttack(TeneborokAttack.DoomsdayRay, darkeningStormRange))
                         {
                             StartCoroutine(DoomsdayRay());
+                        }
+                        else if(CanUseAttack(TeneborokAttack.DarkeningStorm, sharpBlowRange))
+                        {
+                            DarkeningStorm();
+                        }
+                        else if(CanUseAttack(TeneborokAttack.SharpBlow))
+                        {
+                            SharpBlow();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, doomsdayRayRange);
+                        }
+                        break;
+                    }
+                case TeneborokAttack.DarkeningStorm:
+                    {
+                        if (CanUseAttack(TeneborokAttack.DoomsdayRay, rimVoideRange))
+                        {
+                            StartCoroutine(DoomsdayRay());
+                        }
+                        else if (CanUseAttack(TeneborokAttack.RimVoid, snakeStrikeRange))
+                        {
+                            RimVoid();
+                        }
+                        else if (CanUseAttack(TeneborokAttack.SnakeStrike))
+                        {
+                            SnakeStrik();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, doomsdayRayRange);
+                        }
+                        break;
+                    }
+                case TeneborokAttack.DoomsdayRay:
+                    {
+                        if(CanUseAttack(TeneborokAttack.DoomsdayRay, rimVoideRange))
+                        {
+                            StartCoroutine(DoomsdayRay());
+                        }else if(CanUseAttack(TeneborokAttack.RimVoid, sharpBlowRange))
+                        {
+                            RimVoid();
+                        }
+                        else if (CanUseAttack(TeneborokAttack.SharpBlow))
+                        {
+                            SharpBlow();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, doomsdayRayRange);
+                        }
+                        break;
+                    }
+                case TeneborokAttack.RimVoid:
+                    {
+                        if(CanUseAttack(TeneborokAttack.DarkeningStorm, abyssalVortexRange))
+                        {
+                            DarkeningStorm();
+                        }
+                        else if(CanUseAttack(TeneborokAttack.AbyssalVortex, sharpBlowRange))
+                        {
+                            AbyssalVortex();
+                        }
+                        else if (CanUseAttack(TeneborokAttack.SharpBlow))
+                        {
+                            SharpBlow();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, abyssalVortexRange);
+                        }
+                        break;
+                    }
+                case TeneborokAttack.AbyssalVortex:
+                    {
+                        if(CanUseAttack(TeneborokAttack.DoomsdayRay, rimVoideRange))
+                        {
+                            StartCoroutine(DoomsdayRay());
+                        }
+                        else if(CanUseAttack(TeneborokAttack.RimVoid, snakeStrikeRange))
+                        {
+                            RimVoid();
+                        }
+                        else if (CanUseAttack(TeneborokAttack.SharpBlow))
+                        {
+                            SharpBlow();
                         }
                         else
                         {
@@ -191,7 +300,19 @@ namespace Mekaiju.AI
             }
         }
 
-        IEnumerator SnakeStrik()
+        public void SharpBlow()
+        {
+            _animator.SetTrigger("CoupTranchant");
+            StartCoroutine(IE_SharpBlow());
+        }
+
+        public void SnakeStrik()
+        {
+            _animator.SetTrigger("FrappeSerpent");
+            StartCoroutine(IE_SnakeStrik());
+        }
+
+        IEnumerator IE_SnakeStrik()
         {
             lastAttack = TeneborokAttack.Stop;
             _canAttack = false;
@@ -200,13 +321,24 @@ namespace Mekaiju.AI
             Attack(snakeStrikeDamage, snakeStrikeZoneCenter, snakeStrikeZoneSize);
         }
 
-        IEnumerator SharpBlow()
+        IEnumerator IE_SharpBlow()
         {
             lastAttack = TeneborokAttack.Stop;
             _canAttack = false;
             yield return new WaitForSeconds(timeForSharpBlow);
             lastAttack = TeneborokAttack.SharpBlow;
             Attack(sharpBlowDamage, sharpBlowZoneCenter, sharpBlowZoneSize);
+        }
+
+        public void DarkeningStorm()
+        {
+            _canAttack = false;
+            _canDarkeningStorm = false;
+            GameObject t_darkeningStorm = Instantiate(gameObjectDarkeningStorm, transform.position, Quaternion.identity);
+            lastAttack = TeneborokAttack.DarkeningStorm;
+            Destroy(t_darkeningStorm, darkeningStormDuration);
+            StartCoroutine(CooldownRoutine(darkeningStormCooldown, () => _canDarkeningStorm = true));
+            AttackCooldown();
         }
 
         public void AbyssalVortex()
@@ -251,6 +383,23 @@ namespace Mekaiju.AI
             lastAttack = attack;
         }
 
+
+
+        public bool CanUseAttack(TeneborokAttack attackName, float stopDistance = 0)
+        {
+            if (!attackData.ContainsKey(attackName)) return false;
+
+            var (range, canUse) = attackData[attackName];
+
+            bool t_b = GetTargetDistance() <= range && _canAttack && canUse;
+            if (stopDistance > 0)
+            {
+                t_b = t_b && GetTargetDistance() >= stopDistance;
+            }
+            return t_b;
+        }
+
+
         private new void OnDrawGizmos()
         {
             base.OnDrawGizmos();
@@ -283,12 +432,17 @@ namespace Mekaiju.AI
                 Gizmos.color = colorForDoomsdayRayeRange;
                 Gizmos.DrawWireSphere(transform.position, doomsdayRayRange);
             }
+            if (debugDarkeningDuration)
+            {
+                Gizmos.color = colorForDarkeningDurationRange;
+                Gizmos.DrawWireSphere(transform.position, darkeningStormRange);
+            }
         }
     }
 
     public enum TeneborokAttack
     {
-        SharpBlow, AbyssalVortex, RimVoid, SnakeStrike, DoomsdayRay, Move, Stop, None
+        SharpBlow, AbyssalVortex, RimVoid, SnakeStrike, DoomsdayRay, DarkeningStorm, Move, Stop, None
     }
 }
 
