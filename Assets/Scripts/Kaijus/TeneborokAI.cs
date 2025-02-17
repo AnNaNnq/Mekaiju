@@ -152,8 +152,7 @@ namespace Mekaiju.AI
                     {
                         if (GetTargetDistance() <= sharpBlowRange && _canAttack)
                         {
-                            _animator.SetTrigger("CoupTranchant");
-                            StartCoroutine(SharpBlow());
+                            SharpBlow();
                         }
                         else
                         {
@@ -175,8 +174,7 @@ namespace Mekaiju.AI
                         }
                         else if (GetTargetDistance() <= snakeStrikeRange && _canAttack)
                         {
-                            _animator.SetTrigger("FrappeSerpent");
-                            StartCoroutine(SnakeStrik());
+                            SnakeStrik();
                         }
                         else
                         {
@@ -191,9 +189,36 @@ namespace Mekaiju.AI
                         {
                             StartCoroutine(DoomsdayRay());
                         }
-                        else if(GetTargetDistance() <= darkeningStormRange && _canAttack && _canDarkeningStorm)
+                        else if(GetTargetDistance() <= darkeningStormRange && _canAttack && _canDarkeningStorm
+                            && GetTargetDistance() >= sharpBlowRange)
                         {
                             DarkeningStorm();
+                        }
+                        else if(GetTargetDistance() <= sharpBlowRange && _canAttack)
+                        {
+                            SharpBlow();
+                        }
+                        else
+                        {
+                            MoveTo(_target.transform.position, doomsdayRayRange);
+                        }
+                        break;
+                    }
+                case TeneborokAttack.DarkeningStorm:
+                    {
+                        if (GetTargetDistance() <= doomsdayRayRange && _canAttack && _canDoomsdayRay
+                            && GetTargetDistance() >= rimVoideRange)
+                        {
+                            StartCoroutine(DoomsdayRay());
+                        }
+                        else if (GetTargetDistance() <= rimVoideRange && _canAttack && _canRimVoid
+                            && GetTargetDistance() >= snakeStrikeRange)
+                        {
+                            RimVoid();
+                        }
+                        else if (GetTargetDistance() <= snakeStrikeRange && _canAttack)
+                        {
+                            SnakeStrik();
                         }
                         else
                         {
@@ -211,7 +236,19 @@ namespace Mekaiju.AI
             }
         }
 
-        IEnumerator SnakeStrik()
+        public void SharpBlow()
+        {
+            _animator.SetTrigger("CoupTranchant");
+            StartCoroutine(IE_SharpBlow());
+        }
+
+        public void SnakeStrik()
+        {
+            _animator.SetTrigger("FrappeSerpent");
+            StartCoroutine(IE_SnakeStrik());
+        }
+
+        IEnumerator IE_SnakeStrik()
         {
             lastAttack = TeneborokAttack.Stop;
             _canAttack = false;
@@ -220,7 +257,7 @@ namespace Mekaiju.AI
             Attack(snakeStrikeDamage, snakeStrikeZoneCenter, snakeStrikeZoneSize);
         }
 
-        IEnumerator SharpBlow()
+        IEnumerator IE_SharpBlow()
         {
             lastAttack = TeneborokAttack.Stop;
             _canAttack = false;
