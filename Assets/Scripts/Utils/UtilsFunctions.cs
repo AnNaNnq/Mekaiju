@@ -14,7 +14,9 @@ namespace Mekaiju.Utils
                 foreach (var hit in hits)
                 {
                     if (hit.point.y < minY)
+                    {
                         minY = hit.point.y; // Prend le point le plus bas
+                    }
                 }
                 return minY;
             }

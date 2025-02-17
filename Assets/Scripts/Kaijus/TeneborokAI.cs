@@ -183,7 +183,7 @@ namespace Mekaiju.AI
                         }
                         else if (CanUseAttack(TeneborokAttack.SnakeStrike))
                         {
-                            SnakeStrik();
+                            SnakeStrike();
                         }
                         else
                         {
@@ -223,7 +223,7 @@ namespace Mekaiju.AI
                         }
                         else if (CanUseAttack(TeneborokAttack.SnakeStrike))
                         {
-                            SnakeStrik();
+                            SnakeStrike();
                         }
                         else
                         {
@@ -303,16 +303,16 @@ namespace Mekaiju.AI
         public void SharpBlow()
         {
             _animator.SetTrigger("CoupTranchant");
-            StartCoroutine(IE_SharpBlow());
+            StartCoroutine(IESharpBlow());
         }
 
-        public void SnakeStrik()
+        public void SnakeStrike()
         {
             _animator.SetTrigger("FrappeSerpent");
-            StartCoroutine(IE_SnakeStrik());
+            StartCoroutine(IESnakeStrike());
         }
 
-        IEnumerator IE_SnakeStrik()
+        IEnumerator IESnakeStrike()
         {
             lastAttack = TeneborokAttack.Stop;
             _canAttack = false;
@@ -321,7 +321,7 @@ namespace Mekaiju.AI
             Attack(snakeStrikeDamage, snakeStrikeZoneCenter, snakeStrikeZoneSize);
         }
 
-        IEnumerator IE_SharpBlow()
+        IEnumerator IESharpBlow()
         {
             lastAttack = TeneborokAttack.Stop;
             _canAttack = false;
