@@ -3,13 +3,23 @@ using UnityEngine;
 
 namespace Mekaiju
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Serializable]
     public class HealEffect : IEffectBehaviour
     {
+        /// <summary>
+        /// 
+        /// </summary>
         [SerializeField]
         private int _heal;
 
-        public float timeBeforeHeal = 5f;
+        /// <summary>
+        /// 
+        /// </summary>
+        [SerializeField]
+        private float _timeBeforeHeal = 5f;
 
         /// <summary>
         /// 
@@ -17,7 +27,7 @@ namespace Mekaiju
         /// <param name="self"></param>
         public override void Tick(MechaInstance self)
         {
-            if (Time.time - self.Context.LastDamageTime > timeBeforeHeal)
+            if (Time.time - self.context.lastDamageTime > _timeBeforeHeal)
                 self.Heal(_heal * Time.deltaTime);
         }
     }

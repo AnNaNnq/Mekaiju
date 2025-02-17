@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Jump.started += OnJump;
         _playerActions.Player.Dash.performed += OnDash;
 
-        _instance.Context.MoveAction = _moveAction;
+        _instance.context.moveAction = _moveAction;
 
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
         Cursor.visible = false; // Make the cursor invisible during gameplay
@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _instance.Context.IsGrounded = _isGrounded;
+        _instance.context.isGrounded = _isGrounded;
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
@@ -261,9 +261,9 @@ public class PlayerController : MonoBehaviour
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
-        if (!_instance.Context.IsMovementOverrided)
+        if (!_instance.context.isMovementOverrided)
         {
-            _speed = _instance.Context.Modifiers[ModifierTarget.Speed]?.ComputeValue(_baseSpeed) ?? _baseSpeed;
+            _speed = _instance.context.modifiers[ModifierTarget.Speed]?.ComputeValue(_baseSpeed) ?? _baseSpeed;
             // _speed = _baseSpeed * _instance.Context.SpeedModifier;
 
             if (_isGrounded)

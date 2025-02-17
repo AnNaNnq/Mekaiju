@@ -54,7 +54,7 @@ namespace Mekaiju
             {
                 if (t_ability)
                 {
-                    t_ability.Behaviour?.Initialize(p_self);
+                    t_ability.behaviour?.Initialize(p_self);
                 }
             };
         }
@@ -66,7 +66,7 @@ namespace Mekaiju
                 Ability t_ability = _abilities[(E)p_opt];
                 if (t_ability)
                 {
-                    return t_ability.Behaviour?.IsAvailable(p_self, null) ?? false;
+                    return t_ability.behaviour?.IsAvailable(p_self, null) ?? false;
                 }
             }
 
@@ -80,7 +80,7 @@ namespace Mekaiju
                 Ability t_ability = _abilities[(E)p_opt];
                 if (t_ability)
                 {
-                    yield return t_ability.Behaviour?.Trigger(p_self, p_target);
+                    yield return t_ability.behaviour?.Trigger(p_self, p_target);
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace Mekaiju
             {
                 if (t_ability)
                 {
-                    t_ability.Behaviour?.Tick(p_self);
+                    t_ability.behaviour?.Tick(p_self);
                 }
             }
         }
@@ -107,7 +107,7 @@ namespace Mekaiju
             {
                 if (t_ability)
                 {
-                    t_ability.Behaviour?.FixedTick(p_self);
+                    t_ability.behaviour?.FixedTick(p_self);
                 }
             }
         }

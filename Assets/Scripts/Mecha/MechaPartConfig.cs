@@ -35,7 +35,7 @@ namespace Mekaiju
         public MechaPartConfig(MechaPartDesc p_desc)
         {
             desc     = p_desc;
-            _ability = p_desc.Ability;
+            _ability = p_desc.ability;
         }
     }
 }

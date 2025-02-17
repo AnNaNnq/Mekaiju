@@ -13,19 +13,19 @@ namespace Mekaiju
     [Serializable]
     public class InstanceContext
     {
-        public float LastAbilityTime = -1000f;
-        public float LastDamageTime  = -1000f;
+        public float lastAbilityTime = -1000f;
+        public float lastDamageTime  = -1000f;
 
-        public EnumArray<ModifierTarget, ModifierCollection> Modifiers = new(() => new());
+        public EnumArray<ModifierTarget, ModifierCollection> modifiers = new(() => new());
 
-        public bool IsGrounded          = false;
-        public bool IsMovementAltered   = false;
-        public bool IsMovementOverrided = false;
+        public bool isGrounded          = false;
+        public bool isMovementAltered   = false;
+        public bool isMovementOverrided = false;
 
-        public InputAction MoveAction;
+        public InputAction moveAction;
 
-        public Animator  Animator;
-        public Rigidbody Rigidbody;
+        public Animator  animator;
+        public Rigidbody rigidbody;
     }
 
 
@@ -54,11 +54,11 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public float Health 
+        public float health 
         { 
             get
             {
-                return _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.Health; });
+                return _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.health; });
             } 
         }
 
@@ -66,12 +66,12 @@ namespace Mekaiju
         /// 
         /// </summary>
         [field: SerializeField]
-        public float Stamina { get; private set; }
+        public float stamina { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public InstanceContext Context { get; private set; }
+        public InstanceContext context { get; private set; }
 
         /// <summary>
         /// 
@@ -85,10 +85,9 @@ namespace Mekaiju
 
         private void Start()
         {
-            Debug.Assert(GameManager.Instance, "Missing GameManager. Please add one!");
-            config = GameManager.Instance.playerData.mechaConfig;
+            config = GameManager.instance.playerData.mechaConfig;
 
-            var t_main = Instantiate(config.desc.Prefab, transform);
+            var t_main = Instantiate(config.desc.prefab, transform);
 
             _parts = config.parts.Select((key, part) => 
                 {
@@ -100,7 +99,7 @@ namespace Mekaiju
                     Debug.Assert(t_tr, $"Unable to find an anchor for {Enum.GetName(typeof(MechaPart), key)}!");
                     t_tr.gameObject.SetActive(false);
 
-                    t_go = t_tr.Find(part.ability.ObjectName).gameObject;
+                    t_go = t_tr.Find(part.ability.objectName).gameObject;
                     Debug.Assert(t_go, $"Unable to find the GameObject associated to the ability {part.ability.name}!");
 
                     t_inst = t_go.AddComponent<MechaPartInstance>();
@@ -118,12 +117,12 @@ namespace Mekaiju
                 new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal")),
             };
 
-            Stamina = config.desc.Stamina;
+            stamina = config.desc.stamina;
 
-            Context = new()
+            context = new()
             {
-                Animator  = GetComponent<Animator>(),
-                Rigidbody = GetComponent<Rigidbody>(),
+                animator  = GetComponent<Animator>(),
+                rigidbody = GetComponent<Rigidbody>(),
             };
         }
 
@@ -132,7 +131,7 @@ namespace Mekaiju
             _effects.ForEach  (effect => effect.Tick());
             _effects.RemoveAll(effect => 
             {
-                if (effect.State == EffectState.Expired)
+                if (effect.state == EffectState.Expired)
                 {
                     effect.Dispose();
                     return true;
@@ -152,7 +151,7 @@ namespace Mekaiju
         /// <returns></returns>
         public bool IsAlive()
         {
-            return Health > 0;
+            return health > 0;
         }
 
         /// <summary>
@@ -221,7 +220,7 @@ namespace Mekaiju
         /// <param name="p_amount"></param>
         public void RestoreStamina(float p_amount)
         {
-            Stamina = Math.Min(config.desc.Stamina, Stamina + p_amount);
+            stamina = Math.Min(config.desc.stamina, stamina + p_amount);
         }
 
         /// <summary>
@@ -230,7 +229,7 @@ namespace Mekaiju
         /// <param name="p_amount"></param>
         public void ConsumeStamina(float p_amount)
         {
-            Stamina = Math.Max(0, Stamina - p_amount);
+            stamina = Math.Max(0, stamina - p_amount);
         }
     }
 
