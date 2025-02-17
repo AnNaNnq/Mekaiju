@@ -46,9 +46,14 @@ namespace Mekaiju
             _effectRef = null;
         }
 
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return !_isAcive && p_self.Mecha.Stamina - _consumption >= 0f;
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
-            if (!_isAcive)
+            if (IsAvailable(p_self, p_opt))
             {
                 p_self.Mecha.ConsumeStamina(_consumption);
 
@@ -58,11 +63,6 @@ namespace Mekaiju
                 p_self.Mecha.RemoveEffect(_effectRef);
                 _isAcive = false;
             }
-        }
-
-        public override float Consumption(object p_opt)
-        {
-            return _consumption;
         }
     }
 }

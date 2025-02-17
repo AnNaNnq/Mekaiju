@@ -72,7 +72,7 @@ namespace Mekaiju
         /// <returns></returns>
         public IEnumerator TriggerDefaultAbility(BodyPartObject p_target, object p_opt)
         {
-            if (Mecha.CanExecuteAbility(_desc.DefaultAbility.Behaviour.Consumption(p_opt)))
+            if (_desc.DefaultAbility.Behaviour.IsAvailable(this, p_opt))
             {
                 Mecha.Context.LastAbilityTime = Time.time;
                 yield return _desc.DefaultAbility.Behaviour.Trigger(this, p_target, p_opt);
@@ -85,32 +85,6 @@ namespace Mekaiju
         public void ReleaseDefaultAbility()
         {
             _desc.DefaultAbility.Behaviour.Release();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_target"></param>
-        /// <param name="p_opt"></param>
-        /// <returns></returns>
-        public IEnumerator TriggerSpecialAbility(BodyPartObject p_target, object p_opt)
-        {   
-            if (_desc.HasSpecial)
-            {
-                if (Mecha.CanExecuteAbility(_desc.SpecialAbility.Behaviour.Consumption(p_opt)))
-                {
-                    Mecha.Context.LastAbilityTime = Time.time;
-                    yield return _desc.SpecialAbility.Behaviour.Trigger(this, p_target, p_opt);    
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void ReleaseSpecialAbility()
-        {
-            _desc.SpecialAbility.Behaviour.Release();
         }
 
         private void Update()

@@ -68,9 +68,14 @@ namespace Mekaiju
             _isStopRequested = false;
         }
 
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return !_isActive && p_self.Mecha.Stamina - _consumption >= 0f;
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
-            if (!_isActive)
+            if (IsAvailable(p_self, p_opt))
             {
                 _isActive = true;
                 _vfxDefault.enabled = true;
@@ -80,12 +85,10 @@ namespace Mekaiju
                 // TODO: rework if other modifier
                 var t_sMod = p_self.Mecha.Context.Modifiers[ModifierTarget.Speed]  .Add(_speedModifier);
                 var t_dMod = p_self.Mecha.Context.Modifiers[ModifierTarget.Defense].Add(_defenseModifier);
-                // p_self.Mecha.Context.SpeedModifier   = _speedModifier;
-                // p_self.Mecha.Context.DefenseModifier = _defenseModifier;
 
                 p_self.Mecha.Context.IsMovementAltered = true;
 
-                while (!_isStopRequested && p_self.Mecha.CanExecuteAbility(_consumption * Time.deltaTime))
+                while (!_isStopRequested && p_self.Mecha.Stamina - (_consumption * Time.deltaTime) >= 0)
                 {
                     p_self.Mecha.ConsumeStamina(_consumption * Time.deltaTime);
                     p_self.Mecha.Context.LastAbilityTime = Time.time;
@@ -96,8 +99,6 @@ namespace Mekaiju
 
                 p_self.Mecha.Context.Animator.SetBool("IsShielding", false);
                 // TODO: rework if other modifier
-                // p_self.Mecha.Context.SpeedModifier   = 1f;
-                // p_self.Mecha.Context.DefenseModifier = 1f;
                 p_self.Mecha.Context.Modifiers[ModifierTarget.Speed]  .Remove(t_sMod);
                 p_self.Mecha.Context.Modifiers[ModifierTarget.Defense].Remove(t_dMod);
 
@@ -118,11 +119,6 @@ namespace Mekaiju
             {
                 _isStopRequested = true;
             }
-        }
-
-        public override float Consumption(object p_opt)
-        {
-            return _consumption;
         }
     }
 }
