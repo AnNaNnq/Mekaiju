@@ -31,11 +31,16 @@ namespace Mekaiju
             _requested = false;
         }
 
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return p_self.mecha.context.isGrounded && !_requested && p_self.mecha.stamina - _consumption >= 0f;
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {  
-            if (p_self.Mecha.Context.IsGrounded && !_requested)
+            if (IsAvailable(p_self, p_opt))
             {
-                p_self.Mecha.ConsumeStamina(_consumption);
+                p_self.mecha.ConsumeStamina(_consumption);
                 _requested = true;
             }
             yield return null;
@@ -45,15 +50,10 @@ namespace Mekaiju
         {
             if (_requested)
             {
-                p_self.Mecha.Context.Animator.SetTrigger("Jump");
-                p_self.Mecha.Context.Rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
+                p_self.mecha.context.animator.SetTrigger("Jump");
+                p_self.mecha.context.rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
                 _requested = false;
             }
-        }
-
-        public override float Consumption(object p_opt)
-        {
-            return _consumption;
         }
     }
 }

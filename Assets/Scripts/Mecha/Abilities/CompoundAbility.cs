@@ -54,9 +54,23 @@ namespace Mekaiju
             {
                 if (t_ability)
                 {
-                    t_ability.Behaviour?.Initialize(p_self);
+                    t_ability.behaviour?.Initialize(p_self);
                 }
             };
+        }
+
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            if (typeof(E).IsAssignableFrom(p_opt.GetType()))
+            {
+                Ability t_ability = _abilities[(E)p_opt];
+                if (t_ability)
+                {
+                    return t_ability.behaviour?.IsAvailable(p_self, null) ?? false;
+                }
+            }
+
+            return false;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -66,7 +80,7 @@ namespace Mekaiju
                 Ability t_ability = _abilities[(E)p_opt];
                 if (t_ability)
                 {
-                    yield return t_ability.Behaviour?.Trigger(p_self, p_target);
+                    yield return t_ability.behaviour?.Trigger(p_self, p_target);
                 }
                 else
                 {
@@ -82,7 +96,7 @@ namespace Mekaiju
             {
                 if (t_ability)
                 {
-                    t_ability.Behaviour?.Tick(p_self);
+                    t_ability.behaviour?.Tick(p_self);
                 }
             }
         }
@@ -93,28 +107,8 @@ namespace Mekaiju
             {
                 if (t_ability)
                 {
-                    t_ability.Behaviour?.FixedTick(p_self);
+                    t_ability.behaviour?.FixedTick(p_self);
                 }
-            }
-        }
-
-        public override float Consumption(object p_opt)
-        {
-            if (typeof(E).IsAssignableFrom(p_opt.GetType()))
-            {
-                Ability t_ability = _abilities[(E)p_opt];
-                if (t_ability)
-                {
-                    return t_ability.Behaviour?.Consumption(null) ?? float.PositiveInfinity;
-                }
-                else
-                {
-                    return float.PositiveInfinity;
-                }
-            }
-            else
-            {
-                return float.PositiveInfinity;
             }
         }
     }

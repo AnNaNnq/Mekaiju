@@ -12,20 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c90c8f421734c05b8e3589afd75ced, type: 3}
   m_Name: DefaulltRailGun
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: RailGun
-  <Description>k__BackingField: BlahBlah
-  <Prefab>k__BackingField: {fileID: 7356328789365181207, guid: 6bb313dd8a4b3485ab6b9c8e7fa6fcee, type: 3}
-  <Target>k__BackingField: 3
-  <Behaviour>k__BackingField:
-    rid: 4067755007570346046
+  <description>k__BackingField: Gun
+  <objectName>k__BackingField: default
+  <target>k__BackingField: 3
+  <behaviour>k__BackingField:
+    rid: 2512019433379594304
   references:
     version: 2
     RefIds:
-    - rid: 4067755007570346046
+    - rid: 2512019433379594304
       type: {class: RailGunAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
-        _damage: 25
+        _damage: 20
         _rateOfFire: 240
-        _consumption: 10
-        _travelTime: 50
+        _projectileSpeed: 50
         _projectile: {fileID: 7119979273812691156, guid: a1c50d1c3dc329f44b22d8ff6616c5ca, type: 3}
+        _consumption: 5

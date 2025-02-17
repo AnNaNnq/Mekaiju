@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mekaiju.AI;
@@ -32,8 +33,11 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private StatefullEffect _effectRef;
+        private IDisposable _effectRef;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private bool _isAcive;
 
         public override void Initialize(MechaPartInstance p_self)
@@ -42,22 +46,23 @@ namespace Mekaiju
             _effectRef = null;
         }
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            if (!_isAcive)
-            {
-                p_self.Mecha.ConsumeStamina(_consumption);
-
-                _isAcive = true;
-                p_self.Mecha.AddEffect(_boostEffect, _duration);
-                yield return new WaitForSeconds(_duration);
-                _isAcive = false;
-            }
+            return !_isAcive && p_self.mecha.stamina - _consumption >= 0f;
         }
 
-        public override float Consumption(object p_opt)
+        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
-            return _consumption;
+            if (IsAvailable(p_self, p_opt))
+            {
+                p_self.mecha.ConsumeStamina(_consumption);
+
+                _isAcive = true;
+                _effectRef = p_self.mecha.AddEffect(_boostEffect);
+                yield return new WaitForSeconds(_duration);
+                p_self.mecha.RemoveEffect(_effectRef);
+                _isAcive = false;
+            }
         }
     }
 }
