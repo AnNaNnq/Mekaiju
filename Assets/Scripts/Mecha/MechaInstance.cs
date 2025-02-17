@@ -100,8 +100,8 @@ namespace Mekaiju
 
                     t_tr.gameObject.SetActive(false);
 
-                    Debug.Assert(part.DefaultAbility.Prefab);
-                    var t_go = Instantiate(part.DefaultAbility.Prefab, t_tr);
+                    Debug.Assert(part.Ability.Prefab);
+                    var t_go = Instantiate(part.Ability.Prefab, t_tr);
 
                     var t_inst = t_go.AddComponent<MechaPartInstance>();
                     t_inst.Initialize(this, part);

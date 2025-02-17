@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
         BodyPartObject t_target = PickRandomTargetPart();
         if (t_target)
         {
-            StartCoroutine(_instance[MechaPart.LeftArm].TriggerDefaultAbility(PickRandomTargetPart(), null));
+            StartCoroutine(_instance[MechaPart.LeftArm].TriggerAbility(PickRandomTargetPart(), null));
         }
     }
     
@@ -182,28 +182,28 @@ public class PlayerController : MonoBehaviour
         BodyPartObject t_target = PickRandomTargetPart();
         if (t_target)
         {
-            StartCoroutine(_instance[MechaPart.RightArm].TriggerDefaultAbility(PickRandomTargetPart(), null));
+            StartCoroutine(_instance[MechaPart.RightArm].TriggerAbility(PickRandomTargetPart(), null));
         }
     }
 
     private void OnHead(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.Head].TriggerDefaultAbility(null, null));
+        StartCoroutine(_instance[MechaPart.Head].TriggerAbility(null, null));
     }
     
     private void OnShield(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.Chest].TriggerDefaultAbility(null, null));
+        StartCoroutine(_instance[MechaPart.Chest].TriggerAbility(null, null));
     }
     
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
-        _instance[MechaPart.Chest].ReleaseDefaultAbility();
+        _instance[MechaPart.Chest].ReleaseAbility();
     }
     
     private void OnJump(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.Legs].TriggerDefaultAbility(null, LegsSelector.Jump));
+        StartCoroutine(_instance[MechaPart.Legs].TriggerAbility(null, LegsSelector.Jump));
     }
 
     private void OnLock(InputAction.CallbackContext p_context)
@@ -222,7 +222,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.Legs].TriggerDefaultAbility(null, LegsSelector.Dash));
+        StartCoroutine(_instance[MechaPart.Legs].TriggerAbility(null, LegsSelector.Dash));
     }
 
     float ClampAngle(float p_angle, float p_from, float p_to)
