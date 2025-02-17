@@ -1,6 +1,8 @@
 using Mekaiju.Attribute;
 using MyBox;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
@@ -425,6 +427,19 @@ namespace Mekaiju.AI
             onCooldownEnd?.Invoke();
         }
 
+        public bool CanUseAttack<T>(T attackName, Dictionary<T, (float range, bool canUse)> attackData, float stopDistance = 0) where T : Enum
+        {
+            if (!attackData.ContainsKey(attackName)) return false;
+
+            var (range, canUse) = attackData[attackName];
+
+            bool t_b = GetTargetDistance() <= range && _canAttack && canUse;
+            if (stopDistance > 0)
+            {
+                t_b = t_b && GetTargetDistance() >= stopDistance;
+            }
+            return t_b;
+        }
 
         #region Fonction pour les LD
 
