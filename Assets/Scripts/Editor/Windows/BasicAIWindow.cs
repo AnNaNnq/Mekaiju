@@ -6,6 +6,9 @@ public class KaijuAttackTree : EditorWindow
     private Vector2 scrollPosition;
     private Vector2 dragOffset;
     private bool isDragging;
+    private float zoom = 1.0f;
+    private const float zoomMin = 0.5f;
+    private const float zoomMax = 2.0f;
 
     [MenuItem("Window/Kaiju Attack Tree")]
     public static void ShowWindow()
@@ -23,30 +26,44 @@ public class KaijuAttackTree : EditorWindow
     {
         Event e = Event.current;
 
+        if (e.type == EventType.ScrollWheel)
+        {
+            float zoomDelta = -e.delta.y * 0.05f;
+            zoom = Mathf.Clamp(zoom + zoomDelta, zoomMin, zoomMax);
+            Repaint();
+        }
+
         if (e.type == EventType.MouseDown && e.button == 2)
         {
             isDragging = true;
             dragOffset = e.mousePosition;
-            EditorGUIUtility.AddCursorRect(new Rect(0, 0, position.width, position.height), MouseCursor.MoveArrow);
+            EditorGUIUtility.SetWantsMouseJumping(1);
         }
         else if (e.type == EventType.MouseDrag && e.button == 2 && isDragging)
         {
             Vector2 delta = e.mousePosition - dragOffset;
             scrollPosition += delta;
             dragOffset = e.mousePosition;
-            EditorGUIUtility.AddCursorRect(new Rect(0, 0, position.width, position.height), MouseCursor.ScaleArrow);
+            EditorGUIUtility.SetWantsMouseJumping(1);
+            EditorGUIUtility.AddCursorRect(new Rect(0, 0, position.width, position.height), MouseCursor.Pan);
             Repaint();
         }
         else if (e.type == EventType.MouseUp && e.button == 2)
         {
             isDragging = false;
+            EditorGUIUtility.SetWantsMouseJumping(0);
+            Repaint();
+        }
+
+        if (isDragging)
+        {
             EditorGUIUtility.AddCursorRect(new Rect(0, 0, position.width, position.height), MouseCursor.Pan);
         }
     }
 
     private void DrawGrid()
     {
-        int gridSpacing = 20;
+        int gridSpacing = Mathf.RoundToInt(20 * zoom);
         int gridOpacity = 50;
         Color gridColor = new Color(0f, 0f, 0f, gridOpacity / 255f);
 
