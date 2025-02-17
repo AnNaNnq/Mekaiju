@@ -115,11 +115,10 @@ namespace Mekaiju
             // TODO: remove
             // t_main.SetActive(false);
 
-            // _effects = new();
             _effects = new()
             {
                 new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
-                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal"), 10),
+                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal")),
             };
 
             Stamina = Desc.Stamina;
@@ -128,14 +127,21 @@ namespace Mekaiju
             {
                 Animator  = GetComponent<Animator>(),
                 Rigidbody = GetComponent<Rigidbody>(),
-                // Modifiers  = new()
             };
         }
 
         private void Update()
         {            
             _effects.ForEach  (effect => effect.Tick());
-            _effects.RemoveAll(effect => effect.State == EffectState.Expired);
+            _effects.RemoveAll(effect => 
+            {
+                if (effect.State == EffectState.Expired)
+                {
+                    effect.Dispose();
+                    return true;
+                }
+                return false;
+            });
         }
 
         private void FixedUpdate()
@@ -182,7 +188,7 @@ namespace Mekaiju
         /// The effect will remain active indefinitely until it is manually removed.
         /// </summary>
         /// <param name="p_effect">The effect to be added.</param>
-        public StatefullEffect AddEffect(Effect p_effect)
+        public IDisposable AddEffect(Effect p_effect)
         {
             _effects.Add(new(this, p_effect));
             return _effects[^1];
@@ -193,15 +199,23 @@ namespace Mekaiju
         /// </summary>
         /// <param name="p_effect">The effect to be added.</param>
         /// <param name="p_time">The duration of the effect in seconds.</param>
-        public StatefullEffect AddEffect(Effect p_effect, float p_time)
+        public IDisposable AddEffect(Effect p_effect, float p_time)
         {
             _effects.Add(new(this, p_effect, p_time));
             return _effects[^1];
         }
 
-        public void RemoveEffect(StatefullEffect p_effect)
+        /// <summary>
+        /// Remove 
+        /// </summary>
+        /// <param name="p_effect"></param>
+        public void RemoveEffect(IDisposable p_effect)
         {
-            _effects.Remove(p_effect);
+            if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
+            {
+                _effects.Remove((StatefullEffect)p_effect);
+                p_effect.Dispose();
+            }
         }
 
         /// <summary>

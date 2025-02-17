@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mekaiju.AI;
@@ -32,8 +33,11 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private StatefullEffect _effectRef;
+        private IDisposable _effectRef;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private bool _isAcive;
 
         public override void Initialize(MechaPartInstance p_self)
@@ -49,8 +53,9 @@ namespace Mekaiju
                 p_self.Mecha.ConsumeStamina(_consumption);
 
                 _isAcive = true;
-                p_self.Mecha.AddEffect(_boostEffect, _duration);
+                _effectRef = p_self.Mecha.AddEffect(_boostEffect);
                 yield return new WaitForSeconds(_duration);
+                p_self.Mecha.RemoveEffect(_effectRef);
                 _isAcive = false;
             }
         }

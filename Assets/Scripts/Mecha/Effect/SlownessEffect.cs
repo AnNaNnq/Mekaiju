@@ -12,7 +12,7 @@ namespace Mekaiju
 
         public override void OnAdd(MechaInstance p_self)
         {
-            _speedMod = p_self.Context.Modifiers[ModifierTarget.Speed].Add(-1 * (_slownessPercentage / 100));
+            _speedMod = p_self.Context.Modifiers[ModifierTarget.Speed].Add(-1 * ((float)_slownessPercentage / 100));
         }
 
         public override void OnRemove(MechaInstance p_self)

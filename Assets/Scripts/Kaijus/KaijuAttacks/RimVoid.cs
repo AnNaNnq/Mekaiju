@@ -1,6 +1,7 @@
 ﻿using Mekaiju;
 using Mekaiju.AI;
 using Mekaiju.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Mekaiju.AI.Attack
         public int pointCount = 10;
         private List<Vector3> _firePos = new List<Vector3>();
 
-        private StatefullEffect _speedMod;
+        private IDisposable _speedMod;
 
         bool _damagable = false;
 
