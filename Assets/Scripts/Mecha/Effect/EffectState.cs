@@ -38,6 +38,11 @@ namespace Mekaiju
         private float _elapsed;
 
         /// <summary>
+        /// Track if resource is no more managed
+        /// </summary>
+        private bool _disposed;
+
+        /// <summary>
         /// 
         /// </summary>
         public EffectState State { get; private set; }
@@ -86,14 +91,25 @@ namespace Mekaiju
             }
         }
 
-        ~StatefullEffect()
-        {
-            _effect.Behaviour?.OnRemove(_target);    
-        }
-
         public void Dispose()
         {
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool p_disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (p_disposing)
+            {
+                _effect.Behaviour?.OnRemove(_target);
+            }
+
+            _disposed = true;
         }
     }
 }
