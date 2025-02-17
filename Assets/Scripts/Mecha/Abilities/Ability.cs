@@ -22,8 +22,8 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [field: SerializeField]
-        public GameObject Prefab { get; private set; }
+        [field: SerializeField, Tooltip("Assiciated GameObeject name in mecha mesh tree")]
+        public string ObjectName { get; private set; }
         
         /// <summary>
         /// 
@@ -39,9 +39,6 @@ namespace Mekaiju
 
         public void OnValidate()
         {
-            if (!Prefab)
-                Debug.LogWarning("You must provide a prefab for each mecha ability.");
-
             if (Behaviour == null)
             {
                 Debug.LogWarning("You must provide a behaviour for each mecha ability.");
