@@ -62,7 +62,7 @@ public class GraphSaveUtility
             t_kaijuAttackContainer.EntryPointNodePositions.Add(entryPointNode.GetPosition().position);
         }
 
-        AssetDatabase.CreateAsset(t_kaijuAttackContainer, $"Assets/Resources/Kaijus/{p_fileName}.asset");
+        AssetDatabase.CreateAsset(t_kaijuAttackContainer, $"Assets/Resources/Kaijus/AttackGraph/{p_fileName}.asset");
         AssetDatabase.SaveAssets();
     }
 
@@ -71,7 +71,7 @@ public class GraphSaveUtility
 
     public void LoadGraph(string p_fileName)
     {
-        _containerCache = Resources.Load<KaijuAttackContainer>("Kaijus/" + p_fileName);
+        _containerCache = Resources.Load<KaijuAttackContainer>("Kaijus/AttackGraph/" + p_fileName);
         if (_containerCache == null)
         {
             EditorUtility.DisplayDialog("File Not Found", "Target dialogue graph file does not exist!", "OK");
