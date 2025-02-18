@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using System;
 using UnityEngine;
+using System.Linq;
 
 namespace Mekaiju
 {
@@ -112,4 +114,18 @@ namespace Mekaiju
             _disposed = true;
         }
     }
+
+    public static class EffectListExtension
+    {
+        public static string ToString<T>(this System.Collections.Generic.List<T> p_effects, string[] p_exclude) where T : StatefullEffect
+        {
+            var filteredEffects = p_effects
+                .Select(effect => effect.effect.description)
+                .Where(desc => !p_exclude.Contains(desc))
+                .ToList();
+
+            return filteredEffects.Count > 0 ? string.Join(" & ", filteredEffects) : string.Empty;
+        }
+    }
+
 }

@@ -50,7 +50,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private List<StatefullEffect> _effects;
+        public List<StatefullEffect> effects { get; private set; }
 
         /// <summary>
         /// 
@@ -112,7 +112,7 @@ namespace Mekaiju
                 }
             );
 
-            _effects = new()
+            effects = new()
             {
                 new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
                 new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal")),
@@ -129,8 +129,8 @@ namespace Mekaiju
 
         private void Update()
         {            
-            _effects.ForEach  (effect => effect.Tick());
-            _effects.RemoveAll(effect => 
+            effects.ForEach  (effect => effect.Tick());
+            effects.RemoveAll(effect => 
             {
                 if (effect.state == EffectState.Expired)
                 {
@@ -143,7 +143,7 @@ namespace Mekaiju
 
         private void FixedUpdate()
         {
-            _effects.ForEach(effect => effect.FixedTick());
+            effects.ForEach(effect => effect.FixedTick());
         }
 
         /// <summary>
@@ -181,27 +181,14 @@ namespace Mekaiju
         }
 
         /// <summary>
-        /// Get all the effects that are affecting the mecha
-        /// </summary>
-        public string GetEffects()
-        {
-            var filteredEffects = _effects
-                .Select(effect => effect.effect.description)
-                .Where(desc => desc != "Heal" && desc != "Stamina")
-                .ToList();
-
-            return filteredEffects.Count > 0 ? string.Join(" & ", filteredEffects) : string.Empty;
-        }
-
-        /// <summary>
         /// Adds a new effect to the list of active effects without a timeout. 
         /// The effect will remain active indefinitely until it is manually removed.
         /// </summary>
         /// <param name="p_effect">The effect to be added.</param>
         public IDisposable AddEffect(Effect p_effect)
         {
-            _effects.Add(new(this, p_effect));
-            return _effects[^1];
+            effects.Add(new(this, p_effect));
+            return effects[^1];
         }
 
         /// <summary>
@@ -211,8 +198,8 @@ namespace Mekaiju
         /// <param name="p_time">The duration of the effect in seconds.</param>
         public IDisposable AddEffect(Effect p_effect, float p_time)
         {
-            _effects.Add(new(this, p_effect, p_time));
-            return _effects[^1];
+            effects.Add(new(this, p_effect, p_time));
+            return effects[^1];
         }
 
         /// <summary>
@@ -223,7 +210,7 @@ namespace Mekaiju
         {
             if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
             {
-                _effects.Remove((StatefullEffect)p_effect);
+                effects.Remove((StatefullEffect)p_effect);
                 p_effect.Dispose();
             }
         }
