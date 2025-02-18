@@ -88,7 +88,7 @@ namespace Mekaiju
         {
             config = GameManager.instance.playerData.mechaConfig;
 
-            _effects = new()
+            effects = new()
             {
                 new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
                 new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal")),
