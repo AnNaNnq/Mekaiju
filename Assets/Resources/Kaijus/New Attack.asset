@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb21259124df937458b8e9a96bee5aaf, type: 3}
+  m_Name: New Attack
+  m_EditorClassIdentifier: 
+  NodeLinks:
+  - BaseNodeGUID: 34921f65-4848-4356-be7c-2132dbe5ed73
+    PortName: Next
+    TargetNodeGUID: 169d20c9-8e9b-447f-a1f4-65a3a1ec21ad
+  - BaseNodeGUID: 169d20c9-8e9b-447f-a1f4-65a3a1ec21ad
+    PortName: Attack 1
+    TargetNodeGUID: 5c4b3763-e084-42b1-9fc3-f63453765071
+  - BaseNodeGUID: 169d20c9-8e9b-447f-a1f4-65a3a1ec21ad
+    PortName: Attack 2
+    TargetNodeGUID: cca3376a-d3e2-4a97-be6a-31802b7a9dcd
+  NodeData:
+  - GUID: 169d20c9-8e9b-447f-a1f4-65a3a1ec21ad
+    Name: RimVoid
+    Position: {x: 498, y: 229}
+  - GUID: 5c4b3763-e084-42b1-9fc3-f63453765071
+    Name: Ta mere
+    Position: {x: 765, y: 210}
+  - GUID: cca3376a-d3e2-4a97-be6a-31802b7a9dcd
+    Name: Attaque Node
+    Position: {x: 817, y: 462}
