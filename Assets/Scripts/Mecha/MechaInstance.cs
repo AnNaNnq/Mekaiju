@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mekaiju.Utils;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -177,6 +178,19 @@ namespace Mekaiju
             {
                 t_part.Heal(p_amount);
             }
+        }
+
+        /// <summary>
+        /// Get all the effects that are affecting the mecha
+        /// </summary>
+        public string GetEffects()
+        {
+            var filteredEffects = _effects
+                .Select(effect => effect.effect.description)
+                .Where(desc => desc != "Heal" && desc != "Stamina")
+                .ToList();
+
+            return filteredEffects.Count > 0 ? string.Join(" & ", filteredEffects) : string.Empty;
         }
 
         /// <summary>

@@ -25,6 +25,9 @@ public class DebugInfo : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _legsHealthField;
 
+    [SerializeField]
+    private TextMeshProUGUI _effectField;
+
     public TextMeshProUGUI Sword;
     public TextMeshProUGUI Gun;
 
@@ -55,6 +58,7 @@ public class DebugInfo : MonoBehaviour
     {
         _SetStamina();
         _SetHealth();
+        _SetEffect();
     }
 
     private IEnumerator _SetTempValue(TextMeshProUGUI p_target, string p_text, float timout)
@@ -72,6 +76,11 @@ public class DebugInfo : MonoBehaviour
     private void _SetStamina()
     {
         _staminaField.text = $"{_inst.stamina:0.00}";
+    }
+
+    private void _SetEffect()
+    {
+        _effectField.text = $"{_inst.GetEffects():0.00}";
     }
 
     private void _SetHealth()
