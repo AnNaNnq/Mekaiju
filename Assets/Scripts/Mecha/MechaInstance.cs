@@ -24,7 +24,7 @@ namespace Mekaiju
 
         public InputAction moveAction;
 
-        public Animator  animator;
+        public MechaAnimatorProxy animationProxy;
         public Rigidbody rigidbody;
     }
 
@@ -87,8 +87,21 @@ namespace Mekaiju
         {
             config = GameManager.instance.playerData.mechaConfig;
 
-            var t_main = Instantiate(config.desc.prefab, transform);
+            _effects = new()
+            {
+                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
+                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal")),
+            };
 
+            stamina = config.desc.stamina;
+
+            context = new()
+            {
+                animationProxy = GetComponent<MechaAnimatorProxy>(),
+                rigidbody      = GetComponent<Rigidbody>(),
+            };
+
+            var t_main = Instantiate(config.desc.prefab, transform);
             _parts = config.parts.Select((key, part) => 
                 {
                     Transform  t_tr;
@@ -110,20 +123,6 @@ namespace Mekaiju
                     return t_inst;
                 }
             );
-
-            _effects = new()
-            {
-                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
-                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal")),
-            };
-
-            stamina = config.desc.stamina;
-
-            context = new()
-            {
-                animator  = GetComponent<Animator>(),
-                rigidbody = GetComponent<Rigidbody>(),
-            };
         }
 
         private void Update()

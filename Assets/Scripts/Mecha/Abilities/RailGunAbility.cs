@@ -68,7 +68,7 @@ namespace Mekaiju
             {
                 _lastTriggerTime = t_now;
                 // TODO: Launch animation
-                p_self.mecha.context.animator.SetTrigger("laserAttack");
+                p_self.mecha.context.animationProxy.animator.SetTrigger("laserAttack");
 
                 p_self.mecha.ConsumeStamina(_consumption);
 

@@ -41,6 +41,7 @@ namespace Mekaiju
             if (IsAvailable(p_self, p_opt))
             {
                 p_self.mecha.ConsumeStamina(_consumption);
+                p_self.mecha.context.animationProxy.animator.SetTrigger("Jump");
                 _requested = true;
             }
             yield return null;
@@ -50,7 +51,6 @@ namespace Mekaiju
         {
             if (_requested)
             {
-                p_self.mecha.context.animator.SetTrigger("Jump");
                 p_self.mecha.context.rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
                 _requested = false;
             }
