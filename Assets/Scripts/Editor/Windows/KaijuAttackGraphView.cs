@@ -4,12 +4,15 @@ using UnityEngine.UIElements;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 
 public class KaijuAttackGraphView : GraphView
 {
     public readonly Vector2 defaultNodeSize = new Vector2(150, 200);
+    
+    private NodeSearchWindow _searchWindow;
 
-    public KaijuAttackGraphView()
+    public KaijuAttackGraphView(EditorWindow editorWindow)
     {
         SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
         styleSheets.Add(Resources.Load<StyleSheet>("Styles/KaijuAttackGraph"));
@@ -23,7 +26,37 @@ public class KaijuAttackGraphView : GraphView
         p_grid.StretchToParentSize();
         p_grid.AddToClassList("grid-background");
 
-        AddElement(GenerateEntryPointNode());
+        CreateStartNode();
+
+        AddSearchWindow(editorWindow);
+    }
+
+
+    public KaijuAttackNode CreateStartNode()
+    {
+        var startNode = GenerateEntryPointNode();
+        AddElement(startNode); // Ajoute le nœud à la vue
+        return startNode;
+    }
+
+
+    private void AddSearchWindow(EditorWindow editorWindow)
+    {
+        _searchWindow = ScriptableObject.CreateInstance<NodeSearchWindow>();
+
+        _searchWindow.Init(editorWindow, this);
+
+        nodeCreationRequest = context =>
+            SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), _searchWindow);
+    }
+
+    private void AddStartNodeButton()
+    {
+        var button = new Button(() => CreateNode("Start", new Vector2(200, 200)))
+        {
+            text = "Add Start Node"
+        };
+        this.Add(button);
     }
 
     private Port GeneratePort(KaijuAttackNode node, Direction portDirection, Port.Capacity capacity = Port.Capacity.Single)
@@ -45,9 +78,6 @@ public class KaijuAttackGraphView : GraphView
         t_generatedPort.portName = "Next";
         t_node.outputContainer.Add(t_generatedPort);
 
-        t_node.capabilities &= ~Capabilities.Movable;
-        t_node.capabilities &= ~Capabilities.Deletable;
-
         t_node.RefreshExpandedState();
         t_node.RefreshPorts();
 
@@ -56,12 +86,12 @@ public class KaijuAttackGraphView : GraphView
         return t_node;
     }
 
-    public void CreateNode(string p_nodeName)
+    public void CreateNode(string p_nodeName, Vector2 position)
     {
-        AddElement(CreateKaijuAttackNode(p_nodeName));
+        AddElement(CreateKaijuAttackNode(p_nodeName, position));
     }
 
-    public KaijuAttackNode CreateKaijuAttackNode(string p_nodeName)
+    public KaijuAttackNode CreateKaijuAttackNode(string p_nodeName, Vector2 position)
     {
         var t_node = new KaijuAttackNode
         {
@@ -82,18 +112,17 @@ public class KaijuAttackGraphView : GraphView
         t_node.titleContainer.Add(t_button);
 
         var textField = new TextField(string.Empty);
-        textField.RegisterValueChangedCallback(evt => 
-        { 
+        textField.RegisterValueChangedCallback(evt =>
+        {
             t_node.Name = evt.newValue;
             t_node.title = evt.newValue;
         });
         textField.SetValueWithoutNotify(t_node.title);
         t_node.mainContainer.Add(textField);
 
-        
         t_node.RefreshExpandedState();
         t_node.RefreshPorts();
-        t_node.SetPosition(new Rect(Vector2.zero, defaultNodeSize));
+        t_node.SetPosition(new Rect(position, defaultNodeSize));
 
         return t_node;
     }

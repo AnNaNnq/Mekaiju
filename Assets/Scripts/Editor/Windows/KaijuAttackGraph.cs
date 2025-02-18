@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class KaijuAttackGraph : EditorWindow
 {
@@ -25,15 +26,16 @@ public class KaijuAttackGraph : EditorWindow
     private void GenerateMiniMap()
     {
         var miniMap = new MiniMap();
-        miniMap.SetPosition(new Rect(10, 30, 200, 140));
+        var cords = _graphView.contentViewContainer.WorldToLocal(new Vector2(this.maxSize.x - 10, 30));
+        miniMap.SetPosition(new Rect(cords.x, cords.y, 200, 140));
         _graphView.Add(miniMap);
     }
 
     private void ConstructGraphView()
     {
-        _graphView = new KaijuAttackGraphView
+        _graphView = new KaijuAttackGraphView(this)
         {
-            name = "Kaiju Attack"
+            name = "Kaiju Attack",
         };
 
         _graphView.StretchToParentSize();
@@ -50,19 +52,24 @@ public class KaijuAttackGraph : EditorWindow
         t_fileNameTextField.RegisterValueChangedCallback(evt => _fileName = evt.newValue);
         t_toolbar.Add(t_fileNameTextField);
 
+        var t_nodeStartButton = new Button(() => { CreateStartNode(); });
+        t_nodeStartButton.text = "Add Start";
+
         var t_nodeSaveButton = new Button(() => { RequestDataOperation(true); });
         t_nodeSaveButton.text = "Save";
 
         var t_nodeLoadButton = new Button(() => { RequestDataOperation(false); });
         t_nodeLoadButton.text = "Load";
 
-        var t_nodeCreateButton = new Button(() => { _graphView.CreateNode("Attaque Node"); });
-        t_nodeCreateButton.text = "Create Node";
-
-        t_toolbar.Add(t_nodeCreateButton);
+        t_toolbar.Add(t_nodeStartButton);
         t_toolbar.Add(t_nodeSaveButton);
         t_toolbar.Add(t_nodeLoadButton);
         rootVisualElement.Add(t_toolbar);
+    }
+
+    private void CreateStartNode()
+    {
+        _graphView.CreateStartNode();
     }
 
     private void RequestDataOperation(bool p_save)

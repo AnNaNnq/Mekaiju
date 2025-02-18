@@ -13,22 +13,28 @@ MonoBehaviour:
   m_Name: New Attack
   m_EditorClassIdentifier: 
   NodeLinks:
-  - BaseNodeGUID: 34921f65-4848-4356-be7c-2132dbe5ed73
+  - BaseNodeGUID: 65d30af4-45ea-430d-b8d9-8252a2eacf05
     PortName: Next
-    TargetNodeGUID: 169d20c9-8e9b-447f-a1f4-65a3a1ec21ad
-  - BaseNodeGUID: 169d20c9-8e9b-447f-a1f4-65a3a1ec21ad
+    TargetNodeGUID: 40f3d3af-8e4c-4fc2-a10d-35589c6151c7
+  - BaseNodeGUID: 40f3d3af-8e4c-4fc2-a10d-35589c6151c7
     PortName: Attack 1
-    TargetNodeGUID: 5c4b3763-e084-42b1-9fc3-f63453765071
-  - BaseNodeGUID: 169d20c9-8e9b-447f-a1f4-65a3a1ec21ad
-    PortName: Attack 2
-    TargetNodeGUID: cca3376a-d3e2-4a97-be6a-31802b7a9dcd
+    TargetNodeGUID: e50ecd4f-5f10-4382-aa20-8cc81af2bab8
+  - BaseNodeGUID: 65563513-c4f6-4ff7-be04-120ecfacf0f8
+    PortName: Next
+    TargetNodeGUID: ffe29781-e2b0-4b01-b387-65a084069781
   NodeData:
-  - GUID: 169d20c9-8e9b-447f-a1f4-65a3a1ec21ad
-    Name: RimVoid
-    Position: {x: 498, y: 229}
-  - GUID: 5c4b3763-e084-42b1-9fc3-f63453765071
-    Name: Ta mere
-    Position: {x: 765, y: 210}
-  - GUID: cca3376a-d3e2-4a97-be6a-31802b7a9dcd
+  - GUID: 40f3d3af-8e4c-4fc2-a10d-35589c6151c7
     Name: Attaque Node
-    Position: {x: 817, y: 462}
+    Position: {x: 452, y: 252}
+  - GUID: e50ecd4f-5f10-4382-aa20-8cc81af2bab8
+    Name: Attaque Node
+    Position: {x: 769, y: 270}
+  - GUID: ffe29781-e2b0-4b01-b387-65a084069781
+    Name: Attaque Node
+    Position: {x: 411, y: 543}
+  EntryPointNodePositions:
+  - {x: 286, y: 214}
+  - {x: 196, y: 437}
+  EntryPointNodeGUIDs:
+  - 65d30af4-45ea-430d-b8d9-8252a2eacf05
+  - 65563513-c4f6-4ff7-be04-120ecfacf0f8
