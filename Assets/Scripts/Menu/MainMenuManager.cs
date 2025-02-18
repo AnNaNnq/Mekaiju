@@ -5,7 +5,7 @@ namespace Mekaiju.MainMenu
 {
     public class MainMenuManager : MonoBehaviour
     {
-        public string nextSceneName = "Prototype"; // Name of the scene to load
+        public string nextSceneName = "PauseManager"; // Name of the scene to load
         public GameObject mainMenu; // Reference to the main menu
         public GameObject settingsMenu; // Reference to the settings menu
         public GameObject creditsMenu; // Reference to the credits menu
