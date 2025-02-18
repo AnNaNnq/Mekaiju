@@ -80,7 +80,7 @@ public class DebugInfo : MonoBehaviour
 
     private void _SetEffect()
     {
-        _effectField.text = $"{_inst.GetEffects():0.00}";
+        _effectField.text = $"{_inst.effects.ToString(new[] {"Heal", "Stamina"} )}";
     }
 
     private void _SetHealth()
