@@ -56,11 +56,11 @@ namespace Mekaiju
         {
             GameObject t_go;
 
-            t_go = GameObject.Instantiate(_vfxDefaultPrefab, p_self.Mecha.transform.Find("ChestPivot"));
+            t_go = GameObject.Instantiate(_vfxDefaultPrefab, p_self.mecha.transform.Find("ChestPivot"));
             _vfxDefault = t_go.GetComponent<VisualEffect>();
             _vfxDefault.enabled = false;
 
-            t_go = GameObject.Instantiate(_vfxBreakPrefab, p_self.Mecha.transform.Find("ChestPivot"));
+            t_go = GameObject.Instantiate(_vfxBreakPrefab, p_self.mecha.transform.Find("ChestPivot"));
             _vfxBreak = t_go.GetComponent<VisualEffect>();
             _vfxBreak.enabled = false;
 
@@ -68,40 +68,41 @@ namespace Mekaiju
             _isStopRequested = false;
         }
 
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return !_isActive && p_self.mecha.stamina - _consumption >= 0f;
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
-            if (!_isActive)
+            if (IsAvailable(p_self, p_opt))
             {
                 _isActive = true;
                 _vfxDefault.enabled = true;
 
-                p_self.Mecha.Context.Animator.SetBool("IsShielding", true);
+                p_self.mecha.context.animator.SetBool("IsShielding", true);
                 
                 // TODO: rework if other modifier
-                var t_sMod = p_self.Mecha.Context.Modifiers[ModifierTarget.Speed]  .Add(_speedModifier);
-                var t_dMod = p_self.Mecha.Context.Modifiers[ModifierTarget.Defense].Add(_defenseModifier);
-                // p_self.Mecha.Context.SpeedModifier   = _speedModifier;
-                // p_self.Mecha.Context.DefenseModifier = _defenseModifier;
+                var t_sMod = p_self.mecha.context.modifiers[ModifierTarget.Speed]  .Add(_speedModifier);
+                var t_dMod = p_self.mecha.context.modifiers[ModifierTarget.Defense].Add(_defenseModifier);
 
-                p_self.Mecha.Context.IsMovementAltered = true;
+                p_self.mecha.context.isMovementAltered = true;
 
-                while (!_isStopRequested && p_self.Mecha.CanExecuteAbility(_consumption * Time.deltaTime))
+                while (!_isStopRequested && p_self.mecha.stamina - (_consumption * Time.deltaTime) >= 0)
                 {
-                    p_self.Mecha.ConsumeStamina(_consumption * Time.deltaTime);
-                    p_self.Mecha.Context.LastAbilityTime = Time.time;
+                    p_self.mecha.ConsumeStamina(_consumption * Time.deltaTime);
+                    p_self.mecha.context.lastAbilityTime = Time.time;
                     yield return null;
                 }
 
                 _vfxDefault.enabled = false;
 
-                p_self.Mecha.Context.Animator.SetBool("IsShielding", false);
+                p_self.mecha.context.animator.SetBool("IsShielding", false);
                 // TODO: rework if other modifier
-                // p_self.Mecha.Context.SpeedModifier   = 1f;
-                // p_self.Mecha.Context.DefenseModifier = 1f;
-                p_self.Mecha.Context.Modifiers[ModifierTarget.Speed]  .Remove(t_sMod);
-                p_self.Mecha.Context.Modifiers[ModifierTarget.Defense].Remove(t_dMod);
+                p_self.mecha.context.modifiers[ModifierTarget.Speed]  .Remove(t_sMod);
+                p_self.mecha.context.modifiers[ModifierTarget.Defense].Remove(t_dMod);
 
-                p_self.Mecha.Context.IsMovementAltered = false;
+                p_self.mecha.context.isMovementAltered = false;
                 
                 _vfxBreak.enabled = true;
                 yield return new WaitForSeconds(_breakTime);
@@ -118,11 +119,6 @@ namespace Mekaiju
             {
                 _isStopRequested = true;
             }
-        }
-
-        public override float Consumption(object p_opt)
-        {
-            return _consumption;
         }
     }
 }

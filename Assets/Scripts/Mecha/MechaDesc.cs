@@ -14,25 +14,19 @@ namespace Mekaiju
         /// 
         /// </summary>
         [field: SerializeField]
-        public float Health { get; private set; }
+        public float stamina { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
         [field: SerializeField]
-        public float Stamina { get; private set; }
+        public GameObject prefab { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
         [field: SerializeField]
-        public GameObject Prefab { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [field: SerializeField]
-        public EnumArray<MechaPart, MechaPartDesc> Parts { get; private set; }
+        public EnumArray<MechaPart, MechaPartDesc> parts { get; private set; }
     }
     
 }

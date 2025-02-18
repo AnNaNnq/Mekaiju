@@ -10,7 +10,7 @@ public class StaminaEffect : IEffectBehaviour
 
     public override void Tick(MechaInstance self)
     {
-        if (Time.time - self.Context.LastAbilityTime > 2f)
-            self.RestoreStamina(_percentPerSec * self.Desc.Stamina * Time.deltaTime);
+        if (Time.time - self.context.lastAbilityTime > 2f)
+            self.RestoreStamina(_percentPerSec * self.config.desc.stamina * Time.deltaTime);
     }
 }
