@@ -50,9 +50,16 @@ namespace Mekaiju
         /// </summary>
         private float _minTimeBetweenFire => 1f / (_rateOfFire / 60f);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private bool _isAnimationStarted;
+
         public override void Initialize(MechaPartInstance p_self)
         {
             _lastTriggerTime = 0f;
+            _isAnimationStarted = false;
+            p_self.mecha.context.animationProxy.onFire.AddListener(_OnAnimationStarted);
         }
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
@@ -69,6 +76,10 @@ namespace Mekaiju
                 _lastTriggerTime = t_now;
                 // TODO: Launch animation
                 p_self.mecha.context.animationProxy.animator.SetTrigger("laserAttack");
+
+                yield return new WaitUntil(() => _isAnimationStarted);
+                _isAnimationStarted = false;
+
 
                 p_self.mecha.ConsumeStamina(_consumption);
 
@@ -112,6 +123,11 @@ namespace Mekaiju
                 }
                 GameObject.Destroy(t_go);
             }
+        }
+
+        private void _OnAnimationStarted()
+        {
+            _isAnimationStarted = true;
         }
     }
 
