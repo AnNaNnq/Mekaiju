@@ -627,6 +627,11 @@ MonoBehaviour:
   doomsdayRayStart: {fileID: 594123353144874}
   doomsdayRaySpeed: 5
   doomsdayRayDuration: 5
+  darkeningStormRange: 30
+  darkeningStormBody: 0
+  darkeningStormCooldown: 10
+  gameObjectDarkeningStorm: {fileID: 4004846009892072983, guid: 4f5ae8cf3fc8ab943804c64ca2dc9d0e, type: 3}
+  darkeningStormDuration: 5
   debugSharpBlow: 0
   colorForSharpBlowRange: {r: 1, g: 0, b: 0, a: 1}
   debugAbyssalVortex: 0
@@ -635,8 +640,10 @@ MonoBehaviour:
   colorForRimVoidRange: {r: 0, g: 0, b: 0, a: 1}
   debugSnakeStrike: 0
   colorForSnakeStrikeRange: {r: 0.96760225, g: 0, b: 1, a: 1}
-  debugDoomsdayRay: 1
+  debugDoomsdayRay: 0
   colorForDoomsdayRayeRange: {r: 0, g: 0, b: 0, a: 1}
+  debugDarkeningDuration: 1
+  colorForDarkeningDurationRange: {r: 0, g: 0, b: 0, a: 1}
   timeForSharpBlow: 0.2
   timeForSnakeStrike: 0.1
 --- !u!195 &3542776749811644157
