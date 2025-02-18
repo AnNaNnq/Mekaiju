@@ -4,7 +4,7 @@ public class KaijuAttackNode : Node
 {
     public string GUID;
 
-    public string Description;
+    public string Name;
 
     public bool EntryPoint = false;
 

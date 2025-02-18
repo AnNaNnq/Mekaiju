@@ -3,10 +3,11 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class KaijuAttackGraphView : GraphView
 {
-    private readonly Vector2 defaultNodeSize = new Vector2(150, 200);
+    public readonly Vector2 defaultNodeSize = new Vector2(150, 200);
 
     public KaijuAttackGraphView()
     {
@@ -36,13 +37,16 @@ public class KaijuAttackGraphView : GraphView
         {
             title = "Start",
             GUID = Guid.NewGuid().ToString(),
-            Description = "Start Node",
+            Name = "Start Node",
             EntryPoint = true
         };
 
         var t_generatedPort = GeneratePort(t_node, Direction.Output);
         t_generatedPort.portName = "Next";
         t_node.outputContainer.Add(t_generatedPort);
+
+        t_node.capabilities &= ~Capabilities.Movable;
+        t_node.capabilities &= ~Capabilities.Deletable;
 
         t_node.RefreshExpandedState();
         t_node.RefreshPorts();
@@ -62,18 +66,31 @@ public class KaijuAttackGraphView : GraphView
         var t_node = new KaijuAttackNode
         {
             title = p_nodeName,
-            Description = p_nodeName,
+            Name = p_nodeName,
             GUID = Guid.NewGuid().ToString()
         };
 
         var t_inputPort = GeneratePort(t_node, Direction.Input, Port.Capacity.Multi);
         t_inputPort.portName = "Input";
+        t_node.inputContainer.Add(t_inputPort);
 
-        var t_button = new Button(() => { AddChoicePort(t_node); });
+        t_node.styleSheets.Add(Resources.Load<StyleSheet>("Styles/Node"));
+        t_node.AddToClassList("DialogueNode");
+
+        var t_button = new Button(() => { AddLinkPort(t_node); });
         t_button.text = "New Attack";
         t_node.titleContainer.Add(t_button);
 
-        t_node.inputContainer.Add(t_inputPort);
+        var textField = new TextField(string.Empty);
+        textField.RegisterValueChangedCallback(evt => 
+        { 
+            t_node.Name = evt.newValue;
+            t_node.title = evt.newValue;
+        });
+        textField.SetValueWithoutNotify(t_node.title);
+        t_node.mainContainer.Add(textField);
+
+        
         t_node.RefreshExpandedState();
         t_node.RefreshPorts();
         t_node.SetPosition(new Rect(Vector2.zero, defaultNodeSize));
@@ -81,16 +98,52 @@ public class KaijuAttackGraphView : GraphView
         return t_node;
     }
 
-    private void AddChoicePort(KaijuAttackNode p_node)
+    public void AddLinkPort(KaijuAttackNode p_node, string p_portName = "")
     {
         var t_generatedPort = GeneratePort(p_node, Direction.Output);
 
+        var t_oldLabel = t_generatedPort.contentContainer.Q<Label>("type");
+        t_generatedPort.contentContainer.Remove(t_oldLabel);
+
         var t_outputPortCount = p_node.outputContainer.Query("connector").ToList().Count;
-        t_generatedPort.portName = $"Option {t_outputPortCount}";
+
+        var t_portName = string.IsNullOrEmpty(p_portName) ? $"Attack {t_outputPortCount + 1}" : p_portName;
+
+        var textField = new TextField()
+        {
+            name = string.Empty,
+            value = t_portName
+        };
+        textField.RegisterValueChangedCallback(evt => t_generatedPort.portName = evt.newValue);
+        t_generatedPort.contentContainer.Add(new Label(" "));
+        t_generatedPort.contentContainer.Add(textField);
+        var t_deleteButton = new Button(() => RemovePort(p_node, t_generatedPort)) 
+        { 
+            text = "x"
+        };
+        t_generatedPort.contentContainer.Add(t_deleteButton);
+
+        t_generatedPort.portName = t_portName;
 
         p_node.outputContainer.Add(t_generatedPort);
         p_node.RefreshPorts();
         p_node.RefreshExpandedState();
+    }
+
+    private void RemovePort(Node node, Port socket)
+    {
+        var targetEdge = edges.ToList()
+            .Where(x => x.output.portName == socket.portName && x.output.node == socket.node);
+        if (targetEdge.Any())
+        {
+            var edge = targetEdge.First();
+            edge.input.Disconnect(edge);
+            RemoveElement(targetEdge.First());
+        }
+
+        node.outputContainer.Remove(socket);
+        node.RefreshPorts();
+        node.RefreshExpandedState();
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)

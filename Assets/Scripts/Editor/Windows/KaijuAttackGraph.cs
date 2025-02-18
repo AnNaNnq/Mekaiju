@@ -1,8 +1,7 @@
-using System;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class KaijuAttackGraph : EditorWindow
 {
@@ -20,6 +19,14 @@ public class KaijuAttackGraph : EditorWindow
     {
         ConstructGraphView();
         GenerateToolBar();
+        GenerateMiniMap();
+    }
+
+    private void GenerateMiniMap()
+    {
+        var miniMap = new MiniMap();
+        miniMap.SetPosition(new Rect(10, 30, 200, 140));
+        _graphView.Add(miniMap);
     }
 
     private void ConstructGraphView()
@@ -43,10 +50,10 @@ public class KaijuAttackGraph : EditorWindow
         t_fileNameTextField.RegisterValueChangedCallback(evt => _fileName = evt.newValue);
         t_toolbar.Add(t_fileNameTextField);
 
-        var t_nodeSaveButton = new Button(() => { SaveData(); });
+        var t_nodeSaveButton = new Button(() => { RequestDataOperation(true); });
         t_nodeSaveButton.text = "Save";
 
-        var t_nodeLoadButton = new Button(() => { LoadData(); });
+        var t_nodeLoadButton = new Button(() => { RequestDataOperation(false); });
         t_nodeLoadButton.text = "Load";
 
         var t_nodeCreateButton = new Button(() => { _graphView.CreateNode("Attaque Node"); });
@@ -58,14 +65,23 @@ public class KaijuAttackGraph : EditorWindow
         rootVisualElement.Add(t_toolbar);
     }
 
-    private void LoadData()
+    private void RequestDataOperation(bool p_save)
     {
-        throw new NotImplementedException();
-    }
+        if (string.IsNullOrEmpty(_fileName))
+        {
+            EditorUtility.DisplayDialog("Invalid file name!", "Please enter valid file name", "ok");
+            return;
+        }
 
-    private void SaveData()
-    {
-        throw new NotImplementedException();
+        var t_saveUtility = GraphSaveUtility.GetInstance(_graphView);
+        if (p_save)
+        {
+            t_saveUtility.SaveGraph(_fileName);
+        }
+        else
+        {
+            t_saveUtility.LoadGraph(_fileName);
+        }
     }
 
     private void OnDisable()
