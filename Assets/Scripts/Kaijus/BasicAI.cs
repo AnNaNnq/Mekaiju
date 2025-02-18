@@ -18,6 +18,9 @@ namespace Mekaiju.AI
         public BodyPart[] bodyParts;
         [ReadOnly]
         public int nbPhase;
+        [SOSelector]
+        public KaijuAttackContainer attackGraph;
+        
 
         [Foldout("Agro")]
         [PositiveValueOnly] public float agroTriggerArea = 10f;
