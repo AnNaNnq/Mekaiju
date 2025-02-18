@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mekaiju.Utils;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -49,7 +50,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private List<StatefullEffect> _effects;
+        public List<StatefullEffect> effects { get; private set; }
 
         /// <summary>
         /// 
@@ -127,8 +128,8 @@ namespace Mekaiju
 
         private void Update()
         {            
-            _effects.ForEach  (effect => effect.Tick());
-            _effects.RemoveAll(effect => 
+            effects.ForEach  (effect => effect.Tick());
+            effects.RemoveAll(effect => 
             {
                 if (effect.state == EffectState.Expired)
                 {
@@ -141,7 +142,7 @@ namespace Mekaiju
 
         private void FixedUpdate()
         {
-            _effects.ForEach(effect => effect.FixedTick());
+            effects.ForEach(effect => effect.FixedTick());
         }
 
         /// <summary>
@@ -185,8 +186,8 @@ namespace Mekaiju
         /// <param name="p_effect">The effect to be added.</param>
         public IDisposable AddEffect(Effect p_effect)
         {
-            _effects.Add(new(this, p_effect));
-            return _effects[^1];
+            effects.Add(new(this, p_effect));
+            return effects[^1];
         }
 
         /// <summary>
@@ -196,8 +197,8 @@ namespace Mekaiju
         /// <param name="p_time">The duration of the effect in seconds.</param>
         public IDisposable AddEffect(Effect p_effect, float p_time)
         {
-            _effects.Add(new(this, p_effect, p_time));
-            return _effects[^1];
+            effects.Add(new(this, p_effect, p_time));
+            return effects[^1];
         }
 
         /// <summary>
@@ -208,7 +209,7 @@ namespace Mekaiju
         {
             if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
             {
-                _effects.Remove((StatefullEffect)p_effect);
+                effects.Remove((StatefullEffect)p_effect);
                 p_effect.Dispose();
             }
         }
