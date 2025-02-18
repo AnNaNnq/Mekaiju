@@ -15,36 +15,49 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public MechaInstance Mecha { get; private set; }
+        public MechaInstance mecha { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        private MechaPartDesc _desc;
+        private MechaPartConfig _config;
 
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
-        public int Health { get; private set; }
+        [field: SerializeField]
+        public float health { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="p_inst"></param>
         /// <param name="p_config"></param>
-        public void Initialize(MechaInstance p_inst, MechaPartDesc p_config)
+        public void Initialize(MechaInstance p_inst, MechaPartConfig p_config)
         {
-            Mecha   = p_inst;
+            mecha   = p_inst;
 
-            _desc  = p_config;
-            Health = p_config.Health;
+            _config = p_config;
+            health = p_config.desc.health;
 
-            _desc.DefaultAbility.Behaviour?.Initialize();
-            if (_desc.HasSpecial)
-            {
-                _desc.SpecialAbility.Behaviour?.Initialize();
-            }
+            _config.ability.behaviour?.Initialize(this);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p_damage"></param>
+        public void TakeDamage(float p_damage)
+        {
+            var t_damage = mecha.context.modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
+            
+            mecha.context.lastDamageTime = Time.time;
+            health = Mathf.Max(0f, health - t_damage);
+        }
+
+        public void Heal(float p_heal)
+        {
+            health = Mathf.Min(_config.desc.health, health + p_heal);
         }
 
         /// <summary>
@@ -53,31 +66,31 @@ namespace Mekaiju
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
-        public IEnumerator TriggerDefaultAbility(BasicAI p_target, object p_opt)
+        public IEnumerator TriggerAbility(BodyPartObject p_target, object p_opt)
         {
-            if (Mecha.CanExecuteAbility(_desc.DefaultAbility.Behaviour.Consumption(p_opt)))
+            if (_config.ability.behaviour.IsAvailable(this, p_opt))
             {
-                Mecha.Context.LastAbilityTime = Time.time;
-                yield return _desc.DefaultAbility.Behaviour.Trigger(this, p_target, p_opt);
+                mecha.context.lastAbilityTime = Time.time;
+                yield return _config.ability.behaviour.Trigger(this, p_target, p_opt);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="p_target"></param>
-        /// <param name="p_opt"></param>
-        /// <returns></returns>
-        public IEnumerator TriggerSpecialAbility(BasicAI p_target, object p_opt)
-        {   
-            if (_desc.HasSpecial)
-            {
-                if (Mecha.CanExecuteAbility(_desc.SpecialAbility.Behaviour.Consumption(p_opt)))
-                {
-                    Mecha.Context.LastAbilityTime = Time.time;
-                    yield return _desc.SpecialAbility.Behaviour.Trigger(this, p_target, p_opt);    
-                }
-            }
+        public void ReleaseAbility()
+        {
+            _config.ability.behaviour.Release();
+        }
+
+        private void Update()
+        {
+            _config.ability.behaviour?.Tick(this);
+        }
+
+        private void FixedUpdate()
+        {
+            _config.ability.behaviour?.FixedTick(this);
         }
 
     }

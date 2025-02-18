@@ -42,9 +42,9 @@ namespace MyBox.Internal
 		private static void AssertComponentsInScene()
 		{
 			#if UNITY_2020_1_OR_NEWER
-			var behaviours = Object.FindObjectsOfType<MonoBehaviour>(true);
+			var behaviours = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
 			#else
-			var behaviours = Object.FindObjectsOfType<MonoBehaviour>();
+			var behaviours = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
 			#endif
 			// ReSharper disable once CoVariantArrayConversion
 			AssertComponents(behaviours);

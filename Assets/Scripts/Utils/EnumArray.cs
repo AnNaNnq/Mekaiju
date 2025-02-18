@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Mekaiju.Utils
@@ -16,7 +17,21 @@ namespace Mekaiju.Utils
     public class EnumArray<TKey, TValue> : EnumArray, IEnumerable<TValue> where TKey : Enum
     {
         [SerializeField]
-        private TValue[] _array = new TValue[Enum.GetValues(typeof(TKey)).Length];
+        private List<TValue> _array = new(Enumerable.Repeat<TValue>(default, Enum.GetValues(typeof(TKey)).Length));
+
+
+        public EnumArray()
+        {
+            _array = new(Enumerable.Repeat<TValue>(default, Enum.GetValues(typeof(TKey)).Length));
+        }
+
+        public EnumArray(Func<TValue> p_cst)
+        {
+            for (int i = 0; i < _array.Count; i++)
+            {
+                _array[i] = p_cst();
+            }
+        }
 
         public TValue this[TKey key]
         {
@@ -55,7 +70,7 @@ namespace Mekaiju.Utils
             }
         }
 
-        public IEnumerator<TValue> GetEnumerator() => new Enumerator(_array);
+        public IEnumerator<TValue> GetEnumerator() => new Enumerator(_array.ToArray());
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
@@ -80,6 +95,14 @@ namespace Mekaiju.Utils
                 t_ret[t_key] = selector(t_key, v);
             }
             return t_ret;
+        }
+
+        public static void ForEach<K, V>(this EnumArray<K, V> self, Action<K, V> func) where K: Enum
+        {
+            foreach (var (i, v) in self.Select<V, (int, V)>((v, i) => (i, v)))
+            {
+                func((K)Enum.ToObject(typeof(K), i), v);
+            }
         }
     }
 
