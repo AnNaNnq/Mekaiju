@@ -10,8 +10,8 @@ public class KaijuAttackGraphView : GraphView
 
     public KaijuAttackGraphView()
     {
-        //styleSheets.Add(Resources.Load<StyleSheet>("KaijuAttackGraph"));
         SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
+        styleSheets.Add(Resources.Load<StyleSheet>("Styles/KaijuAttackGraph"));
 
         this.AddManipulator(new ContentDragger());
         this.AddManipulator(new SelectionDragger());
@@ -20,6 +20,7 @@ public class KaijuAttackGraphView : GraphView
         var p_grid = new GridBackground();
         Insert(0, p_grid);
         p_grid.StretchToParentSize();
+        p_grid.AddToClassList("grid-background");
 
         AddElement(GenerateEntryPointNode());
     }
