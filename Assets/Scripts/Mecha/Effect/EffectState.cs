@@ -115,6 +115,9 @@ namespace Mekaiju
         }
     }
 
+    /// <summary>
+    /// Class extension for effects
+    /// </summary>
     public static class EffectListExtension
     {
         public static string ToString<T>(this System.Collections.Generic.List<T> p_effects, string[] p_exclude) where T : StatefullEffect
