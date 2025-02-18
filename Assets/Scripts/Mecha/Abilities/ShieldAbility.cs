@@ -80,7 +80,7 @@ namespace Mekaiju
                 _isActive = true;
                 _vfxDefault.enabled = true;
 
-                p_self.mecha.context.animator.SetBool("IsShielding", true);
+                p_self.mecha.context.animationProxy.animator.SetBool("IsShielding", true);
                 
                 // TODO: rework if other modifier
                 var t_sMod = p_self.mecha.context.modifiers[ModifierTarget.Speed]  .Add(_speedModifier);
@@ -97,7 +97,7 @@ namespace Mekaiju
 
                 _vfxDefault.enabled = false;
 
-                p_self.mecha.context.animator.SetBool("IsShielding", false);
+                p_self.mecha.context.animationProxy.animator.SetBool("IsShielding", false);
                 // TODO: rework if other modifier
                 p_self.mecha.context.modifiers[ModifierTarget.Speed]  .Remove(t_sMod);
                 p_self.mecha.context.modifiers[ModifierTarget.Defense].Remove(t_dMod);
