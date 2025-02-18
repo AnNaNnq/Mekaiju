@@ -25,7 +25,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private Effect _effect;
+        public Effect effect { get; private set; }
         
         /// <summary>
         /// 
@@ -52,11 +52,11 @@ namespace Mekaiju
             state = EffectState.Inactive;
 
             _target  = p_target; 
-            _effect  = p_effect;
+            effect  = p_effect;
             _time    = p_time;
             _elapsed = 0f;
 
-            _effect.behaviour?.OnAdd(p_target);
+            effect.behaviour?.OnAdd(p_target);
         }
 
         public StatefullEffect(MechaInstance p_target, Effect p_effect) : this(p_target, p_effect, -1)
@@ -71,13 +71,13 @@ namespace Mekaiju
                 if (_time > 0 && _elapsed > _time)
                 {
                     state = EffectState.Expired;
-                    _effect.behaviour?.OnRemove(_target);
+                    effect.behaviour?.OnRemove(_target);
                 }
                 else
                 {
                     state = EffectState.Active;
 
-                    _effect.behaviour.Tick(_target);
+                    effect.behaviour.Tick(_target);
                     _elapsed += Time.deltaTime;
                 }
             }
@@ -87,7 +87,7 @@ namespace Mekaiju
         {
             if (_time < 0 || _elapsed < _time)
             {
-                _effect.behaviour.FixedTick(_target);
+                effect.behaviour.FixedTick(_target);
             }
         }
 
@@ -106,7 +106,7 @@ namespace Mekaiju
 
             if (p_disposing)
             {
-                _effect.behaviour?.OnRemove(_target);
+                effect.behaviour?.OnRemove(_target);
             }
 
             _disposed = true;
