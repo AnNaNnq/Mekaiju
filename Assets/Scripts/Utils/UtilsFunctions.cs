@@ -1,5 +1,6 @@
 using Mekaiju.AI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +26,16 @@ namespace Mekaiju.Utils
             }
 
             return pos.y; // Retourne la hauteur actuelle si aucun hit
+        }
+
+        /// <summary>
+        /// Countdown function
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator CooldownRoutine(float cooldown, System.Action onCooldownEnd)
+        {
+            yield return new WaitForSeconds(cooldown);
+            onCooldownEnd?.Invoke();
         }
     }
 }

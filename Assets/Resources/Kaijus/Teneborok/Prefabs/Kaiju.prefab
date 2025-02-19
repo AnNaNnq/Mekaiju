@@ -510,6 +510,8 @@ GameObject:
   - component: {fileID: 3481992632544994579}
   - component: {fileID: 3542776749811644157}
   - component: {fileID: 1733689174530891390}
+  - component: {fileID: 309942910244388346}
+  - component: {fileID: 258508486715786093}
   m_Layer: 0
   m_Name: Kaiju
   m_TagString: Kaiju
@@ -544,7 +546,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3276911127515905678}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7afc732effbd5e44bb1a0e21037236aa, type: 3}
   m_Name: 
@@ -694,6 +696,53 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &309942910244388346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276911127515905678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e772473092a5da41a4744cebedb3c88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTag: Player
+  behaviors:
+  - rid: 3772134562093072529
+  - rid: 3772134562093072530
+  attacks: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 3772134562093072529
+      type: {class: NormalBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
+      data:
+        speed: 3
+        cooldown: 2
+        canTrigger: 0
+        triggerArea: 30
+        nest: {fileID: 0}
+    - rid: 3772134562093072530
+      type: {class: AwaitBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
+      data:
+        speed: 3
+        cooldown: 2
+        canTrigger: 1
+        triggerArea: 30
+--- !u!114 &258508486715786093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276911127515905678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53af2620ee7ce5a4cbb7f5fcf3c7990e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3489572259349122008
 GameObject:
   m_ObjectHideFlags: 0
