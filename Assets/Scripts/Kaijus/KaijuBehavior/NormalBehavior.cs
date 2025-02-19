@@ -11,7 +11,7 @@ namespace Mekaiju.AI
         public override void Run()
         {
             base.Run();
-            _motor.MoveTo(nest.position);
+            _motor.MoveTo(nest.position, speed);
         }
     }
 }

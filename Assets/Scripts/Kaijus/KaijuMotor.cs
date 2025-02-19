@@ -39,8 +39,9 @@ public class KaijuMotor : MonoBehaviour
     /// </summary>
     /// <param name="p_pos"></param>
     /// <param name="p_stopping"></param>
-    public void MoveTo(Vector3 p_pos, float p_stopping = 0.2f)
+    public void MoveTo(Vector3 p_pos, float p_speed, float p_stopping = 0.2f)
     {
+        _agent.speed = p_speed;
         _agent.destination = p_pos;
         _agent.stoppingDistance = p_stopping;
     }
