@@ -709,11 +709,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  stats:
+    health: 100
+    dmg: 1000
+    def: 10
   behaviors:
   - rid: 3772134562093072529
   - rid: 3772134562093072530
   - rid: 3772134562093072587
-  attacks: []
+  attacks:
+  - rid: 3772134562093072599
   references:
     version: 2
     RefIds:
@@ -735,7 +740,7 @@ MonoBehaviour:
         canTrigger: 1
         triggerArea: 30
         triggerOnce: 0
-        showGizmo: 1
+        showGizmo: 0
         playerDistance: 20
     - rid: 3772134562093072587
       type: {class: AgroBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
@@ -745,7 +750,10 @@ MonoBehaviour:
         canTrigger: 1
         triggerArea: 50
         triggerOnce: 1
-        showGizmo: 1
+        showGizmo: 0
+    - rid: 3772134562093072599
+      type: {class: SharpBlow, ns: Mekaiju.AI, asm: Assembly-CSharp}
+      data: 
 --- !u!114 &258508486715786093
 MonoBehaviour:
   m_ObjectHideFlags: 0

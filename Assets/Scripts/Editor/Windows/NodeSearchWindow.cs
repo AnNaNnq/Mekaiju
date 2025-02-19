@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
+using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -26,17 +28,24 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
         var tree = new List<SearchTreeEntry>
         {
             new SearchTreeGroupEntry(new GUIContent("Add Attack"), 0),
-            new SearchTreeGroupEntry(new GUIContent("Attack"), 1),
-            new SearchTreeEntry(new GUIContent("Attack Node", _indentationIcon))
-            {
-                userData = "AttackNode", level = 2
-            },
-            // Bouton pour ajouter une node de départ
-            new SearchTreeEntry(new GUIContent("Start Node", _indentationIcon))
-            {
-                userData = "StartNode", level = 2
-            }
+            new SearchTreeGroupEntry(new GUIContent("Attack"), 1)
         };
+
+        // Récupérer tous les scripts implémentant IAttack
+        Type attackInterface = typeof(Mekaiju.AI.IAttack);
+        var attackTypes = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(assembly => assembly.GetTypes())
+            .Where(type => attackInterface.IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract);
+
+        foreach (var attackType in attackTypes)
+        {
+            tree.Add(new SearchTreeEntry(new GUIContent(attackType.Name, _indentationIcon))
+            {
+                userData = attackType.Name,
+                level = 2
+            });
+        }
+
         return tree;
     }
 
@@ -46,18 +55,11 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
                 context.screenMousePosition - _window.position.position);
         var localMousePosition = _graphView.contentViewContainer.WorldToLocal(worldMousePosition);
 
-        switch (searchTreeEntry.userData)
+        if (searchTreeEntry.userData.ToString() != null)
         {
-            case "AttackNode":
-                _graphView.CreateNode("Attaque Node", localMousePosition);
-                return true;
-
-            case "StartNode":
-                _graphView.CreateStartNode(localMousePosition, "Start Node");
-                return true;
-
-            default:
-                return false;
+            _graphView.CreateNode(searchTreeEntry.userData.ToString(), localMousePosition);
+            return true;
         }
+        return false;
     }
 }
