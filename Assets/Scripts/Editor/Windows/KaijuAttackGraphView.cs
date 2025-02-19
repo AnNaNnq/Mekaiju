@@ -78,15 +78,9 @@ public class KaijuAttackGraphView : GraphView
         t_generatedPort.portName = "Next";
         t_node.outputContainer.Add(t_generatedPort);
 
-        var textField = new TextField(string.Empty);
-        textField.RegisterValueChangedCallback(evt =>
-        {
-            t_node.Name = evt.newValue;
-            t_node.title = evt.newValue;
-        });
-
-        textField.SetValueWithoutNotify(t_node.title);
-        t_node.mainContainer.Add(textField);
+        var t_button2 = new Button(() => { SwitchStartNodeToNode(t_node); });
+        t_button2.text = "Node";
+        t_node.titleContainer.Add(t_button2);
 
         t_node.RefreshExpandedState();
         t_node.RefreshPorts();
@@ -121,14 +115,9 @@ public class KaijuAttackGraphView : GraphView
         t_button.text = "New Attack";
         t_node.titleContainer.Add(t_button);
 
-        var textField = new TextField(string.Empty);
-        textField.RegisterValueChangedCallback(evt =>
-        {
-            t_node.Name = evt.newValue;
-            t_node.title = evt.newValue;
-        });
-        textField.SetValueWithoutNotify(t_node.title);
-        t_node.mainContainer.Add(textField);
+        var t_button2 = new Button(() => { SwitchNodeToStartNode(t_node); });
+        t_button2.text = "Start Node";
+        t_node.titleContainer.Add(t_button2);
 
         t_node.RefreshExpandedState();
         t_node.RefreshPorts();
@@ -169,6 +158,22 @@ public class KaijuAttackGraphView : GraphView
         p_node.RefreshExpandedState();
     }
 
+    private void SwitchNodeToStartNode(KaijuAttackNode node)
+    {
+        string t_name = node.title;
+        Vector2 t_pos = node.GetPosition().position;
+        DeleteKaijuAttackNode(node);
+        CreateStartNode(t_pos, t_name);
+    }
+
+    private void SwitchStartNodeToNode(KaijuAttackNode node)
+    {
+        string t_name = node.title;
+        Vector2 t_pos = node.GetPosition().position;
+        DeleteKaijuAttackNode(node);
+        CreateNode(t_name, t_pos);
+    }
+
     private void RemovePort(Node node, Port socket)
     {
         var targetEdge = edges.ToList()
@@ -183,6 +188,42 @@ public class KaijuAttackGraphView : GraphView
         node.outputContainer.Remove(socket);
         node.RefreshPorts();
         node.RefreshExpandedState();
+    }
+
+    public void DeleteKaijuAttackNode(KaijuAttackNode node)
+    {
+        if (node == null)
+            return;
+
+        // Supprime toutes les connexions aux autres nodes
+        foreach (var port in node.inputContainer.Children())
+        {
+            if (port is Port inputPort)
+            {
+                foreach (var edge in inputPort.connections.ToList())
+                {
+                    edge.input.Disconnect(edge);
+                    edge.output.Disconnect(edge);
+                    edge.RemoveFromHierarchy();
+                }
+            }
+        }
+
+        foreach (var port in node.outputContainer.Children())
+        {
+            if (port is Port outputPort)
+            {
+                foreach (var edge in outputPort.connections.ToList())
+                {
+                    edge.input.Disconnect(edge);
+                    edge.output.Disconnect(edge);
+                    edge.RemoveFromHierarchy();
+                }
+            }
+        }
+
+        // Supprime le nœud de la vue
+        node.RemoveFromHierarchy();
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
