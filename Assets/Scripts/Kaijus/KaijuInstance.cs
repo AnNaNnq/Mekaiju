@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using MyBox;
 using System.Linq;
-using UnityEngine.AI;
 
 namespace Mekaiju.AI
 {
@@ -11,6 +10,7 @@ namespace Mekaiju.AI
     {
         [Header("General")]
         [Tag] public string targetTag;
+        public KaijuStats stats;
 
         [Separator]
         [field: SerializeReference, SubclassPicker]
@@ -62,6 +62,11 @@ namespace Mekaiju.AI
                     behavior.Active();
                 }
             }
+        }
+
+        public void Combat()
+        {
+
         }
 
         private void OnDrawGizmos()
