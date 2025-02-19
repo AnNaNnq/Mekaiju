@@ -58,8 +58,12 @@ public class GraphSaveUtility
         var entryPointNodes = Nodes.Where(node => node.EntryPoint).ToList();
         foreach (var entryPointNode in entryPointNodes)
         {
-            t_kaijuAttackContainer.EntryPointNodeGUIDs.Add(entryPointNode.GUID);
-            t_kaijuAttackContainer.EntryPointNodePositions.Add(entryPointNode.GetPosition().position);
+            t_kaijuAttackContainer.StartNodeData.Add(new KaijuAttackNodeData()
+            {
+                GUID = entryPointNode.GUID,
+                Name = entryPointNode.Name,
+                Position = entryPointNode.GetPosition().position
+            });
         }
 
         AssetDatabase.CreateAsset(t_kaijuAttackContainer, $"Assets/Resources/Kaijus/AttackGraph/{p_fileName}.asset");
@@ -80,7 +84,7 @@ public class GraphSaveUtility
 
         ClearGraph();
 
-        var savedEntryCount = _containerCache.EntryPointNodeGUIDs.Count;
+        var savedEntryCount = _containerCache.StartNodeData.Count;
         var entryPointNodes = Nodes.Where(node => node.EntryPoint).ToList();
         int currentEntryCount = entryPointNodes.Count;
 
@@ -105,18 +109,33 @@ public class GraphSaveUtility
             int missingNodes = savedEntryCount - currentEntryCount;
             for (int i = 0; i < missingNodes; i++)
             {
-                var newEntryNode = _targetGraphView.CreateStartNode();
+                var newEntryNode = _targetGraphView.CreateStartNode(_containerCache.StartNodeData[i].Name);
                 _targetGraphView.AddElement(newEntryNode);
                 entryPointNodes.Add(newEntryNode);
             }
         }
 
-        // Mettre à jour les GUID et les positions des nodes de départ
+        // Mettre à jour les GUID, les positions et le nom des nodes de départ
         for (int i = 0; i < savedEntryCount; i++)
         {
-            entryPointNodes[i].GUID = _containerCache.EntryPointNodeGUIDs[i];
-            entryPointNodes[i].SetPosition(new Rect(_containerCache.EntryPointNodePositions[i], _targetGraphView.defaultNodeSize));
+            entryPointNodes[i].GUID = _containerCache.StartNodeData[i].GUID;
+            entryPointNodes[i].SetPosition(new Rect(
+                _containerCache.StartNodeData[i].Position,
+                _targetGraphView.defaultNodeSize
+            ));
+
+            // Mise à jour du nom affiché
+            entryPointNodes[i].Name = _containerCache.StartNodeData[i].Name;
+            entryPointNodes[i].title = _containerCache.StartNodeData[i].Name;
+
+            // Trouver le champ texte existant et mettre à jour sa valeur
+            var textField = entryPointNodes[i].mainContainer.Q<TextField>();
+            if (textField != null)
+            {
+                textField.SetValueWithoutNotify(_containerCache.StartNodeData[i].Name);
+            }
         }
+
 
         CreateNode();
         ConnectNode();

@@ -578,6 +578,7 @@ MonoBehaviour:
     health: 100
     isDestroyed: 0
   nbPhase: 0
+  attackGraph: {fileID: 11400000, guid: 23dd764b241947c419af616eae8f5f65, type: 2}
   agroTriggerArea: 51.91
   agroSpeed: 3.5
   attackCountdown: 1
@@ -589,6 +590,7 @@ MonoBehaviour:
   nest: {fileID: 0}
   normalSpeed: 3
   timeBeforeNormal: 2
+  _currentPhase: 1
   showGizmo: 0
   textDPS: {fileID: 0}
   lastAttack: 0
@@ -646,8 +648,8 @@ MonoBehaviour:
   debugDarkeningDuration: 1
   colorForDarkeningDurationRange: {r: 0, g: 0, b: 0, a: 1}
   timeForSharpBlow: 0.2
-  timeForSnakeStrike: 0.1
   timeForSecondAttackSharpblow: 0.2
+  timeForSnakeStrike: 0.1
 --- !u!195 &3542776749811644157
 NavMeshAgent:
   m_ObjectHideFlags: 0
