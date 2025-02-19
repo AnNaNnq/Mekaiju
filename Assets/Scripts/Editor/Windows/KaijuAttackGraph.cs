@@ -63,24 +63,15 @@ public class KaijuAttackGraph : EditorWindow
         t_fileNameTextField.RegisterValueChangedCallback(evt => _fileName = evt.newValue);
         t_toolbar.Add(t_fileNameTextField);
 
-        var t_nodeStartButton = new Button(() => { CreateStartNode(); });
-        t_nodeStartButton.text = "Add Start";
-
         var t_nodeSaveButton = new Button(() => { RequestDataOperation(true); });
         t_nodeSaveButton.text = "Save";
 
         var t_nodeLoadButton = new Button(() => { RequestDataOperation(false); });
         t_nodeLoadButton.text = "Load";
 
-        t_toolbar.Add(t_nodeStartButton);
         t_toolbar.Add(t_nodeSaveButton);
         t_toolbar.Add(t_nodeLoadButton);
         rootVisualElement.Add(t_toolbar);
-    }
-
-    private void CreateStartNode()
-    {
-        _graphView.CreateStartNode(Vector2.zero);
     }
 
     private void RequestDataOperation(bool p_save)
