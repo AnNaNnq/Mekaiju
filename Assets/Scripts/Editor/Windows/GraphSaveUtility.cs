@@ -109,7 +109,7 @@ public class GraphSaveUtility
             int missingNodes = savedEntryCount - currentEntryCount;
             for (int i = 0; i < missingNodes; i++)
             {
-                var newEntryNode = _targetGraphView.CreateStartNode(_containerCache.StartNodeData[i].Name);
+                var newEntryNode = _targetGraphView.CreateStartNode(_containerCache.StartNodeData[i].Position, _containerCache.StartNodeData[i].Name);
                 _targetGraphView.AddElement(newEntryNode);
                 entryPointNodes.Add(newEntryNode);
             }

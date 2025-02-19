@@ -26,15 +26,15 @@ public class KaijuAttackGraphView : GraphView
         p_grid.StretchToParentSize();
         p_grid.AddToClassList("grid-background");
 
-        CreateStartNode();
+        CreateStartNode(Vector2.zero);
 
         AddSearchWindow(editorWindow);
     }
 
 
-    public KaijuAttackNode CreateStartNode(string p_name = "Start")
+    public KaijuAttackNode CreateStartNode(Vector2 p_pos, string p_name = "Start")
     {
-        var startNode = GenerateEntryPointNode(p_name);
+        var startNode = GenerateEntryPointNode(p_pos, p_name);
         AddElement(startNode); // Ajoute le nœud à la vue
         return startNode;
     }
@@ -64,7 +64,7 @@ public class KaijuAttackGraphView : GraphView
         return node.InstantiatePort(Orientation.Horizontal, portDirection, capacity, typeof(float));
     }
 
-    private KaijuAttackNode GenerateEntryPointNode(string p_name)
+    private KaijuAttackNode GenerateEntryPointNode(Vector2 p_pos, string p_name)
     {
         var t_node = new KaijuAttackNode
         {
@@ -84,13 +84,14 @@ public class KaijuAttackGraphView : GraphView
             t_node.Name = evt.newValue;
             t_node.title = evt.newValue;
         });
+
         textField.SetValueWithoutNotify(t_node.title);
         t_node.mainContainer.Add(textField);
 
         t_node.RefreshExpandedState();
         t_node.RefreshPorts();
 
-        t_node.SetPosition(new Rect(100, 200, 100, 150));
+        t_node.SetPosition(new Rect(p_pos, new Vector2(100, 150)));
 
         return t_node;
     }
