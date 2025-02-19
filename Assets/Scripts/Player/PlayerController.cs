@@ -65,8 +65,6 @@ public class PlayerController : MonoBehaviour
 
         _cameraPivot = transform.Find("CameraPivot");
 
-        
-
         GameObject t_go;
         t_go = GameObject.FindWithTag("Kaiju");
         if (t_go)
@@ -121,9 +119,6 @@ public class PlayerController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
         Cursor.visible = false; // Make the cursor invisible during gameplay
-
-        //var t_sensibility = Mathf.Lerp(_minSensitivity, _maxSensitivity, _mouseSensitivity / 100f);
-        //_lookAction.ApplyBindingOverride(new InputBinding{ overrideProcessors = "scaleVector2(x="+ t_sensibility + ", y=" + t_sensibility + ")" });
     }
 
     private void OnEnable()
