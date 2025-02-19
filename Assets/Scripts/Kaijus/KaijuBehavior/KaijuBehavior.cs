@@ -1,6 +1,7 @@
 using MyBox;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 namespace Mekaiju.AI
 {
@@ -11,6 +12,8 @@ namespace Mekaiju.AI
         public float cooldown = 2;
         public bool canTrigger = false;
         [ConditionalField(nameof(canTrigger))] public float triggerArea = 30f;
+        [ConditionalField(nameof(canTrigger))] public bool triggerOnce = false;
+        [ConditionalField(nameof(canTrigger))] public bool showGizmo = false;
 
         protected GameObject _target;
         protected GameObject _kaiju;
@@ -19,7 +22,6 @@ namespace Mekaiju.AI
         protected KaijuMotor _motor;
 
         public bool active { get { return _active; } }
-        [SerializeField]
         private bool _active;
 
         public void Init(GameObject p_target, GameObject p_kaiju)
@@ -32,8 +34,9 @@ namespace Mekaiju.AI
             _motor = _kaiju.GetComponent<KaijuMotor>();
         }
 
-        protected void IsTrigger()
+        public void IsTrigger()
         {
+            if(!_kaijuInstance.canSwitch()) return;
             if(!canTrigger) _active = false;
 
             _active = GetDistance() <= triggerArea;
@@ -51,6 +54,14 @@ namespace Mekaiju.AI
         protected float GetDistance()
         {
             return Vector3.Distance(_target.transform.position, _kaiju.transform.position);
+        }
+
+        public void DrawGizmo()
+        {
+            if (showGizmo)
+            {
+                
+            }
         }
     }
 }

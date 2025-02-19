@@ -723,6 +723,8 @@ MonoBehaviour:
         cooldown: 2
         canTrigger: 0
         triggerArea: 30
+        triggerOnce: 0
+        showGizmo: 0
         nest: {fileID: 0}
     - rid: 3772134562093072530
       type: {class: AwaitBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
@@ -731,6 +733,9 @@ MonoBehaviour:
         cooldown: 2
         canTrigger: 1
         triggerArea: 30
+        triggerOnce: 0
+        showGizmo: 1
+        playerDistance: 20
 --- !u!114 &258508486715786093
 MonoBehaviour:
   m_ObjectHideFlags: 0

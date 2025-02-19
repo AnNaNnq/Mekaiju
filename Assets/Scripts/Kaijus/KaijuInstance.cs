@@ -43,8 +43,14 @@ namespace Mekaiju.AI
         {
             foreach(var behavior in behaviors)
             {
+                behavior.IsTrigger();
                 if (behavior.active) behavior.Run();
             }
+        }
+
+        public bool canSwitch()
+        {
+            return behaviors.All(b => !b.active || !b.triggerOnce);
         }
 
         public void CheckAllBehaviorsDisabeled()
@@ -55,6 +61,15 @@ namespace Mekaiju.AI
                 {
                     behavior.Active();
                 }
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            foreach (var behavior in behaviors.Where(b => b.showGizmo))
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(transform.position, behavior.triggerArea);
             }
         }
     }
