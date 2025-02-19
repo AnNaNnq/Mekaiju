@@ -12,10 +12,11 @@ namespace Mekaiju.AI
         public bool canTrigger = false;
         [ConditionalField(nameof(canTrigger))] public float triggerArea = 30f;
 
-        private GameObject _target;
-        private GameObject _kaiju;
+        protected GameObject _target;
+        protected GameObject _kaiju;
 
-        private KaijuInstance _kaijuInstance;
+        protected KaijuInstance _kaijuInstance;
+        protected KaijuMotor _motor;
 
         public bool active { get { return _active; } }
         [SerializeField]
@@ -28,6 +29,7 @@ namespace Mekaiju.AI
             _kaiju = p_kaiju;
 
             _kaijuInstance = _kaiju.GetComponent<KaijuInstance>();
+            _motor = _kaiju.GetComponent<KaijuMotor>();
         }
 
         protected void IsTrigger()
