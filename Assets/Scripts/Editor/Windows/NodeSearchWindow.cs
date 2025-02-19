@@ -29,23 +29,35 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
             new SearchTreeGroupEntry(new GUIContent("Attack"), 1),
             new SearchTreeEntry(new GUIContent("Attack Node", _indentationIcon))
             {
-                userData = new KaijuAttackNode(), level = 2
+                userData = "AttackNode", level = 2
+            },
+            // Bouton pour ajouter une node de départ
+            new SearchTreeEntry(new GUIContent("Start Node", _indentationIcon))
+            {
+                userData = "StartNode", level = 2
             }
         };
         return tree;
     }
 
-    public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
+    public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
     {
-        var worldMousePosition = _window.rootVisualElement.ChangeCoordinatesTo(_window.rootVisualElement.parent, 
-                context.screenMousePosition-_window.position.position);
+        var worldMousePosition = _window.rootVisualElement.ChangeCoordinatesTo(_window.rootVisualElement.parent,
+                context.screenMousePosition - _window.position.position);
         var localMousePosition = _graphView.contentViewContainer.WorldToLocal(worldMousePosition);
-        switch (SearchTreeEntry.userData)
+
+        switch (searchTreeEntry.userData)
         {
-            case KaijuAttackNode node:
+            case "AttackNode":
                 _graphView.CreateNode("Attaque Node", localMousePosition);
                 return true;
-            default: return false;
+
+            case "StartNode":
+                _graphView.CreateStartNode(localMousePosition, "Start Node");
+                return true;
+
+            default:
+                return false;
         }
     }
 }

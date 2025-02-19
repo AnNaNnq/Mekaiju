@@ -80,7 +80,7 @@ public class KaijuAttackGraph : EditorWindow
 
     private void CreateStartNode()
     {
-        _graphView.CreateStartNode();
+        _graphView.CreateStartNode(Vector2.zero);
     }
 
     private void RequestDataOperation(bool p_save)
