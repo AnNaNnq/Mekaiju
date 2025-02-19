@@ -712,6 +712,7 @@ MonoBehaviour:
   behaviors:
   - rid: 3772134562093072529
   - rid: 3772134562093072530
+  - rid: 3772134562093072587
   attacks: []
   references:
     version: 2
@@ -736,6 +737,15 @@ MonoBehaviour:
         triggerOnce: 0
         showGizmo: 1
         playerDistance: 20
+    - rid: 3772134562093072587
+      type: {class: AgroBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
+      data:
+        speed: 3
+        cooldown: 2
+        canTrigger: 1
+        triggerArea: 50
+        triggerOnce: 1
+        showGizmo: 1
 --- !u!114 &258508486715786093
 MonoBehaviour:
   m_ObjectHideFlags: 0
