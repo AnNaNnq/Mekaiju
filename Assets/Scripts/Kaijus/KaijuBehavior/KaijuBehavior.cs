@@ -51,13 +51,5 @@ namespace Mekaiju.AI
         {
             return Vector3.Distance(_target.transform.position, _kaiju.transform.position);
         }
-
-        public void DrawGizmo()
-        {
-            if (showGizmo)
-            {
-                
-            }
-        }
     }
 }

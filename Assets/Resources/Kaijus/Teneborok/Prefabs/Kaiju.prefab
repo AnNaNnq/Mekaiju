@@ -718,7 +718,10 @@ MonoBehaviour:
   - rid: 3772134562093072529
   - rid: 3772134562093072530
   - rid: 3772134562093072587
+  _canBehaviorSwitch: 1
   attackGraph: {fileID: 11400000, guid: 74ecf6242186e604eb76c0e683c0b8ac, type: 2}
+  checkRange: 1
+  debugRange: 10
   references:
     version: 2
     RefIds:
@@ -726,7 +729,6 @@ MonoBehaviour:
       type: {class: NormalBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
       data:
         speed: 3
-        cooldown: 2
         canTrigger: 0
         triggerArea: 30
         triggerOnce: 0
@@ -736,21 +738,19 @@ MonoBehaviour:
       type: {class: AwaitBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
       data:
         speed: 3
-        cooldown: 2
         canTrigger: 1
         triggerArea: 30
         triggerOnce: 0
-        showGizmo: 1
+        showGizmo: 0
         playerDistance: 20
     - rid: 3772134562093072587
       type: {class: AgroBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
       data:
         speed: 3
-        cooldown: 2
         canTrigger: 1
-        triggerArea: 5
+        triggerArea: 20
         triggerOnce: 1
-        showGizmo: 1
+        showGizmo: 0
 --- !u!114 &258508486715786093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,6 +775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09045f5883ced84b89a2eb6ea61e5a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _allAttacks: []
 --- !u!1 &3489572259349122008
 GameObject:
   m_ObjectHideFlags: 0
