@@ -11,7 +11,7 @@ namespace Mekaiju.AI
         public override void Active()
         {
             base.Active();
-            Debug.Log("Sharp Blow");
+            
         }
     }
 }

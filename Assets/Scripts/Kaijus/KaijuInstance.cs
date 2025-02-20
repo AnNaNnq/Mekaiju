@@ -34,6 +34,11 @@ namespace Mekaiju.AI
         [SOSelector]
         public KaijuAttackContainer attackGraph;
 
+        [Separator]
+        [Header("Debug")]
+        public bool checkRange;
+        [ConditionalField(nameof(checkRange))] public float debugRange;
+
         private void Start()
         {
             _motor = GetComponent<KaijuMotor>();
@@ -83,12 +88,23 @@ namespace Mekaiju.AI
             _brain.StarFight();
         }
 
+        public bool TargetInRange(float p_range)
+        {
+            return Vector3.Distance(_target.transform.position, transform.position) <= p_range;
+        }
+
         private void OnDrawGizmos()
         {
             foreach (var behavior in behaviors.Where(b => b.showGizmo))
             {
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawWireSphere(transform.position, behavior.triggerArea);
+            }
+
+            if (checkRange)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(transform.position, debugRange);
             }
         }
     }

@@ -75,9 +75,9 @@ public class GraphSaveUtility
         {
             t_kaijuAttackContainer.NodeData.Add(new KaijuAttackNodeData()
             {
-                GUID = node.GUID,
-                Name = node.Name,
-                Position = node.GetPosition().position
+                guid = node.GUID,
+                name = node.Name,
+                position = node.GetPosition().position
             });
         }
 
@@ -87,9 +87,9 @@ public class GraphSaveUtility
         {
             t_kaijuAttackContainer.StartNodeData.Add(new KaijuAttackNodeData()
             {
-                GUID = entryPointNode.GUID,
-                Name = entryPointNode.title,
-                Position = entryPointNode.GetPosition().position
+                guid = entryPointNode.GUID,
+                name = entryPointNode.title,
+                position = entryPointNode.GetPosition().position
             });
         }
 
@@ -142,7 +142,7 @@ public class GraphSaveUtility
             int missingNodes = savedEntryCount - currentEntryCount;
             for (int i = 0; i < missingNodes; i++)
             {
-                var newEntryNode = _targetGraphView.CreateStartNode(_containerCache.StartNodeData[i].Position, _containerCache.StartNodeData[i].Name);
+                var newEntryNode = _targetGraphView.CreateStartNode(_containerCache.StartNodeData[i].position, _containerCache.StartNodeData[i].name);
                 _targetGraphView.AddElement(newEntryNode);
                 entryPointNodes.Add(newEntryNode);
             }
@@ -151,21 +151,21 @@ public class GraphSaveUtility
         // Mettre à jour les GUID, les positions et le nom des nodes de départ
         for (int i = 0; i < savedEntryCount; i++)
         {
-            entryPointNodes[i].GUID = _containerCache.StartNodeData[i].GUID;
+            entryPointNodes[i].GUID = _containerCache.StartNodeData[i].guid;
             entryPointNodes[i].SetPosition(new Rect(
-                _containerCache.StartNodeData[i].Position,
+                _containerCache.StartNodeData[i].position,
                 _targetGraphView.defaultNodeSize
             ));
 
             // Mise à jour du nom affiché
-            entryPointNodes[i].Name = _containerCache.StartNodeData[i].Name;
-            entryPointNodes[i].title = _containerCache.StartNodeData[i].Name;
+            entryPointNodes[i].Name = _containerCache.StartNodeData[i].name;
+            entryPointNodes[i].title = _containerCache.StartNodeData[i].name;
 
             // Trouver le champ texte existant et mettre à jour sa valeur
             var textField = entryPointNodes[i].mainContainer.Q<TextField>();
             if (textField != null)
             {
-                textField.SetValueWithoutNotify(_containerCache.StartNodeData[i].Name);
+                textField.SetValueWithoutNotify(_containerCache.StartNodeData[i].name);
             }
 
             var t_nodePorts = _containerCache.NodeLinks
@@ -189,7 +189,7 @@ public class GraphSaveUtility
                 LinkNodes(Nodes[i].outputContainer[j].Q<Port>(), (Port)targetNode.inputContainer[0]);
 
                 targetNode.SetPosition(new Rect(
-                    _containerCache.NodeData.First(x => x.GUID == targetNodeGuid).Position,
+                    _containerCache.NodeData.First(x => x.guid == targetNodeGuid).position,
                     _targetGraphView.defaultNodeSize
                 ));
             }
@@ -213,11 +213,11 @@ public class GraphSaveUtility
     {
         foreach (var nodeData in _containerCache.NodeData)
         {
-            var t_node = _targetGraphView.CreateKaijuAttackNode(nodeData.Name, Vector2.zero);
-            t_node.GUID = nodeData.GUID;
+            var t_node = _targetGraphView.CreateKaijuAttackNode(nodeData.name, Vector2.zero);
+            t_node.GUID = nodeData.guid;
             _targetGraphView.AddElement(t_node);
 
-            var t_nodePorts = _containerCache.NodeLinks.Where(x => x.BaseNodeGUID == nodeData.GUID).ToList();
+            var t_nodePorts = _containerCache.NodeLinks.Where(x => x.BaseNodeGUID == nodeData.guid).ToList();
             t_nodePorts.ForEach(x => _targetGraphView.AddLinkPort(t_node, x.PortName));
         }
     }

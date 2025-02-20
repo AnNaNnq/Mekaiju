@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: SharpBlow
   m_EditorClassIdentifier: 
   <Name>k__BackingField: SharpBlow
-  <Description>k__BackingField: 
-  <KaijuAttack>k__BackingField:
-    rid: 3772134584505860266
+  <Attack>k__BackingField:
+    rid: 3772134584505860340
   references:
     version: 2
     RefIds:
-    - rid: 3772134584505860266
+    - rid: 3772134584505860340
       type: {class: SharpBlow, ns: Mekaiju.AI, asm: Assembly-CSharp}
-      data: 
+      data:
+        cooldown: 2
+        range: 10
+        damage: 50
