@@ -512,6 +512,7 @@ GameObject:
   - component: {fileID: 1733689174530891390}
   - component: {fileID: 309942910244388346}
   - component: {fileID: 258508486715786093}
+  - component: {fileID: 2158193899646599423}
   m_Layer: 0
   m_Name: Kaiju
   m_TagString: Kaiju
@@ -580,7 +581,7 @@ MonoBehaviour:
     health: 100
     isDestroyed: 0
   nbPhase: 0
-  attackGraph: {fileID: 11400000, guid: 23dd764b241947c419af616eae8f5f65, type: 2}
+  attackGraph: {fileID: 0}
   agroTriggerArea: 51.91
   agroSpeed: 3.5
   attackCountdown: 1
@@ -717,8 +718,7 @@ MonoBehaviour:
   - rid: 3772134562093072529
   - rid: 3772134562093072530
   - rid: 3772134562093072587
-  attacks:
-  - rid: 3772134562093072599
+  attackGraph: {fileID: 11400000, guid: 74ecf6242186e604eb76c0e683c0b8ac, type: 2}
   references:
     version: 2
     RefIds:
@@ -740,7 +740,7 @@ MonoBehaviour:
         canTrigger: 1
         triggerArea: 30
         triggerOnce: 0
-        showGizmo: 0
+        showGizmo: 1
         playerDistance: 20
     - rid: 3772134562093072587
       type: {class: AgroBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
@@ -748,12 +748,9 @@ MonoBehaviour:
         speed: 3
         cooldown: 2
         canTrigger: 1
-        triggerArea: 50
+        triggerArea: 5
         triggerOnce: 1
-        showGizmo: 0
-    - rid: 3772134562093072599
-      type: {class: SharpBlow, ns: Mekaiju.AI, asm: Assembly-CSharp}
-      data: 
+        showGizmo: 1
 --- !u!114 &258508486715786093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -764,6 +761,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53af2620ee7ce5a4cbb7f5fcf3c7990e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2158193899646599423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276911127515905678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e09045f5883ced84b89a2eb6ea61e5a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3489572259349122008

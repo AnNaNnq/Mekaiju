@@ -3,9 +3,13 @@ using UnityEngine;
 using System.Collections.Generic;
 using MyBox;
 using System.Linq;
+using Mekaiju.Attribute;
+using Mekaiju.Utils;
 
 namespace Mekaiju.AI
 {
+    [RequireComponent(typeof(KaijuBrain))]
+    [RequireComponent(typeof(KaijuMotor))]
     public class KaijuInstance : MonoBehaviour
     {
         [Header("General")]
@@ -16,14 +20,24 @@ namespace Mekaiju.AI
         [field: SerializeReference, SubclassPicker]
         public List<KaijuBehavior> behaviors = new List<KaijuBehavior>();
 
-        [Separator]
-        [field: SerializeReference, SubclassPicker]
-        public List<IAttack> attacks = new List<IAttack>();
+        [SerializeField]
+        private bool _canBehaviorSwitch = true;
 
         private GameObject _target;
 
+        [HideInInspector]
+        public KaijuMotor motor { get { return _motor; } }
+        protected KaijuMotor _motor;
+
+        private KaijuBrain _brain;
+
+        [SOSelector]
+        public KaijuAttackContainer attackGraph;
+
         private void Start()
         {
+            _motor = GetComponent<KaijuMotor>();
+            _brain = GetComponent<KaijuBrain>();
             _target = GameObject.FindGameObjectWithTag(targetTag);
             foreach (var behavior in behaviors)
             {
@@ -66,7 +80,7 @@ namespace Mekaiju.AI
 
         public void Combat()
         {
-
+            _brain.StarFight();
         }
 
         private void OnDrawGizmos()

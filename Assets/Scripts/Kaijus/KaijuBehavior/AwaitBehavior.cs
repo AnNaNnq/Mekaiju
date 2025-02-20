@@ -11,7 +11,7 @@ namespace Mekaiju.AI
         public override void Run()
         {
             base.Run();
-            _motor.MoveTo(_target.transform.position, speed, playerDistance);
+            _kaijuInstance.motor.MoveTo(_target.transform.position, speed, playerDistance);
         }
     }
 }

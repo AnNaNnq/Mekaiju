@@ -8,7 +8,6 @@ namespace Mekaiju.AI
     public abstract class KaijuBehavior
     {
         public float speed = 3;
-        public float cooldown = 2;
         public bool canTrigger = false;
         [ConditionalField(nameof(canTrigger))] public float triggerArea = 30f;
         [ConditionalField(nameof(canTrigger))] public bool triggerOnce = false;
@@ -18,7 +17,6 @@ namespace Mekaiju.AI
         protected GameObject _kaiju;
 
         protected KaijuInstance _kaijuInstance;
-        protected KaijuMotor _motor;
 
         public bool active { get { return _active; } }
         private bool _active;
@@ -30,7 +28,6 @@ namespace Mekaiju.AI
             _kaiju = p_kaiju;
 
             _kaijuInstance = _kaiju.GetComponent<KaijuInstance>();
-            _motor = _kaiju.GetComponent<KaijuMotor>();
         }
 
         public void IsTrigger()
