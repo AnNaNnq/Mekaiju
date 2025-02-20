@@ -9,7 +9,7 @@ using UnityEditor;
 public class KaijuAttackGraphView : GraphView
 {
     public readonly Vector2 defaultNodeSize = new Vector2(150, 200);
-    
+
     private NodeSearchWindow _searchWindow;
 
     public KaijuAttackGraphView(EditorWindow editorWindow)
@@ -26,7 +26,7 @@ public class KaijuAttackGraphView : GraphView
         p_grid.StretchToParentSize();
         p_grid.AddToClassList("grid-background");
 
-        CreateStartNode(Vector2.zero);
+        CreateStart();
 
         AddSearchWindow(editorWindow);
     }
@@ -35,6 +35,13 @@ public class KaijuAttackGraphView : GraphView
     public KaijuAttackNode CreateStartNode(Vector2 p_pos, string p_name = "Start")
     {
         var startNode = GenerateEntryPointNode(p_pos, p_name);
+        AddElement(startNode); // Ajoute le nœud à la vue
+        return startNode;
+    }
+
+    public KaijuAttackNode CreateStart()
+    {
+        var startNode = GenerateFirstNode();
         AddElement(startNode); // Ajoute le nœud à la vue
         return startNode;
     }
@@ -75,17 +82,46 @@ public class KaijuAttackGraphView : GraphView
         };
 
         var t_generatedPort = GeneratePort(t_node, Direction.Output);
-        t_generatedPort.portName = "Next";
+        t_generatedPort.portName = "Attack 1";
         t_node.outputContainer.Add(t_generatedPort);
 
         var t_button2 = new Button(() => { SwitchStartNodeToNode(t_node); });
         t_button2.text = "Node";
         t_node.titleContainer.Add(t_button2);
 
+        var t_button = new Button(() => { AddLinkPort(t_node); });
+        t_button.text = "New Attack";
+        t_node.titleContainer.Add(t_button);
+
         t_node.RefreshExpandedState();
         t_node.RefreshPorts();
 
         t_node.SetPosition(new Rect(p_pos, new Vector2(100, 150)));
+
+        return t_node;
+    }
+
+    private KaijuAttackNode GenerateFirstNode()
+    {
+        var t_node = new KaijuAttackNode
+        {
+            title = "Start",
+            GUID = Guid.NewGuid().ToString(),
+            Name = "Start",
+            EntryPoint = true
+        };
+
+        var t_generatedPort = GeneratePort(t_node, Direction.Output);
+        t_generatedPort.portName = "Next";
+        t_node.outputContainer.Add(t_generatedPort);
+
+        t_node.capabilities &= ~Capabilities.Movable;
+        t_node.capabilities &= ~Capabilities.Deletable;
+
+        t_node.RefreshExpandedState();
+        t_node.RefreshPorts();
+
+        t_node.SetPosition(new Rect(new Vector2(0, 0), new Vector2(100, 150)));
 
         return t_node;
     }
@@ -111,13 +147,14 @@ public class KaijuAttackGraphView : GraphView
         t_node.styleSheets.Add(Resources.Load<StyleSheet>("Styles/Node"));
         t_node.AddToClassList("DialogueNode");
 
+        var t_button2 = new Button(() => { SwitchNodeToStartNode(t_node); });
+        t_button2.text = "Start Node";
+        t_node.titleContainer.Add(t_button2);
+
         var t_button = new Button(() => { AddLinkPort(t_node); });
         t_button.text = "New Attack";
         t_node.titleContainer.Add(t_button);
 
-        var t_button2 = new Button(() => { SwitchNodeToStartNode(t_node); });
-        t_button2.text = "Start Node";
-        t_node.titleContainer.Add(t_button2);
 
         t_node.RefreshExpandedState();
         t_node.RefreshPorts();
@@ -142,7 +179,7 @@ public class KaijuAttackGraphView : GraphView
             name = string.Empty,
             value = t_portName
         };
-        textField.RegisterValueChangedCallback(evt => t_generatedPort.portName = evt.newValue);
+        textField.SetEnabled(false);
         t_generatedPort.contentContainer.Add(new Label(" "));
         t_generatedPort.contentContainer.Add(textField);
         var t_deleteButton = new Button(() => RemovePort(p_node, t_generatedPort)) 
@@ -174,7 +211,7 @@ public class KaijuAttackGraphView : GraphView
         CreateNode(t_name, t_pos);
     }
 
-    private void RemovePort(Node node, Port socket)
+    public void RemovePort(Node node, Port socket)
     {
         var targetEdge = edges.ToList()
             .Where(x => x.output.portName == socket.portName && x.output.node == socket.node);

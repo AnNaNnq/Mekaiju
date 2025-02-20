@@ -22,6 +22,33 @@ public class GraphSaveUtility
         };
     }
 
+    public static KaijuAttackGraph GetActiveGraphView()
+    {
+        // Récupère la fenêtre active de l'éditeur
+        var window = EditorWindow.focusedWindow;
+
+        // Vérifie si la fenêtre active est de type KaijuAttackGraphView
+        if (window is KaijuAttackGraph graphView)
+        {
+            return graphView;
+        }
+
+        Debug.LogWarning("No active KaijuAttackGraphView found.");
+        return null;
+    }
+
+    public static void SaveCurrentGraph()
+    {
+        var graphView = GetActiveGraphView();
+        if (graphView != null)
+        {
+            //GetInstance(graphView.GetGraph()).SaveGraph(graphView.name);
+            Debug.Log(graphView.name);
+        }
+    }
+
+
+
     public void SaveGraph(string p_fileName)
     {
         if (!Edges.Any()) return;
@@ -61,7 +88,7 @@ public class GraphSaveUtility
             t_kaijuAttackContainer.StartNodeData.Add(new KaijuAttackNodeData()
             {
                 GUID = entryPointNode.GUID,
-                Name = entryPointNode.Name,
+                Name = entryPointNode.title,
                 Position = entryPointNode.GetPosition().position
             });
         }
@@ -83,7 +110,13 @@ public class GraphSaveUtility
         }
 
         ClearGraph();
+        AddAndDeleteStartNod();
+        CreateNode();
+        ConnectNode();
+    }
 
+    public void AddAndDeleteStartNod()
+    {
         var savedEntryCount = _containerCache.StartNodeData.Count;
         var entryPointNodes = Nodes.Where(node => node.EntryPoint).ToList();
         int currentEntryCount = entryPointNodes.Count;
@@ -134,14 +167,15 @@ public class GraphSaveUtility
             {
                 textField.SetValueWithoutNotify(_containerCache.StartNodeData[i].Name);
             }
+
+            var t_nodePorts = _containerCache.NodeLinks
+                .Where(x => x.BaseNodeGUID == entryPointNodes[i].GUID)
+                .Skip(1)
+                .ToList();
+
+            t_nodePorts.ForEach(x => _targetGraphView.AddLinkPort(entryPointNodes[i], x.PortName));
         }
-
-
-        CreateNode();
-        ConnectNode();
     }
-
-
 
     private void ConnectNode()
     {
