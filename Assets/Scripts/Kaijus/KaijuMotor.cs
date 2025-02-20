@@ -2,6 +2,8 @@ using Mekaiju.AI;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(KaijuInstance))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class KaijuMotor : MonoBehaviour
 {
     private KaijuInstance _instance;
@@ -27,7 +29,7 @@ public class KaijuMotor : MonoBehaviour
     /// </summary>
     /// <param name="p_pos"></param>
     /// <param name="p_stopping"></param>
-    public void BackOff(Vector3 p_pos, float p_stopping = 0.2f)
+    public void BackOff(Vector3 p_pos, float p_speed, float p_stopping = 0.2f)
     {
         MoveTo(p_pos, p_stopping);
         LookTarget();

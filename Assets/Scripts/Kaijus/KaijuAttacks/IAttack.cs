@@ -1,8 +1,10 @@
 using UnityEngine;
 
 namespace Mekaiju.AI {
-    public interface IAttack
+    [System.Serializable]
+    public abstract class IAttack
     {
-        
+
+        public virtual void Active() { }
     }
 }
