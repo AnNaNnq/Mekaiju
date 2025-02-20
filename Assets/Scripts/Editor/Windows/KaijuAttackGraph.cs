@@ -44,6 +44,11 @@ public class KaijuAttackGraph : EditorWindow
         _graphView.Add(miniMap);
     }
 
+    public KaijuAttackGraphView GetGraph()
+    {
+        return _graphView;
+    }
+
     private void ConstructGraphView()
     {
         _graphView = new KaijuAttackGraphView(this)

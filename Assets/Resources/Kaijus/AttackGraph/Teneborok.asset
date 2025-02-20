@@ -16,11 +16,35 @@ MonoBehaviour:
   - BaseNodeGUID: 79040e9f-8433-460e-aef6-9d15275d9da8
     PortName: Next
     TargetNodeGUID: 6ed4a6a7-4282-4830-842e-7dd2cdca3ab0
+  - BaseNodeGUID: 16f14a5d-cf67-4d23-9e8b-5509a2ca8e9d
+    PortName: Attack 1
+    TargetNodeGUID: e6050d1c-b8f4-4e59-8e93-cd24de2dc031
+  - BaseNodeGUID: 6ed4a6a7-4282-4830-842e-7dd2cdca3ab0
+    PortName: Attack 1
+    TargetNodeGUID: 741ece0a-9a5a-4f90-a2f2-4e1b9b51f0f0
+  - BaseNodeGUID: 16f14a5d-cf67-4d23-9e8b-5509a2ca8e9d
+    PortName: Attack 2
+    TargetNodeGUID: eb426893-a640-401a-a15a-6ac1cf868e74
+  - BaseNodeGUID: 6ed4a6a7-4282-4830-842e-7dd2cdca3ab0
+    PortName: Attack 2
+    TargetNodeGUID: e6050d1c-b8f4-4e59-8e93-cd24de2dc031
   NodeData:
   - GUID: 6ed4a6a7-4282-4830-842e-7dd2cdca3ab0
     Name: SharpBlow
-    Position: {x: 484, y: 73}
+    Position: {x: 175, y: 0}
+  - GUID: 741ece0a-9a5a-4f90-a2f2-4e1b9b51f0f0
+    Name: SharpBlow
+    Position: {x: 640, y: 102}
+  - GUID: eb426893-a640-401a-a15a-6ac1cf868e74
+    Name: SharpBlow
+    Position: {x: 422, y: 408}
+  - GUID: e6050d1c-b8f4-4e59-8e93-cd24de2dc031
+    Name: SharpBlow
+    Position: {x: 580, y: 259}
   StartNodeData:
   - GUID: 79040e9f-8433-460e-aef6-9d15275d9da8
+    Name: Start
+    Position: {x: 0, y: 0}
+  - GUID: 16f14a5d-cf67-4d23-9e8b-5509a2ca8e9d
     Name: SharpBlow
-    Position: {x: 195, y: 76}
+    Position: {x: -24, y: 214}
