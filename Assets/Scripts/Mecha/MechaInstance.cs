@@ -109,7 +109,8 @@ namespace Mekaiju
                     GameObject t_go;
                     MechaPartInstance t_inst;
 
-                    t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
+                    t_tr = t_main.transform;
+                    //t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
                     Debug.Assert(t_tr, $"Unable to find an anchor for {Enum.GetName(typeof(MechaPart), key)}!");
                     t_tr.gameObject.SetActive(false);
 
