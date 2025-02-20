@@ -2,6 +2,7 @@ using System.Collections;
 using Mekaiju;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DebugInfo : MonoBehaviour
 {
@@ -28,6 +29,10 @@ public class DebugInfo : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _effectField;
 
+    private float _maxHealth;
+    public Image healthBarUI;
+    public Image effectTimeLeft;
+
     public TextMeshProUGUI Sword;
     public TextMeshProUGUI Gun;
 
@@ -50,7 +55,9 @@ public class DebugInfo : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _SetStamina();   
+        _SetStamina();
+        _maxHealth = _inst.health;
+        
     }
 
     // Update is called once per frame
@@ -59,6 +66,8 @@ public class DebugInfo : MonoBehaviour
         _SetStamina();
         _SetHealth();
         _SetEffect();
+        _SetHealthBar();
+
     }
 
     private IEnumerator _SetTempValue(TextMeshProUGUI p_target, string p_text, float timout)
@@ -81,6 +90,16 @@ public class DebugInfo : MonoBehaviour
     private void _SetEffect()
     {
         _effectField.text = $"{_inst.effects.ToString(new[] {"Heal", "Stamina"} )}";
+        if (_inst.effects[^1].time > 0)
+        {
+            effectTimeLeft.fillAmount = _inst.effects[^1].remainingTime  / _inst.effects[^1].time;
+        }
+
+    }
+
+    private void _SetHealthBar()
+    {
+        healthBarUI.fillAmount = _inst.health/_maxHealth;
     }
 
     private void _SetHealth()

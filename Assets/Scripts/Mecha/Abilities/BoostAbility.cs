@@ -58,9 +58,8 @@ namespace Mekaiju
                 p_self.mecha.ConsumeStamina(_consumption);
 
                 _isAcive = true;
-                _effectRef = p_self.mecha.AddEffect(_boostEffect);
+                p_self.mecha.AddEffect(_boostEffect, _duration);
                 yield return new WaitForSeconds(_duration);
-                p_self.mecha.RemoveEffect(_effectRef);
                 _isAcive = false;
             }
         }
