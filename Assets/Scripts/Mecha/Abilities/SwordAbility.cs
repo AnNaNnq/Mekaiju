@@ -63,7 +63,7 @@ namespace Mekaiju
                 _lastTriggerTime = t_now;
 
                 // TODO: Launch animation
-                p_self.mecha.context.animator.SetTrigger("swordAttack");
+                p_self.mecha.context.animationProxy.animator.SetTrigger("swordAttack");
 
                 p_self.mecha.ConsumeStamina(_consumption);
 
