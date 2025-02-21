@@ -123,6 +123,12 @@ namespace Mekaiju
                 }
             );
 
+            context = new()
+            {
+                animator = GetComponent<Animator>(),
+                rigidbody = GetComponent<Rigidbody>(),
+            };
+
             effects = new()
             {
                 new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
@@ -130,13 +136,7 @@ namespace Mekaiju
             };
 
             stamina = config.desc.stamina;
-
-            context = new()
-            {
-                animator  = GetComponent<Animator>(),
-                rigidbody = GetComponent<Rigidbody>(),
-            };
-
+            
             onAddEffect = new();
             onRemoveEffect = new();
         }
