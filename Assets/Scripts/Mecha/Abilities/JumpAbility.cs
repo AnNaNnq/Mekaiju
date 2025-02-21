@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Mekaiju.AI;
 using UnityEngine;
@@ -10,63 +11,76 @@ namespace Mekaiju
     public class JumpAbility : IAbilityBehaviour
     {
         /// <summary>
-        /// 
+        /// The phisycs force applied
         /// </summary>
         [SerializeField]
         private float _force;
 
         /// <summary>
-        /// 
+        /// Time to wait to be able to jump again
         /// </summary>
         [SerializeField]
         private float _cooldown;
 
-        /// <summary>
-        /// 
-        /// </summary>
+        private float _endTriggerTimout    = 5f;
+        private float _actionTriggerTimout = 5f;
+
         private bool _requested;
-
-        /// <summary>
-        /// 
-        /// </summary>
+        private bool _isActive;
         private bool _inCooldown;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool _isAnimationStarted;
+        private bool _isAnimationAction;
+        private bool _isAnimationEnd;
 
         public override void Initialize(MechaPartInstance p_self)
         {
             _requested  = false;
+            _isActive   = false;
             _inCooldown = false;
-            _isAnimationStarted = false;
-            p_self.mecha.context.animationProxy.onJump.AddListener(_OnJumpAnimationStarted);
+            _isAnimationAction = false;
+            _isAnimationEnd    = false;
+            p_self.mecha.context.animationProxy.onJump.AddListener(_OnJumpAnimationEvent);
         }
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return p_self.mecha.context.isGrounded && !_requested && !_inCooldown;
+            return !_isActive && p_self.mecha.context.isGrounded && !_requested && !_inCooldown;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {  
             if (IsAvailable(p_self, p_opt))
             {
+                _isActive = true;
                 p_self.mecha.context.animationProxy.animator.SetTrigger("Jump");
-                yield return new WaitUntil(() =>_isAnimationStarted);
-                _isAnimationStarted = false;
-                _requested = true;
+
+                // Wait for animation action
+                float t_timout = _actionTriggerTimout;
+                yield return new WaitUntil(() =>_isAnimationAction || (t_timout -= Time.deltaTime) <= 0);
+
+                _isAnimationAction = false;
+                _requested         = true;
+
+                // Wait for physic jump performed
                 yield return new WaitUntil(() => !_requested && !p_self.mecha.context.isGrounded);
-                yield return new WaitUntil(() => p_self.mecha.context.isGrounded);
-                _inCooldown = true;
+
+                // Wait for jump animation end
+                t_timout = _endTriggerTimout;
+                yield return new WaitUntil(() => p_self.mecha.context.isGrounded && (_isAnimationEnd || (t_timout -= Time.deltaTime) <= 0));
+
+                _inCooldown     = true;
+                _isAnimationEnd = false;
+
+                // Wait for cooldown
                 yield return new WaitForSeconds(_cooldown);
+
                 _inCooldown = false;
+                _isActive   = false;
             }
         }
 
         public override void FixedTick(MechaPartInstance p_self)
         {
+            // Perform physic jump if requested
             if (_requested)
             {
                 p_self.mecha.context.rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
@@ -74,9 +88,19 @@ namespace Mekaiju
             }
         }
 
-        private void _OnJumpAnimationStarted()
+        private void _OnJumpAnimationEvent(AnimationEventType p_eType)
         {
-            _isAnimationStarted = true;
+            switch (p_eType)
+            {
+                case AnimationEventType.Action:
+                    _isAnimationAction = true;
+                    break;
+                case AnimationEventType.End:
+                    _isAnimationEnd = true;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
