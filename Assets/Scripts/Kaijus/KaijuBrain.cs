@@ -1,22 +1,32 @@
+using Mekaiju.Utils;
+using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 namespace Mekaiju.AI
 {
     [RequireComponent(typeof(KaijuInstance))]
+    [RequireComponent(typeof(KaijuMotor))]
     public class KaijuBrain : MonoBehaviour
     {
         KaijuInstance _instance;
 
         private KaijuAttackContainer _attackGraph;
+        private KaijuMotor _motor;
         private string _lastAttack;
+
+        [SerializeField]
+        private bool _canAttack = true;
 
         [SerializeField]
         private KaijuAttack[] _allAttacks;
 
         private void Start()
         {
+            _motor = GetComponent<KaijuMotor>();
             _instance = GetComponent<KaijuInstance>();
             _attackGraph = _instance.attackGraph;
             _allAttacks = LoadAllAttacks();
@@ -93,24 +103,43 @@ namespace Mekaiju.AI
 
         public void Attack(List<string> p_attackGUID)
         {
+            if (!_canAttack)
+            {
+                _motor.MoveTo(_instance.target.transform.position, 1.3f);
+                return;
+            }
+
             List<KaijuAttack> t_kaijuAttacks = PotentialAttacks(p_attackGUID);
+            bool t_canAttack = false;
             for (int i = 0; i < t_kaijuAttacks.Count; i++)
             {
                 if (i < t_kaijuAttacks.Count - 1)
                 {
-                    Debug.Log(t_kaijuAttacks[i].name);
+                    t_canAttack = t_kaijuAttacks[i].attack.CanUse(_instance, t_kaijuAttacks[i+1].attack.range);
                 }
                 else
                 {
-                    Debug.Log(t_kaijuAttacks[i].name);
+                    t_canAttack = t_kaijuAttacks[i].attack.CanUse(_instance);
+                }
+
+                if (t_canAttack)
+                {
+                    _motor.Stop();
+                    _motor.LookTarget();
+                    t_kaijuAttacks[i].attack.Active();
+                    MakeAction();
+                    return;
                 }
             }
 
-            //string t_name = _attackGraph.NodeData.FirstOrDefault(attack => attack.GUID == p_attackGUID)?.Name;
-
-            //KaijuAttack t_attack = GetAttack(t_name);
-            //Debug.Log(t_attack.Attack.CanUse(_instance).ToString());
+            MakeAction();
+            _motor.MoveTo(_instance.target.transform.position, 1.3f);
         }
 
+        public void MakeAction()
+        {
+            _canAttack = false;
+            StartCoroutine(UtilsFunctions.CooldownRoutine(_instance.timeBetweenTowAction, () => { _canAttack = true; }));
+        }
     }
 }

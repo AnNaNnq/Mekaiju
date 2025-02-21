@@ -19,11 +19,12 @@ namespace Mekaiju.AI
         [Separator]
         [field: SerializeReference, SubclassPicker]
         public List<KaijuBehavior> behaviors = new List<KaijuBehavior>();
+        public float timeBetweenTowAction = 1f;
 
         [SerializeField]
         private bool _canBehaviorSwitch = true;
 
-        private GameObject _target;
+        public GameObject target { get; private set; }
 
         [HideInInspector]
         public KaijuMotor motor { get { return _motor; } }
@@ -43,10 +44,10 @@ namespace Mekaiju.AI
         {
             _motor = GetComponent<KaijuMotor>();
             _brain = GetComponent<KaijuBrain>();
-            _target = GameObject.FindGameObjectWithTag(targetTag);
+            target = GameObject.FindGameObjectWithTag(targetTag);
             foreach (var behavior in behaviors)
             {
-                behavior.Init(_target, gameObject);
+                behavior.Init(target, gameObject);
             }
 
             CheckAllBehaviorsDisabeled();
@@ -90,7 +91,7 @@ namespace Mekaiju.AI
 
         public bool TargetInRange(float p_range)
         {
-            return Vector3.Distance(_target.transform.position, transform.position) <= p_range;
+            return Vector3.Distance(target.transform.position, transform.position) <= p_range;
         }
 
         private void OnDrawGizmos()

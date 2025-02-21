@@ -6,9 +6,15 @@ namespace Mekaiju.AI {
     {
         public float cooldown;
         public float range;
-        protected bool canUse { get; set; }
+        [HideInInspector]
+        public bool canUse;
 
-        public bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public IAttack()
+        {
+            canUse = true;
+        }
+
+        public virtual bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
             bool t_return = canUse && kaiju.TargetInRange(range);
             if (otherRange > 0)
