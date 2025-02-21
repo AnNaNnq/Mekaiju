@@ -34,9 +34,9 @@ public class DebugInfo : MonoBehaviour
 
     private float _maxHealth;
     public Image healthBarUI;
+
     public Image effectTimeRing;
     public Transform effectTimeList;
-    private bool _isInstantiate = false;
     private Dictionary<StatefullEffect, Image> _effectsMapping;
 
     public TextMeshProUGUI Sword;
@@ -102,7 +102,6 @@ public class DebugInfo : MonoBehaviour
     {
         var t_go  = Instantiate(effectTimeRing, effectTimeList);
         _effectsMapping.Add(p_effect, t_go);
-
     }
 
     private void _RemoveEffects(StatefullEffect p_effect)
