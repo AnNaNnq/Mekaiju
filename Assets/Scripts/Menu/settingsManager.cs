@@ -6,28 +6,28 @@ namespace Mekaiju.UI
     public class SettingsManager : MonoBehaviour
     {
         // References to the settings panels (Graphics, Audio, Controls)
-        public GameObject GraphicsPanel;
-        public GameObject AudioPanel;
-        public GameObject ControlsPanel;
+        public GameObject graphicsPanel;
+        public GameObject audioPanel;
+        public GameObject controlsPanel;
 
         // References to the buttons
-        public Button GraphicsButton;
-        public Button AudioButton;
-        public Button ControlsButton;
+        public Button graphicsButton;
+        public Button audioButton;
+        public Button controlsButton;
 
         // Colors for active/inactive buttons
-        public Color ActiveButtonColor;
-        public Color InactiveButtonColor;
+        public Color activeButtonColor;
+        public Color inactiveButtonColor;
 
         void Start()
         {
             // Add listeners to buttons
-            GraphicsButton.onClick.AddListener(() => ShowPanel("Graphics"));
-            AudioButton.onClick.AddListener(() => ShowPanel("Audio"));
-            ControlsButton.onClick.AddListener(() => ShowPanel("Controls"));
+            graphicsButton.onClick.AddListener(() => ShowPanel("Graphics"));
+            audioButton.onClick.AddListener(() => ShowPanel("Audio"));
+            controlsButton.onClick.AddListener(() => ShowPanel("Controls"));
 
             // Initially show the "Graphics" panel and set its button to active color
-            SetActiveButton(GraphicsButton);
+            _SetActiveButton(graphicsButton);
             ShowPanel("Graphics");
         }
 
@@ -35,64 +35,64 @@ namespace Mekaiju.UI
         public void ShowPanel(string p_PanelName)
         {
             // Hide all panels
-            GraphicsPanel.SetActive(false);
-            AudioPanel.SetActive(false);
-            ControlsPanel.SetActive(false);
+            graphicsPanel.SetActive(false);
+            audioPanel.SetActive(false);
+            controlsPanel.SetActive(false);
 
             // Show the selected panel based on its name
             switch (p_PanelName)
             {
                 case "Graphics":
-                    GraphicsPanel.SetActive(true);
+                    graphicsPanel.SetActive(true);
                     break;
                 case "Audio":
-                    AudioPanel.SetActive(true);
+                    audioPanel.SetActive(true);
                     break;
                 case "Controls":
-                    ControlsPanel.SetActive(true);
+                    controlsPanel.SetActive(true);
                     break;
             }
 
             // Update the appearance of the buttons (active/inactive)
-            UpdateButtonAppearance(p_PanelName);
+            _UpdateButtonAppearance(p_PanelName);
         }
 
         // Update the appearance of the buttons
-        private void UpdateButtonAppearance(string p_ActivePanel)
+        private void _UpdateButtonAppearance(string p_ActivePanel)
         {
             // Reset all buttons to inactive color
-            SetInactiveButton(GraphicsButton);
-            SetInactiveButton(AudioButton);
-            SetInactiveButton(ControlsButton);
+            _SetInactiveButton(graphicsButton);
+            _SetInactiveButton(audioButton);
+            _SetInactiveButton(controlsButton);
 
             // Set the active button based on the active panel
             if (p_ActivePanel == "Graphics")
             {
-                SetActiveButton(GraphicsButton);
+                _SetActiveButton(graphicsButton);
             }
             else if (p_ActivePanel == "Audio")
             {
-                SetActiveButton(AudioButton);
+                _SetActiveButton(audioButton);
             }
             else if (p_ActivePanel == "Controls")
             {
-                SetActiveButton(ControlsButton);
+                _SetActiveButton(controlsButton);
             }
         }
 
         // Set a button to active color
-        private void SetActiveButton(Button t_Button)
+        private void _SetActiveButton(Button t_Button)
         {
             ColorBlock buttonColors = t_Button.colors;
-            buttonColors.normalColor = ActiveButtonColor;
+            buttonColors.normalColor = activeButtonColor;
             t_Button.colors = buttonColors;
         }
 
         // Set a button to inactive color
-        private void SetInactiveButton(Button t_Button)
+        private void _SetInactiveButton(Button t_Button)
         {
             ColorBlock buttonColors = t_Button.colors;
-            buttonColors.normalColor = InactiveButtonColor;
+            buttonColors.normalColor = inactiveButtonColor;
             t_Button.colors = buttonColors;
         }
     }

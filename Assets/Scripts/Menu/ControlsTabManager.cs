@@ -3,14 +3,14 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-namespace Mekaiju.Controls
+namespace Mekaiju.UI
 {
     public class ControlsTabManager : MonoBehaviour
     {
         // UI elements
-        public PlayerInput PlayerInput;
-        public Transform ControlsContainer;
-        public GameObject ControlPrefab;
+        public PlayerInput playerInput;
+        public Transform controlsContainer;
+        public GameObject controlPrefab;
 
         private InputActionRebindingExtensions.RebindingOperation _rebindingOperation;
         private Dictionary<string, Button> _buttons = new Dictionary<string, Button>();
@@ -18,32 +18,32 @@ namespace Mekaiju.Controls
         void Start()
         {
             // Load saved key bindings and create UI
-            LoadSavedBindings();
-            LoadControls();
+            _LoadSavedBindings();
+            _LoadControls();
         }
 
-        private void LoadControls()
+        private void _LoadControls()
         {
-            foreach (InputAction p_action in PlayerInput.actions)
+            foreach (InputAction t_action in playerInput.actions)
             {
-                if (p_action.bindings.Count == 0) continue;
+                if (t_action.bindings.Count == 0) continue;
 
                 // Create a button for each control setting
-                GameObject t_obj = Instantiate(ControlPrefab, ControlsContainer);
+                GameObject t_obj = Instantiate(controlPrefab, controlsContainer);
                 Button t_button = t_obj.GetComponent<Button>();
                 Text t_buttonText = t_button.GetComponentInChildren<Text>();
 
-                string actionName = p_action.name;
-                t_buttonText.text = $"{actionName}: {p_action.GetBindingDisplayString()}";
+                string t_actionName = t_action.name;
+                t_buttonText.text = $"{t_actionName}: {t_action.GetBindingDisplayString()}";
 
                 // Assign a function to handle rebinding
-                t_button.onClick.AddListener(() => StartRebind(p_action, t_buttonText));
+                t_button.onClick.AddListener(() => _StartRebind(t_action, t_buttonText));
 
-                _buttons[actionName] = t_button;
+                _buttons[t_actionName] = t_button;
             }
         }
 
-        private void StartRebind(InputAction p_action, Text t_buttonText)
+        private void _StartRebind(InputAction p_action, Text p_buttonText)
         {
             // Disable action temporarily
             p_action.Disable();
@@ -55,14 +55,14 @@ namespace Mekaiju.Controls
                 {
                     // Update button text and save the new binding
                     p_action.Enable();
-                    t_buttonText.text = $"{p_action.name}: {p_action.GetBindingDisplayString()}";
-                    SaveControl(p_action);
+                    p_buttonText.text = $"{p_action.name}: {p_action.GetBindingDisplayString()}";
+                    _SaveControl(p_action);
                     _rebindingOperation.Dispose();
                 })
                 .Start();
         }
 
-        private void SaveControl(InputAction p_action)
+        private void _SaveControl(InputAction p_action)
         {
             // Save new key binding
             string t_bindingJson = p_action.SaveBindingOverridesAsJson();
@@ -70,9 +70,9 @@ namespace Mekaiju.Controls
             PlayerPrefs.Save();
         }
 
-        private void LoadSavedBindings()
+        private void _LoadSavedBindings()
         {
-            foreach (InputAction p_action in PlayerInput.actions)
+            foreach (InputAction p_action in playerInput.actions)
             {
                 // Load saved key bindings
                 string t_bindingJson = PlayerPrefs.GetString($"binding_{p_action.name}", "");

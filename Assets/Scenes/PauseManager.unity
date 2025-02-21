@@ -11412,12 +11412,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58dceace0d81ee4983f412c20f3a752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MusicVolumeSlider: {fileID: 883749389}
-  MusicEnableToggle: {fileID: 522267312}
-  SfxVolumeSlider: {fileID: 388260779}
-  SfxEnableToggle: {fileID: 631556468}
-  MusicSource: {fileID: 0}
-  SfxSource: {fileID: 0}
+  musicVolumeSlider: {fileID: 0}
+  musicEnableToggle: {fileID: 0}
+  sfxVolumeSlider: {fileID: 0}
+  sfxEnableToggle: {fileID: 0}
+  musicSource: {fileID: 0}
+  sfxSource: {fileID: 0}
 --- !u!1 &970549801
 GameObject:
   m_ObjectHideFlags: 0
@@ -12583,14 +12583,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa5580970fa637544995452e20d56eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GraphicsPanel: {fileID: 850089307}
-  AudioPanel: {fileID: 955401331}
-  ControlsPanel: {fileID: 1466196393}
-  GraphicsButton: {fileID: 2100652386}
-  AudioButton: {fileID: 651306472}
-  ControlsButton: {fileID: 1518550008}
-  ActiveButtonColor: {r: 0.47058827, g: 0.47058827, b: 0.47058827, a: 0}
-  InactiveButtonColor: {r: 0.7960785, g: 0.7960785, b: 0.7960785, a: 0}
+  graphicsPanel: {fileID: 850089307}
+  audioPanel: {fileID: 955401331}
+  controlsPanel: {fileID: 1466196393}
+  graphicsButton: {fileID: 2100652386}
+  audioButton: {fileID: 651306472}
+  controlsButton: {fileID: 1518550008}
+  activeButtonColor: {r: 0.47058824, g: 0.47058824, b: 0.47058824, a: 0}
+  inactiveButtonColor: {r: 0.79607844, g: 0.79607844, b: 0.79607844, a: 0}
 --- !u!114 &1120805720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16277,8 +16277,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 0}
-  _controlsContainer: {fileID: 0}
-  _controlPrefab: {fileID: 0}
+  controlsContainer: {fileID: 0}
+  controlPrefab: {fileID: 0}
 --- !u!1 &1470857158
 GameObject:
   m_ObjectHideFlags: 0

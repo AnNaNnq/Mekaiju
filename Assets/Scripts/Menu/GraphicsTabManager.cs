@@ -3,16 +3,16 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
 
-namespace Mekaiju.Graphics
+namespace Mekaiju.UI
 {
     public class GraphicsTabManager : MonoBehaviour
     {
         // UI elements
-        public TMP_Dropdown ResolutionDropdown;  // Dropdown for screen resolution selection
-        public TMP_Dropdown QualityDropdown;     // Dropdown for graphics quality selection
-        public Toggle ReflectionsToggle;     // Toggle for real-time reflections
-        public Toggle VSyncToggle;           // Toggle for V-Sync
-        public Toggle FullscreenToggle;      // Toggle for fullscreen mode
+        public TMP_Dropdown resolutionDropdown;  // Dropdown for screen resolution selection
+        public TMP_Dropdown qualityDropdown;     // Dropdown for graphics quality selection
+        public Toggle reflectionsToggle;     // Toggle for real-time reflections
+        public Toggle vSyncToggle;           // Toggle for V-Sync
+        public Toggle fullscreenToggle;      // Toggle for fullscreen mode
 
         private Resolution[] _resolutions;   // Available screen resolutions
 
@@ -20,7 +20,7 @@ namespace Mekaiju.Graphics
         {
             // Load available screen resolutions
             _resolutions = Screen.resolutions;
-            ResolutionDropdown.ClearOptions();
+            resolutionDropdown.ClearOptions();
             List<string> t_options = new List<string>();
 
             int t_currentResolutionIndex = 0;
@@ -36,50 +36,50 @@ namespace Mekaiju.Graphics
                 }
             }
 
-            ResolutionDropdown.AddOptions(t_options);
-            ResolutionDropdown.value = t_currentResolutionIndex;
-            ResolutionDropdown.RefreshShownValue();
+            resolutionDropdown.AddOptions(t_options);
+            resolutionDropdown.value = t_currentResolutionIndex;
+            resolutionDropdown.RefreshShownValue();
 
             // Load quality settings
-            QualityDropdown.ClearOptions();
-            QualityDropdown.AddOptions(new List<string>(QualitySettings.names));
-            QualityDropdown.value = QualitySettings.GetQualityLevel();
-            QualityDropdown.RefreshShownValue();
+            qualityDropdown.ClearOptions();
+            qualityDropdown.AddOptions(new List<string>(QualitySettings.names));
+            qualityDropdown.value = QualitySettings.GetQualityLevel();
+            qualityDropdown.RefreshShownValue();
 
             // Load toggle settings
-            ReflectionsToggle.isOn = PlayerPrefs.GetInt("Reflections", 1) == 1;
-            VSyncToggle.isOn = QualitySettings.vSyncCount > 0;
-            FullscreenToggle.isOn = Screen.fullScreen;
+            reflectionsToggle.isOn = PlayerPrefs.GetInt("Reflections", 1) == 1;
+            vSyncToggle.isOn = QualitySettings.vSyncCount > 0;
+            fullscreenToggle.isOn = Screen.fullScreen;
 
             // Add event listeners
-            ResolutionDropdown.onValueChanged.AddListener(p_index => SetResolution(p_index));
-            QualityDropdown.onValueChanged.AddListener(p_index => SetQuality(p_index));
-            ReflectionsToggle.onValueChanged.AddListener(p_enabled => SetReflections(p_enabled));
-            VSyncToggle.onValueChanged.AddListener(p_enabled => SetVSync(p_enabled));
-            FullscreenToggle.onValueChanged.AddListener(p_enabled => SetFullscreen(p_enabled));
+            resolutionDropdown.onValueChanged.AddListener(p_index => _SetResolution(p_index));
+            qualityDropdown.onValueChanged.AddListener(p_index => _SetQuality(p_index));
+            reflectionsToggle.onValueChanged.AddListener(p_enabled => _SetReflections(p_enabled));
+            vSyncToggle.onValueChanged.AddListener(p_enabled => _SetVSync(p_enabled));
+            fullscreenToggle.onValueChanged.AddListener(p_enabled => _SetFullscreen(p_enabled));
         }
 
-        private void SetResolution(int p_index)
+        private void _SetResolution(int p_index)
         {
             Screen.SetResolution(_resolutions[p_index].width, _resolutions[p_index].height, Screen.fullScreen);
         }
 
-        private void SetQuality(int p_index)
+        private void _SetQuality(int p_index)
         {
             QualitySettings.SetQualityLevel(p_index);
         }
 
-        private void SetReflections(bool p_enabled)
+        private void _SetReflections(bool p_enabled)
         {
             PlayerPrefs.SetInt("Reflections", p_enabled ? 1 : 0);
         }
 
-        private void SetVSync(bool p_enabled)
+        private void _SetVSync(bool p_enabled)
         {
             QualitySettings.vSyncCount = p_enabled ? 1 : 0;
         }
 
-        private void SetFullscreen(bool p_enabled)
+        private void _SetFullscreen(bool p_enabled)
         {
             Screen.fullScreen = p_enabled;
         }
