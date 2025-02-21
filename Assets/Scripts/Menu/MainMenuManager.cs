@@ -5,37 +5,37 @@ namespace Mekaiju.MainMenu
 {
     public class MainMenuManager : MonoBehaviour
     {
-        public string nextSceneName = "PauseManager"; // Name of the scene to load
-        public GameObject mainMenu; // Reference to the main menu
-        public GameObject settingsMenu; // Reference to the settings menu
-        public GameObject creditsMenu; // Reference to the credits menu
+        public string NextSceneName = "PauseManager"; // Name of the scene to load
+        public GameObject MainMenu; // Reference to the main menu
+        public GameObject SettingsMenu; // Reference to the settings menu
+        public GameObject CreditsMenu; // Reference to the credits menu
 
         // Load the game scene
         public void PlayGame()
         {
-            SceneManager.LoadScene(nextSceneName);
+            SceneManager.LoadScene(NextSceneName);
         }
 
         // Open the settings menu and hide the main menu
         public void OpenSettings()
         {
-            mainMenu.SetActive(false);
-            settingsMenu.SetActive(true);
+            MainMenu.SetActive(false);
+            SettingsMenu.SetActive(true);
         }
 
         // Open the credits menu and hide the main menu
         public void OpenCredits()
         {
-            mainMenu.SetActive(false);
-            creditsMenu.SetActive(true);
+            MainMenu.SetActive(false);
+            CreditsMenu.SetActive(true);
         }
 
         // Return to the main menu from any submenu
         public void BackToMainMenu()
         {
-            settingsMenu.SetActive(false);
-            creditsMenu.SetActive(false);
-            mainMenu.SetActive(true);
+            SettingsMenu.SetActive(false);
+            CreditsMenu.SetActive(false);
+            MainMenu.SetActive(true);
         }
 
         // Exit the game

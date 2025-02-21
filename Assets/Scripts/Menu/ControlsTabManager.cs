@@ -8,9 +8,9 @@ namespace Mekaiju.Controls
     public class ControlsTabManager : MonoBehaviour
     {
         // UI elements
-        public PlayerInput playerInput;
-        public Transform _controlsContainer;
-        public GameObject _controlPrefab;
+        public PlayerInput PlayerInput;
+        public Transform ControlsContainer;
+        public GameObject ControlPrefab;
 
         private InputActionRebindingExtensions.RebindingOperation _rebindingOperation;
         private Dictionary<string, Button> _buttons = new Dictionary<string, Button>();
@@ -18,67 +18,67 @@ namespace Mekaiju.Controls
         void Start()
         {
             // Load saved key bindings and create UI
-            _LoadSavedBindings();
-            _LoadControls();
+            LoadSavedBindings();
+            LoadControls();
         }
 
-        private void _LoadControls()
+        private void LoadControls()
         {
-            foreach (InputAction action in playerInput.actions)
+            foreach (InputAction p_action in PlayerInput.actions)
             {
-                if (action.bindings.Count == 0) continue;
+                if (p_action.bindings.Count == 0) continue;
 
                 // Create a button for each control setting
-                GameObject obj = Instantiate(_controlPrefab, _controlsContainer);
-                Button button = obj.GetComponent<Button>();
-                Text buttonText = button.GetComponentInChildren<Text>();
+                GameObject t_obj = Instantiate(ControlPrefab, ControlsContainer);
+                Button t_button = t_obj.GetComponent<Button>();
+                Text t_buttonText = t_button.GetComponentInChildren<Text>();
 
-                string actionName = action.name;
-                buttonText.text = $"{actionName}: {action.GetBindingDisplayString()}";
+                string actionName = p_action.name;
+                t_buttonText.text = $"{actionName}: {p_action.GetBindingDisplayString()}";
 
                 // Assign a function to handle rebinding
-                button.onClick.AddListener(() => _StartRebind(action, buttonText));
+                t_button.onClick.AddListener(() => StartRebind(p_action, t_buttonText));
 
-                _buttons[actionName] = button;
+                _buttons[actionName] = t_button;
             }
         }
 
-        private void _StartRebind(InputAction action, Text buttonText)
+        private void StartRebind(InputAction p_action, Text t_buttonText)
         {
             // Disable action temporarily
-            action.Disable();
+            p_action.Disable();
 
-            _rebindingOperation = action.PerformInteractiveRebinding()
+            _rebindingOperation = p_action.PerformInteractiveRebinding()
                 .WithControlsExcluding("Mouse")
                 .OnMatchWaitForAnother(0.1f)
                 .OnComplete(operation =>
                 {
                     // Update button text and save the new binding
-                    action.Enable();
-                    buttonText.text = $"{action.name}: {action.GetBindingDisplayString()}";
-                    _SaveControl(action);
+                    p_action.Enable();
+                    t_buttonText.text = $"{p_action.name}: {p_action.GetBindingDisplayString()}";
+                    SaveControl(p_action);
                     _rebindingOperation.Dispose();
                 })
                 .Start();
         }
 
-        private void _SaveControl(InputAction action)
+        private void SaveControl(InputAction p_action)
         {
             // Save new key binding
-            string bindingJson = action.SaveBindingOverridesAsJson();
-            PlayerPrefs.SetString($"binding_{action.name}", bindingJson);
+            string t_bindingJson = p_action.SaveBindingOverridesAsJson();
+            PlayerPrefs.SetString($"binding_{p_action.name}", t_bindingJson);
             PlayerPrefs.Save();
         }
 
-        private void _LoadSavedBindings()
+        private void LoadSavedBindings()
         {
-            foreach (InputAction action in playerInput.actions)
+            foreach (InputAction p_action in PlayerInput.actions)
             {
                 // Load saved key bindings
-                string bindingJson = PlayerPrefs.GetString($"binding_{action.name}", "");
-                if (!string.IsNullOrEmpty(bindingJson))
+                string t_bindingJson = PlayerPrefs.GetString($"binding_{p_action.name}", "");
+                if (!string.IsNullOrEmpty(t_bindingJson))
                 {
-                    action.LoadBindingOverridesFromJson(bindingJson);
+                    p_action.LoadBindingOverridesFromJson(t_bindingJson);
                 }
             }
         }
