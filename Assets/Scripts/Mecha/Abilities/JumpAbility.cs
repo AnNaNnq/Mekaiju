@@ -19,41 +19,64 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private int _consumption;
+        private float _cooldown;
 
         /// <summary>
         /// 
         /// </summary>
         private bool _requested;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private bool _inCooldown;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private bool _isAnimationStarted;
+
         public override void Initialize(MechaPartInstance p_self)
         {
-            _requested = false;
+            _requested  = false;
+            _inCooldown = false;
+            _isAnimationStarted = false;
+            p_self.mecha.context.animationProxy.onJump.AddListener(_OnJumpAnimationStarted);
+        }
+
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return p_self.mecha.context.isGrounded && !_requested && !_inCooldown;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {  
-            if (p_self.Mecha.Context.IsGrounded && !_requested)
+            if (IsAvailable(p_self, p_opt))
             {
-                p_self.Mecha.ConsumeStamina(_consumption);
+                p_self.mecha.context.animationProxy.animator.SetTrigger("Jump");
+                yield return new WaitUntil(() =>_isAnimationStarted);
+                _isAnimationStarted = false;
                 _requested = true;
+                yield return new WaitUntil(() => !_requested && !p_self.mecha.context.isGrounded);
+                yield return new WaitUntil(() => p_self.mecha.context.isGrounded);
+                _inCooldown = true;
+                yield return new WaitForSeconds(_cooldown);
+                _inCooldown = false;
             }
-            yield return null;
         }
 
         public override void FixedTick(MechaPartInstance p_self)
         {
             if (_requested)
             {
-                p_self.Mecha.Context.Animator.SetTrigger("Jump");
-                p_self.Mecha.Context.Rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
+                p_self.mecha.context.rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
                 _requested = false;
             }
         }
 
-        public override float Consumption(object p_opt)
+        private void _OnJumpAnimationStarted()
         {
-            return _consumption;
+            _isAnimationStarted = true;
         }
     }
 }

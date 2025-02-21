@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using System;
 using UnityEngine;
+using System.Linq;
 
 namespace Mekaiju
 {
@@ -25,7 +27,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private Effect _effect;
+        public Effect effect { get; private set; }
         
         /// <summary>
         /// 
@@ -38,20 +40,25 @@ namespace Mekaiju
         private float _elapsed;
 
         /// <summary>
+        /// Track if resource is no longer managed
+        /// </summary>
+        private bool _disposed;
+
+        /// <summary>
         /// 
         /// </summary>
-        public EffectState State { get; private set; }
+        public EffectState state { get; private set; }
 
         public StatefullEffect(MechaInstance p_target, Effect p_effect, float p_time)
         {
-            State = EffectState.Inactive;
+            state = EffectState.Inactive;
 
             _target  = p_target; 
-            _effect  = p_effect;
+            effect  = p_effect;
             _time    = p_time;
             _elapsed = 0f;
 
-            _effect.Behaviour?.OnAdd(p_target);
+            effect.behaviour?.OnAdd(p_target);
         }
 
         public StatefullEffect(MechaInstance p_target, Effect p_effect) : this(p_target, p_effect, -1)
@@ -61,18 +68,18 @@ namespace Mekaiju
 
         public void Tick()
         {
-            if (State != EffectState.Expired)
+            if (state != EffectState.Expired)
             {
                 if (_time > 0 && _elapsed > _time)
                 {
-                    State = EffectState.Expired;
-                    _effect.Behaviour?.OnRemove(_target);
+                    state = EffectState.Expired;
+                    effect.behaviour?.OnRemove(_target);
                 }
                 else
                 {
-                    State = EffectState.Active;
+                    state = EffectState.Active;
 
-                    _effect.Behaviour.Tick(_target);
+                    effect.behaviour.Tick(_target);
                     _elapsed += Time.deltaTime;
                 }
             }
@@ -82,18 +89,46 @@ namespace Mekaiju
         {
             if (_time < 0 || _elapsed < _time)
             {
-                _effect.Behaviour.FixedTick(_target);
+                effect.behaviour.FixedTick(_target);
             }
-        }
-
-        ~StatefullEffect()
-        {
-            _effect.Behaviour?.OnRemove(_target);    
         }
 
         public void Dispose()
         {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        protected virtual void Dispose(bool p_disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (p_disposing)
+            {
+                effect.behaviour?.OnRemove(_target);
+            }
+
+            _disposed = true;
+        }
     }
+
+    /// <summary>
+    /// Class extension for effects
+    /// </summary>
+    public static class EffectListExtension
+    {
+        public static string ToString<T>(this System.Collections.Generic.List<T> p_effects, string[] p_exclude) where T : StatefullEffect
+        {
+            var filteredEffects = p_effects
+                .Select(effect => effect.effect.description)
+                .Where(desc => !p_exclude.Contains(desc))
+                .ToList();
+
+            return filteredEffects.Count > 0 ? string.Join(" & ", filteredEffects) : string.Empty;
+        }
+    }
+
 }

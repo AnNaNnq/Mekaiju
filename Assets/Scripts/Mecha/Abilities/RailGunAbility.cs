@@ -21,24 +21,24 @@ namespace Mekaiju
         /// </summary>
         [SerializeField]
         private int _rateOfFire;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        [SerializeField]
-        private int _consumption;
 
         /// <summary>
         /// Bullet speed in m/s
         /// </summary>
         [SerializeField]
-        private float _travelTime;
+        private float _projectileSpeed;
 
         /// <summary>
         /// 
         /// </summary>
         [SerializeField]
         private GameObject _projectile;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [SerializeField]
+        private int _consumption;
 
         /// <summary>
         /// 
@@ -53,41 +53,48 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        private bool _isAnimationStarted;
+
         public override void Initialize(MechaPartInstance p_self)
         {
             _lastTriggerTime = 0f;
+            _isAnimationStarted = false;
+            p_self.mecha.context.animationProxy.onFire.AddListener(_OnAnimationStarted);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_self"></param>
-        /// <param name="p_target"></param>
-        /// <returns></returns>
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return Time.time - _lastTriggerTime >= _minTimeBetweenFire && p_self.mecha.stamina - _consumption >= 0f;
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
-            var t_now     = Time.time; 
+            var t_now     = Time.time;
             var t_elapsed = t_now - _lastTriggerTime;
             if (t_elapsed >= _minTimeBetweenFire)
             {
                 _lastTriggerTime = t_now;
                 // TODO: Launch animation
-                p_self.Mecha.Context.Animator.SetTrigger("laserAttack");
+                p_self.mecha.context.animationProxy.animator.SetTrigger("laserAttack");
 
-                p_self.Mecha.ConsumeStamina(_consumption);
+                yield return new WaitUntil(() => _isAnimationStarted);
+                _isAnimationStarted = false;
+
+
+                p_self.mecha.ConsumeStamina(_consumption);
 
                 var t_targetPosition = p_target.transform.position;
 
                 // Compute travel time
                 var t_dist = Vector3.Distance(p_self.transform.position, t_targetPosition);
-                var t_time = t_dist / _travelTime;
+                var t_time = t_dist / _projectileSpeed;
 
                 bool t_hasCollide = false;
 
                 var t_go = GameObject.Instantiate(_projectile);
                 var t_wb = t_go.GetComponent<WeaponBullet>();
 
-                t_wb.transform.position = p_self.transform.position + new Vector3(0, 2.5f, 0) + (2 * p_self.Mecha.transform.forward);
+                t_wb.transform.position = p_self.transform.position + new Vector3(0, 2.5f, 0) + (2 * p_self.mecha.transform.forward);
                 t_wb.OnCollide.AddListener(
                     collision => {
                         if (collision.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
@@ -96,7 +103,7 @@ namespace Mekaiju
                         }
                     }
                 );
-                t_wb.Launch(p_self.transform.forward.normalized * _travelTime, p_self.Mecha.transform.forward);
+                t_wb.Launch(p_self.transform.forward.normalized * _projectileSpeed, p_self.mecha.transform.forward);
                 
 
                 // Wait for bullet travel
@@ -107,7 +114,7 @@ namespace Mekaiju
                 if (t_hasCollide)
                 {
                     // TODO: remove cast
-                    var t_damage = p_self.Mecha.Context.Modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
+                    var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
                     p_target.TakeDamage((int)t_damage);
                     if (DebugInfo.Instance)
                     {
@@ -118,9 +125,9 @@ namespace Mekaiju
             }
         }
 
-        public override float Consumption(object p_opt)
+        private void _OnAnimationStarted()
         {
-            return _consumption;
+            _isAnimationStarted = true;
         }
     }
 

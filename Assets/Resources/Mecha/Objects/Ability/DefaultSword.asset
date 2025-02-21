@@ -12,19 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c90c8f421734c05b8e3589afd75ced, type: 3}
   m_Name: DefaultSword
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Sword
-  <Description>k__BackingField: BlahBlah
-  <Prefab>k__BackingField: {fileID: 7356328789365181207, guid: 6bb313dd8a4b3485ab6b9c8e7fa6fcee, type: 3}
-  <Target>k__BackingField: 2
-  <Behaviour>k__BackingField:
-    rid: 4067755007570346047
+  <description>k__BackingField: Sword
+  <objectName>k__BackingField: default
+  <target>k__BackingField: 2
+  <behaviour>k__BackingField:
+    rid: 2512019433379594307
   references:
     version: 2
     RefIds:
-    - rid: 4067755007570346047
+    - rid: 2512019433379594307
       type: {class: SwordAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
-        _damage: 25
+        _damage: 75
         _rateOfFire: 100
         _consumption: 5
         _reachDistance: 10

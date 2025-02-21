@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 5666275875088792191}
   - component: {fileID: 1078583125285842341}
   - component: {fileID: 5855820826959060527}
+  - component: {fileID: 5267602554239309925}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -212,6 +213,7 @@ MonoBehaviour:
   _lockOnTargetSystem: {fileID: 5855820826959060527}
   _groundCheckRadius: 0.5
   _baseSpeed: 250
+  _speed: 0
   _mouseSensitivity: 50
   _minVerticalAngle: -30
   _maxVerticalAngle: 80
@@ -275,7 +277,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86904fcce27b445869d3d5cc054dcd0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Desc: {fileID: 11400000, guid: 308f1d0ea754e4cb184fc858325377f5, type: 2}
   _parts:
     _array:
     - {fileID: 0}
@@ -284,6 +285,7 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
   _effects: []
+  <stamina>k__BackingField: 0
 --- !u!114 &5855820826959060527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,13 +300,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   lockOnRange: 100
   lockOnRotationSpeed: 10
   lockOnDistance: 3
   verticalAngle: 0
   _currentTarget: {fileID: 0}
   _lockedTarget: {fileID: 0}
+--- !u!114 &5267602554239309925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492760335613161966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04b4d6d0e5c9740f0b57297fa6d58f6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1785833025642644442
 GameObject:
   m_ObjectHideFlags: 0

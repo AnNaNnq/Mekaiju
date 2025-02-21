@@ -12,17 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c90c8f421734c05b8e3589afd75ced, type: 3}
   m_Name: JumpAbility
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Jump
-  <Description>k__BackingField: Jump
-  <Prefab>k__BackingField: {fileID: 7356328789365181207, guid: 6bb313dd8a4b3485ab6b9c8e7fa6fcee, type: 3}
-  <Target>k__BackingField: 4
-  <Behaviour>k__BackingField:
-    rid: 2512019268350771260
+  <description>k__BackingField: Jump
+  <objectName>k__BackingField: default
+  <target>k__BackingField: 4
+  <behaviour>k__BackingField:
+    rid: 2512019433379594308
   references:
     version: 2
     RefIds:
-    - rid: 2512019268350771260
+    - rid: 2512019433379594308
       type: {class: JumpAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
         _force: 25000
-        _consumption: 10
+        _cooldown: 1.5
