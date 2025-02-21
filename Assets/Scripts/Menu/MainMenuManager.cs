@@ -1,41 +1,41 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Mekaiju.MainMenu
+namespace Mekaiju.UI
 {
     public class MainMenuManager : MonoBehaviour
     {
-        public string NextSceneName = "PauseManager"; // Name of the scene to load
-        public GameObject MainMenu; // Reference to the main menu
-        public GameObject SettingsMenu; // Reference to the settings menu
-        public GameObject CreditsMenu; // Reference to the credits menu
+        public string nextSceneName = "PauseManager"; // Name of the scene to load
+        public GameObject mainMenu; // Reference to the main menu
+        public GameObject settingsMenu; // Reference to the settings menu
+        public GameObject creditsMenu; // Reference to the credits menu
 
         // Load the game scene
         public void PlayGame()
         {
-            SceneManager.LoadScene(NextSceneName);
+            SceneManager.LoadScene(nextSceneName);
         }
 
         // Open the settings menu and hide the main menu
         public void OpenSettings()
         {
-            MainMenu.SetActive(false);
-            SettingsMenu.SetActive(true);
+            mainMenu.SetActive(false);
+            settingsMenu.SetActive(true);
         }
 
         // Open the credits menu and hide the main menu
         public void OpenCredits()
         {
-            MainMenu.SetActive(false);
-            CreditsMenu.SetActive(true);
+            mainMenu.SetActive(false);
+            creditsMenu.SetActive(true);
         }
 
         // Return to the main menu from any submenu
         public void BackToMainMenu()
         {
-            SettingsMenu.SetActive(false);
-            CreditsMenu.SetActive(false);
-            MainMenu.SetActive(true);
+            settingsMenu.SetActive(false);
+            creditsMenu.SetActive(false);
+            mainMenu.SetActive(true);
         }
 
         // Exit the game

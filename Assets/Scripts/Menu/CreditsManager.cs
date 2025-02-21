@@ -7,54 +7,54 @@ namespace Mekaiju.UI
     [System.Serializable]
     public class CreditSection
     {
-        public string CategoryName;
-        public List<string> Names = new List<string>();
+        public string categoryName;
+        public List<string> names = new List<string>();
     }
 
     public class CreditsManager : MonoBehaviour
     {
         [Header("UI Elements")]
-        [SerializeField] private TextMeshProUGUI CategoriesText;
-        [SerializeField] private TextMeshProUGUI NamesText;
-        [SerializeField] private RectTransform CreditsTransform;
-        [SerializeField] private float ScrollSpeed = 30f;
+        [SerializeField] private TextMeshProUGUI _categoriesText;
+        [SerializeField] private TextMeshProUGUI _namesText;
+        [SerializeField] private RectTransform _creditsTransform;
+        [SerializeField] private float _scrollSpeed = 30f;
 
         [Header("Credits Data")]
-        [SerializeField] private List<CreditSection> CreditSections = new List<CreditSection>();
+        [SerializeField] private List<CreditSection> _creditSections = new List<CreditSection>();
 
         private void OnEnable()
         {
-            ResetCreditsPosition();
-            GenerateCreditsText();
+            _ResetCreditsPosition();
+            _GenerateCreditsText();
         }
 
         private void Update()
         {
-            CreditsTransform.Translate(Vector3.up * (ScrollSpeed * Time.deltaTime));
+            _creditsTransform.Translate(Vector3.up * (_scrollSpeed * Time.deltaTime));
         }
 
-        private void GenerateCreditsText()
+        private void _GenerateCreditsText()
         {
-            CategoriesText.text = "";
-            NamesText.text = "";
+            _categoriesText.text = "";
+            _namesText.text = "";
 
-            foreach (var section in CreditSections)
+            foreach (var t_section in _creditSections)
             {
-                CategoriesText.text += $"<b>{section.CategoryName}</b>\n";
+                _categoriesText.text += $"<b>{t_section.categoryName}</b>\n";
 
-                foreach (var name in section.Names)
+                foreach (var name in t_section.names)
                 {
-                    NamesText.text += $"{name}\n";
+                    _namesText.text += $"{name}\n";
                 }
 
-                CategoriesText.text += "\n"; // Space between sections
-                NamesText.text += "\n";
+                _categoriesText.text += "\n"; // Space between sections
+                _namesText.text += "\n";
             }
         }
 
-        private void ResetCreditsPosition()
+        private void _ResetCreditsPosition()
         {
-            CreditsTransform.anchoredPosition = new Vector2(CreditsTransform.anchoredPosition.x, 0);
+            _creditsTransform.anchoredPosition = new Vector2(_creditsTransform.anchoredPosition.x, 0);
         }
     }
 }

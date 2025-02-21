@@ -481,34 +481,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17d3c45a5eb187944b943057728a9da2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  categoriesText: {fileID: 365660593}
-  namesText: {fileID: 1720796001}
-  creditsTransform: {fileID: 496766561}
-  scrollSpeed: 1
-  creditSections:
-  - CategoryName: 'Artistes :'
-    Names:
-    - Antoine TARKOWSK
-    - Djamel BENTAYEB
-    - Gauthier BARALLON ALEXANDR
-    - Gregory BOURNOT
-    - Louis DHOISNE
-    - Mila COUSIN
-    - Zoe HEILPORN
-  - CategoryName: "D\xE9veloppeurs :"
-    Names:
-    - Alex CLORENNEC
-    - Anna SARBIEWSKI
-    - Ivan ROCQUE
-    - Maxime ATZA
-    - Reyane REDJEM
-    - Said AITAHMAD
-  - CategoryName: 'Level Designers :'
-    Names:
-    - Adrien CIRADE
-    - Adrien MESURE
-    - Louis PELLETIER
-    - Tonatiu MONTERDE
+  _categoriesText: {fileID: 0}
+  _namesText: {fileID: 0}
+  _creditsTransform: {fileID: 0}
+  _scrollSpeed: 30
+  _creditSections: []
 --- !u!1 &72631268
 GameObject:
   m_ObjectHideFlags: 0
@@ -3828,14 +3805,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa5580970fa637544995452e20d56eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GraphicsPanel: {fileID: 603375057}
-  AudioPanel: {fileID: 1391789648}
-  ControlsPanel: {fileID: 556488809}
-  GraphicsButton: {fileID: 1314052853}
-  AudioButton: {fileID: 144734198}
-  ControlsButton: {fileID: 2029933973}
-  ActiveButtonColor: {r: 0.47058827, g: 0.47058827, b: 0.47058827, a: 0}
-  InactiveButtonColor: {r: 0.7960785, g: 0.7960785, b: 0.7960785, a: 0}
+  graphicsPanel: {fileID: 0}
+  audioPanel: {fileID: 0}
+  controlsPanel: {fileID: 0}
+  graphicsButton: {fileID: 0}
+  audioButton: {fileID: 0}
+  controlsButton: {fileID: 0}
+  activeButtonColor: {r: 0, g: 0, b: 0, a: 0}
+  inactiveButtonColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &533362050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4008,8 +3985,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 0}
-  _controlsContainer: {fileID: 0}
-  _controlPrefab: {fileID: 0}
+  controlsContainer: {fileID: 0}
+  controlPrefab: {fileID: 0}
 --- !u!114 &556488811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5671,7 +5648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c651ee7cafa1aa4595299daa25bb24e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextSceneName: Prototype
+  nextSceneName: PauseManager
   mainMenu: {fileID: 614138096}
   settingsMenu: {fileID: 533362048}
   creditsMenu: {fileID: 60047884}
@@ -6364,7 +6341,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 741535566}
-        m_TargetAssemblyTypeName: Mekaiju.MainMenu.MainMenuManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: Mekaiju.UI.MainMenuManager, Assembly-CSharp
         m_MethodName: PlayGame
         m_Mode: 1
         m_Arguments:
@@ -11408,12 +11385,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58dceace0d81ee4983f412c20f3a752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MusicVolumeSlider: {fileID: 992474385}
-  MusicEnableToggle: {fileID: 784087322}
-  SfxVolumeSlider: {fileID: 899224953}
-  SfxEnableToggle: {fileID: 504449862}
-  MusicSource: {fileID: 0}
-  SfxSource: {fileID: 0}
+  musicVolumeSlider: {fileID: 0}
+  musicEnableToggle: {fileID: 0}
+  sfxVolumeSlider: {fileID: 0}
+  sfxEnableToggle: {fileID: 0}
+  musicSource: {fileID: 0}
+  sfxSource: {fileID: 0}
 --- !u!114 &1391789650
 MonoBehaviour:
   m_ObjectHideFlags: 0
