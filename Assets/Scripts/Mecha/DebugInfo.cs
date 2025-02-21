@@ -63,9 +63,15 @@ public class DebugInfo : MonoBehaviour
     void Start()
     {
         _SetStamina();
-        _maxHealth = _inst.health;
         _inst.onAddEffect.AddListener(_SetEffects);
         _inst.onRemoveEffect.AddListener(_RemoveEffects);
+        StartCoroutine(LateStart(1));
+    }
+
+    IEnumerator LateStart(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        _maxHealth = _inst.health;
     }
 
     // Update is called once per frame
