@@ -135,9 +135,7 @@ namespace Mekaiju
                     return t_inst;
                 }
             );
-            
-            stamina = config.desc.stamina;
-            
+                        
             onAddEffect = new();
             onRemoveEffect = new();
         }
