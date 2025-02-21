@@ -4,6 +4,7 @@ using System.Linq;
 using Mekaiju.Utils;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Mekaiju
@@ -77,6 +78,16 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        public UnityEvent<StatefullEffect> onAddEffect;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public UnityEvent<StatefullEffect> onRemoveEffect;
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="p_part"></param>
         /// <returns></returns>
         public MechaPartInstance this[MechaPart p_part]
@@ -125,6 +136,9 @@ namespace Mekaiju
                 animator  = GetComponent<Animator>(),
                 rigidbody = GetComponent<Rigidbody>(),
             };
+
+            onAddEffect = new();
+            onRemoveEffect = new();
         }
 
         private void Update()
@@ -134,6 +148,7 @@ namespace Mekaiju
             {
                 if (effect.state == EffectState.Expired)
                 {
+                    onRemoveEffect.Invoke(effect);
                     effect.Dispose();
                     return true;
                 }
@@ -188,6 +203,7 @@ namespace Mekaiju
         public IDisposable AddEffect(Effect p_effect)
         {
             effects.Add(new(this, p_effect));
+            onAddEffect.Invoke(effects[^1]);
             return effects[^1];
         }
 
@@ -199,6 +215,7 @@ namespace Mekaiju
         public IDisposable AddEffect(Effect p_effect, float p_time)
         {
             effects.Add(new(this, p_effect, p_time));
+            onAddEffect.Invoke(effects[^1]);
             return effects[^1];
         }
 
@@ -210,6 +227,7 @@ namespace Mekaiju
         {
             if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
             {
+                onRemoveEffect.Invoke((StatefullEffect)p_effect);
                 effects.Remove((StatefullEffect)p_effect);
                 p_effect.Dispose();
             }
