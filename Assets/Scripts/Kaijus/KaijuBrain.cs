@@ -26,7 +26,7 @@ namespace Mekaiju.AI
         {
             string t_GUID = GetGUIDStartWithName("Start");
             
-            List<string> t_startAttack = GetNextNodes("b5a74a81-edc1-4018-95f2-606b6fc917c3");
+            List<string> t_startAttack = GetNextNodes(t_GUID);
             Attack(t_startAttack);
         }
 
@@ -88,23 +88,21 @@ namespace Mekaiju.AI
 
         KaijuAttack GetAttack(string p_attackName)
         {
-            return _allAttacks.FirstOrDefault(attack => attack.Name == p_attackName);
+            return _allAttacks.FirstOrDefault(attack => attack.name == p_attackName);
         }
 
         public void Attack(List<string> p_attackGUID)
         {
             List<KaijuAttack> t_kaijuAttacks = PotentialAttacks(p_attackGUID);
-            Debug.Log(t_kaijuAttacks.Count());
             for (int i = 0; i < t_kaijuAttacks.Count; i++)
             {
-                Debug.Log(i);
                 if (i < t_kaijuAttacks.Count - 1)
                 {
-                    Debug.Log("First");
+                    Debug.Log(t_kaijuAttacks[i].name);
                 }
                 else
                 {
-                    Debug.Log("Last");
+                    Debug.Log(t_kaijuAttacks[i].name);
                 }
             }
 
