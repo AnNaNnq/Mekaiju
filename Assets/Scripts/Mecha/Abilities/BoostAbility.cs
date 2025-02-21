@@ -38,17 +38,17 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private bool _isAcive;
+        private bool _isActive;
 
         public override void Initialize(MechaPartInstance p_self)
         {
-            _isAcive   = false;
+            _isActive   = false;
             _effectRef = null;
         }
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return !_isAcive && p_self.mecha.stamina - _consumption >= 0f;
+            return !_isActive && p_self.mecha.stamina - _consumption >= 0f;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -57,11 +57,10 @@ namespace Mekaiju
             {
                 p_self.mecha.ConsumeStamina(_consumption);
 
-                _isAcive = true;
-                _effectRef = p_self.mecha.AddEffect(_boostEffect);
+                _isActive = true;
+                p_self.mecha.AddEffect(_boostEffect, _duration);
                 yield return new WaitForSeconds(_duration);
-                p_self.mecha.RemoveEffect(_effectRef);
-                _isAcive = false;
+                _isActive = false;
             }
         }
     }
