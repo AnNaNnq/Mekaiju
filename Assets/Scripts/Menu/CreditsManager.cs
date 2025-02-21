@@ -14,47 +14,47 @@ namespace Mekaiju.UI
     public class CreditsManager : MonoBehaviour
     {
         [Header("UI Elements")]
-        [SerializeField] private TextMeshProUGUI categoriesText;
-        [SerializeField] private TextMeshProUGUI namesText;
-        [SerializeField] private RectTransform creditsTransform;
-        [SerializeField] private float scrollSpeed = 30f;
+        [SerializeField] private TextMeshProUGUI CategoriesText;
+        [SerializeField] private TextMeshProUGUI NamesText;
+        [SerializeField] private RectTransform CreditsTransform;
+        [SerializeField] private float ScrollSpeed = 30f;
 
         [Header("Credits Data")]
-        [SerializeField] private List<CreditSection> creditSections = new List<CreditSection>();
+        [SerializeField] private List<CreditSection> CreditSections = new List<CreditSection>();
 
         private void OnEnable()
         {
-            _ResetCreditsPosition();
+            ResetCreditsPosition();
             GenerateCreditsText();
         }
 
         private void Update()
         {
-            creditsTransform.Translate(Vector3.up * (scrollSpeed * Time.deltaTime));
+            CreditsTransform.Translate(Vector3.up * (ScrollSpeed * Time.deltaTime));
         }
 
         private void GenerateCreditsText()
         {
-            categoriesText.text = "";
-            namesText.text = "";
+            CategoriesText.text = "";
+            NamesText.text = "";
 
-            foreach (var section in creditSections)
+            foreach (var section in CreditSections)
             {
-                categoriesText.text += $"<b>{section.CategoryName}</b>\n";
+                CategoriesText.text += $"<b>{section.CategoryName}</b>\n";
 
                 foreach (var name in section.Names)
                 {
-                    namesText.text += $"{name}\n";
+                    NamesText.text += $"{name}\n";
                 }
 
-                categoriesText.text += "\n"; // Space between sections
-                namesText.text += "\n";
+                CategoriesText.text += "\n"; // Space between sections
+                NamesText.text += "\n";
             }
         }
 
-        private void _ResetCreditsPosition()
+        private void ResetCreditsPosition()
         {
-            creditsTransform.anchoredPosition = new Vector2(creditsTransform.anchoredPosition.x, 0);
+            CreditsTransform.anchoredPosition = new Vector2(CreditsTransform.anchoredPosition.x, 0);
         }
     }
 }

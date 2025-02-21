@@ -22,7 +22,7 @@ namespace Mekaiju.Audio
 
         void Start()
         {
-            _LoadSettings();
+            LoadSettings();
         }
 
         // Set music volume and save it
@@ -54,7 +54,7 @@ namespace Mekaiju.Audio
         }
 
         // Load saved settings
-        private void _LoadSettings()
+        private void LoadSettings()
         {
             float t_musicVolume = PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, 1f);
             MusicSource.volume = t_musicVolume;
