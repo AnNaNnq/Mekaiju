@@ -34,7 +34,6 @@ namespace Mekaiju.Utils
         /// <returns></returns>
         public static IEnumerator CooldownRoutine(float cooldown, System.Action onCooldownEnd)
         {
-            Debug.Log("caca");
             yield return new WaitForSeconds(cooldown);
             onCooldownEnd?.Invoke();
         }

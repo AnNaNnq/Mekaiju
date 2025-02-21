@@ -8,9 +8,15 @@ namespace Mekaiju.AI
         [OverrideLabel("Damage (% of DMG)")]
         public float damage = 50;
 
+        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        {
+            return base.CanUse(kaiju, otherRange);
+        }
+
         public override void Active()
         {
             base.Active();
+            Debug.Log($"Teneborok fait {damage} degats");
             
         }
     }
