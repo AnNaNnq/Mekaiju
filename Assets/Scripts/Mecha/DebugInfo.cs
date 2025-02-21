@@ -1,6 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Mekaiju;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +34,10 @@ public class DebugInfo : MonoBehaviour
 
     private float _maxHealth;
     public Image healthBarUI;
-    public Image effectTimeLeft;
+    public Image effectTimeRing;
+    public Transform effectTimeList;
+    private bool _isInstantiate = false;
+    private Dictionary<StatefullEffect, Image> _effectsMapping;
 
     public TextMeshProUGUI Sword;
     public TextMeshProUGUI Gun;
@@ -43,6 +49,7 @@ public class DebugInfo : MonoBehaviour
         {
             Instance = this;
             _inst = GameObject.Find("Player").GetComponent<MechaInstance>();
+            _effectsMapping = new();
 
             DontDestroyOnLoad(gameObject);
         }
@@ -57,7 +64,8 @@ public class DebugInfo : MonoBehaviour
     {
         _SetStamina();
         _maxHealth = _inst.health;
-        
+        _inst.onAddEffect.AddListener(_SetEffects);
+        _inst.onRemoveEffect.AddListener(_RemoveEffects);
     }
 
     // Update is called once per frame
@@ -65,9 +73,12 @@ public class DebugInfo : MonoBehaviour
     {
         _SetStamina();
         _SetHealth();
-        _SetEffect();
         _SetHealthBar();
 
+        foreach (var (key, value) in _effectsMapping)
+        {
+            value.fillAmount = key.remainingTime / key.time;
+        }
     }
 
     private IEnumerator _SetTempValue(TextMeshProUGUI p_target, string p_text, float timout)
@@ -87,14 +98,17 @@ public class DebugInfo : MonoBehaviour
         _staminaField.text = $"{_inst.stamina:0.00}";
     }
 
-    private void _SetEffect()
+    private void _SetEffects(StatefullEffect p_effect)
     {
-        _effectField.text = $"{_inst.effects.ToString(new[] {"Heal", "Stamina"} )}";
-        if (_inst.effects[^1].time > 0)
-        {
-            effectTimeLeft.fillAmount = _inst.effects[^1].remainingTime  / _inst.effects[^1].time;
-        }
+        var t_go  = Instantiate(effectTimeRing, effectTimeList);
+        _effectsMapping.Add(p_effect, t_go);
 
+    }
+
+    private void _RemoveEffects(StatefullEffect p_effect)
+    {
+        Destroy(_effectsMapping[p_effect].gameObject);
+        _effectsMapping.Remove(p_effect);
     }
 
     private void _SetHealthBar()
