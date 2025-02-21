@@ -21,12 +21,6 @@ namespace Mekaiju
         /// </summary>
         [SerializeField]
         private int _rateOfFire;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        [SerializeField]
-        private int _consumption;
 
         /// <summary>
         /// Distance in m.
@@ -35,13 +29,12 @@ namespace Mekaiju
         private int _reachDistance;
 
         /// <summary>
-        /// 
+        /// Stamina consumption for a shot
         /// </summary>
-        private float _lastTriggerTime;
+        [SerializeField]
+        private int _consumption;
 
-        /// <summary>
-        /// 
-        /// </summary>
+        private float _lastTriggerTime;
         private float _minTimeBetweenFire => 1f / (_rateOfFire / 60f);
 
         public override void Initialize(MechaPartInstance p_self)
@@ -62,8 +55,7 @@ namespace Mekaiju
             {
                 _lastTriggerTime = t_now;
 
-                // TODO: Launch animation
-                p_self.mecha.context.animationProxy.animator.SetTrigger("swordAttack");
+                p_self.mecha.context.animationProxy.animator.SetTrigger("LArm");
 
                 p_self.mecha.ConsumeStamina(_consumption);
 
@@ -72,7 +64,7 @@ namespace Mekaiju
                 var t_dist = Vector3.Distance(p_self.transform.position, t_tpos);
                 if (t_dist < _reachDistance)
                 {
-                    // TODO: remove cast
+                    // Make damage
                     var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
                     p_target.TakeDamage((int)t_damage);
                     if (DebugInfo.Instance)

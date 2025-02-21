@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Mekaiju.AI;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private int _damage;
+        private float _damage;
 
         /// <summary>
         /// Max bullet throw per minute
@@ -23,48 +24,44 @@ namespace Mekaiju
         private int _rateOfFire;
 
         /// <summary>
-        /// Bullet speed in m/s
+        /// Projectile speed in m/s
         /// </summary>
         [SerializeField]
         private float _projectileSpeed;
 
         /// <summary>
-        /// 
+        /// Projectile prefab (must contain WeaponBullet comp)
         /// </summary>
         [SerializeField]
         private GameObject _projectile;
 
         /// <summary>
-        /// 
+        /// Stamina consumption for a shot
         /// </summary>
         [SerializeField]
         private int _consumption;
 
-        /// <summary>
-        /// 
-        /// </summary>
         private float _lastTriggerTime;
-
-        /// <summary>
-        /// 
-        /// </summary>
         private float _minTimeBetweenFire => 1f / (_rateOfFire / 60f);
+        private float _endTriggerTimout    = 5f;
+        private float _actionTriggerTimout = 5f;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool _isAnimationStarted;
+        private bool _isActive;
+        private bool _isAnimationAction;
+        private bool _isAnimationEnd;
 
         public override void Initialize(MechaPartInstance p_self)
         {
             _lastTriggerTime = 0f;
-            _isAnimationStarted = false;
-            p_self.mecha.context.animationProxy.onFire.AddListener(_OnAnimationStarted);
+            _isActive = false;
+            _isAnimationAction = false;
+            _isAnimationEnd    = false;
+            p_self.mecha.context.animationProxy.onRArm.AddListener(_OnAnimationEvent);
         }
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return Time.time - _lastTriggerTime >= _minTimeBetweenFire && p_self.mecha.stamina - _consumption >= 0f;
+            return !_isActive && Time.time - _lastTriggerTime >= _minTimeBetweenFire && p_self.mecha.stamina - _consumption >= 0f;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -73,27 +70,27 @@ namespace Mekaiju
             var t_elapsed = t_now - _lastTriggerTime;
             if (t_elapsed >= _minTimeBetweenFire)
             {
+                _isActive = true;
                 _lastTriggerTime = t_now;
-                // TODO: Launch animation
-                p_self.mecha.context.animationProxy.animator.SetTrigger("laserAttack");
 
-                yield return new WaitUntil(() => _isAnimationStarted);
-                _isAnimationStarted = false;
+                p_self.mecha.context.animationProxy.animator.SetTrigger("RArm");
 
+                // Wait for animation action
+                float t_timout = _actionTriggerTimout;
+                yield return new WaitUntil(() => _isAnimationAction || (t_timout -= Time.deltaTime) <= 0);
+                _isAnimationAction = false;
 
                 p_self.mecha.ConsumeStamina(_consumption);
 
-                var t_targetPosition = p_target.transform.position;
-
                 // Compute travel time
-                var t_dist = Vector3.Distance(p_self.transform.position, t_targetPosition);
+                var t_dist = Vector3.Distance(p_self.transform.position, p_target.transform.position);
                 var t_time = t_dist / _projectileSpeed;
 
                 bool t_hasCollide = false;
 
+                // Setup projectile and launch
                 var t_go = GameObject.Instantiate(_projectile);
                 var t_wb = t_go.GetComponent<WeaponBullet>();
-
                 t_wb.transform.position = p_self.transform.position + new Vector3(0, 2.5f, 0) + (2 * p_self.mecha.transform.forward);
                 t_wb.OnCollide.AddListener(
                     collision => {
@@ -107,14 +104,14 @@ namespace Mekaiju
                 
 
                 // Wait for bullet travel
-                float t_timout = t_time;
+                t_timout = t_time;
                 yield return new WaitUntil(() => t_hasCollide || (t_timout -= Time.deltaTime) <= 0);
 
-                // Check new position of BasicAI ?
+                // Make damage if projectile has collide
                 if (t_hasCollide)
                 {
-                    // TODO: remove cast
-                    var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
+                    var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue(_damage);
+                    // @TODO: wait for parameter to be float
                     p_target.TakeDamage((int)t_damage);
                     if (DebugInfo.Instance)
                     {
@@ -122,12 +119,29 @@ namespace Mekaiju
                     }
                 }
                 GameObject.Destroy(t_go);
+
+                // Wait for animation end
+                t_timout = _endTriggerTimout;
+                yield return new WaitUntil(() => _isAnimationEnd || (t_timout -= Time.deltaTime) <= 0);
+
+                _isAnimationEnd = false;
+                _isActive       = false;
             }
         }
 
-        private void _OnAnimationStarted()
+        private void _OnAnimationEvent(AnimationEventType p_eType)
         {
-            _isAnimationStarted = true;
+            switch (p_eType)
+            {
+                case AnimationEventType.Action:
+                    _isAnimationAction = true;
+                    break;
+                case AnimationEventType.End:
+                    _isAnimationEnd = true;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

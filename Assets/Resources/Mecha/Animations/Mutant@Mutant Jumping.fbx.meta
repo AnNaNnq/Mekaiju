@@ -34,8 +34,8 @@ ModelImporter:
       name: Mutant Jumping
       takeName: mixamo.com
       internalID: -203655887218126122
-      firstFrame: 37.8
-      lastFrame: 91.72
+      firstFrame: 0
+      lastFrame: 95
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -55,8 +55,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.0037594195
-        functionName: _OnJump
+      - time: 0
+        functionName: _OnJumpStart
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 04b4d6d0e5c9740f0b57297fa6d58f6f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.33330485
+        functionName: _OnJumpAction
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 04b4d6d0e5c9740f0b57297fa6d58f6f, type: 3}
         floatParameter: 0
