@@ -37,7 +37,7 @@ namespace Mekaiju.AI
         [Separator]
         [Header("Debug")]
         public bool checkRange;
-        [ConditionalField(nameof(checkRange))] public float debugRange;
+        [ConditionalField(nameof(checkRange))] public float debugRange ;
 
         private void Start()
         {

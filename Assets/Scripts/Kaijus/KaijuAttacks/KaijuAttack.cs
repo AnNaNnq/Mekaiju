@@ -10,17 +10,17 @@ namespace Mekaiju.AI
         /// 
         /// </summary>
         [field: SerializeField]
-        public string Name { get; private set; }
+        public string name { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
         [field: SerializeReference, SubclassPicker]
-        public IAttack Attack { get; private set; }
+        public IAttack attack { get; private set; }
 
         private void OnValidate()
         {
-            if (Attack == null)
+            if (attack == null)
                 Debug.LogWarning("You must provide an attack for each kaiju attack.");
         }
     }
