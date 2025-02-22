@@ -17,9 +17,9 @@ namespace Mekaiju
         /// 
         /// </summary>
         /// <param name="self"></param>
-        public override void Tick(MechaInstance self)
+        public override void Tick(IEntityInstance p_self)
         {
-            self.TakeDamage(_damage * Time.deltaTime);
+            p_self.TakeDamage(_damage * Time.deltaTime);
         }
     }
 

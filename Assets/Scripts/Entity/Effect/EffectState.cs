@@ -22,7 +22,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private MechaInstance _target;
+        private IEntityInstance _target;
 
         /// <summary>
         /// 
@@ -54,7 +54,7 @@ namespace Mekaiju
         /// </summary>
         public EffectState state { get; private set; }
 
-        public StatefullEffect(MechaInstance p_target, Effect p_effect, float p_time)
+        public StatefullEffect(IEntityInstance p_target, Effect p_effect, float p_time)
         {
             state = EffectState.Inactive;
 
@@ -66,7 +66,7 @@ namespace Mekaiju
             effect.behaviour?.OnAdd(p_target);
         }
 
-        public StatefullEffect(MechaInstance p_target, Effect p_effect) : this(p_target, p_effect, -1)
+        public StatefullEffect(IEntityInstance p_target, Effect p_effect) : this(p_target, p_effect, -1)
         {        
 
         }

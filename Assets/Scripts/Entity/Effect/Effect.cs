@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Mekaiju
 {
-    [CreateAssetMenu(fileName = "New Effect", menuName = "Mecha/Effect")]
+    [CreateAssetMenu(fileName = "New Effect", menuName = "Entity/Effect")]
     public class Effect : ScriptableObject
     {   
         /// <summary>

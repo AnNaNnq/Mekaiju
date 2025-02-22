@@ -91,7 +91,7 @@ namespace Mekaiju
                 while (!_isStopRequested && p_self.mecha.stamina - (_consumption * Time.deltaTime) >= 0)
                 {
                     p_self.mecha.ConsumeStamina(_consumption * Time.deltaTime);
-                    p_self.mecha.context.lastAbilityTime = Time.time;
+                    p_self.mecha.timePoints[TimePoint.LastAbilityTriggered] = Time.time;
                     yield return null;
                 }
 

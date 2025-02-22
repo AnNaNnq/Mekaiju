@@ -25,10 +25,12 @@ namespace Mekaiju
         /// 
         /// </summary>
         /// <param name="self"></param>
-        public override void Tick(MechaInstance self)
+        public override void Tick(IEntityInstance self)
         {
-            if (Time.time - self.context.lastDamageTime > _timeBeforeHeal)
+            if (Time.time - self.timePoints[TimePoint.LastDamage] > _timeBeforeHeal)
+            {
                 self.Heal(_heal * Time.deltaTime);
+            }
         }
     }
 }

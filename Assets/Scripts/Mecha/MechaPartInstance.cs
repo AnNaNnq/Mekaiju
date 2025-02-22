@@ -51,7 +51,7 @@ namespace Mekaiju
         {
             var t_damage = mecha.context.modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
             
-            mecha.context.lastDamageTime = Time.time;
+            mecha.timePoints[TimePoint.LastDamage] = Time.time;
             health = Mathf.Max(0f, health - t_damage);
         }
 
@@ -70,7 +70,7 @@ namespace Mekaiju
         {
             if (_config.ability.behaviour.IsAvailable(this, p_opt))
             {
-                mecha.context.lastAbilityTime = Time.time;
+                mecha.timePoints[TimePoint.LastAbilityTriggered] = Time.time;
                 yield return _config.ability.behaviour.Trigger(this, p_target, p_opt);
             }
         }
