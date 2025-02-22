@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using MyBox;
 using System.Linq;
 using Mekaiju.Attribute;
+using Mekaiju.Utils;
 
 namespace Mekaiju.AI
 {
     [RequireComponent(typeof(KaijuBrain))]
     [RequireComponent(typeof(KaijuMotor))]
-    public class KaijuInstance : MonoBehaviour
+    public class KaijuInstance : IEntityInstance
     {
         [Header("General")]
         [Tag] public string targetTag;
@@ -27,6 +28,7 @@ namespace Mekaiju.AI
 
         [HideInInspector]
         public KaijuMotor motor { get { return _motor; } }
+
         protected KaijuMotor _motor;
 
         private KaijuBrain _brain;
@@ -107,5 +109,23 @@ namespace Mekaiju.AI
                 Gizmos.DrawWireSphere(transform.position, debugRange);
             }
         }
+
+#region IEntityInstance implemetation
+
+        // TODO: implement
+        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => throw new System.NotImplementedException();
+
+        public override float baseHealth => throw new System.NotImplementedException();
+
+        public override void Heal(float p_amount)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void TakeDamage(float p_damage)
+        {
+            throw new System.NotImplementedException();
+        }
+#endregion
     }
 }
