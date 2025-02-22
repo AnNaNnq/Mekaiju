@@ -15,9 +15,6 @@ namespace Mekaiju
     [Serializable]
     public class InstanceContext
     {
-        public float lastAbilityTime = -1000f;
-        public float lastDamageTime  = -1000f;
-
         public EnumArray<ModifierTarget, ModifierCollection> modifiers = new(() => new());
 
         public bool isGrounded          = false;
@@ -34,7 +31,7 @@ namespace Mekaiju
     /// <summary>
     /// 
     /// </summary>
-    public class MechaInstance : MonoBehaviour
+    public class MechaInstance : IEntityInstance
     {
         /// <summary>
         /// 
@@ -50,7 +47,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
+        [field: SerializeField]
         public List<StatefullEffect> effects { get; private set; }
 
         /// <summary>
@@ -95,6 +92,56 @@ namespace Mekaiju
             get => _parts[p_part];
         }
 
+#region MechaInstance specifique implementation
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAlive()
+        {
+            return health > 0;
+        }
+
+        /// <summary>
+        /// Adds a new effect to the list of active effects without a timeout. 
+        /// The effect will remain active indefinitely until it is manually removed.
+        /// </summary>
+        /// <param name="p_effect">The effect to be added.</param>
+        public IDisposable AddEffect(Effect p_effect)
+        {
+            effects.Add(new(this, p_effect));
+            onAddEffect.Invoke(effects[^1]);
+            return effects[^1];
+        }
+
+        /// <summary>
+        /// Adds a new effect to the list of active effects, with a specified duration.
+        /// </summary>
+        /// <param name="p_effect">The effect to be added.</param>
+        /// <param name="p_time">The duration of the effect in seconds.</param>
+        public IDisposable AddEffect(Effect p_effect, float p_time)
+        {
+            effects.Add(new(this, p_effect, p_time));
+            onAddEffect.Invoke(effects[^1]);
+            return effects[^1];
+        }
+
+        /// <summary>
+        /// Remove an effect.
+        /// </summary>
+        /// <param name="p_effect">The effect to remove.</param>
+        public void RemoveEffect(IDisposable p_effect)
+        {
+            if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
+            {
+                onRemoveEffect.Invoke((StatefullEffect)p_effect);
+                effects.Remove((StatefullEffect)p_effect);
+                p_effect.Dispose();
+            }
+        }
+#endregion
+
+#region MonoBehaviour implementation
         private void Start()
         {
             config = GameManager.instance.playerData.mechaConfig;
@@ -159,34 +206,26 @@ namespace Mekaiju
         {
             effects.ForEach(effect => effect.FixedTick());
         }
+#endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public bool IsAlive()
+#region IEntityInstance implementation
+        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => context.modifiers;
+
+        public override float baseStamina => config.desc.stamina;
+
+        public override float baseHealth => config.desc.parts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
+
+        public override void RestoreStamina(float p_amount)
         {
-            return health > 0;
+            stamina = Math.Min(config.desc.stamina, stamina + p_amount);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_damage"></param>
-        public void TakeDamage(float p_damage)
+        public override void ConsumeStamina(float p_amount)
         {
-            foreach (var t_part in _parts)
-            {
-                // TODO: Maybe not divide
-                t_part.TakeDamage(p_damage / _parts.Count());    
-            }
+            stamina = Math.Max(0, stamina - p_amount);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_amount"></param>
-        public void Heal(float p_amount)
+        public override void Heal(float p_amount)
         {
             foreach (var t_part in _parts)
             {
@@ -194,61 +233,14 @@ namespace Mekaiju
             }
         }
 
-        /// <summary>
-        /// Adds a new effect to the list of active effects without a timeout. 
-        /// The effect will remain active indefinitely until it is manually removed.
-        /// </summary>
-        /// <param name="p_effect">The effect to be added.</param>
-        public IDisposable AddEffect(Effect p_effect)
+        public override void TakeDamage(float p_damage)
         {
-            effects.Add(new(this, p_effect));
-            onAddEffect.Invoke(effects[^1]);
-            return effects[^1];
-        }
-
-        /// <summary>
-        /// Adds a new effect to the list of active effects, with a specified duration.
-        /// </summary>
-        /// <param name="p_effect">The effect to be added.</param>
-        /// <param name="p_time">The duration of the effect in seconds.</param>
-        public IDisposable AddEffect(Effect p_effect, float p_time)
-        {
-            effects.Add(new(this, p_effect, p_time));
-            onAddEffect.Invoke(effects[^1]);
-            return effects[^1];
-        }
-
-        /// <summary>
-        /// Remove an effect.
-        /// </summary>
-        /// <param name="p_effect">The effect to remove.</param>
-        public void RemoveEffect(IDisposable p_effect)
-        {
-            if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
+            foreach (var t_part in _parts)
             {
-                onRemoveEffect.Invoke((StatefullEffect)p_effect);
-                effects.Remove((StatefullEffect)p_effect);
-                p_effect.Dispose();
+                // TODO: Maybe not divide
+                t_part.TakeDamage(p_damage / _parts.Count());    
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_amount"></param>
-        public void RestoreStamina(float p_amount)
-        {
-            stamina = Math.Min(config.desc.stamina, stamina + p_amount);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_amount"></param>
-        public void ConsumeStamina(float p_amount)
-        {
-            stamina = Math.Max(0, stamina - p_amount);
-        }
+#endregion
     }
-
 }
