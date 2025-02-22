@@ -1,10 +1,7 @@
 using Mekaiju.Utils;
-using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 namespace Mekaiju.AI
 {
@@ -105,7 +102,7 @@ namespace Mekaiju.AI
         {
             if (!_canAttack)
             {
-                _motor.MoveTo(_instance.target.transform.position, 1.3f);
+                _motor.MoveTo(_instance.target.transform.position, 100);
                 return;
             }
 
@@ -133,7 +130,7 @@ namespace Mekaiju.AI
             }
 
             MakeAction();
-            _motor.MoveTo(_instance.target.transform.position, 1.3f);
+            _motor.MoveTo(_instance.target.transform.position, 100);
         }
 
         public void MakeAction()
