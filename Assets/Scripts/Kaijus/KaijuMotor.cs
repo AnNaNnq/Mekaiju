@@ -45,6 +45,8 @@ public class KaijuMotor : MonoBehaviour
     {
         p_stopping = Mathf.Max(p_stopping, 8f);
 
+        float t_speed = (_instance.stats.speed * p_speed) / 100;
+
         _agent.speed = p_speed;
         _agent.destination = p_pos;
         _agent.stoppingDistance = p_stopping;

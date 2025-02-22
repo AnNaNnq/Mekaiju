@@ -8,5 +8,6 @@ namespace Mekaiju.AI
         public float health = 100;
         public float dmg = 1000;
         public float def = 10;
+        public float speed = 3.5f;
     }
 }
