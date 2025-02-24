@@ -15,11 +15,10 @@ namespace Mekaiju.AI
             return base.CanUse(kaiju, otherRange);
         }
 
-        public override void Active()
+        public override void Active(KaijuInstance kaiju)
         {
-            base.Active();
+            base.Active(kaiju);
             Debug.Log($"Abyssal Vortex fait {damage} degats");
-
         }
     }
 }

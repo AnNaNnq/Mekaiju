@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c81f28bfa57eadc47904e311de7feb8c, type: 3}
   m_Name: SharpBlow
   m_EditorClassIdentifier: 
-  <name>k__BackingField: SharpBlow
   <attack>k__BackingField:
     rid: 3772134609141629007
   references:
@@ -23,4 +22,6 @@ MonoBehaviour:
       data:
         cooldown: 2
         range: 10
+        canUse: 1
         damage: 50
+        timeBeforeAttack: 0.2
