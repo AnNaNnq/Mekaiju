@@ -5,6 +5,7 @@ using MyBox;
 using System.Linq;
 using Mekaiju.Attribute;
 using Mekaiju.Utils;
+using System;
 
 namespace Mekaiju.AI
 {
@@ -20,6 +21,9 @@ namespace Mekaiju.AI
         [field: SerializeReference, SubclassPicker]
         public List<KaijuBehavior> behaviors = new List<KaijuBehavior>();
         public float timeBetweenTowAction = 1f;
+        
+        [field: SerializeField]
+        public List<StatefullEffect> effects { get; private set; }
 
         [SerializeField]
         private bool _canBehaviorSwitch = true;
@@ -54,10 +58,24 @@ namespace Mekaiju.AI
             CheckAllBehaviorsDisabeled();
         }
 
-
         private void Update()
         {
             UseBehavior();
+            effects.ForEach(effect => effect.Tick());
+            effects.RemoveAll(effect =>
+            {
+                if (effect.state == EffectState.Expired)
+                {
+                    effect.Dispose();
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        private void FixedUpdate()
+        {
+            effects.ForEach(effect => effect.FixedTick());
         }
 
         public void UseBehavior()
@@ -110,7 +128,42 @@ namespace Mekaiju.AI
             }
         }
 
-#region IEntityInstance implemetation
+        /// <summary>
+        /// Adds a new effect to the list of active effects without a timeout. 
+        /// The effect will remain active indefinitely until it is manually removed.
+        /// </summary>
+        /// <param name="p_effect">The effect to be added.</param>
+        public IDisposable AddEffect(Effect p_effect)
+        {
+            effects.Add(new(this, p_effect));
+            return effects[^1];
+        }
+
+        /// <summary>
+        /// Adds a new effect to the list of active effects, with a specified duration.
+        /// </summary>
+        /// <param name="p_effect">The effect to be added.</param>
+        /// <param name="p_time">The duration of the effect in seconds.</param>
+        public IDisposable AddEffect(Effect p_effect, float p_time)
+        {
+            effects.Add(new(this, p_effect, p_time));
+            return effects[^1];
+        }
+
+        /// <summary>
+        /// Remove an effect.
+        /// </summary>
+        /// <param name="p_effect">The effect to remove.</param>
+        public void RemoveEffect(IDisposable p_effect)
+        {
+            if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
+            {
+                effects.Remove((StatefullEffect)p_effect);
+                p_effect.Dispose();
+            }
+        }
+
+        #region IEntityInstance implemetation
 
         // TODO: implement
         public override EnumArray<ModifierTarget, ModifierCollection> modifiers => throw new System.NotImplementedException();
