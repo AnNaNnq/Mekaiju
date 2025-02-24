@@ -17,6 +17,7 @@ namespace Mekaiju.AI
         [Header("General")]
         [Tag] public string targetTag;
         public KaijuStats stats;
+        public BodyPart[] bodyParts;
 
         [Separator]
         [field: SerializeReference, SubclassPicker]
@@ -61,6 +62,18 @@ namespace Mekaiju.AI
             foreach (var behavior in behaviors)
             {
                 behavior.Init(target, gameObject);
+            }
+
+            // We add the BodyPartObject script to bodyParts objects if they don't already have it
+            foreach (BodyPart t_part in bodyParts)
+            {
+                foreach (GameObject t_obj in t_part.part)
+                {
+                    if (t_obj.GetComponent<BodyPartObject>() == null)
+                    {
+                        t_obj.AddComponent<BodyPartObject>();
+                    }
+                }
             }
 
             CheckAllBehaviorsDisabeled();
@@ -119,6 +132,11 @@ namespace Mekaiju.AI
         public bool TargetInRange(float p_range)
         {
             return Vector3.Distance(target.transform.position, transform.position) <= p_range;
+        }
+
+        public Vector3 GetTargetPos()
+        {
+            return target.transform.position;
         }
 
         private void OnDrawGizmos()

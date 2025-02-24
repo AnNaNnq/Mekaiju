@@ -426,8 +426,8 @@ namespace Mekaiju.AI
             _canRimVoid = false;
             lastAttack = TeneborokAttack.Stop;
             GameObject t_rim = Instantiate(gameObjectRimVoid, transform.position, Quaternion.identity);
-            RimVoid t_rv = t_rim.GetComponent<RimVoid>();
-            t_rv.SetUp(this);
+            RimVoidInstance t_rv = t_rim.GetComponent<RimVoidInstance>();
+            //t_rv.SetUp(this);
             StartCoroutine(CooldownRoutine(rimVoidCooldown, () => _canRimVoid = true));
         }
 
