@@ -7,6 +7,7 @@ namespace Mekaiju.AI {
     {
         public float cooldown;
         public float range;
+        public bool blockable;
 
         [HideInInspector]
         public bool canUse;
