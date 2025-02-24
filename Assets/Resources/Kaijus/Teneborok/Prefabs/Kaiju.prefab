@@ -714,7 +714,7 @@ MonoBehaviour:
     health: 100
     dmg: 1000
     def: 10
-    speed: 3.5
+    speed: 1
   behaviors:
   - rid: 3772134562093072529
   - rid: 3772134562093072530
@@ -777,6 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09045f5883ced84b89a2eb6ea61e5a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lastAttack: 
   _canAttack: 1
   _allAttacks: []
 --- !u!1 &3489572259349122008
