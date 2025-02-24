@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI
 {
-    public class RImeVoid : IAttack
+    public class RimeVoid : IAttack
     {
         [OverrideLabel("Damage (% of DMG)")]
         public float damage = 50;
