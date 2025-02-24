@@ -23,6 +23,7 @@ namespace Mekaiju
 
         public override void OnAdd(IEntityInstance p_self)
         {
+            _modifierRefs = new();
             _modifiers.ForEach((t_key, t_value) => {
                 _modifierRefs[t_key] = p_self.modifiers[t_key].Add(t_value);
             });
