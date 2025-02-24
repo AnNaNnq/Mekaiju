@@ -11,6 +11,7 @@ namespace Mekaiju.AI
 {
     [RequireComponent(typeof(KaijuBrain))]
     [RequireComponent(typeof(KaijuMotor))]
+    [RequireComponent(typeof(KaijuAnimatorController))]
     public class KaijuInstance : IEntityInstance
     {
         [Header("General")]
@@ -34,6 +35,8 @@ namespace Mekaiju.AI
         public KaijuMotor motor { get { return _motor; } }
 
         protected KaijuMotor _motor;
+
+        public KaijuBrain brain { get { return _brain; } }
 
         private KaijuBrain _brain;
 

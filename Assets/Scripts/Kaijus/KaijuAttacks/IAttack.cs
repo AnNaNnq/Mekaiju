@@ -9,6 +9,9 @@ namespace Mekaiju.AI {
         [HideInInspector]
         public bool canUse;
 
+        public bool isUsing { get { return _using; } }
+        private bool _using;
+
         public IAttack()
         {
             canUse = true;
