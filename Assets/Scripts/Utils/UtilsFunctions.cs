@@ -1,3 +1,7 @@
+using Mekaiju.AI;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mekaiju.Utils
@@ -14,12 +18,24 @@ namespace Mekaiju.Utils
                 foreach (var hit in hits)
                 {
                     if (hit.point.y < minY)
+                    {
                         minY = hit.point.y; // Prend le point le plus bas
+                    }
                 }
                 return minY;
             }
 
             return pos.y; // Retourne la hauteur actuelle si aucun hit
+        }
+
+        /// <summary>
+        /// Countdown function
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerator CooldownRoutine(float cooldown, System.Action onCooldownEnd)
+        {
+            yield return new WaitForSeconds(cooldown);
+            onCooldownEnd?.Invoke();
         }
     }
 }

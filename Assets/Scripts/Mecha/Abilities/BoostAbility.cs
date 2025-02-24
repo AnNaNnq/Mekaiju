@@ -33,17 +33,11 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private IDisposable _effectRef;
-
-        /// <summary>
-        /// 
-        /// </summary>
         private bool _isActive;
 
         public override void Initialize(MechaPartInstance p_self)
         {
             _isActive   = false;
-            _effectRef = null;
         }
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
