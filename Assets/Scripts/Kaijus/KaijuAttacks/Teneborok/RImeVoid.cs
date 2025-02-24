@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI
 {
-    public class SharpBlow : IAttack
+    public class RimeVoid : IAttack
     {
         [OverrideLabel("Damage (% of DMG)")]
         public float damage = 50;
@@ -16,8 +16,8 @@ namespace Mekaiju.AI
         public override void Active()
         {
             base.Active();
-            Debug.Log($"Sharp Blow fait {damage} degats");
-            
+            Debug.Log($"Rime Void fait {damage} degats");
+
         }
     }
 }

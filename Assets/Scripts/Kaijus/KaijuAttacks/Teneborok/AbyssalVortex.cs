@@ -1,9 +1,11 @@
+using Mekaiju.AI;
 using MyBox;
 using UnityEngine;
 
+
 namespace Mekaiju.AI
 {
-    public class SharpBlow : IAttack
+    public class AbyssalVortex : IAttack
     {
         [OverrideLabel("Damage (% of DMG)")]
         public float damage = 50;
@@ -16,8 +18,8 @@ namespace Mekaiju.AI
         public override void Active()
         {
             base.Active();
-            Debug.Log($"Sharp Blow fait {damage} degats");
-            
+            Debug.Log($"Abyssal Vortex fait {damage} degats");
+
         }
     }
 }

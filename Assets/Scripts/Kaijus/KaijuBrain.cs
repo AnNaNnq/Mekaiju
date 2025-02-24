@@ -13,6 +13,7 @@ namespace Mekaiju.AI
 
         private KaijuAttackContainer _attackGraph;
         private KaijuMotor _motor;
+        [SerializeField]
         private string _lastAttack;
 
         [SerializeField]
@@ -27,13 +28,15 @@ namespace Mekaiju.AI
             _instance = GetComponent<KaijuInstance>();
             _attackGraph = _instance.attackGraph;
             _allAttacks = LoadAllAttacks();
+            _lastAttack = "Start";
         }
 
         public void StarFight()
         {
-            string t_GUID = GetGUIDStartWithName("Start");
+            string t_GUID = GetGUIDStartWithName(_lastAttack);
             
             List<string> t_startAttack = GetNextNodes(t_GUID);
+            
             Attack(t_startAttack);
         }
 
@@ -95,7 +98,11 @@ namespace Mekaiju.AI
 
         KaijuAttack GetAttack(string p_attackName)
         {
-            return _allAttacks.FirstOrDefault(attack => attack.name == p_attackName);
+            foreach(KaijuAttack attack in _allAttacks)
+            {
+                if (p_attackName.Equals(attack.name)) return attack;
+            }
+            return null;
         }
 
         public void Attack(List<string> p_attackGUID)
@@ -107,6 +114,7 @@ namespace Mekaiju.AI
             }
 
             List<KaijuAttack> t_kaijuAttacks = PotentialAttacks(p_attackGUID);
+
             bool t_canAttack = false;
             for (int i = 0; i < t_kaijuAttacks.Count; i++)
             {
@@ -124,9 +132,10 @@ namespace Mekaiju.AI
                     _motor.Stop();
                     _motor.LookTarget();
                     t_kaijuAttacks[i].attack.Active();
+                    _lastAttack = t_kaijuAttacks[i].name;
                     MakeAction();
                     return;
-                }
+                }   
             }
 
             MakeAction();
