@@ -1,6 +1,7 @@
 using Mekaiju.Utils;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 namespace Mekaiju.AI
@@ -131,9 +132,9 @@ namespace Mekaiju.AI
                 {
                     _motor.Stop();
                     _motor.LookTarget();
-                    t_kaijuAttacks[i].attack.Active();
+                    t_kaijuAttacks[i].attack.Active(_instance);
                     _lastAttack = t_kaijuAttacks[i].name;
-                    MakeAction();
+                    _canAttack = false;
                     return;
                 }   
             }

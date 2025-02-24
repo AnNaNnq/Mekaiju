@@ -40,6 +40,10 @@ namespace Mekaiju.AI
 
         private KaijuBrain _brain;
 
+        public KaijuAnimatorController animator { get { return _animation; } }
+
+        private KaijuAnimatorController _animation;
+
         [SOSelector]
         public KaijuAttackContainer attackGraph;
 
@@ -52,6 +56,7 @@ namespace Mekaiju.AI
         {
             _motor = GetComponent<KaijuMotor>();
             _brain = GetComponent<KaijuBrain>();
+            _animation = GetComponent<KaijuAnimatorController>();
             target = GameObject.FindGameObjectWithTag(targetTag);
             foreach (var behavior in behaviors)
             {

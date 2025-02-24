@@ -25,10 +25,7 @@ namespace Mekaiju.AI
         {
             foreach(KaijuAttack attack in _instance.brain.allAttacks)
             {
-                if (attack.attack.isUsing)
-                {
-                    Debug.Log(attack.name);
-                }
+                _animator.SetBool(attack.name, attack.attack.isUsing);
             }
         }
     }
