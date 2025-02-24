@@ -19,7 +19,7 @@ namespace Mekaiju.AI
         [SerializeField]
         private bool _canAttack = true;
 
-        [SerializeField]
+        public KaijuAttack[] allAttacks { get { return _allAttacks; } }
         private KaijuAttack[] _allAttacks;
 
         private void Start()
