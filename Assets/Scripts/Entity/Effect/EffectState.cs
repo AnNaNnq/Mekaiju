@@ -22,7 +22,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private MechaInstance _target;
+        private IEntityInstance _target;
 
         /// <summary>
         /// 
@@ -32,12 +32,17 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private float _time;
-        
+        public float time { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
         private float _elapsed;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public float remainingTime => time > 0 ? time - _elapsed : -1;
 
         /// <summary>
         /// Track if resource is no longer managed
@@ -49,19 +54,19 @@ namespace Mekaiju
         /// </summary>
         public EffectState state { get; private set; }
 
-        public StatefullEffect(MechaInstance p_target, Effect p_effect, float p_time)
+        public StatefullEffect(IEntityInstance p_target, Effect p_effect, float p_time)
         {
             state = EffectState.Inactive;
 
             _target  = p_target; 
             effect  = p_effect;
-            _time    = p_time;
+            time    = p_time;
             _elapsed = 0f;
 
             effect.behaviour?.OnAdd(p_target);
         }
 
-        public StatefullEffect(MechaInstance p_target, Effect p_effect) : this(p_target, p_effect, -1)
+        public StatefullEffect(IEntityInstance p_target, Effect p_effect) : this(p_target, p_effect, -1)
         {        
 
         }
@@ -70,7 +75,7 @@ namespace Mekaiju
         {
             if (state != EffectState.Expired)
             {
-                if (_time > 0 && _elapsed > _time)
+                if (time > 0 && _elapsed > time)
                 {
                     state = EffectState.Expired;
                     effect.behaviour?.OnRemove(_target);
@@ -87,7 +92,7 @@ namespace Mekaiju
         
         public void FixedTick()
         {
-            if (_time < 0 || _elapsed < _time)
+            if (time < 0 || _elapsed < time)
             {
                 effect.behaviour.FixedTick(_target);
             }
