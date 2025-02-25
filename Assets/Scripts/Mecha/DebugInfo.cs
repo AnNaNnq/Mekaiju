@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class DebugInfo : MonoBehaviour
 {
-    public static DebugInfo Instance { get; private set; }
-
     private MechaInstance _inst;
 
     [SerializeField]
@@ -44,19 +42,8 @@ public class DebugInfo : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton pattern to ensure only one instance of GameManager exists.
-        if (Instance == null)
-        {
-            Instance = this;
-            _inst = GameObject.Find("Player").GetComponent<MechaInstance>();
-            _effectsMapping = new();
-
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
+        _inst = GameObject.Find("Player").GetComponent<MechaInstance>();
+        _effectsMapping = new();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
