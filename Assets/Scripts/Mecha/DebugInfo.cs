@@ -30,6 +30,9 @@ public class DebugInfo : MonoBehaviour
     private TextMeshProUGUI _legsHealthField;
 
     [SerializeField]
+    private TextMeshProUGUI _dps;
+
+    [SerializeField]
     private TextMeshProUGUI _effectField;
 
     private float _maxHealth;
@@ -38,9 +41,6 @@ public class DebugInfo : MonoBehaviour
     public Image effectTimeRing;
     public Transform effectTimeList;
     private Dictionary<StatefullEffect, Image> _effectsMapping;
-
-    public TextMeshProUGUI Sword;
-    public TextMeshProUGUI Gun;
 
     private void Awake()
     {
@@ -65,6 +65,7 @@ public class DebugInfo : MonoBehaviour
         _SetStamina();
         _inst.onAddEffect.AddListener(_SetEffects);
         _inst.onRemoveEffect.AddListener(_RemoveEffects);
+        _inst.onDealDamage.AddListener(_OnDealDamage);
         StartCoroutine(LateStart(1));
     }
 
@@ -114,6 +115,11 @@ public class DebugInfo : MonoBehaviour
     {
         Destroy(_effectsMapping[p_effect].gameObject);
         _effectsMapping.Remove(p_effect);
+    }
+
+    private void _OnDealDamage(float p_damage)
+    {
+        StartCoroutine(_SetTempValue(_dps, $"{p_damage:0.00}", 0.5f));
     }
 
     private void _SetHealthBar()
