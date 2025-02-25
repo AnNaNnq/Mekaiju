@@ -27,7 +27,7 @@ namespace Mekaiju.AI
             base.Attack(kaiju);
             _using = true;
             yield return new WaitForSeconds(timeBeforeAttack);
-            Debug.Log($"Sharp Blow fait {damage} degats");
+            Debug.Log($"Sharp Blow + fait {damage} degats");
             _using = false;
             kaiju.brain.MakeAction();
         }
