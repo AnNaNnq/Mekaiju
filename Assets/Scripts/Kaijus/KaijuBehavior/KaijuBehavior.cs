@@ -30,7 +30,7 @@ namespace Mekaiju.AI
             _kaijuInstance = _kaiju.GetComponent<KaijuInstance>();
         }
 
-        public void IsTrigger()
+        public void Trigger()
         {
             if(!_kaijuInstance.canSwitch()) return;
             if(!canTrigger) _active = false;

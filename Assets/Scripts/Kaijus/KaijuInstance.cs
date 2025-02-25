@@ -51,7 +51,9 @@ namespace Mekaiju.AI
         [Separator]
         [Header("Debug")]
         public bool checkRange;
-        [ConditionalField(nameof(checkRange))] public float debugRange ;
+        [ConditionalField(nameof(checkRange))] public float debugRange;
+
+        bool _isInFight;
 
         private void Start()
         {
@@ -81,7 +83,14 @@ namespace Mekaiju.AI
 
         private void Update()
         {
-            UseBehavior();
+            if (_isInFight)
+            {
+                _brain.StarFight();
+            }
+            else
+            {
+                UseBehavior();
+            }
             effects.ForEach(effect => effect.Tick());
             effects.RemoveAll(effect =>
             {
@@ -103,7 +112,7 @@ namespace Mekaiju.AI
         {
             foreach(var behavior in behaviors)
             {
-                behavior.IsTrigger();
+                behavior.Trigger();
                 if (behavior.active) behavior.Run();
             }
         }
@@ -126,7 +135,7 @@ namespace Mekaiju.AI
 
         public void Combat()
         {
-            _brain.StarFight();
+            _isInFight = true;
         }
 
         public bool TargetInRange(float p_range)
