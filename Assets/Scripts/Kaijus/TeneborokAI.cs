@@ -416,7 +416,7 @@ namespace Mekaiju.AI
             lastAttack = TeneborokAttack.Stop;
             GameObject t_zone = Instantiate(gameObjectAbyssalVortex, _target.transform.position, Quaternion.identity);
             GravitationalZone t_gz = t_zone.GetComponent<GravitationalZone>();
-            t_gz.SetUp(this);
+            //t_gz.SetUp(p_stat);
             StartCoroutine(CooldownRoutine(abyssalVortexCooldown, () => _canAbyssalVortex = true));
         }
 

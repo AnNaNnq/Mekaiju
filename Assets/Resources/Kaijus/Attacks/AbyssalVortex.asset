@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c81f28bfa57eadc47904e311de7feb8c, type: 3}
   m_Name: AbyssalVortex
   m_EditorClassIdentifier: 
-  <name>k__BackingField: AbyssalVortex
   <attack>k__BackingField:
     rid: 164422602358521919
   references:
@@ -22,6 +21,11 @@ MonoBehaviour:
       type: {class: AbyssalVortex, ns: Mekaiju.AI, asm: Assembly-CSharp}
       data:
         cooldown: 2
-        range: 30
+        range: 50
+        blockable: 0
         canUse: 1
         damage: 50
+        gameObjectAbyssalVortex: {fileID: 1136635311529201712, guid: d7b6002c8c20e7945bed8cce40946338, type: 3}
+        gameObjectRock: {fileID: 8298655363207905739, guid: 2683fcf5f6f70b149bb762da0f2dcb0f, type: 3}
+        radius: 10
+        nbRock: 10

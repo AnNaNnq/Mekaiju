@@ -682,8 +682,8 @@ MonoBehaviour:
   <effects>k__BackingField: []
   _canBehaviorSwitch: 1
   attackGraph: {fileID: 11400000, guid: 74ecf6242186e604eb76c0e683c0b8ac, type: 2}
-  checkRange: 0
-  debugRange: 20
+  checkRange: 1
+  debugRange: 50
   references:
     version: 2
     RefIds:
@@ -701,16 +701,16 @@ MonoBehaviour:
       data:
         speed: 75
         canTrigger: 1
-        triggerArea: 30
+        triggerArea: 75
         triggerOnce: 0
         showGizmo: 1
-        playerDistance: 20
+        playerDistance: 50
     - rid: 3772134562093072587
       type: {class: AgroBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
       data:
         speed: 100
         canTrigger: 1
-        triggerArea: 25
+        triggerArea: 40
         triggerOnce: 1
         showGizmo: 1
 --- !u!114 &258508486715786093
