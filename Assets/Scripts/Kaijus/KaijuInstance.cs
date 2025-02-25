@@ -6,8 +6,6 @@ using System.Linq;
 using Mekaiju.Attribute;
 using Mekaiju.Utils;
 using System;
-using UnityEditor;
-using static UnityEngine.Rendering.STP;
 
 namespace Mekaiju.AI
 {
