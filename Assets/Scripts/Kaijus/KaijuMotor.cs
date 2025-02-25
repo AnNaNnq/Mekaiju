@@ -50,6 +50,7 @@ public class KaijuMotor : MonoBehaviour
 
     public void Stop()
     {
+        if (!_agent.enabled) return;
         _agent.ResetPath();
     }
 
@@ -72,6 +73,7 @@ public class KaijuMotor : MonoBehaviour
 
     public void StopKaiju(float p_time)
     {
+        if (!_agent.enabled) return;
         StartCoroutine(Stop(p_time));
     }
 
