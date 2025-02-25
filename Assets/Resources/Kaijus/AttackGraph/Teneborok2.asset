@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb21259124df937458b8e9a96bee5aaf, type: 3}
+  m_Name: Teneborok2
+  m_EditorClassIdentifier: 
+  NodeLinks:
+  - BaseNodeGUID: 6cca9056-9717-45ac-b603-5821f40a12b0
+    PortName: Next
+    TargetNodeGUID: 807eeb1d-cca2-4677-b140-92aa61399ce1
+  NodeData:
+  - guid: 807eeb1d-cca2-4677-b140-92aa61399ce1
+    name: SharpBlowUpgrade
+    position: {x: 121, y: 0}
+  StartNodeData:
+  - guid: 6cca9056-9717-45ac-b603-5821f40a12b0
+    name: Start
+    position: {x: 0, y: 0}

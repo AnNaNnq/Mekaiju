@@ -23573,6 +23573,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 309942910244388346, guid: f2f022c6a0931ab479e7f7f70bce7049, type: 3}
+      propertyPath: attackGraphPhaseTow
+      value: 
+      objectReference: {fileID: 11400000, guid: 49a579f92cf023a499d7558b1ae3e818, type: 2}
+    - target: {fileID: 309942910244388346, guid: f2f022c6a0931ab479e7f7f70bce7049, type: 3}
       propertyPath: managedReferences[3772134562093072529].nest
       value: 
       objectReference: {fileID: 1615825249}
@@ -23580,14 +23584,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kaiju
       objectReference: {fileID: 0}
-    - target: {fileID: 3481992632544994579, guid: f2f022c6a0931ab479e7f7f70bce7049, type: 3}
-      propertyPath: nest
-      value: 
-      objectReference: {fileID: 1615825249}
-    - target: {fileID: 3481992632544994579, guid: f2f022c6a0931ab479e7f7f70bce7049, type: 3}
-      propertyPath: textDPS
-      value: 
-      objectReference: {fileID: 1628645693}
     - target: {fileID: 9125232104238680391, guid: f2f022c6a0931ab479e7f7f70bce7049, type: 3}
       propertyPath: m_LocalPosition.x
       value: -19.18
@@ -23628,7 +23624,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3470388231203511882, guid: f2f022c6a0931ab479e7f7f70bce7049, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
