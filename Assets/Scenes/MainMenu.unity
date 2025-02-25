@@ -3792,6 +3792,8 @@ GameObject:
   - component: {fileID: 533362051}
   - component: {fileID: 533362050}
   - component: {fileID: 533362049}
+  - component: {fileID: 533362054}
+  - component: {fileID: 533362053}
   m_Layer: 5
   m_Name: 'SETTINGS Menu '
   m_TagString: Untagged
@@ -3817,8 +3819,16 @@ MonoBehaviour:
   graphicsButton: {fileID: 1314052853}
   audioButton: {fileID: 144734198}
   controlsButton: {fileID: 2029933973}
-  activeButtonColor: {r: 0.47450984, g: 0.47450984, b: 0.47450984, a: 0}
-  inactiveButtonColor: {r: 0.7254902, g: 0.7254902, b: 0.7254902, a: 0}
+  activeButtonColor:
+    r: 0.47450984
+    g: 0.47450984
+    b: 0.47450984
+    a: 0
+  inactiveButtonColor:
+    r: 0.7254902
+    g: 0.7254902
+    b: 0.7254902
+    a: 0
 --- !u!114 &533362050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3884,6 +3894,54 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &533362053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533362048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9efe1f658b7519541a689f58de816061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graphicsPanel: {fileID: 603375057}
+  audioPanel: {fileID: 1391789648}
+  controlsPanel: {fileID: 556488809}
+  graphicsButton: {fileID: 1314052853}
+  audioButton: {fileID: 144734198}
+  controlsButton: {fileID: 2029933973}
+  activeButtonColor: {r: 0.45098042, g: 0.45098042, b: 0.45098042, a: 0}
+  inactiveButtonColor: {r: 0.7019608, g: 0.7019608, b: 0.7019608, a: 0}
+--- !u!114 &533362054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533362048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01059313882a7be45a049e61fc0c53be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graphicsPanel: {fileID: 0}
+  audioPanel: {fileID: 0}
+  controlsPanel: {fileID: 0}
+  graphicsButton: {fileID: 0}
+  audioButton: {fileID: 0}
+  controlsButton: {fileID: 0}
+  activeButtonColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
+  inactiveButtonColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
 --- !u!1 &551127063
 GameObject:
   m_ObjectHideFlags: 0
