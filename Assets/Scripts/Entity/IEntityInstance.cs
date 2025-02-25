@@ -1,5 +1,6 @@
 using Mekaiju.Utils;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Mekaiju
 {
@@ -9,6 +10,11 @@ namespace Mekaiju
     /// </summary>
     public abstract class IEntityInstance : MonoBehaviour
     {
+        /// <summary>
+        /// Must be invoke in TakeDamage implementation
+        /// </summary>
+        public UnityEvent onTakeDamage { get; private set; } = new();
+
         /// <summary>
         /// Allow time point tracking
         /// Can be overridden if entity is controlled by top level one.
