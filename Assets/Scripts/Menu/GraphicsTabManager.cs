@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
 
-namespace Mekaiju.UI
+namespace Mekaiju.Menu
 {
     public class GraphicsTabManager : MonoBehaviour
     {
