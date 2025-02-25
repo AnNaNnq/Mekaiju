@@ -6,15 +6,14 @@ namespace Mekaiju.Menu
 {
     public class MainMenuManager : MonoBehaviour
     {
-        public string nextSceneName = "PauseManager"; // Name of the scene to load
         public GameObject mainMenu; // Reference to the main menu
         public GameObject settingsMenu; // Reference to the settings menu
         public GameObject creditsMenu; // Reference to the credits menu
 
         // Load the game scene
-        public void PlayGame()
+        public void PlayGame(string p_name)
         {
-            SceneManager.LoadScene(nextSceneName);
+            SceneManager.LoadScene(p_name);
         }
 
         // Open the settings menu and hide the main menu
