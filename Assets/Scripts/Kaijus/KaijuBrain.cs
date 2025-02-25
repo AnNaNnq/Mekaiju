@@ -28,7 +28,7 @@ namespace Mekaiju.AI
         {
             _motor = GetComponent<KaijuMotor>();
             _instance = GetComponent<KaijuInstance>();
-            _attackGraph = _instance.attackGraph;
+            _attackGraph = _instance.GetGraph();
             _allAttacks = LoadAllAttacks();
             _lastAttack = "Start";
             StartCoroutine(CheckAttack());
@@ -36,6 +36,7 @@ namespace Mekaiju.AI
 
         public void StarFight()
         {
+            _attackGraph = _instance.GetGraph();
             string t_GUID = GetGUIDStartWithName(_lastAttack);
             
             List<string> t_startAttack = GetNextNodes(t_GUID);
@@ -88,12 +89,12 @@ namespace Mekaiju.AI
 
         public KaijuAttack[] LoadAllAttacks()
         {
-            // Charger tous les ScriptableObjects de type Attack dans le dossier Resources/Kaijus/Attacks
+            // Charger tous les ScriptableObjects de type Attack dans Resources/Kaijus/Attacks
             KaijuAttack[] t_attacks = Resources.LoadAll<KaijuAttack>("Kaijus/Attacks");
 
-            if (t_attacks.Length == 0)
+            if (t_attacks == null || t_attacks.Length == 0)
             {
-                Debug.LogWarning("Aucun attack ScriptableObject trouvé dans Resources/Kaijus/Attacks.");
+                Debug.LogWarning("Aucun attack ScriptableObject trouvé dans Resources/Kaijus/Attacks");
             }
 
             return t_attacks;

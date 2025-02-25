@@ -45,8 +45,15 @@ namespace Mekaiju.AI
 
         private KaijuAnimatorController _animation;
 
+        [SerializeField]
+        private int _currentPhase = 2;
+
         [SOSelector]
-        public KaijuAttackContainer attackGraph;
+        [OverrideLabel("Attack Graph (Phase 1)")]
+        public KaijuAttackContainer attackGraphPhaseOne;
+        [SOSelector]
+        [OverrideLabel("Attack Graph (Phase 2)")]
+        public KaijuAttackContainer attackGraphPhaseTow;
 
         [Separator]
         [Header("Debug")]
@@ -54,6 +61,12 @@ namespace Mekaiju.AI
         [ConditionalField(nameof(checkRange))] public float debugRange;
 
         bool _isInFight;
+
+        public KaijuAttackContainer GetGraph()
+        {
+            if (_currentPhase == 1) return attackGraphPhaseOne;
+            else return attackGraphPhaseTow;
+        }
 
         private void Start()
         {
@@ -65,6 +78,8 @@ namespace Mekaiju.AI
             {
                 behavior.Init(target, gameObject);
             }
+
+            _currentPhase = 2;
 
             // We add the BodyPartObject script to bodyParts objects if they don't already have it
             foreach (BodyPart t_part in bodyParts)
