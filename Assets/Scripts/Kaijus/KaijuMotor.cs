@@ -1,4 +1,5 @@
 using Mekaiju.AI;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,12 +17,6 @@ public class KaijuMotor : MonoBehaviour
         _instance = GetComponent<KaijuInstance>();
         _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.FindGameObjectWithTag(_instance.targetTag);
-    }
-
-    
-    void Update()
-    {
-        
     }
 
     /// <summary>
@@ -72,5 +67,18 @@ public class KaijuMotor : MonoBehaviour
             Quaternion t_targetRotation = Quaternion.LookRotation(t_direction);
             transform.rotation = Quaternion.Lerp(transform.rotation, t_targetRotation, _agent.angularSpeed * Time.deltaTime);
         }
+    }
+
+    public void StopKaiju(float p_time)
+    {
+        StartCoroutine(Stop(p_time));
+    }
+
+    private IEnumerator Stop(float p_time)
+    {
+        _agent.ResetPath();
+        _agent.enabled = false;
+        yield return new WaitForSeconds(p_time);
+        _agent.enabled = true;
     }
 }
