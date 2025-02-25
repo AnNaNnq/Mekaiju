@@ -59,8 +59,8 @@ namespace Mekaiju
             state = EffectState.Inactive;
 
             _target  = p_target; 
-            effect  = p_effect;
-            time    = p_time;
+            effect   = ScriptableObject.Instantiate(p_effect);
+            time     = p_time;
             _elapsed = 0f;
 
             effect.behaviour?.OnAdd(p_target);
