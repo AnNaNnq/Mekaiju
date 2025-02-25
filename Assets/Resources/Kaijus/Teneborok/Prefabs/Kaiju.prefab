@@ -673,7 +673,29 @@ MonoBehaviour:
     dmg: 1000
     def: 10
     speed: 3.4
-  bodyParts: []
+  bodyParts:
+  - nom: "T\xEAte"
+    part:
+    - {fileID: 5197896978300794659}
+    health: 100
+    isDestroyed: 0
+  - nom: Bras
+    part:
+    - {fileID: 8445334262680586365}
+    - {fileID: 2395312711759002177}
+    health: 100
+    isDestroyed: 0
+  - nom: Patte
+    part:
+    - {fileID: 3489572259349122008}
+    - {fileID: 4353400018563308469}
+    health: 100
+    isDestroyed: 0
+  - nom: Corps
+    part:
+    - {fileID: 6904326128312965468}
+    health: 100
+    isDestroyed: 0
   behaviors:
   - rid: 3772134562093072529
   - rid: 3772134562093072530
