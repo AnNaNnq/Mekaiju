@@ -52,7 +52,7 @@ namespace Mekaiju.AI
         [SerializeField]
         protected int _currentPhase = 1;
 
-        private int _totalStartHealth;
+        private float _totalStartHealth;
 
         [Foldout("Debug")]
         [OverrideLabel("Show Gizmo For Non-agro Phase")]
@@ -94,9 +94,9 @@ namespace Mekaiju.AI
             return Vector3.Distance(_target.transform.position, transform.position);
         }
 
-        public int GetTotalHealth()
+        public float GetTotalHealth()
         {
-            int t_health = 0;
+            float t_health = 0;
             foreach (BodyPart t_part in bodyParts)
             {
                 t_health += t_part.health;
@@ -343,7 +343,7 @@ namespace Mekaiju.AI
                 t_bodyPart.health = 0;
             }
 
-            int t_curretHealth = GetTotalHealth();
+            float t_curretHealth = GetTotalHealth();
             if (t_curretHealth <= (_totalStartHealth / 2))
             {
                 _currentPhase++;

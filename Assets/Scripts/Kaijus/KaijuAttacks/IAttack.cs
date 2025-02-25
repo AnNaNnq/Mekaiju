@@ -13,6 +13,7 @@ namespace Mekaiju.AI {
         public bool canUse;
 
         public bool isUsing { get { return _using; } }
+        [SerializeField]
         protected bool _using;
 
         public IAttack()

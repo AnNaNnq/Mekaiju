@@ -5,6 +5,6 @@ public class BodyPart
 {
     public string nom;
     public GameObject[] part;
-    public int health;
+    public float health;
     public bool isDestroyed;
 }
