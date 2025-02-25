@@ -682,7 +682,7 @@ MonoBehaviour:
   <effects>k__BackingField: []
   _canBehaviorSwitch: 1
   attackGraph: {fileID: 11400000, guid: 74ecf6242186e604eb76c0e683c0b8ac, type: 2}
-  checkRange: 1
+  checkRange: 0
   debugRange: 20
   references:
     version: 2
@@ -710,7 +710,7 @@ MonoBehaviour:
       data:
         speed: 100
         canTrigger: 1
-        triggerArea: 50
+        triggerArea: 25
         triggerOnce: 1
         showGizmo: 0
 --- !u!114 &258508486715786093
@@ -737,7 +737,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09045f5883ced84b89a2eb6ea61e5a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lastAttack: 
+  _lastAttack: SharpBlow
   _canAttack: 1
 --- !u!114 &8610327776798930001
 MonoBehaviour:

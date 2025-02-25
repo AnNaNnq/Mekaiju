@@ -1,6 +1,7 @@
 ﻿using Mekaiju;
 using Mekaiju.AI;
 using Mekaiju.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Mekaiju.AI.Attack
         public int pointCount = 10;
         private List<Vector3> _firePos = new List<Vector3>();
 
-        private StatefullEffect _speedMod;
+        private IDisposable _speedMod;
 
         bool _damagable = false;
 
@@ -135,7 +136,7 @@ namespace Mekaiju.AI.Attack
             if (other.CompareTag("Player"))
             {
                 MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-                //_speedMod = t_mecha.AddEffect(_ai.rimVoidEffect);
+                _speedMod = t_mecha.AddEffect(_stat.rimVoidEffect);
                 _damagable = true;
                 StartCoroutine(Damage(t_mecha));
             }
