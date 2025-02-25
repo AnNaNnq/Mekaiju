@@ -66,6 +66,16 @@ namespace Mekaiju.Pause
             }
         }
 
+        public void ReturnMainMenu()
+        {
+            SceneManager.LoadScene("MainScene");
+        }
+
+        private void OnDisable()
+        {
+            Time.timeScale = 1;
+        }
+
         // Opens the settings menu
         public void OpenSettings()
         {
