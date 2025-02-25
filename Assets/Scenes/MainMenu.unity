@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 55723042}
   - component: {fileID: 55723041}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: LeftKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1121,7 +1121,7 @@ GameObject:
   - component: {fileID: 153592613}
   - component: {fileID: 153592612}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: DownKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1453,7 +1453,7 @@ GameObject:
   - component: {fileID: 207718290}
   - component: {fileID: 207718289}
   m_Layer: 5
-  m_Name: Button (11)
+  m_Name: DashKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1998,7 +1998,7 @@ GameObject:
   - component: {fileID: 276651605}
   - component: {fileID: 276651604}
   m_Layer: 5
-  m_Name: Button (7)
+  m_Name: Lockoff/onKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2850,7 +2850,7 @@ GameObject:
   - component: {fileID: 443091830}
   - component: {fileID: 443091829}
   m_Layer: 5
-  m_Name: Button (14)
+  m_Name: HealKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3990,9 +3990,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d5d8eba35823a48988edfb93b68f12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInput: {fileID: 0}
-  controlsContainer: {fileID: 0}
-  controlPrefab: {fileID: 0}
+  upText: {fileID: 814286179}
+  downText: {fileID: 2126932296}
+  leftText: {fileID: 660912496}
+  rightText: {fileID: 235830521}
+  jumpText: {fileID: 1728047483}
+  cameraText: {fileID: 696853975}
+  lockChangeText: {fileID: 915436764}
+  lockOnOffText: {fileID: 1496784128}
+  shieldText: {fileID: 72631270}
+  leftArmActionText: {fileID: 573482603}
+  rightArmActionText: {fileID: 858012060}
+  dashText: {fileID: 2111871494}
+  chestText: {fileID: 1045439838}
+  headText: {fileID: 1470680355}
+  healText: {fileID: 193643683}
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!114 &556488811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4229,7 +4242,7 @@ GameObject:
   - component: {fileID: 577962079}
   - component: {fileID: 577962078}
   m_Layer: 5
-  m_Name: Button (9)
+  m_Name: LeftArmActionKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7933,7 +7946,7 @@ GameObject:
   - component: {fileID: 1053371378}
   - component: {fileID: 1053371377}
   m_Layer: 5
-  m_Name: Button (3)
+  m_Name: RightKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9640,7 +9653,7 @@ GameObject:
   - component: {fileID: 1211633859}
   - component: {fileID: 1211633858}
   m_Layer: 5
-  m_Name: Button (6)
+  m_Name: Lock_ChangeKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10857,7 +10870,7 @@ GameObject:
   - component: {fileID: 1378956983}
   - component: {fileID: 1378956982}
   m_Layer: 5
-  m_Name: Button
+  m_Name: UPKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11189,7 +11202,7 @@ GameObject:
   - component: {fileID: 1409048955}
   - component: {fileID: 1409048954}
   m_Layer: 5
-  m_Name: Button (5)
+  m_Name: CameraKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12393,7 +12406,7 @@ GameObject:
   - component: {fileID: 1541879726}
   - component: {fileID: 1541879725}
   m_Layer: 5
-  m_Name: Button (10)
+  m_Name: RightArmActionKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12859,7 +12872,7 @@ GameObject:
   - component: {fileID: 1671584328}
   - component: {fileID: 1671584327}
   m_Layer: 5
-  m_Name: Button (13)
+  m_Name: HeadKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14137,7 +14150,7 @@ GameObject:
   - component: {fileID: 1823511417}
   - component: {fileID: 1823511416}
   m_Layer: 5
-  m_Name: Button (12)
+  m_Name: ChestKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14792,7 +14805,7 @@ GameObject:
   - component: {fileID: 1858689913}
   - component: {fileID: 1858689912}
   m_Layer: 5
-  m_Name: Button (4)
+  m_Name: JumpKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15049,7 +15062,7 @@ GameObject:
   - component: {fileID: 1953580271}
   - component: {fileID: 1953580270}
   m_Layer: 5
-  m_Name: Button (8)
+  m_Name: ShieldKeybind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

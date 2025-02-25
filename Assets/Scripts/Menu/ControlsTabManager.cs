@@ -1,6 +1,6 @@
 using UnityEngine;
-using TMPro; // Required for TextMeshPro
-using UnityEngine.InputSystem; // Required for the new Input System
+using TMPro; 
+using UnityEngine.InputSystem; 
 
 
 namespace Mekaiju.Menu
