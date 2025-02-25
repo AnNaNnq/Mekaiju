@@ -1,7 +1,6 @@
 using Mekaiju.Attribute;
 using MyBox;
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 namespace Mekaiju.AI
