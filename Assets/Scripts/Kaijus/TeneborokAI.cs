@@ -439,7 +439,7 @@ namespace Mekaiju.AI
             Vector3 t_pos = new Vector3(transform.position.x, UtilsFunctions.GetGround(transform.position), transform.position.z) + (transform.forward * 10);
             GameObject t_doomsday = Instantiate(gameObjectDoomsdayRay, t_pos, Quaternion.identity);
             DoomsdayRay t_dr = t_doomsday.GetComponent<DoomsdayRay>();
-            t_dr.SetUp(doomsdayRayStart, this);
+            //t_dr.SetUp(doomsdayRayStart, this);
             yield return new WaitForSeconds(doomsdayRayDuration);
             lastAttack = TeneborokAttack.DoomsdayRay;
             Destroy(t_doomsday);

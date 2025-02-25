@@ -1,21 +1,22 @@
 using Mekaiju.Utils;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Mekaiju.AI.Attack
 {
-    public class DoomsdayRay : MonoBehaviour
+    public class DoomsdayRaySpawnable : MonoBehaviour
     {
-        private TeneborokAI _ai;
+        private DoomsdayRay _stat;
         private LineRenderer _line;
+        private KaijuInstance _instnace;
         private Transform _start;
         private bool _damagable = true;
 
 
-        public void SetUp(Transform p_start, TeneborokAI p_ai)
+        public void SetUp(Transform p_start, DoomsdayRay p_stat, KaijuInstance p_instnace)
         {
-            _ai = p_ai;
+            _stat = p_stat;
+            _instnace = p_instnace;
             _line = GetComponent<LineRenderer>();
             _start = p_start;
             SetRay();
@@ -23,9 +24,9 @@ namespace Mekaiju.AI.Attack
 
         public void Update()
         {
-            if (_ai == null) return;
-            Vector3 pos = new Vector3(_ai.GetTargetPos().x, UtilsFunctions.GetGround(_ai.GetTargetPos()), _ai.GetTargetPos().z);
-            transform.position = Vector3.MoveTowards(transform.position, _ai.GetTargetPos(), _ai.doomsdayRaySpeed * Time.deltaTime);
+            if (_instnace == null) return;
+            Vector3 pos = new Vector3(_instnace.GetTargetPos().x, UtilsFunctions.GetGround(_instnace.GetTargetPos()), _instnace.GetTargetPos().z);
+            transform.position = Vector3.MoveTowards(transform.position, _instnace.GetTargetPos(), _stat.speed * Time.deltaTime);
             SetRay();
         } 
 
@@ -40,10 +41,9 @@ namespace Mekaiju.AI.Attack
                 if (_damagable)
                 {
                     _damagable = false;
-                    _ai.AddDps(_ai.doomsdayRayDamage);
                     if (hit.collider.TryGetComponent(out MechaInstance _mecha))
                     {
-                        _mecha.TakeDamage(_ai.doomsdayRayDamage);
+                        _mecha.TakeDamage(_stat.damage);
                         StartCoroutine(DamagableCooldown());
                     }
                 }
