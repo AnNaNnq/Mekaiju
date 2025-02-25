@@ -20,15 +20,17 @@ namespace Mekaiju.Menu
         {
             // Load available screen resolutions
             _resolutions = Screen.resolutions;
-            resolutionDropdown.ClearOptions();
-            List<string> t_options = new List<string>();
+            resolutionDropdown.ClearOptions(); // Clear any pre-existing options in the resolution dropdown
+            List<string> t_options = new List<string>(); // List to hold the resolution options as strings
 
-            int t_currentResolutionIndex = 0;
+            int t_currentResolutionIndex = 0; // Variable to store the index of the current screen resolution
             for (int i = 0; i < _resolutions.Length; i++)
             {
+                // Create a string representation of the resolution
                 string t_option = _resolutions[i].width + " x " + _resolutions[i].height;
                 t_options.Add(t_option);
 
+                // Check if this resolution matches the current screen resolution
                 if (_resolutions[i].width == Screen.currentResolution.width &&
                     _resolutions[i].height == Screen.currentResolution.height)
                 {
@@ -36,6 +38,7 @@ namespace Mekaiju.Menu
                 }
             }
 
+            // Add the resolution options to the dropdown and set the default selected value
             resolutionDropdown.AddOptions(t_options);
             resolutionDropdown.value = t_currentResolutionIndex;
             resolutionDropdown.RefreshShownValue();
@@ -58,27 +61,27 @@ namespace Mekaiju.Menu
             vSyncToggle.onValueChanged.AddListener(p_enabled => _SetVSync(p_enabled));
             fullscreenToggle.onValueChanged.AddListener(p_enabled => _SetFullscreen(p_enabled));
         }
-
+        // Method to update the screen resolution based on the user's selection
         private void _SetResolution(int p_index)
         {
             Screen.SetResolution(_resolutions[p_index].width, _resolutions[p_index].height, Screen.fullScreen);
         }
-
+        // Method to update the graphics quality level based on the user's selection
         private void _SetQuality(int p_index)
         {
             QualitySettings.SetQualityLevel(p_index);
         }
-
+        // Method to enable or disable reflections and save the preference
         private void _SetReflections(bool p_enabled)
         {
             PlayerPrefs.SetInt("Reflections", p_enabled ? 1 : 0);
         }
-
+        // Method to enable or disable V-Sync based on the user's toggle
         private void _SetVSync(bool p_enabled)
         {
             QualitySettings.vSyncCount = p_enabled ? 1 : 0;
         }
-
+        // Method to enable or disable fullscreen mode
         private void _SetFullscreen(bool p_enabled)
         {
             Screen.fullScreen = p_enabled;
