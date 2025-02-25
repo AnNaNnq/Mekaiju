@@ -27,6 +27,11 @@ namespace Mekaiju
         public abstract EnumArray<ModifierTarget, ModifierCollection> modifiers { get; }
 
         /// <summary>
+        /// Return if entity is alive
+        /// </summary>
+        public abstract bool isAlive { get; }
+
+        /// <summary>
         /// Gets the base health of the entity.
         /// </summary>
         public abstract float baseHealth { get; }
