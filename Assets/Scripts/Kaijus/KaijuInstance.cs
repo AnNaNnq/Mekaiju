@@ -6,6 +6,8 @@ using System.Linq;
 using Mekaiju.Attribute;
 using Mekaiju.Utils;
 using System;
+using UnityEditor;
+using static UnityEngine.Rendering.STP;
 
 namespace Mekaiju.AI
 {
@@ -26,6 +28,7 @@ namespace Mekaiju.AI
         
         [field: SerializeField]
         public List<StatefullEffect> effects { get; private set; }
+        public InstanceContext context { get; private set; }
 
         [SerializeField]
         private bool _canBehaviorSwitch = true;
@@ -45,8 +48,15 @@ namespace Mekaiju.AI
 
         private KaijuAnimatorController _animation;
 
+        [SerializeField]
+        private int _currentPhase = 2;
+
         [SOSelector]
-        public KaijuAttackContainer attackGraph;
+        [OverrideLabel("Attack Graph (Phase 1)")]
+        public KaijuAttackContainer attackGraphPhaseOne;
+        [SOSelector]
+        [OverrideLabel("Attack Graph (Phase 2)")]
+        public KaijuAttackContainer attackGraphPhaseTow;
 
         [Separator]
         [Header("Debug")]
@@ -54,6 +64,12 @@ namespace Mekaiju.AI
         [ConditionalField(nameof(checkRange))] public float debugRange;
 
         bool _isInFight;
+
+        public KaijuAttackContainer GetGraph()
+        {
+            if (_currentPhase == 1) return attackGraphPhaseOne;
+            else return attackGraphPhaseTow;
+        }
 
         private void Start()
         {
@@ -65,6 +81,8 @@ namespace Mekaiju.AI
             {
                 behavior.Init(target, gameObject);
             }
+
+            _currentPhase = 2;
 
             // We add the BodyPartObject script to bodyParts objects if they don't already have it
             foreach (BodyPart t_part in bodyParts)
@@ -198,22 +216,76 @@ namespace Mekaiju.AI
             }
         }
 
-        #region IEntityInstance implemetation
+        /// <summary>
+        /// Get the body part with the GameObject
+        /// </summary>
+        /// <param name="p_object"></param>
+        /// <returns></returns>
+        public BodyPart GetBodyPartWithGameObject(GameObject p_object)
+        {
+            foreach (BodyPart t_part in bodyParts)
+            {
+                foreach (GameObject t_obj in t_part.part)
+                {
+                    if (t_obj == p_object)
+                    {
+                        return t_part;
+                    }
+                }
+            }
+            return null;
+        }
 
-        // TODO: implement
-        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => throw new System.NotImplementedException();
+        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => context.modifiers;
 
-        public override float baseHealth => throw new System.NotImplementedException();
+        public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
+
+        public void Heal(GameObject p_bodyPart, float p_amonunt)
+        {
+            BodyPart t_part = GetBodyPartWithGameObject(p_bodyPart);
+            Heal(t_part, p_amonunt);
+        }
+
+        public void Heal(BodyPart p_bodyPart, float p_amonunt)
+        {
+            p_bodyPart.health += p_amonunt;
+            if (p_bodyPart.isDestroyed && p_bodyPart.health > 0)
+            {
+                p_bodyPart.isDestroyed = false;
+            }
+        }
 
         public override void Heal(float p_amount)
         {
-            throw new System.NotImplementedException();
+            float t_amountForPart = p_amount / bodyParts.Count();
+            foreach(var part in bodyParts)
+            {
+                Heal(part, t_amountForPart);
+            }
+        }
+
+        public void TakeDamage(GameObject p_bodyPart, float p_amonunt)
+        {
+            BodyPart t_part = GetBodyPartWithGameObject(p_bodyPart);
+            TakeDamage(t_part, p_amonunt);
+        }
+
+        public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
+        {
+            p_bodyPart.health -= p_amonunt;
+            if(!p_bodyPart.isDestroyed && p_bodyPart.health <= 0)
+            {
+                p_bodyPart.isDestroyed = true;
+            }
         }
 
         public override void TakeDamage(float p_damage)
         {
-            throw new System.NotImplementedException();
+            float t_amountForPart = p_damage / bodyParts.Count();
+            foreach (var part in bodyParts)
+            {
+                TakeDamage(part, t_amountForPart);
+            }
         }
-#endregion
     }
 }
