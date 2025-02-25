@@ -24,9 +24,10 @@ public class ControlsTabManager : MonoBehaviour
     public TMP_Text chestText;
     public TMP_Text headText;
     public TMP_Text healText;
+    public TMP_Text pauseText;
 
-    // This is the InputActionAsset that contains your input mappings (the .inputactions file).
-    [Header("Reference to the InputActionAsset")]
+        // This is the InputActionAsset that contains your input mappings (the .inputactions file).
+        [Header("Reference to the InputActionAsset")]
     public InputActionAsset inputActions;
 
     private void Start()
@@ -96,14 +97,14 @@ public class ControlsTabManager : MonoBehaviour
         // Update the "LockChange" action text.
         if (lockChangeText)
         {
-            InputAction action = playerMap.FindAction("LockChange", throwIfNotFound: false);
+            InputAction action = playerMap.FindAction("Lock", throwIfNotFound: false);
             if (action != null && action.bindings.Count > 0)
                 lockChangeText.text = action.bindings[0].ToDisplayString();
         }
         // Update the "LockOn/Off" action text.
         if (lockOnOffText)
         {
-            InputAction action = playerMap.FindAction("LockOnOff", throwIfNotFound: false);
+            InputAction action = playerMap.FindAction("LockSwitch", throwIfNotFound: false);
             if (action != null && action.bindings.Count > 0)
                 lockOnOffText.text = action.bindings[0].ToDisplayString();
         }
@@ -156,7 +157,14 @@ public class ControlsTabManager : MonoBehaviour
             if (action != null && action.bindings.Count > 0)
                 healText.text = action.bindings[0].ToDisplayString();
         }
-    }
+            // Update the "Pause" action text.
+            if (healText)
+            {
+                InputAction action = playerMap.FindAction("Pause", throwIfNotFound: false);
+                if (action != null && action.bindings.Count > 0)
+                    pauseText.text = action.bindings[0].ToDisplayString();
+            }
+        }
 }
 
 }

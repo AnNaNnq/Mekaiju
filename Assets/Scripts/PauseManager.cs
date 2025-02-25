@@ -34,7 +34,7 @@ namespace Mekaiju.Pause
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.P)) // Press "P" to pause/unpause
+            if (Input.GetKeyDown(KeyCode.Escape)) // Press "Esc" to pause/unpause
             {
                 if (_settingsMenu.activeSelf)
                 {
