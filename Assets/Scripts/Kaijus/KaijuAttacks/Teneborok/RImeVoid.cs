@@ -29,7 +29,6 @@ namespace Mekaiju.AI
             GameObject t_rim = GameObject.Instantiate(gameObjectRimVoid, kaiju.transform.position, Quaternion.identity);
             RimVoidInstance t_rv = t_rim.GetComponent<RimVoidInstance>();
             t_rv.SetUp(kaiju, this);
-
         }
     }
 }

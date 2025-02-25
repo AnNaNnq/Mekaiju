@@ -6,35 +6,27 @@ namespace Mekaiju.Attacks
 {
     public class GravitationalZone : MonoBehaviour
     {
-        private int _dmg;
-        private GameObject _rock;
-        private float _radius = 10f;
-        private int _nbRock = 10;
-        private TeneborokAI _ai;
+        private AbyssalVortex _stat;
+        private KaijuInstance _kaiju;
 
-        public void SetUp(TeneborokAI p_ai)
+        public void SetUp(KaijuInstance p_kaiju, AbyssalVortex p_stat)
         {
-            _dmg = p_ai.abyssalVortexDamage;
-            _rock = p_ai.gameObjectRock;
-            _radius = p_ai.abyssalVortexRadius;
-            _nbRock = p_ai.abyssalVortexNumberOfRock;
-            _ai = p_ai;
+            _kaiju = p_kaiju;
+            _stat = p_stat;
             StartCoroutine(rockFall());
         }
 
         private IEnumerator rockFall()
         {
             yield return new WaitForSeconds(1);
-            for (int i = 0; i < _nbRock; i++)
+            for (int i = 0; i < _stat.nbRock; i++)
             {
-                GameObject t_kaillou = Instantiate(_rock, GetRandomPointInCircle(_radius), Quaternion.identity);
+                GameObject t_kaillou = Instantiate(_stat.gameObjectRock, GetRandomPointInCircle(_stat.radius), Quaternion.identity);
                 FallRock t_fr = t_kaillou.GetComponent<FallRock>();
-                t_fr.SetUp(_ai);
+                t_fr.SetUp(_stat);
                 Destroy(t_kaillou, 10f);
                 yield return new WaitForSeconds(0.2f);
             }
-            _ai.AttackCooldown();
-            _ai.SetLastAttack(TeneborokAttack.AbyssalVortex);
             Destroy(gameObject);
         }
 
@@ -48,12 +40,6 @@ namespace Mekaiju.Attacks
             float y = transform.position.y + 20; // Hauteur fixée
 
             return new Vector3(x, y, z);
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, _radius);
         }
     }
 }

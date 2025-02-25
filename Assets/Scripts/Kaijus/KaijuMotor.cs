@@ -38,6 +38,7 @@ public class KaijuMotor : MonoBehaviour
     /// <param name="p_stopping"></param>
     public void MoveTo(Vector3 p_pos, float p_speed, float p_stopping = 10f)
     {
+        if (!_agent.enabled) return;
         p_stopping = Mathf.Max(p_stopping, 10f);
 
         float t_speed = _instance.stats.speed * (1 + (p_speed / 100));
