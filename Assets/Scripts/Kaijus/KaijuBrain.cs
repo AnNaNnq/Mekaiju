@@ -1,4 +1,5 @@
 using Mekaiju.Utils;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Timeline.Actions;
@@ -30,6 +31,7 @@ namespace Mekaiju.AI
             _attackGraph = _instance.attackGraph;
             _allAttacks = LoadAllAttacks();
             _lastAttack = "Start";
+            StartCoroutine(CheckAttack());
         }
 
         public void StarFight()
@@ -147,6 +149,15 @@ namespace Mekaiju.AI
         {
             _canAttack = false;
             StartCoroutine(UtilsFunctions.CooldownRoutine(_instance.timeBetweenTowAction, () => { _canAttack = true; }));
+        }
+
+        IEnumerator CheckAttack()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(_instance.timeBetweenTowAction + 1);
+                _canAttack = true;
+            }
         }
     }
 }
