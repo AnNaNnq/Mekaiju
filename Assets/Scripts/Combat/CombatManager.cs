@@ -56,7 +56,7 @@ namespace Mekaiju
             kaijuInstance?.onTakeDamage.AddListener(_OnEntityTakeDamage);
         }
 
-        private void Oestroy()
+        private void OnDestroy()
         {
             mechaInstance?.onTakeDamage?.RemoveListener(_OnEntityTakeDamage);
             kaijuInstance?.onTakeDamage?.RemoveListener(_OnEntityTakeDamage);           
