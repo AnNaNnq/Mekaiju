@@ -1,6 +1,8 @@
 using Mekaiju.Utils;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 namespace Mekaiju.AI
@@ -19,7 +21,7 @@ namespace Mekaiju.AI
         [SerializeField]
         private bool _canAttack = true;
 
-        [SerializeField]
+        public KaijuAttack[] allAttacks { get { return _allAttacks; } }
         private KaijuAttack[] _allAttacks;
 
         private void Start()
@@ -29,6 +31,7 @@ namespace Mekaiju.AI
             _attackGraph = _instance.attackGraph;
             _allAttacks = LoadAllAttacks();
             _lastAttack = "Start";
+            StartCoroutine(CheckAttack());
         }
 
         public void StarFight()
@@ -131,9 +134,9 @@ namespace Mekaiju.AI
                 {
                     _motor.Stop();
                     _motor.LookTarget();
-                    t_kaijuAttacks[i].attack.Active();
+                    t_kaijuAttacks[i].attack.Active(_instance);
                     _lastAttack = t_kaijuAttacks[i].name;
-                    MakeAction();
+                    _canAttack = false;
                     return;
                 }   
             }
@@ -146,6 +149,15 @@ namespace Mekaiju.AI
         {
             _canAttack = false;
             StartCoroutine(UtilsFunctions.CooldownRoutine(_instance.timeBetweenTowAction, () => { _canAttack = true; }));
+        }
+
+        IEnumerator CheckAttack()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(_instance.timeBetweenTowAction + 1);
+                _canAttack = true;
+            }
         }
     }
 }

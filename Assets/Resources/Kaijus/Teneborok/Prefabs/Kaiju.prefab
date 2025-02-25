@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 4578713365338896830}
   m_Layer: 0
   m_Name: Yeux
-  m_TagString: Untagged
+  m_TagString: DoomsdayRaySpawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -469,6 +469,8 @@ GameObject:
   - component: {fileID: 309942910244388346}
   - component: {fileID: 258508486715786093}
   - component: {fileID: 2158193899646599423}
+  - component: {fileID: 8610327776798930001}
+  - component: {fileID: 3470388231203511882}
   m_Layer: 0
   m_Name: Kaiju
   m_TagString: Kaiju
@@ -671,15 +673,39 @@ MonoBehaviour:
     dmg: 1000
     def: 10
     speed: 3.4
+  bodyParts:
+  - nom: "T\xEAte"
+    part:
+    - {fileID: 5197896978300794659}
+    health: 100
+    isDestroyed: 0
+  - nom: Bras
+    part:
+    - {fileID: 8445334262680586365}
+    - {fileID: 2395312711759002177}
+    health: 100
+    isDestroyed: 0
+  - nom: Patte
+    part:
+    - {fileID: 3489572259349122008}
+    - {fileID: 4353400018563308469}
+    health: 100
+    isDestroyed: 0
+  - nom: Corps
+    part:
+    - {fileID: 6904326128312965468}
+    health: 100
+    isDestroyed: 0
   behaviors:
   - rid: 3772134562093072529
   - rid: 3772134562093072530
   - rid: 3772134562093072587
   timeBetweenTowAction: 2
+  <effects>k__BackingField: []
   _canBehaviorSwitch: 1
   attackGraph: {fileID: 11400000, guid: 74ecf6242186e604eb76c0e683c0b8ac, type: 2}
   checkRange: 1
-  debugRange: 20
+  debugRange: 50
   references:
     version: 2
     RefIds:
@@ -697,18 +723,18 @@ MonoBehaviour:
       data:
         speed: 75
         canTrigger: 1
-        triggerArea: 30
+        triggerArea: 75
         triggerOnce: 0
-        showGizmo: 0
-        playerDistance: 20
+        showGizmo: 1
+        playerDistance: 50
     - rid: 3772134562093072587
       type: {class: AgroBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
       data:
         speed: 100
         canTrigger: 1
-        triggerArea: 20
+        triggerArea: 40
         triggerOnce: 1
-        showGizmo: 0
+        showGizmo: 1
 --- !u!114 &258508486715786093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733,9 +759,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09045f5883ced84b89a2eb6ea61e5a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lastAttack: 
+  _lastAttack: SharpBlow
   _canAttack: 1
-  _allAttacks: []
+--- !u!114 &8610327776798930001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276911127515905678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e08b5fcb585a2419eedd9e133694d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3470388231203511882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276911127515905678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e08b5fcb585a2419eedd9e133694d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3489572259349122008
 GameObject:
   m_ObjectHideFlags: 0

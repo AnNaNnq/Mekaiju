@@ -10,19 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c81f28bfa57eadc47904e311de7feb8c, type: 3}
-  m_Name: SharpBlow
+  m_Name: DoomsdayRay
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 3772134609141629007
+    rid: 3772134698131652715
   references:
     version: 2
     RefIds:
-    - rid: 3772134609141629007
-      type: {class: SharpBlow, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 3772134698131652715
+      type: {class: DoomsdayRay, ns: Mekaiju.AI, asm: Assembly-CSharp}
       data:
-        cooldown: 0
+        cooldown: 10
         range: 10
-        blockable: 1
+        blockable: 0
         canUse: 1
-        damage: 50
-        timeBeforeAttack: 0.2
+        damage: 10
+        doomsdayObject: {fileID: 4720256673585378873, guid: 47dcc4d36c6ae6c4995aa35ff010f77b, type: 3}
+        start: {fileID: 0}
+        speed: 10
+        duration: 5

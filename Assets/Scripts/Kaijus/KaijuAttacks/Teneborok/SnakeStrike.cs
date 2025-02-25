@@ -1,10 +1,10 @@
-using MyBox;
-using System.Collections;
 using UnityEngine;
+using System.Collections;
+using MyBox;
 
 namespace Mekaiju.AI
 {
-    public class SharpBlow : IAttack
+    public class SnakeStrike : IAttack
     {
         [Separator]
         [OverrideLabel("Damage (% of DMG)")]
@@ -32,6 +32,5 @@ namespace Mekaiju.AI
             kaiju.brain.MakeAction();
 
         }
-
     }
 }

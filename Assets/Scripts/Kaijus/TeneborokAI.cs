@@ -416,7 +416,7 @@ namespace Mekaiju.AI
             lastAttack = TeneborokAttack.Stop;
             GameObject t_zone = Instantiate(gameObjectAbyssalVortex, _target.transform.position, Quaternion.identity);
             GravitationalZone t_gz = t_zone.GetComponent<GravitationalZone>();
-            t_gz.SetUp(this);
+            //t_gz.SetUp(p_stat);
             StartCoroutine(CooldownRoutine(abyssalVortexCooldown, () => _canAbyssalVortex = true));
         }
 
@@ -426,8 +426,8 @@ namespace Mekaiju.AI
             _canRimVoid = false;
             lastAttack = TeneborokAttack.Stop;
             GameObject t_rim = Instantiate(gameObjectRimVoid, transform.position, Quaternion.identity);
-            RimVoid t_rv = t_rim.GetComponent<RimVoid>();
-            t_rv.SetUp(this);
+            RimVoidInstance t_rv = t_rim.GetComponent<RimVoidInstance>();
+            //t_rv.SetUp(this);
             StartCoroutine(CooldownRoutine(rimVoidCooldown, () => _canRimVoid = true));
         }
 
@@ -439,7 +439,7 @@ namespace Mekaiju.AI
             Vector3 t_pos = new Vector3(transform.position.x, UtilsFunctions.GetGround(transform.position), transform.position.z) + (transform.forward * 10);
             GameObject t_doomsday = Instantiate(gameObjectDoomsdayRay, t_pos, Quaternion.identity);
             DoomsdayRay t_dr = t_doomsday.GetComponent<DoomsdayRay>();
-            t_dr.SetUp(doomsdayRayStart, this);
+            //t_dr.SetUp(doomsdayRayStart, this);
             yield return new WaitForSeconds(doomsdayRayDuration);
             lastAttack = TeneborokAttack.DoomsdayRay;
             Destroy(t_doomsday);

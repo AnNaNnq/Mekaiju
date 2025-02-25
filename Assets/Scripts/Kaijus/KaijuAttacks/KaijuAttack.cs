@@ -1,4 +1,5 @@
 using Mekaiju.Attributes;
+using MyBox;
 using UnityEngine;
 
 namespace Mekaiju.AI
@@ -6,12 +7,6 @@ namespace Mekaiju.AI
     [CreateAssetMenu(fileName = "New Attack", menuName = "Kaiju/Attack")]
     public class KaijuAttack : ScriptableObject
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        [field: SerializeField]
-        public string name { get; private set; }
-
         /// <summary>
         /// 
         /// </summary>

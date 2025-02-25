@@ -1,19 +1,18 @@
 using Mekaiju;
 using Mekaiju.AI;
 using UnityEngine;
-using UnityEngine.VFX;
 
 public class FallRock : MonoBehaviour
 {
-    public int _dmg;
-    TeneborokAI _ia;
+    public float _dmg;
+    AbyssalVortex _stat;
     public GameObject impactVFX;
 
 
-    public void SetUp(TeneborokAI p_ai)
+    public void SetUp(AbyssalVortex p_stat)
     {
-        _dmg = p_ai.abyssalVortexDamage;
-        _ia = p_ai;
+        _dmg = p_stat.damage;
+        _stat = p_stat;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -21,7 +20,6 @@ public class FallRock : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             other.gameObject.GetComponent<MechaInstance>().TakeDamage(_dmg);
-            _ia.AddDps(_dmg);
         }
         else
         {

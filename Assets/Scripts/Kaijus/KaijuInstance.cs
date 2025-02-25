@@ -11,11 +11,13 @@ namespace Mekaiju.AI
 {
     [RequireComponent(typeof(KaijuBrain))]
     [RequireComponent(typeof(KaijuMotor))]
+    [RequireComponent(typeof(KaijuAnimatorController))]
     public class KaijuInstance : IEntityInstance
     {
         [Header("General")]
         [Tag] public string targetTag;
         public KaijuStats stats;
+        public BodyPart[] bodyParts;
 
         [Separator]
         [field: SerializeReference, SubclassPicker]
@@ -35,7 +37,13 @@ namespace Mekaiju.AI
 
         protected KaijuMotor _motor;
 
+        public KaijuBrain brain { get { return _brain; } }
+
         private KaijuBrain _brain;
+
+        public KaijuAnimatorController animator { get { return _animation; } }
+
+        private KaijuAnimatorController _animation;
 
         [SOSelector]
         public KaijuAttackContainer attackGraph;
@@ -43,16 +51,31 @@ namespace Mekaiju.AI
         [Separator]
         [Header("Debug")]
         public bool checkRange;
-        [ConditionalField(nameof(checkRange))] public float debugRange ;
+        [ConditionalField(nameof(checkRange))] public float debugRange;
+
+        bool _isInFight;
 
         private void Start()
         {
             _motor = GetComponent<KaijuMotor>();
             _brain = GetComponent<KaijuBrain>();
+            _animation = GetComponent<KaijuAnimatorController>();
             target = GameObject.FindGameObjectWithTag(targetTag);
             foreach (var behavior in behaviors)
             {
                 behavior.Init(target, gameObject);
+            }
+
+            // We add the BodyPartObject script to bodyParts objects if they don't already have it
+            foreach (BodyPart t_part in bodyParts)
+            {
+                foreach (GameObject t_obj in t_part.part)
+                {
+                    if (t_obj.GetComponent<BodyPartObject>() == null)
+                    {
+                        t_obj.AddComponent<BodyPartObject>();
+                    }
+                }
             }
 
             CheckAllBehaviorsDisabeled();
@@ -60,7 +83,14 @@ namespace Mekaiju.AI
 
         private void Update()
         {
-            UseBehavior();
+            if (_isInFight)
+            {
+                _brain.StarFight();
+            }
+            else
+            {
+                UseBehavior();
+            }
             effects.ForEach(effect => effect.Tick());
             effects.RemoveAll(effect =>
             {
@@ -82,7 +112,7 @@ namespace Mekaiju.AI
         {
             foreach(var behavior in behaviors)
             {
-                behavior.IsTrigger();
+                behavior.Trigger();
                 if (behavior.active) behavior.Run();
             }
         }
@@ -105,12 +135,17 @@ namespace Mekaiju.AI
 
         public void Combat()
         {
-            _brain.StarFight();
+            _isInFight = true;
         }
 
         public bool TargetInRange(float p_range)
         {
             return Vector3.Distance(target.transform.position, transform.position) <= p_range;
+        }
+
+        public Vector3 GetTargetPos()
+        {
+            return target.transform.position;
         }
 
         private void OnDrawGizmos()
