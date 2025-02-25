@@ -4,16 +4,16 @@ namespace Mekaiju.AI
 {
     public class BodyPartObject : MonoBehaviour
     {
-        BasicAI _ai;
+        KaijuInstance _instance;
 
         void Start()
         {
-            _ai = GetComponentInParent<BasicAI>();
+            _instance = GetComponentInParent<KaijuInstance>();
         }
 
         public void TakeDamage(int p_damage)
         {
-            _ai.TakeDamage(p_damage, gameObject);
+            _instance.TakeDamage(gameObject, p_damage);
         }
     }
 }

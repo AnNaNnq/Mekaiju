@@ -1,3 +1,4 @@
+using System.Linq;
 using Mekaiju;
 using Mekaiju.AI;
 using Mekaiju.LockOnTargetSystem;
@@ -43,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
 
     private MechaInstance _instance;
-    private BasicAI       _target;
+    private KaijuInstance _target;
 
     private LayerMask _groundLayerMask;
 
@@ -64,41 +65,6 @@ public class PlayerController : MonoBehaviour
         _instance = GetComponent<MechaInstance>();
 
         _cameraPivot = transform.Find("CameraPivot");
-
-        GameObject t_go;
-        t_go = GameObject.FindWithTag("Kaiju");
-        if (t_go)
-        {
-            if (t_go.TryGetComponent<BasicAI>(out var t_comp))
-            {
-                _target = t_comp;
-            }
-            else
-            {
-                Debug.Log("Kaiju must have BasicAI inherited component!");
-            }
-        }
-        else
-        {
-            Debug.Log("Kaiju must have Kaiju tag!");
-        }
-
-        t_go = GameObject.FindWithTag("MainCamera");
-        if (t_go)
-        {
-            if (t_go.TryGetComponent<CinemachineCamera>(out var t_comp))
-            {
-                t_comp.Target.TrackingTarget = _cameraPivot;
-            }
-            else
-            {
-                Debug.Log("MainCamera must have CinemachineCamera component!");
-            }
-        }
-        else
-        {
-            Debug.Log("Scene camera must have MainCamera tag!");
-        }
     }
 
     private void Start()
@@ -119,6 +85,41 @@ public class PlayerController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
         Cursor.visible = false; // Make the cursor invisible during gameplay
+
+        GameObject t_go;
+        t_go = GameObject.Find("CombatManager");
+        if (t_go)
+        {
+            if (t_go.TryGetComponent<CombatManager>(out var t_cm))
+            {
+                _target = t_cm.kaijuInstance;
+            }
+            else
+            {
+                Debug.Log("Combat manager must have CombatManager script!");
+            }
+        }
+        else
+        {
+            Debug.Log("CombatManager must be in the scene!");
+        }
+
+        t_go = GameObject.FindWithTag("MainCamera");
+        if (t_go)
+        {
+            if (t_go.TryGetComponent<CinemachineCamera>(out var t_comp))
+            {
+                t_comp.Target.TrackingTarget = _cameraPivot;
+            }
+            else
+            {
+                Debug.Log("MainCamera must have CinemachineCamera component!");
+            }
+        }
+        else
+        {
+            Debug.Log("Scene camera must have MainCamera tag!");
+        }
     }
 
     private void OnEnable()
@@ -156,18 +157,15 @@ public class PlayerController : MonoBehaviour
     {
         if (_target)
         {
-            BodyPart t_part;
-            do
+            BodyPart[] t_parts = _target.bodyParts.Where(t_part => !t_part.isDestroyed).ToArray();
+            if (t_parts.Length > 0)
             {
-                t_part = _target.bodyParts[Random.Range(0, _target.bodyParts.Length)];
+                BodyPart   t_part  = t_parts[Random.Range(0, t_parts.Length)];
+                if (t_part != null)
+                    return t_part.part[Random.Range(0, t_part.part.Length)].GetComponent<BodyPartObject>();
             }
-            while (t_part.isDestroyed == true);
-            return t_part.part[Random.Range(0, t_part.part.Length)].GetComponent<BodyPartObject>();
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     private void OnSwordAttack(InputAction.CallbackContext p_context)
