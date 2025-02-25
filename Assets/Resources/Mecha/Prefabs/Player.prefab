@@ -213,7 +213,7 @@ MonoBehaviour:
   _cameraPivot: {fileID: 1708984074938599406}
   _lockOnTargetSystem: {fileID: 5855820826959060527}
   _groundCheckRadius: 0.5
-  _baseSpeed: 250
+  _baseSpeed: 500
   _speed: 0
   _mouseSensitivity: 50
   _minVerticalAngle: -30
@@ -240,7 +240,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.1828743
+  m_Radius: 3.89
   m_Height: 7.3218665
   m_Direction: 1
   m_Center: {x: -0.03519976, y: 3.6818888, z: 0}
@@ -285,6 +285,7 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+  <effects>k__BackingField: []
   <stamina>k__BackingField: 0
   onAddEffect:
     m_PersistentCalls:
@@ -325,6 +326,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b4d6d0e5c9740f0b57297fa6d58f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  onJump:
+    m_PersistentCalls:
+      m_Calls: []
+  onLArm:
+    m_PersistentCalls:
+      m_Calls: []
+  onRArm:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1785833025642644442
 GameObject:
   m_ObjectHideFlags: 0
