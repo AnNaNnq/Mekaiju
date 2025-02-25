@@ -16,7 +16,7 @@ namespace Mekaiju.Pause
         {
             _pauseMenu.SetActive(false); // Hide pause menu at start
             _settingsMenu.SetActive(false); // Hide settings menu at start
-            LockCursor(); // Lock the cursor at the start
+            _LockCursor(); // Lock the cursor at the start
 
             // Ensure UI sounds are not paused when the game is paused
             if (_uiAudioSources != null)
@@ -58,11 +58,11 @@ namespace Mekaiju.Pause
             if (_isPaused)
             {
                 _resumeButton.Select(); // Auto-select the resume button when paused
-                UnlockCursor(); // Unlock the cursor when paused
+                _UnlockCursor(); // Unlock the cursor when paused
             }
             else
             {
-                LockCursor(); // Lock the cursor during gameplay
+                _LockCursor(); // Lock the cursor during gameplay
             }
         }
 
@@ -81,14 +81,14 @@ namespace Mekaiju.Pause
         }
 
         // Locks the cursor to the center of the screen and makes it invisible
-        private void LockCursor()
+        private void _LockCursor()
         {
             Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
             Cursor.visible = false; // Make the cursor invisible during gameplay
         }
 
         // Unlocks the cursor and makes it visible
-        private void UnlockCursor()
+        private void _UnlockCursor()
         {
             Cursor.lockState = CursorLockMode.None; // Unlock the cursor
             Cursor.visible = true; // Make the cursor visible for menu interaction

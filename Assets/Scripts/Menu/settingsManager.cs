@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Mekaiju.UI
+namespace Mekaiju.Menu
+
 {
     public class SettingsManager : MonoBehaviour
     {
