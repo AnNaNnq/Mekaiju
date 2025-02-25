@@ -13,7 +13,12 @@ namespace Mekaiju
         /// <summary>
         /// Must be invoke in TakeDamage implementation
         /// </summary>
-        public UnityEvent onTakeDamage { get; private set; } = new();
+        public virtual UnityEvent<float> onTakeDamage { get; private set; } = new();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual UnityEvent<float> onDealDamage { get; private set; } = new();
 
         /// <summary>
         /// Allow time point tracking

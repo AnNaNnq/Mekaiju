@@ -62,7 +62,7 @@ namespace Mekaiju
             kaijuInstance?.onTakeDamage?.RemoveListener(_OnEntityTakeDamage);           
         }
 
-        private void _OnEntityTakeDamage()
+        private void _OnEntityTakeDamage(float p_damage)
         {
             if (!(mechaInstance.isAlive && kaijuInstance.isAlive))
             {

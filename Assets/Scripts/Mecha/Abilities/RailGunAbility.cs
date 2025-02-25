@@ -113,10 +113,7 @@ namespace Mekaiju
                     var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue(_damage);
                     // @TODO: wait for parameter to be float
                     p_target.TakeDamage((int)t_damage);
-                    if (DebugInfo.Instance)
-                    {
-                        DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Gun, t_damage.ToString(), 0.5f);
-                    }
+                    p_self.onDealDamage.Invoke(t_damage);
                 }
                 GameObject.Destroy(t_go);
 

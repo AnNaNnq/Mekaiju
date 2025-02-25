@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using Mekaiju.AI;
+using Mekaiju.Utils;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Mekaiju
 {
@@ -10,7 +12,7 @@ namespace Mekaiju
     /// 
     /// </summary>
     [Serializable]
-    public class MechaPartInstance : MonoBehaviour
+    public class MechaPartInstance : IEntityInstance
     {
         /// <summary>
         /// 
@@ -46,23 +48,6 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="p_damage"></param>
-        public void TakeDamage(float p_damage)
-        {
-            var t_damage = mecha.context.modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
-            
-            mecha.timePoints[TimePoint.LastDamage] = Time.time;
-            health = Mathf.Max(0f, health - t_damage);
-        }
-
-        public void Heal(float p_heal)
-        {
-            health = Mathf.Min(_config.desc.health, health + p_heal);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
@@ -93,6 +78,31 @@ namespace Mekaiju
             _config.ability.behaviour?.FixedTick(this);
         }
 
-    }
+#region IEntityInstance implementation
 
+        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => mecha.modifiers;
+
+        public override UnityEvent<float> onTakeDamage => mecha.onTakeDamage;
+        public override UnityEvent<float> onDealDamage => mecha.onDealDamage;
+
+        public override bool isAlive => health > 0f;
+
+        public override float baseHealth => _config.desc.health;
+
+        public override void TakeDamage(float p_damage)
+        {
+            var t_damage = mecha.context.modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
+            
+            mecha.timePoints[TimePoint.LastDamage] = Time.time;
+            health = Mathf.Max(0f, health - t_damage);
+
+            onTakeDamage.Invoke(t_damage);
+        }
+
+        public override void Heal(float p_heal)
+        {
+            health = Mathf.Min(_config.desc.health, health + p_heal);
+        }
+    }
+#endregion
 }

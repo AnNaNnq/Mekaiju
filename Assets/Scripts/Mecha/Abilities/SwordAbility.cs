@@ -67,10 +67,7 @@ namespace Mekaiju
                     // Make damage
                     var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
                     p_target.TakeDamage((int)t_damage);
-                    if (DebugInfo.Instance)
-                    {
-                        DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Sword, t_damage.ToString(), 1f);
-                    }
+                    p_self.onDealDamage.Invoke(t_damage);
                 }
 
             }
