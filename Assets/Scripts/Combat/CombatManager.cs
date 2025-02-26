@@ -1,5 +1,6 @@
 using UnityEngine;
 using Mekaiju.AI;
+using UnityEngine.Events;
 
 namespace Mekaiju
 {
@@ -10,6 +11,8 @@ namespace Mekaiju
 
         public CombatState  state  { get; private set; }
         public CombatResult result { get; private set; }
+
+        public UnityEvent<CombatState> onStateChange;
 
         private void Awake()
         {
@@ -45,6 +48,8 @@ namespace Mekaiju
             {
                 Debug.LogWarning("A kaiju must be present in the scene!");
             }
+
+            onStateChange = new();
         }
 
         private void Start()
@@ -68,6 +73,8 @@ namespace Mekaiju
             {
                 state  = CombatState.Ended;
                 result = mechaInstance.isAlive ? CombatResult.Win : CombatResult.Loose;
+
+                onStateChange.Invoke(state);
             }
         }
     }
