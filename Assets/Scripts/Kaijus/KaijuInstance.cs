@@ -238,6 +238,8 @@ namespace Mekaiju.AI
 
         public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
 
+        public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
+
         public void Heal(GameObject p_bodyPart, float p_amonunt)
         {
             BodyPart t_part = GetBodyPartWithGameObject(p_bodyPart);
@@ -275,6 +277,8 @@ namespace Mekaiju.AI
             {
                 p_bodyPart.isDestroyed = true;
             }
+
+            onTakeDamage.Invoke(p_amonunt);
         }
 
         public override void TakeDamage(float p_damage)

@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class DebugInfo : MonoBehaviour
 {
-    public static DebugInfo Instance { get; private set; }
-
     private MechaInstance _inst;
 
     [SerializeField]
@@ -30,6 +28,9 @@ public class DebugInfo : MonoBehaviour
     private TextMeshProUGUI _legsHealthField;
 
     [SerializeField]
+    private TextMeshProUGUI _dps;
+
+    [SerializeField]
     private TextMeshProUGUI _effectField;
 
     private float _maxHealth;
@@ -39,24 +40,10 @@ public class DebugInfo : MonoBehaviour
     public Transform effectTimeList;
     private Dictionary<StatefullEffect, Image> _effectsMapping;
 
-    public TextMeshProUGUI Sword;
-    public TextMeshProUGUI Gun;
-
     private void Awake()
     {
-        // Singleton pattern to ensure only one instance of GameManager exists.
-        if (Instance == null)
-        {
-            Instance = this;
-            _inst = GameObject.Find("Player").GetComponent<MechaInstance>();
-            _effectsMapping = new();
-
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
+        _inst = GameObject.Find("Player").GetComponent<MechaInstance>();
+        _effectsMapping = new();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -65,6 +52,7 @@ public class DebugInfo : MonoBehaviour
         _SetStamina();
         _inst.onAddEffect.AddListener(_SetEffects);
         _inst.onRemoveEffect.AddListener(_RemoveEffects);
+        _inst.onDealDamage.AddListener(_OnDealDamage);
         StartCoroutine(LateStart(1));
     }
 
@@ -114,6 +102,11 @@ public class DebugInfo : MonoBehaviour
     {
         Destroy(_effectsMapping[p_effect].gameObject);
         _effectsMapping.Remove(p_effect);
+    }
+
+    private void _OnDealDamage(float p_damage)
+    {
+        StartCoroutine(_SetTempValue(_dps, $"{p_damage:0.00}", 0.5f));
     }
 
     private void _SetHealthBar()
