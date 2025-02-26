@@ -139,9 +139,15 @@ namespace Mekaiju
                 p_effect.Dispose();
             }
         }
-#endregion
+        #endregion
 
-#region MonoBehaviour implementation
+        #region MonoBehaviour implementation
+        private void Awake()
+        {
+            onAddEffect = new();
+            onRemoveEffect = new();
+        }
+
         private void Start()
         {
             config = GameManager.instance.playerData.mechaConfig;
@@ -182,9 +188,6 @@ namespace Mekaiju
                     return t_inst;
                 }
             );
-                        
-            onAddEffect = new();
-            onRemoveEffect = new();
         }
 
         private void Update()
