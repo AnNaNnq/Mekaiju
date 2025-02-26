@@ -25,10 +25,9 @@ namespace Mekaiju.AI
         public override IEnumerator Attack(KaijuInstance kaiju)
         {
             base.Attack(kaiju);
-            _using = true;
+            kaiju.animator.AttackAnimation(nameof(SharpBlowUpgrade));
             yield return new WaitForSeconds(timeBeforeAttack);
             Debug.Log($"Sharp Blow + fait {damage} degats");
-            _using = false;
             kaiju.brain.MakeAction();
         }
 
