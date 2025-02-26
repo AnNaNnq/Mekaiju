@@ -24,7 +24,6 @@ namespace Mekaiju.AI
         public override void Active(KaijuInstance kaiju)
         {
             base.Active(kaiju);
-            _using = true;
             kaiju.motor.StopKaiju(1f);
             GameObject t_rim = GameObject.Instantiate(gameObjectRimVoid, kaiju.transform.position, Quaternion.identity);
             RimVoidInstance t_rv = t_rim.GetComponent<RimVoidInstance>();

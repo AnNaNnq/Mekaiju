@@ -24,7 +24,6 @@ namespace Mekaiju.AI
         public override void Active(KaijuInstance kaiju)
         {
             base.Active(kaiju);
-            _using = true;
             kaiju.motor.StopKaiju(2f);
             GameObject t_zone = GameObject.Instantiate(gameObjectAbyssalVortex, kaiju.GetTargetPos(), Quaternion.identity);
             GravitationalZone t_gz = t_zone.GetComponent<GravitationalZone>();

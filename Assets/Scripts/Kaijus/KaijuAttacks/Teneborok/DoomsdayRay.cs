@@ -24,7 +24,6 @@ namespace Mekaiju.AI
         {
             base.Active(kaiju);
             start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
-            _using = true;
             kaiju.motor.StopKaiju(duration);
             Vector3 t_pos = new Vector3(kaiju.transform.position.x, UtilsFunctions.GetGround(kaiju.transform.position), kaiju.transform.position.z) + (kaiju.transform.forward * 10);
             GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, t_pos, Quaternion.identity);

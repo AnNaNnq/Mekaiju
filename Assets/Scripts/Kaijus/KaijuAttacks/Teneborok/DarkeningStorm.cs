@@ -19,7 +19,6 @@ namespace Mekaiju.AI
         public override void Active(KaijuInstance kaiju)
         {
             base.Active(kaiju);
-            _using = true;
             GameObject t_darkeningStorm = GameObject.Instantiate(prefab, kaiju.transform.position, Quaternion.identity);
             GameObject.Destroy(t_darkeningStorm, duration);
         }
@@ -28,7 +27,6 @@ namespace Mekaiju.AI
         {
             base.Attack(kaiju);
             yield return new WaitForSeconds(duration);
-            _using = false;
         }
     }
 
