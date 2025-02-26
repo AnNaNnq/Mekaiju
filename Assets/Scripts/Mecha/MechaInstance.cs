@@ -215,6 +215,8 @@ namespace Mekaiju
 
         public override float baseHealth => config.desc.parts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
 
+        public override bool isAlive => health > 0;
+
         public override void RestoreStamina(float p_amount)
         {
             stamina = Math.Min(config.desc.stamina, stamina + p_amount);

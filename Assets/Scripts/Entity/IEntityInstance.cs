@@ -1,5 +1,6 @@
 using Mekaiju.Utils;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Mekaiju
 {
@@ -10,6 +11,16 @@ namespace Mekaiju
     public abstract class IEntityInstance : MonoBehaviour
     {
         /// <summary>
+        /// Must be invoke in TakeDamage implementation
+        /// </summary>
+        public virtual UnityEvent<float> onTakeDamage { get; private set; } = new();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual UnityEvent<float> onDealDamage { get; private set; } = new();
+
+        /// <summary>
         /// Allow time point tracking
         /// Can be overridden if entity is controlled by top level one.
         /// </summary>
@@ -19,6 +30,11 @@ namespace Mekaiju
         /// Allow buff/debuff effect
         /// </summary>
         public abstract EnumArray<ModifierTarget, ModifierCollection> modifiers { get; }
+
+        /// <summary>
+        /// Return if entity is alive
+        /// </summary>
+        public abstract bool isAlive { get; }
 
         /// <summary>
         /// Gets the base health of the entity.
