@@ -7,11 +7,11 @@ public class RimVoidFire : MonoBehaviour
 {
     public int maxSizeY = 10;
 
-    TeneborokAI _ai;
+    RimeVoid _stat;
 
-    public void UpdateLineVisual(LineRenderer p_line, TeneborokAI p_ai)
+    public void UpdateLineVisual(LineRenderer p_line, RimeVoid p_stat)
     {
-        _ai = p_ai;
+        _stat = p_stat;
         int pointCount = p_line.positionCount;
         if (pointCount < 2) return; // Il faut au moins deux points pour tracer une ligne
 
@@ -39,7 +39,7 @@ public class RimVoidFire : MonoBehaviour
 
     IEnumerator DestroyWall()
     {
-        yield return new WaitForSeconds(_ai.rimVoidDuration);
+        yield return new WaitForSeconds(_stat.rimVoidDuration);
         while (gameObject.transform.localScale.y >= 0)
         {
             yield return new WaitForSeconds(0.01f);

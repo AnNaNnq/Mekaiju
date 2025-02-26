@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 4578713365338896830}
   m_Layer: 0
   m_Name: Yeux
-  m_TagString: Untagged
+  m_TagString: DoomsdayRaySpawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -463,12 +463,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9125232104238680391}
-  - component: {fileID: 3481992632544994579}
-  - component: {fileID: 3542776749811644157}
-  - component: {fileID: 1733689174530891390}
   - component: {fileID: 309942910244388346}
   - component: {fileID: 258508486715786093}
   - component: {fileID: 2158193899646599423}
+  - component: {fileID: 8610327776798930001}
+  - component: {fileID: 3542776749811644157}
+  - component: {fileID: 1733689174530891390}
   m_Layer: 0
   m_Name: Kaiju
   m_TagString: Kaiju
@@ -496,38 +496,28 @@ Transform:
   - {fileID: 8256200262542259368}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3481992632544994579
+--- !u!114 &309942910244388346
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3276911127515905678}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7afc732effbd5e44bb1a0e21037236aa, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e772473092a5da41a4744cebedb3c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  states: 0
-  mask:
-    serializedVersion: 2
-    m_Bits: 256
   targetTag: Player
+  stats:
+    health: 100
+    dmg: 1000
+    def: 10
+    speed: 3.4
   bodyParts:
   - nom: "T\xEAte"
     part:
     - {fileID: 5197896978300794659}
-    health: 100
-    isDestroyed: 0
-  - nom: Corps
-    part:
-    - {fileID: 6904326128312965468}
-    health: 100
-    isDestroyed: 0
-  - nom: Jambe
-    part:
-    - {fileID: 3489572259349122008}
-    - {fileID: 4353400018563308469}
     health: 100
     isDestroyed: 0
   - nom: Bras
@@ -536,79 +526,96 @@ MonoBehaviour:
     - {fileID: 2395312711759002177}
     health: 100
     isDestroyed: 0
-  nbPhase: 0
-  attackGraph: {fileID: 0}
-  agroTriggerArea: 51.91
-  agroSpeed: 3.5
-  attackCountdown: 1
-  _canAttack: 1
-  awaitTriggerArea: 30
-  awaitPlayerDistance: 20
-  awaitSpeed: 3
-  timeBeforeAwait: 2
-  nest: {fileID: 0}
-  normalSpeed: 3
-  timeBeforeNormal: 2
+  - nom: Patte
+    part:
+    - {fileID: 3489572259349122008}
+    - {fileID: 4353400018563308469}
+    health: 100
+    isDestroyed: 0
+  - nom: Corps
+    part:
+    - {fileID: 6904326128312965468}
+    health: 100
+    isDestroyed: 0
+  behaviors:
+  - rid: 3772134562093072529
+  - rid: 3772134562093072530
+  - rid: 3772134562093072587
+  timeBetweenTowAction: 2
+  <effects>k__BackingField: []
+  _canBehaviorSwitch: 1
   _currentPhase: 1
-  showGizmo: 0
-  textDPS: {fileID: 0}
-  lastAttack: 0
-  sharpBlowDamage: 10
-  sharpBlowRange: 15
-  sharpBlowBody: 0
-  sharpBlowZoneCenter: {x: 0, y: 0, z: 8}
-  sharpBlowZoneSize: {x: 10, y: 10, z: 10}
-  sharpBlowSecondAttackDamage: 20
-  abyssalVortexDamage: 10
-  abyssalVortexRange: 40
-  abyssalVortexBody: 0
-  gameObjectAbyssalVortex: {fileID: 1136635311529201712, guid: d7b6002c8c20e7945bed8cce40946338, type: 3}
-  gameObjectRock: {fileID: 8298655363207905739, guid: 2683fcf5f6f70b149bb762da0f2dcb0f, type: 3}
-  abyssalVortexRadius: 10
-  abyssalVortexNumberOfRock: 10
-  abyssalVortexCooldown: 10
-  rimVoidDamage: 10
-  rimVoideRange: 30
-  rimVoidBody: 0
-  gameObjectRimVoid: {fileID: 8796084795391207267, guid: f8a8dee523c18c645b5f8a61b77489eb, type: 3}
-  gameObjectRimVoidFire: {fileID: 5250174984945250790, guid: d5a60c170b5ff834bab0dd7b9a00d95c, type: 3}
-  rimVoidDuration: 2
-  rimVoidHitCooldown: 0.1
-  rimVoidEffect: {fileID: 11400000, guid: 75bc609f0c750b743bb40896e9e5c995, type: 2}
-  rimVoidCooldown: 10
-  snakeStrikeDamage: 10
-  snakeStrikeRange: 10
-  snakeStrikeBody: 0
-  snakeStrikeZoneCenter: {x: 0, y: 0, z: 8}
-  snakeStrikeZoneSize: {x: 5, y: 5, z: 5}
-  doomsdayRayDamage: 10
-  doomsdayRayRange: 45
-  doomsdayRayBody: 0
-  doomsdayRayCooldown: 10
-  gameObjectDoomsdayRay: {fileID: 4720256673585378873, guid: 47dcc4d36c6ae6c4995aa35ff010f77b, type: 3}
-  doomsdayRayStart: {fileID: 594123353144874}
-  doomsdayRaySpeed: 5
-  doomsdayRayDuration: 5
-  darkeningStormRange: 30
-  darkeningStormBody: 0
-  darkeningStormCooldown: 10
-  gameObjectDarkeningStorm: {fileID: 4004846009892072983, guid: 4f5ae8cf3fc8ab943804c64ca2dc9d0e, type: 3}
-  darkeningStormDuration: 5
-  debugSharpBlow: 0
-  colorForSharpBlowRange: {r: 1, g: 0, b: 0, a: 1}
-  debugAbyssalVortex: 0
-  colorForAbyssalVortexRange: {r: 1, g: 0.92988515, b: 0, a: 1}
-  debugRimVoid: 0
-  colorForRimVoidRange: {r: 0, g: 0, b: 0, a: 1}
-  debugSnakeStrike: 0
-  colorForSnakeStrikeRange: {r: 0.96760225, g: 0, b: 1, a: 1}
-  debugDoomsdayRay: 0
-  colorForDoomsdayRayeRange: {r: 0, g: 0, b: 0, a: 1}
-  debugDarkeningDuration: 1
-  colorForDarkeningDurationRange: {r: 0, g: 0, b: 0, a: 1}
-  timeForSharpBlow: 0.2
-  timeForSecondAttackSharpblow: 0.2
-  timeForSnakeStrike: 0.1
+  attackGraphPhaseOne: {fileID: 11400000, guid: 74ecf6242186e604eb76c0e683c0b8ac, type: 2}
+  attackGraphPhaseTow: {fileID: 11400000, guid: 49a579f92cf023a499d7558b1ae3e818, type: 2}
+  checkRange: 0
+  debugRange: 50
+  references:
+    version: 2
+    RefIds:
+    - rid: 3772134562093072529
+      type: {class: NormalBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
+      data:
+        speed: 100
+        canTrigger: 0
+        triggerArea: 30
+        triggerOnce: 0
+        showGizmo: 0
+        nest: {fileID: 0}
+    - rid: 3772134562093072530
+      type: {class: AwaitBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
+      data:
+        speed: 75
+        canTrigger: 1
+        triggerArea: 75
+        triggerOnce: 0
+        showGizmo: 0
+        playerDistance: 50
+    - rid: 3772134562093072587
+      type: {class: AgroBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
+      data:
+        speed: 100
+        canTrigger: 1
+        triggerArea: 40
+        triggerOnce: 1
+        showGizmo: 0
+--- !u!114 &258508486715786093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276911127515905678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53af2620ee7ce5a4cbb7f5fcf3c7990e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2158193899646599423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276911127515905678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e09045f5883ced84b89a2eb6ea61e5a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lastAttack: SharpBlow
+  _canAttack: 1
+--- !u!114 &8610327776798930001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276911127515905678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e08b5fcb585a2419eedd9e133694d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!195 &3542776749811644157
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -653,89 +660,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &309942910244388346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3276911127515905678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e772473092a5da41a4744cebedb3c88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetTag: Player
-  stats:
-    health: 100
-    dmg: 1000
-    def: 10
-    speed: 3.4
-  behaviors:
-  - rid: 3772134562093072529
-  - rid: 3772134562093072530
-  - rid: 3772134562093072587
-  timeBetweenTowAction: 2
-  _canBehaviorSwitch: 1
-  attackGraph: {fileID: 11400000, guid: 74ecf6242186e604eb76c0e683c0b8ac, type: 2}
-  checkRange: 1
-  debugRange: 20
-  references:
-    version: 2
-    RefIds:
-    - rid: 3772134562093072529
-      type: {class: NormalBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
-      data:
-        speed: 100
-        canTrigger: 0
-        triggerArea: 30
-        triggerOnce: 0
-        showGizmo: 0
-        nest: {fileID: 0}
-    - rid: 3772134562093072530
-      type: {class: AwaitBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
-      data:
-        speed: 75
-        canTrigger: 1
-        triggerArea: 30
-        triggerOnce: 0
-        showGizmo: 0
-        playerDistance: 20
-    - rid: 3772134562093072587
-      type: {class: AgroBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
-      data:
-        speed: 100
-        canTrigger: 1
-        triggerArea: 20
-        triggerOnce: 1
-        showGizmo: 0
---- !u!114 &258508486715786093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3276911127515905678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53af2620ee7ce5a4cbb7f5fcf3c7990e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2158193899646599423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3276911127515905678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e09045f5883ced84b89a2eb6ea61e5a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _lastAttack: 
-  _canAttack: 1
-  _allAttacks: []
 --- !u!1 &3489572259349122008
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,26 +1,30 @@
 ﻿using Mekaiju;
 using Mekaiju.AI;
 using Mekaiju.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class RimVoid : MonoBehaviour
+    public class RimVoidInstance : MonoBehaviour
     {
-        private TeneborokAI _ai;
+        KaijuInstance _instance;
+        RimeVoid _stat;
         private LineRenderer _line;
         public int pointCount = 10;
         private List<Vector3> _firePos = new List<Vector3>();
 
-        private StatefullEffect _speedMod;
+        private IDisposable _speedMod;
 
         bool _damagable = false;
 
-        public void SetUp(TeneborokAI p_teneborokAI)
+        public void SetUp(KaijuInstance p_instance, RimeVoid p_stat)
         {
-            _ai = p_teneborokAI;
+            _instance = p_instance;
+            _stat = p_stat;
+
             _line = GetComponent<LineRenderer>();
             BoxCollider t_lineCollider = _line.GetComponent<BoxCollider>();
 
@@ -30,14 +34,14 @@ namespace Mekaiju.AI.Attack
                 t_lineCollider = _line.gameObject.AddComponent<BoxCollider>();
             }
 
-            Vector3 t_startPos = _ai.transform.position;
-            Vector3 t_endPos = _ai.GetTargetPos();
+            Vector3 t_startPos = _instance.transform.position;
+            Vector3 t_endPos = _instance.GetTargetPos();
 
             // Calculer la direction entre l'AI et la cible
             Vector3 t_directionToTarget = (t_endPos - t_startPos).normalized;
 
             // Calculer la position finale en fonction de la port�e max
-            Vector3 t_finalPos = t_endPos + t_directionToTarget * (_ai.rimVoideRange - Vector3.Distance(t_startPos, t_endPos));
+            Vector3 t_finalPos = t_endPos + t_directionToTarget * (_stat.range - Vector3.Distance(t_startPos, t_endPos));
 
             // Distance avant et apr�s la cible
             float distanceToTarget = Vector3.Distance(t_startPos, t_endPos);
@@ -92,9 +96,9 @@ namespace Mekaiju.AI.Attack
 
         public void SpawnFire(Vector3 p_point)
         {
-            GameObject t_fire = Instantiate(_ai.gameObjectRimVoidFire, p_point, Quaternion.identity);
+            GameObject t_fire = Instantiate(_stat.gameObjectRimVoidFire, p_point, Quaternion.identity);
             RimVoidFire t_rvf = t_fire.GetComponent<RimVoidFire>();
-            t_rvf.UpdateLineVisual(_line, _ai);
+            t_rvf.UpdateLineVisual(_line, _stat);
         }
 
         IEnumerator lifeTime()
@@ -120,10 +124,7 @@ namespace Mekaiju.AI.Attack
                 yield return new WaitForSeconds(0.01f);
             }
 
-            _ai.AttackCooldown();
-            _ai.SetLastAttack(TeneborokAttack.RimVoid);
-
-            yield return new WaitForSeconds(_ai.rimVoidDuration);
+            yield return new WaitForSeconds(_stat.rimVoidDuration);
             lineCollider.enabled = false;
 
             yield return new WaitForSeconds(1f);
@@ -135,7 +136,7 @@ namespace Mekaiju.AI.Attack
             if (other.CompareTag("Player"))
             {
                 MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-                //_speedMod = t_mecha.AddEffect(_ai.rimVoidEffect);
+                _speedMod = t_mecha.AddEffect(_stat.rimVoidEffect);
                 _damagable = true;
                 StartCoroutine(Damage(t_mecha));
             }
@@ -155,9 +156,8 @@ namespace Mekaiju.AI.Attack
         {
             while (_damagable)
             {
-                p_mecha.TakeDamage(_ai.rimVoidDamage);
-                _ai.AddDps(_ai.rimVoidDamage);
-                yield return new WaitForSeconds(_ai.rimVoidHitCooldown);
+                p_mecha.TakeDamage(_stat.damage);
+                yield return new WaitForSeconds(_stat.rimVoidHitCooldown);
             }
         }
     }

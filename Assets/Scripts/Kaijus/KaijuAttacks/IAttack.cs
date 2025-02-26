@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Mekaiju.AI {
@@ -6,6 +7,8 @@ namespace Mekaiju.AI {
     {
         public float cooldown;
         public float range;
+        public bool blockable;
+
         [HideInInspector]
         public bool canUse;
 
@@ -24,6 +27,11 @@ namespace Mekaiju.AI {
             return t_return;
         }
 
-        public virtual void Active() { }
+        public virtual void Active(KaijuInstance kaiju) { }
+
+        public virtual IEnumerator Attack(KaijuInstance kaiju)
+        {
+            yield return null;
+        }
     }
 }

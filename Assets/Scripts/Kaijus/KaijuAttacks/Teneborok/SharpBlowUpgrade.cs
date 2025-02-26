@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI
 {
-    public class SharpBlow : IAttack
+    public class SharpBlowUpgrade : IAttack
     {
         [Separator]
         [OverrideLabel("Damage (% of DMG)")]
@@ -25,11 +25,10 @@ namespace Mekaiju.AI
         public override IEnumerator Attack(KaijuInstance kaiju)
         {
             base.Attack(kaiju);
-            kaiju.animator.AttackAnimation(nameof(SharpBlow));
+            kaiju.animator.AttackAnimation(nameof(SharpBlowUpgrade));
             yield return new WaitForSeconds(timeBeforeAttack);
-            Debug.Log($"Sharp Blow fait {damage} degats");
+            Debug.Log($"Sharp Blow + fait {damage} degats");
             kaiju.brain.MakeAction();
-
         }
 
     }

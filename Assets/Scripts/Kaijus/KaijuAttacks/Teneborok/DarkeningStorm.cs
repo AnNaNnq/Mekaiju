@@ -1,15 +1,15 @@
+using Mekaiju.Attribute;
 using MyBox;
 using System.Collections;
 using UnityEngine;
 
 namespace Mekaiju.AI
 {
-    public class SharpBlow : IAttack
+    public class DarkeningStorm : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
-        public float timeBeforeAttack = 1;
+        [OpenPrefabButton] public GameObject prefab;
+        [OverrideLabel("Duration (sec)")] public float duration = 5f;
 
         public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
@@ -19,18 +19,15 @@ namespace Mekaiju.AI
         public override void Active(KaijuInstance kaiju)
         {
             base.Active(kaiju);
-            kaiju.StartCoroutine(Attack(kaiju));
+            GameObject t_darkeningStorm = GameObject.Instantiate(prefab, kaiju.transform.position, Quaternion.identity);
+            GameObject.Destroy(t_darkeningStorm, duration);
         }
 
         public override IEnumerator Attack(KaijuInstance kaiju)
         {
             base.Attack(kaiju);
-            kaiju.animator.AttackAnimation(nameof(SharpBlow));
-            yield return new WaitForSeconds(timeBeforeAttack);
-            Debug.Log($"Sharp Blow fait {damage} degats");
-            kaiju.brain.MakeAction();
-
+            yield return new WaitForSeconds(duration);
         }
-
     }
+
 }

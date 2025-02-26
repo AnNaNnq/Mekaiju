@@ -10,18 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c81f28bfa57eadc47904e311de7feb8c, type: 3}
-  m_Name: AbyssalVortex
+  m_Name: DoomsdayRayUpgrade
   m_EditorClassIdentifier: 
-  <name>k__BackingField: AbyssalVortex
   <attack>k__BackingField:
-    rid: 164422602358521919
+    rid: 3772134698131652781
   references:
     version: 2
     RefIds:
-    - rid: 164422602358521919
-      type: {class: AbyssalVortex, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 3772134698131652781
+      type: {class: DoomsdayRayUpgrade, ns: Mekaiju.AI, asm: Assembly-CSharp}
       data:
-        cooldown: 2
-        range: 30
+        cooldown: 10
+        range: 50
+        blockable: 1
         canUse: 1
-        damage: 50
+        _using: 0
+        damage: 10
+        doomsdayObject: {fileID: 3009096104523879044, guid: 5fbdef867ce21e247a0678745d0dd082, type: 3}
+        start: {fileID: 0}
+        speed: 10
+        duration: 5

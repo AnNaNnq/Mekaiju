@@ -1,10 +1,10 @@
-using MyBox;
-using System.Collections;
 using UnityEngine;
+using System.Collections;
+using MyBox;
 
 namespace Mekaiju.AI
 {
-    public class SharpBlow : IAttack
+    public class SnakeStrike : IAttack
     {
         [Separator]
         [OverrideLabel("Damage (% of DMG)")]
@@ -25,12 +25,11 @@ namespace Mekaiju.AI
         public override IEnumerator Attack(KaijuInstance kaiju)
         {
             base.Attack(kaiju);
-            kaiju.animator.AttackAnimation(nameof(SharpBlow));
+            kaiju.animator.AttackAnimation(nameof(SnakeStrike));
             yield return new WaitForSeconds(timeBeforeAttack);
             Debug.Log($"Sharp Blow fait {damage} degats");
             kaiju.brain.MakeAction();
 
         }
-
     }
 }

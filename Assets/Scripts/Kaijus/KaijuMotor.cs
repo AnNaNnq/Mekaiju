@@ -1,4 +1,5 @@
 using Mekaiju.AI;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,12 +17,6 @@ public class KaijuMotor : MonoBehaviour
         _instance = GetComponent<KaijuInstance>();
         _agent = GetComponent<NavMeshAgent>();
         _target = GameObject.FindGameObjectWithTag(_instance.targetTag);
-    }
-
-    
-    void Update()
-    {
-        
     }
 
     /// <summary>
@@ -43,6 +38,7 @@ public class KaijuMotor : MonoBehaviour
     /// <param name="p_stopping"></param>
     public void MoveTo(Vector3 p_pos, float p_speed, float p_stopping = 10f)
     {
+        if (!_agent.enabled) return;
         p_stopping = Mathf.Max(p_stopping, 10f);
 
         float t_speed = _instance.stats.speed * (1 + (p_speed / 100));
@@ -54,6 +50,7 @@ public class KaijuMotor : MonoBehaviour
 
     public void Stop()
     {
+        if (!_agent.enabled) return;
         _agent.ResetPath();
     }
 
@@ -72,5 +69,19 @@ public class KaijuMotor : MonoBehaviour
             Quaternion t_targetRotation = Quaternion.LookRotation(t_direction);
             transform.rotation = Quaternion.Lerp(transform.rotation, t_targetRotation, _agent.angularSpeed * Time.deltaTime);
         }
+    }
+
+    public void StopKaiju(float p_time)
+    {
+        if (!_agent.enabled) return;
+        StartCoroutine(Stop(p_time));
+    }
+
+    private IEnumerator Stop(float p_time)
+    {
+        _agent.ResetPath();
+        _agent.enabled = false;
+        yield return new WaitForSeconds(p_time);
+        _agent.enabled = true;
     }
 }
