@@ -46,7 +46,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""SwordAttack"",
+                    ""name"": ""LeftArm"",
                     ""type"": ""Button"",
                     ""id"": ""6c2ab1b8-8984-453a-af3d-a3c78ae1679a"",
                     ""expectedControlType"": """",
@@ -55,7 +55,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""GunAttack"",
+                    ""name"": ""RightArm"",
                     ""type"": ""Button"",
                     ""id"": ""4cab248f-aa3f-4cd7-a2b5-d461f6da96b6"",
                     ""expectedControlType"": """",
@@ -78,7 +78,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""id"": ""f1ba0d36-48eb-4cd5-b651-1c94a6531f70"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Hold(duration=0.4)"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -112,6 +112,33 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""name"": ""Head"",
                     ""type"": ""Button"",
                     ""id"": ""e7e44229-06a3-44dd-9a14-1a8aa25142bd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Heal"",
+                    ""type"": ""Button"",
+                    ""id"": ""2fd9697e-c517-4343-a62a-997984722209"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Torse"",
+                    ""type"": ""Button"",
+                    ""id"": ""b41370ca-a845-4876-9d4b-1456b2389446"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""d9b1291a-0fc9-41b8-a6b9-95083c7d7d1c"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -176,11 +203,44 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""d12431dc-ba9d-4b67-8e30-4a4157b92f67"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Joystick"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""926d56e4-65ff-4aca-bde7-6fc717b5bb40"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
                     ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
                     ""processors"": ""ScaleVector2(x=0.4,y=0.4)"",
                     ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7faad29b-34ca-4ced-a893-29bf4d4246cf"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""ScaleVector2(x=2,y=2)"",
+                    ""groups"": """",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -198,11 +258,33 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""65627e69-1a42-4d39-a595-a0d3310a2c5c"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""eb40bb66-4559-4dfa-9a2f-820438abb426"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f494877b-4942-4c32-b135-2815c6e5a48a"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -220,12 +302,34 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""6c07cd13-1f03-4c24-95bc-a59200b2ddbc"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shield"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""000ced9c-a20d-4503-8545-5df1029409ca"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SwordAttack"",
+                    ""action"": ""LeftArm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8289d366-7da3-4675-af58-cc27d22e09ca"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftArm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -236,7 +340,18 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""GunAttack"",
+                    ""action"": ""RightArm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0e65ba62-8b64-456f-b2ff-fa475adb85f4"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightArm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -244,6 +359,17 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""ce75ec55-ebb7-436c-9dac-b39cdf0f1461"",
                     ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Lock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6bfea367-abef-46c9-8726-6dfe344ef3e3"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -263,6 +389,39 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""e9b5c9dc-95b7-4677-909e-ad1f5071646d"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LockSwitch"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""33378ebe-9466-4b4b-a782-e3560e2ecd41"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LockSwitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""2e28a48f-8c89-45b2-b72f-7be60d9a0b10"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LockSwitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": """",
                     ""id"": ""2648d9c9-03c1-4fdb-8786-5a41e6ef7a0a"",
                     ""path"": ""<Keyboard>/q"",
@@ -270,6 +429,83 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Head"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bbe4ab5b-51e5-4420-b4b0-b3aae3f82a70"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Head"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b19c204a-8c83-4cbf-9c07-4aa42a89fcd1"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Heal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0246f41-1c39-469b-9c06-007509cb85f7"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Heal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7dbcaa66-4445-492d-abb9-8574280a4524"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Torse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bb6258a1-cf52-4042-8b17-201c8c60b974"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Torse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f202526c-bfe6-4211-8bfd-1d1d74d9af7a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db475e7d-01dd-4506-87cf-bdca84bc5670"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -301,7 +537,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""15cef263-9014-4fd5-94d9-4e4a6234a6ef"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -859,14 +1095,17 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-        m_Player_SwordAttack = m_Player.FindAction("SwordAttack", throwIfNotFound: true);
-        m_Player_GunAttack = m_Player.FindAction("GunAttack", throwIfNotFound: true);
+        m_Player_LeftArm = m_Player.FindAction("LeftArm", throwIfNotFound: true);
+        m_Player_RightArm = m_Player.FindAction("RightArm", throwIfNotFound: true);
         m_Player_Shield = m_Player.FindAction("Shield", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Lock = m_Player.FindAction("Lock", throwIfNotFound: true);
         m_Player_LockSwitch = m_Player.FindAction("LockSwitch", throwIfNotFound: true);
         m_Player_Head = m_Player.FindAction("Head", throwIfNotFound: true);
+        m_Player_Heal = m_Player.FindAction("Heal", throwIfNotFound: true);
+        m_Player_Torse = m_Player.FindAction("Torse", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -948,28 +1187,34 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
-    private readonly InputAction m_Player_SwordAttack;
-    private readonly InputAction m_Player_GunAttack;
+    private readonly InputAction m_Player_LeftArm;
+    private readonly InputAction m_Player_RightArm;
     private readonly InputAction m_Player_Shield;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Lock;
     private readonly InputAction m_Player_LockSwitch;
     private readonly InputAction m_Player_Head;
+    private readonly InputAction m_Player_Heal;
+    private readonly InputAction m_Player_Torse;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @MechaPlayerActions m_Wrapper;
         public PlayerActions(@MechaPlayerActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
-        public InputAction @SwordAttack => m_Wrapper.m_Player_SwordAttack;
-        public InputAction @GunAttack => m_Wrapper.m_Player_GunAttack;
+        public InputAction @LeftArm => m_Wrapper.m_Player_LeftArm;
+        public InputAction @RightArm => m_Wrapper.m_Player_RightArm;
         public InputAction @Shield => m_Wrapper.m_Player_Shield;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Lock => m_Wrapper.m_Player_Lock;
         public InputAction @LockSwitch => m_Wrapper.m_Player_LockSwitch;
         public InputAction @Head => m_Wrapper.m_Player_Head;
+        public InputAction @Heal => m_Wrapper.m_Player_Heal;
+        public InputAction @Torse => m_Wrapper.m_Player_Torse;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -985,12 +1230,12 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
-            @SwordAttack.started += instance.OnSwordAttack;
-            @SwordAttack.performed += instance.OnSwordAttack;
-            @SwordAttack.canceled += instance.OnSwordAttack;
-            @GunAttack.started += instance.OnGunAttack;
-            @GunAttack.performed += instance.OnGunAttack;
-            @GunAttack.canceled += instance.OnGunAttack;
+            @LeftArm.started += instance.OnLeftArm;
+            @LeftArm.performed += instance.OnLeftArm;
+            @LeftArm.canceled += instance.OnLeftArm;
+            @RightArm.started += instance.OnRightArm;
+            @RightArm.performed += instance.OnRightArm;
+            @RightArm.canceled += instance.OnRightArm;
             @Shield.started += instance.OnShield;
             @Shield.performed += instance.OnShield;
             @Shield.canceled += instance.OnShield;
@@ -1009,6 +1254,15 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Head.started += instance.OnHead;
             @Head.performed += instance.OnHead;
             @Head.canceled += instance.OnHead;
+            @Heal.started += instance.OnHeal;
+            @Heal.performed += instance.OnHeal;
+            @Heal.canceled += instance.OnHeal;
+            @Torse.started += instance.OnTorse;
+            @Torse.performed += instance.OnTorse;
+            @Torse.canceled += instance.OnTorse;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1019,12 +1273,12 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
-            @SwordAttack.started -= instance.OnSwordAttack;
-            @SwordAttack.performed -= instance.OnSwordAttack;
-            @SwordAttack.canceled -= instance.OnSwordAttack;
-            @GunAttack.started -= instance.OnGunAttack;
-            @GunAttack.performed -= instance.OnGunAttack;
-            @GunAttack.canceled -= instance.OnGunAttack;
+            @LeftArm.started -= instance.OnLeftArm;
+            @LeftArm.performed -= instance.OnLeftArm;
+            @LeftArm.canceled -= instance.OnLeftArm;
+            @RightArm.started -= instance.OnRightArm;
+            @RightArm.performed -= instance.OnRightArm;
+            @RightArm.canceled -= instance.OnRightArm;
             @Shield.started -= instance.OnShield;
             @Shield.performed -= instance.OnShield;
             @Shield.canceled -= instance.OnShield;
@@ -1043,6 +1297,15 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Head.started -= instance.OnHead;
             @Head.performed -= instance.OnHead;
             @Head.canceled -= instance.OnHead;
+            @Heal.started -= instance.OnHeal;
+            @Heal.performed -= instance.OnHeal;
+            @Heal.canceled -= instance.OnHeal;
+            @Torse.started -= instance.OnTorse;
+            @Torse.performed -= instance.OnTorse;
+            @Torse.canceled -= instance.OnTorse;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1227,14 +1490,17 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
-        void OnSwordAttack(InputAction.CallbackContext context);
-        void OnGunAttack(InputAction.CallbackContext context);
+        void OnLeftArm(InputAction.CallbackContext context);
+        void OnRightArm(InputAction.CallbackContext context);
         void OnShield(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnLock(InputAction.CallbackContext context);
         void OnLockSwitch(InputAction.CallbackContext context);
         void OnHead(InputAction.CallbackContext context);
+        void OnHeal(InputAction.CallbackContext context);
+        void OnTorse(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
