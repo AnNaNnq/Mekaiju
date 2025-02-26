@@ -32,8 +32,6 @@ public class PlayerController : MonoBehaviour
 
 
     [Foldout("Camera Attributes")]
-    private float _maxSensitivity = 5f;
-    private float _minSensitivity = 0.001f;
     [SerializeField] [Range(1f,100f)] private float _mouseSensitivity; 
     [SerializeField] private float _minVerticalAngle = -30f; 
     [SerializeField] private float _maxVerticalAngle = 80f; 
@@ -50,6 +48,8 @@ public class PlayerController : MonoBehaviour
     //Public variables
     [HideInInspector] public bool isLockedOn = false;
     [HideInInspector] public float scroll;
+
+    private float _timeSinceLastScroll = 0f;
 
     private void Awake()
     {
@@ -107,13 +107,16 @@ public class PlayerController : MonoBehaviour
         _lookAction = _playerActions.Player.Look;
         _scrollAction = _playerActions.Player.LockSwitch;
 
-        _playerActions.Player.SwordAttack.performed += OnSwordAttack;
-        _playerActions.Player.GunAttack.performed += OnGunAttack;
+        _playerActions.Player.LeftArm.performed += OnLeftArm;
+        _playerActions.Player.RightArm.performed += OnRightArm;
         _playerActions.Player.Head.performed += OnHead;
         _playerActions.Player.Shield.performed += OnShield;
         _playerActions.Player.Shield.canceled  += OnUnshield;
-        _playerActions.Player.Jump.started += OnJump;
+        _playerActions.Player.Jump.performed += OnJump;
         _playerActions.Player.Dash.performed += OnDash;
+        _playerActions.Player.Heal.performed += OnHeal;
+        _playerActions.Player.Torse.performed += OnTorse;
+        _playerActions.Player.Pause.performed += OnPause;
 
         _instance.context.moveAction = _moveAction;
 
@@ -126,12 +129,15 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Move.Enable();
         _playerActions.Player.Look.Enable();
         _playerActions.Player.LockSwitch.Enable();
-        _playerActions.Player.SwordAttack.Enable();
+        _playerActions.Player.LeftArm.Enable();
         _playerActions.Player.Head.Enable();
-        _playerActions.Player.GunAttack.Enable();
+        _playerActions.Player.RightArm.Enable();
         _playerActions.Player.Shield.Enable();
         _playerActions.Player.Jump.Enable();
         _playerActions.Player.Dash.Enable();
+        _playerActions.Player.Heal.Enable();
+        _playerActions.Player.Torse.Enable();
+        _playerActions.Player.Pause.Enable();
 
         _playerActions.Player.Lock.performed += OnLock;
         _playerActions.Player.Lock.Enable();
@@ -143,13 +149,16 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Move.Disable();
         _playerActions.Player.Look.Disable();
         _playerActions.Player.LockSwitch.Disable();
-        _playerActions.Player.SwordAttack.Disable();
-        _playerActions.Player.GunAttack.Disable();
+        _playerActions.Player.LeftArm.Disable();
+        _playerActions.Player.RightArm.Disable();
         _playerActions.Player.Head.Disable();
         _playerActions.Player.Shield.Disable();
         _playerActions.Player.Jump.Disable();
         _playerActions.Player.Dash.Disable();
         _playerActions.Player.Lock.Disable();
+        _playerActions.Player.Heal.Disable();
+        _playerActions.Player.Torse.Disable();
+        _playerActions.Player.Pause.Disable();
     }
 
     private BodyPartObject PickRandomTargetPart()
@@ -170,7 +179,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnSwordAttack(InputAction.CallbackContext p_context)
+    private void OnLeftArm(InputAction.CallbackContext p_context)
     {
         BodyPartObject t_target = PickRandomTargetPart();
         if (t_target)
@@ -179,7 +188,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    private void OnGunAttack(InputAction.CallbackContext p_context)
+    private void OnRightArm(InputAction.CallbackContext p_context)
     {
         BodyPartObject t_target = PickRandomTargetPart();
         if (t_target)
@@ -227,6 +236,19 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(_instance[MechaPart.Legs].TriggerAbility(null, LegsSelector.Dash));
     }
 
+    private void OnHeal(InputAction.CallbackContext p_context)
+    {
+        //a faire
+    }
+    private void OnTorse(InputAction.CallbackContext p_context)
+    {
+        // a faire
+    }
+    private void OnPause(InputAction.CallbackContext p_context)
+    {
+        // a faire
+    }
+
     float ClampAngle(float p_angle, float p_from, float p_to)
     {
         // accepts e.g. -80, 80
@@ -252,8 +274,9 @@ public class PlayerController : MonoBehaviour
 
         int t_scrollValue = (int)_scrollAction.ReadValue<float>();
 
-        if (t_scrollValue != 0 && isLockedOn) 
+        if (t_scrollValue != 0 && isLockedOn && Time.time - _timeSinceLastScroll >= 0.2f) 
         {
+            _timeSinceLastScroll = Time.time;
             _lockOnTargetSystem.ChangeTarget(t_scrollValue);
         }
     }
