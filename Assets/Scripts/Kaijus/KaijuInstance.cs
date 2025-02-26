@@ -80,7 +80,7 @@ namespace Mekaiju.AI
                 behavior.Init(target, gameObject);
             }
 
-            _currentPhase = 2;
+            _currentPhase = 1;
 
             // We add the BodyPartObject script to bodyParts objects if they don't already have it
             foreach (BodyPart t_part in bodyParts)
