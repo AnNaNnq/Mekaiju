@@ -12,14 +12,9 @@ namespace Mekaiju.AI {
         [HideInInspector]
         public bool canUse;
 
-        public bool isUsing { get { return _using; } }
-        [SerializeField]
-        protected bool _using;
-
         public IAttack()
         {
             canUse = true;
-            _using = false;
         }
 
         public virtual bool CanUse(KaijuInstance kaiju, float otherRange = 0)

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI
 {
-    public class DoomsdayRay : IAttack
+    public class DoomsdayRayUpgrade : IAttack
     {
         [Separator]
         public int damage = 10;
@@ -28,7 +28,7 @@ namespace Mekaiju.AI
             Vector3 t_pos = new Vector3(kaiju.transform.position.x, UtilsFunctions.GetGround(kaiju.transform.position), kaiju.transform.position.z) + (kaiju.transform.forward * 10);
             GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, t_pos, Quaternion.identity);
             DoomsdayRaySpawnable t_dr = t_doomsday.GetComponent<DoomsdayRaySpawnable>();
-            t_dr.SetUp(start, this, kaiju);
+            //t_dr.SetUp(start, this, kaiju);
             GameObject.Destroy(t_doomsday, duration);
         }
     }
