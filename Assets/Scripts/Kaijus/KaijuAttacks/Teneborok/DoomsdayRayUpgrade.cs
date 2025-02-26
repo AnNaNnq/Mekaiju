@@ -1,4 +1,3 @@
-using Mekaiju.AI.Attack;
 using Mekaiju.Attribute;
 using Mekaiju.Utils;
 using MyBox;
@@ -13,7 +12,10 @@ namespace Mekaiju.AI
         [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject doomsdayObject;
         [HideInInspector] public Transform start;
         [OverrideLabel("Ray Speed")] public float speed = 10f;
-        [OverrideLabel("Duration (sec)")] public float duration = 5f;
+        [Range(1,2)]
+        public float bounceDamping = 1.2f;
+        public int nbBounce = 5;
+        public float bounceForce = 10f;
 
         public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
@@ -24,12 +26,14 @@ namespace Mekaiju.AI
         {
             base.Active(kaiju);
             start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
-            kaiju.motor.StopKaiju(duration);
             Vector3 t_pos = new Vector3(kaiju.transform.position.x, UtilsFunctions.GetGround(kaiju.transform.position), kaiju.transform.position.z) + (kaiju.transform.forward * 10);
-            GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, t_pos, Quaternion.identity);
-            DoomsdayRaySpawnable t_dr = t_doomsday.GetComponent<DoomsdayRaySpawnable>();
-            //t_dr.SetUp(start, this, kaiju);
-            GameObject.Destroy(t_doomsday, duration);
+
+            kaiju.motor.StopKaiju(.2f);
+            
+            GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, start.transform.position, Quaternion.identity);
+            DoomsdyRayUpgradeObject t_obj = t_doomsday.GetComponent<DoomsdyRayUpgradeObject>();
+
+            t_obj.Init(this, t_pos);
         }
     }
 }
