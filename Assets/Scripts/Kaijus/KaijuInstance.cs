@@ -277,6 +277,8 @@ namespace Mekaiju.AI
             {
                 p_bodyPart.isDestroyed = true;
             }
+
+            onTakeDamage.Invoke(p_amonunt);
         }
 
         public override void TakeDamage(float p_damage)
