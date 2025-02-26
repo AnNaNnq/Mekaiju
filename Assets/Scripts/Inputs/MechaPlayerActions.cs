@@ -120,34 +120,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Chest"",
                     ""type"": ""Button"",
-                    ""id"": ""fd642ab7-57de-4ecd-9d62-4724bd2ee0fa"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Pause"",
-                    ""type"": ""Button"",
-                    ""id"": ""9516c201-c471-4494-92fa-df3404b8b6d7"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""LeftArmAction"",
-                    ""type"": ""Button"",
-                    ""id"": ""e446d8ac-edcf-472e-9d76-a86edf56916b"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""RightArmAction"",
-                    ""type"": ""Button"",
-                    ""id"": ""a1a31d90-a78b-45ad-b6cd-c0ac375b256b"",
+                    ""id"": ""d9c7ba77-b300-431c-8c97-29bd287d480b"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -156,56 +129,20 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Heal"",
                     ""type"": ""Button"",
-                    ""id"": ""298c19f1-b490-4c56-8ac1-e93d04629f51"",
+                    ""id"": ""bbc56984-2e99-4c75-8766-b058d10e35dc"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Up"",
+                    ""name"": ""Pause"",
                     ""type"": ""Button"",
-                    ""id"": ""1356c6e4-0cec-4d55-970a-88219fbf92ae"",
+                    ""id"": ""89767b70-4da9-44cb-9a71-4c6cc47f063b"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Down"",
-                    ""type"": ""Button"",
-                    ""id"": ""a7abfbe8-7892-4553-b6da-2ac59f1b6233"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Left"",
-                    ""type"": ""Button"",
-                    ""id"": ""812a13c1-8ab2-4fe7-93cf-b8afa77a0538"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Right"",
-                    ""type"": ""Button"",
-                    ""id"": ""f9378de4-7ac8-4efb-b906-f989cef75ee8"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Camera"",
-                    ""type"": ""Value"",
-                    ""id"": ""7fe87643-3224-47a1-8711-9ea1074acbef"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -365,7 +302,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""2cfca2eb-8994-4e2d-aaca-347ae3ff7a95"",
+                    ""id"": ""19ce8994-b4db-44c4-8ca3-7f675fd5f36d"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -376,40 +313,7 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""af5a0b1c-b67c-4e39-b78a-eed37b09c556"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse;Gamepad"",
-                    ""action"": ""Pause"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ce3d078e-5f52-409d-bbac-5b8438a491ef"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LeftArmAction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""21729711-0014-4196-9ba3-96d214266170"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RightArmAction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0e6b5148-19d8-4c2d-97c0-7f3e9dc64ccf"",
+                    ""id"": ""35d4fba4-8082-413f-b16c-e58088607f20"",
                     ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -420,67 +324,12 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1f54e50f-e658-446a-b6cd-ffc6d5c0f09c"",
-                    ""path"": ""<Keyboard>/w"",
+                    ""id"": ""59dff6ff-a2ad-48c4-9ed9-8786f2312ae7"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Up"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4579a202-3379-4c03-8459-8dd2cfb164c5"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Down"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7c583a1e-c0cc-424d-8418-1b6b9b6003fe"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Left"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1971c511-4ee0-430d-a199-2fb97eec70e8"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Right"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1c6695a6-939d-4dcf-8c63-9fd5139a23ab"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Camera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4b0f8d8a-0396-4307-b431-8026c30082a4"",
-                    ""path"": ""<Mouse>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Camera"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1079,15 +928,8 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         m_Player_LockSwitch = m_Player.FindAction("LockSwitch", throwIfNotFound: true);
         m_Player_Head = m_Player.FindAction("Head", throwIfNotFound: true);
         m_Player_Chest = m_Player.FindAction("Chest", throwIfNotFound: true);
-        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
-        m_Player_LeftArmAction = m_Player.FindAction("LeftArmAction", throwIfNotFound: true);
-        m_Player_RightArmAction = m_Player.FindAction("RightArmAction", throwIfNotFound: true);
         m_Player_Heal = m_Player.FindAction("Heal", throwIfNotFound: true);
-        m_Player_Up = m_Player.FindAction("Up", throwIfNotFound: true);
-        m_Player_Down = m_Player.FindAction("Down", throwIfNotFound: true);
-        m_Player_Left = m_Player.FindAction("Left", throwIfNotFound: true);
-        m_Player_Right = m_Player.FindAction("Right", throwIfNotFound: true);
-        m_Player_Camera = m_Player.FindAction("Camera", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1178,15 +1020,8 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_LockSwitch;
     private readonly InputAction m_Player_Head;
     private readonly InputAction m_Player_Chest;
-    private readonly InputAction m_Player_Pause;
-    private readonly InputAction m_Player_LeftArmAction;
-    private readonly InputAction m_Player_RightArmAction;
     private readonly InputAction m_Player_Heal;
-    private readonly InputAction m_Player_Up;
-    private readonly InputAction m_Player_Down;
-    private readonly InputAction m_Player_Left;
-    private readonly InputAction m_Player_Right;
-    private readonly InputAction m_Player_Camera;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @MechaPlayerActions m_Wrapper;
@@ -1202,15 +1037,8 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         public InputAction @LockSwitch => m_Wrapper.m_Player_LockSwitch;
         public InputAction @Head => m_Wrapper.m_Player_Head;
         public InputAction @Chest => m_Wrapper.m_Player_Chest;
-        public InputAction @Pause => m_Wrapper.m_Player_Pause;
-        public InputAction @LeftArmAction => m_Wrapper.m_Player_LeftArmAction;
-        public InputAction @RightArmAction => m_Wrapper.m_Player_RightArmAction;
         public InputAction @Heal => m_Wrapper.m_Player_Heal;
-        public InputAction @Up => m_Wrapper.m_Player_Up;
-        public InputAction @Down => m_Wrapper.m_Player_Down;
-        public InputAction @Left => m_Wrapper.m_Player_Left;
-        public InputAction @Right => m_Wrapper.m_Player_Right;
-        public InputAction @Camera => m_Wrapper.m_Player_Camera;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1253,33 +1081,12 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Chest.started += instance.OnChest;
             @Chest.performed += instance.OnChest;
             @Chest.canceled += instance.OnChest;
-            @Pause.started += instance.OnPause;
-            @Pause.performed += instance.OnPause;
-            @Pause.canceled += instance.OnPause;
-            @LeftArmAction.started += instance.OnLeftArmAction;
-            @LeftArmAction.performed += instance.OnLeftArmAction;
-            @LeftArmAction.canceled += instance.OnLeftArmAction;
-            @RightArmAction.started += instance.OnRightArmAction;
-            @RightArmAction.performed += instance.OnRightArmAction;
-            @RightArmAction.canceled += instance.OnRightArmAction;
             @Heal.started += instance.OnHeal;
             @Heal.performed += instance.OnHeal;
             @Heal.canceled += instance.OnHeal;
-            @Up.started += instance.OnUp;
-            @Up.performed += instance.OnUp;
-            @Up.canceled += instance.OnUp;
-            @Down.started += instance.OnDown;
-            @Down.performed += instance.OnDown;
-            @Down.canceled += instance.OnDown;
-            @Left.started += instance.OnLeft;
-            @Left.performed += instance.OnLeft;
-            @Left.canceled += instance.OnLeft;
-            @Right.started += instance.OnRight;
-            @Right.performed += instance.OnRight;
-            @Right.canceled += instance.OnRight;
-            @Camera.started += instance.OnCamera;
-            @Camera.performed += instance.OnCamera;
-            @Camera.canceled += instance.OnCamera;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1317,33 +1124,12 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Chest.started -= instance.OnChest;
             @Chest.performed -= instance.OnChest;
             @Chest.canceled -= instance.OnChest;
-            @Pause.started -= instance.OnPause;
-            @Pause.performed -= instance.OnPause;
-            @Pause.canceled -= instance.OnPause;
-            @LeftArmAction.started -= instance.OnLeftArmAction;
-            @LeftArmAction.performed -= instance.OnLeftArmAction;
-            @LeftArmAction.canceled -= instance.OnLeftArmAction;
-            @RightArmAction.started -= instance.OnRightArmAction;
-            @RightArmAction.performed -= instance.OnRightArmAction;
-            @RightArmAction.canceled -= instance.OnRightArmAction;
             @Heal.started -= instance.OnHeal;
             @Heal.performed -= instance.OnHeal;
             @Heal.canceled -= instance.OnHeal;
-            @Up.started -= instance.OnUp;
-            @Up.performed -= instance.OnUp;
-            @Up.canceled -= instance.OnUp;
-            @Down.started -= instance.OnDown;
-            @Down.performed -= instance.OnDown;
-            @Down.canceled -= instance.OnDown;
-            @Left.started -= instance.OnLeft;
-            @Left.performed -= instance.OnLeft;
-            @Left.canceled -= instance.OnLeft;
-            @Right.started -= instance.OnRight;
-            @Right.performed -= instance.OnRight;
-            @Right.canceled -= instance.OnRight;
-            @Camera.started -= instance.OnCamera;
-            @Camera.performed -= instance.OnCamera;
-            @Camera.canceled -= instance.OnCamera;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1537,15 +1323,8 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         void OnLockSwitch(InputAction.CallbackContext context);
         void OnHead(InputAction.CallbackContext context);
         void OnChest(InputAction.CallbackContext context);
-        void OnPause(InputAction.CallbackContext context);
-        void OnLeftArmAction(InputAction.CallbackContext context);
-        void OnRightArmAction(InputAction.CallbackContext context);
         void OnHeal(InputAction.CallbackContext context);
-        void OnUp(InputAction.CallbackContext context);
-        void OnDown(InputAction.CallbackContext context);
-        void OnLeft(InputAction.CallbackContext context);
-        void OnRight(InputAction.CallbackContext context);
-        void OnCamera(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

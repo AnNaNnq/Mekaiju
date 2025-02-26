@@ -48,37 +48,19 @@ public class ControlsTabManager : MonoBehaviour
             return;
         }
 
-        // For each action, we try to retrieve its first binding and then update
-        // the corresponding TMP text with a human-readable string.
-        // If an action or its binding isn't found, nothing happens.
+            // For each action, we try to retrieve its first binding and then update
+            // the corresponding TMP text with a human-readable string.
+            // If an action or its binding isn't found, nothing happens.
 
-        // Update the "Up" action text.
-        if (upText)
+
+        // Update the "Up and down, left and right" action text.
+        InputAction moveAction = playerMap.FindAction("Move", throwIfNotFound: false);
+        if (moveAction != null)
         {
-            InputAction action = playerMap.FindAction("Up", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                upText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Down" action text.
-        if (downText)
-        {
-            InputAction action = playerMap.FindAction("Down", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                downText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Left" action text.
-        if (leftText)
-        {
-            InputAction action = playerMap.FindAction("Left", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                leftText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Right" action text.
-        if (rightText)
-        {
-            InputAction action = playerMap.FindAction("Right", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                rightText.text = action.bindings[0].ToDisplayString();
+            if (upText) upText.text = moveAction.GetBindingDisplayString(1); // Assuming first binding is "Up"
+            if (downText) downText.text = moveAction.GetBindingDisplayString(2); // Second binding = "Down"
+            if (leftText) leftText.text = moveAction.GetBindingDisplayString(3); // Third binding = "Left"
+            if (rightText) rightText.text = moveAction.GetBindingDisplayString(4); // Fourth binding = "Right"
         }
         // Update the "Jump" action text.
         if (jumpText)
@@ -90,7 +72,7 @@ public class ControlsTabManager : MonoBehaviour
         // Update the "Camera" action text.
         if (cameraText)
         {
-            InputAction action = playerMap.FindAction("Camera", throwIfNotFound: false);
+            InputAction action = playerMap.FindAction("Look", throwIfNotFound: false);
             if (action != null && action.bindings.Count > 0)
                 cameraText.text = action.bindings[0].ToDisplayString();
         }
@@ -118,14 +100,14 @@ public class ControlsTabManager : MonoBehaviour
         // Update the "LeftArmAction" action text.
         if (leftArmActionText)
         {
-            InputAction action = playerMap.FindAction("LeftArmAction", throwIfNotFound: false);
+            InputAction action = playerMap.FindAction("SwordAttack", throwIfNotFound: false);
             if (action != null && action.bindings.Count > 0)
                 leftArmActionText.text = action.bindings[0].ToDisplayString();
         }
         // Update the "RightArmAction" action text.
         if (rightArmActionText)
         {
-            InputAction action = playerMap.FindAction("RightArmAction", throwIfNotFound: false);
+            InputAction action = playerMap.FindAction("GunAttack", throwIfNotFound: false);
             if (action != null && action.bindings.Count > 0)
                 rightArmActionText.text = action.bindings[0].ToDisplayString();
         }
@@ -157,14 +139,14 @@ public class ControlsTabManager : MonoBehaviour
             if (action != null && action.bindings.Count > 0)
                 healText.text = action.bindings[0].ToDisplayString();
         }
-            // Update the "Pause" action text.
-            if (healText)
-            {
-                InputAction action = playerMap.FindAction("Pause", throwIfNotFound: false);
-                if (action != null && action.bindings.Count > 0)
-                    pauseText.text = action.bindings[0].ToDisplayString();
-            }
+        // Update the "Pause" action text.
+        if (pauseText)
+        {
+            InputAction action = playerMap.FindAction("Pause", throwIfNotFound: false);
+            if (action != null && action.bindings.Count > 0)
+                pauseText.text = action.bindings[0].ToDisplayString();
         }
+    }
 }
 
 }
