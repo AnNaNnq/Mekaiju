@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Mekaiju.AI;
 using UnityEngine;
@@ -33,11 +34,17 @@ namespace Mekaiju
         private int _consumption;
 #endregion
 
+        private float _endTriggerTimout = 10;
+
         private bool _isActive;
+        private bool _isAnimationEnd;
 
         public override void Initialize(MechaPartInstance p_self)
         {
-            _isActive = false;
+            _isActive       = false;
+            _isAnimationEnd = false;
+
+            p_self.mecha.context.animationProxy.onLArm.AddListener(_OnAnimationEvent);
         }
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
@@ -49,8 +56,10 @@ namespace Mekaiju
         {
             if (IsAvailable(p_self, p_opt))
             {
-                p_self.mecha.context.animationProxy.animator.SetTrigger("LArm");
+                _isActive       = true;
+                _isAnimationEnd = false;
 
+                p_self.mecha.context.animationProxy.animator.SetTrigger("LArm");
                 p_self.mecha.ConsumeStamina(_consumption);
 
                 // TODO: use physics to handle contact
@@ -65,8 +74,25 @@ namespace Mekaiju
                     p_self.onDealDamage.Invoke(t_damage);
                 }
 
+                // Wait for animation end
+                var t_timout = _endTriggerTimout;
+                yield return new WaitUntil(() => _isAnimationEnd || (t_timout -= Time.deltaTime) <= 0);
+
+                _isActive = false;
             }
             yield return null;
+        }
+
+        private void _OnAnimationEvent(AnimationEventType p_eType)
+        {
+            switch (p_eType)
+            {
+                case AnimationEventType.End:
+                    _isAnimationEnd = true;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
