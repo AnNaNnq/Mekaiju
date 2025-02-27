@@ -8,6 +8,8 @@ using UnityEngine.AI;
 public class KaijuMotor : MonoBehaviour
 {
     private KaijuInstance _instance;
+
+    public NavMeshAgent agent { get { return _agent; } }
     private NavMeshAgent _agent;
 
     private GameObject _target;

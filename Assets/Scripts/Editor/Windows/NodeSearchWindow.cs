@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.IO;
 
 public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
 {
@@ -23,27 +23,79 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
         _indentationIcon.Apply();
     }
 
+    private string GetAttackCategory(Type type)
+    {
+        string path = AssetDatabase.FindAssets($"t:MonoScript {type.Name}")
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .FirstOrDefault(p => Path.GetFileNameWithoutExtension(p) == type.Name);
+
+        if (string.IsNullOrEmpty(path))
+            return "Uncategorized";
+
+        // Obtenir le chemin relatif (sans "Assets/")
+        string relativePath = Path.GetDirectoryName(path).Replace("\\", "/");
+        if (relativePath.StartsWith("Assets/"))
+            relativePath = relativePath.Substring(7);
+
+        // Découper le chemin en dossiers
+        string[] folders = relativePath.Split('/');
+
+        // Vérifier qu'on a au moins deux dossiers (Kaiju / Phase)
+        if (folders.Length >= 2)
+        {
+            return $"{folders[^2]}/{folders[^1]}"; // Retourne "Kaiju/Phase"
+        }
+
+        return folders.Length > 0 ? folders[^1] : "Uncategorized";
+    }
+
     public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
     {
         var tree = new List<SearchTreeEntry>
-        {
-            new SearchTreeGroupEntry(new GUIContent("Add Attack"), 0),
-            new SearchTreeGroupEntry(new GUIContent("Attack"), 1)
-        };
+    {
+        new SearchTreeGroupEntry(new GUIContent("Add Attack"), 0)
+    };
 
-        // Récupérer tous les scripts implémentant IAttack
         Type attackInterface = typeof(Mekaiju.AI.IAttack);
         var attackTypes = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(type => attackInterface.IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract);
 
-        foreach (var attackType in attackTypes)
+        // Grouper les attaques par leur catégorie (Kaiju/Phase)
+        var groupedAttacks = attackTypes.GroupBy(GetAttackCategory);
+
+        Dictionary<string, SearchTreeGroupEntry> kaijuGroups = new();
+
+        foreach (var group in groupedAttacks)
         {
-            tree.Add(new SearchTreeEntry(new GUIContent(attackType.Name, _indentationIcon))
+            string[] levels = group.Key.Split('/');
+
+            if (levels.Length < 2) continue; // On s'assure qu'on a bien "Kaiju/Phase"
+
+            string kaijuName = levels[0];
+            string phaseName = levels[1];
+
+            // Ajout du Kaiju (niveau 1)
+            if (!kaijuGroups.ContainsKey(kaijuName))
             {
-                userData = attackType.Name,
-                level = 2
-            });
+                var kaijuEntry = new SearchTreeGroupEntry(new GUIContent(kaijuName), 1);
+                tree.Add(kaijuEntry);
+                kaijuGroups[kaijuName] = kaijuEntry;
+            }
+
+            // Ajout de la phase sous le Kaiju (niveau 2)
+            var phaseEntry = new SearchTreeGroupEntry(new GUIContent(phaseName), 2);
+            tree.Add(phaseEntry);
+
+            // Ajouter les attaques sous la phase (niveau 3)
+            foreach (var attackType in group)
+            {
+                tree.Add(new SearchTreeEntry(new GUIContent(attackType.Name, _indentationIcon))
+                {
+                    userData = attackType.Name,
+                    level = 3
+                });
+            }
         }
 
         return tree;
