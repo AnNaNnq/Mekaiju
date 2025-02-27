@@ -22,7 +22,7 @@ namespace Mekaiju
 
         private void _SetStaminaBar()
         {
-            staminaBarUI.fillAmount = _inst.stamina / _inst.config.desc.stamina;
+            staminaBarUI.fillAmount = _inst.stamina / _inst.desc.stamina;
         }
     }
 }
