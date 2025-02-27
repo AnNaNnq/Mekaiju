@@ -27,7 +27,6 @@ namespace Mekaiju.AI
             base.Attack(kaiju);
             kaiju.animator.AttackAnimation(nameof(SnakeStrike));
             yield return new WaitForSeconds(timeBeforeAttack);
-            Debug.Log($"Sharp Blow fait {damage} degats");
             kaiju.brain.MakeAction();
             SendDamage(damage, kaiju);
         }

@@ -9,6 +9,7 @@ namespace Mekaiju.AI
 {
     public class AbyssalVortex : IAttack
     {
+        [Separator]
         [OverrideLabel("Damage (% of DMG)")]
         public float damage = 50;
         [OverrideLabel("Gravitational zone prefab")][OpenPrefabButton] public GameObject gameObjectAbyssalVortex;
@@ -26,7 +27,7 @@ namespace Mekaiju.AI
             base.Active(kaiju);
             kaiju.motor.StopKaiju(2f);
             GameObject t_zone = GameObject.Instantiate(gameObjectAbyssalVortex, kaiju.GetTargetPos(), Quaternion.identity);
-            GravitationalZone t_gz = t_zone.GetComponent<GravitationalZone>();
+            GravitationalZone t_gz = t_zone.GetComponent<GravitationalZone>();           
             t_gz.SetUp(kaiju, this);
         }
     }

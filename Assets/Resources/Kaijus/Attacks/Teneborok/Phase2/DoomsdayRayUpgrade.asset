@@ -24,6 +24,11 @@ MonoBehaviour:
         range: 50
         blockable: 1
         canUse: 1
+        sphereRadius: 4
+        forwardOffset: 7
+        layerMask:
+          serializedVersion: 2
+          m_Bits: 256
         damage: 10
         doomsdayObject: {fileID: 3009096104523879044, guid: 5fbdef867ce21e247a0678745d0dd082, type: 3}
         start: {fileID: 0}
@@ -31,4 +36,3 @@ MonoBehaviour:
         bounceDamping: 1.2
         nbBounce: 5
         bounceForce: 20
-        extraForce: 10

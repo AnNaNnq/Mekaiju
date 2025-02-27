@@ -1,7 +1,6 @@
 using Mekaiju;
 using Mekaiju.AI;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class FallRock : MonoBehaviour
 {
@@ -13,8 +12,8 @@ public class FallRock : MonoBehaviour
 
     public void SetUp(AbyssalVortex p_stat, KaijuInstance p_instance)
     {
-        _dmg = p_instance.stats.dmg * (1 + (_stat.damage / 100)); ;
         _stat = p_stat;
+        _dmg = p_instance.stats.dmg * (1 + (_stat.damage / 100));
         _instance = p_instance;
     }
 

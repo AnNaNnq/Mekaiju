@@ -59,7 +59,6 @@ namespace Mekaiju.AI {
         public void SendDamage(float p_damage, KaijuInstance p_kaiju, Effect p_effet = null, float p_effetDuration = -1)
         {
             MechaInstance mecha = GetPlayerInstance(p_kaiju);
-            Debug.Log(mecha.name);
             if (mecha != null)
             {
                 float t_damage = p_kaiju.stats.dmg * (1 + (p_damage / 100));
