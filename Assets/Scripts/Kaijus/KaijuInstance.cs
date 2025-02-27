@@ -126,6 +126,7 @@ namespace Mekaiju.AI
                 }
                 return false;
             });
+
         }
 
         private void FixedUpdate()
@@ -305,6 +306,9 @@ namespace Mekaiju.AI
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(transform.position, debugRange);
             }
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position + transform.forward * 7f, 4f);
         }
 
         public IEnumerator resetDps()
@@ -313,6 +317,7 @@ namespace Mekaiju.AI
             {
                 yield return new WaitForSeconds(1);
                 dps = 0;
+                UpdateUI();
             }
         }
 

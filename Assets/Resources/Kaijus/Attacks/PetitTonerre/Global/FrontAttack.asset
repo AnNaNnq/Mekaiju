@@ -21,10 +21,15 @@ MonoBehaviour:
       type: {class: FrontAttack, ns: Mekaiju.AI, asm: Assembly-CSharp}
       data:
         cooldown: 0
-        range: 8
+        range: 30
         blockable: 0
         canUse: 1
+        sphereRadius: 4
+        forwardOffset: 7
+        layerMask:
+          serializedVersion: 2
+          m_Bits: 256
         damage: 50
         timeBeforeAttack: 1
-        sprintRange: 30
+        attackRange: 8
         sprintSpeed: 110
