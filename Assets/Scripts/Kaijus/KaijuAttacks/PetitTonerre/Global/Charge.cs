@@ -12,8 +12,9 @@ namespace Mekaiju.AI
         [OverrideLabel("Charge Speed (Force Pulse)")]
         [Tooltip("Not % of speed")]
         public float chargeSpeed = 10;
+        [OverrideLabel("Charge Duration (sec)")]
         public float chargeDuration = 0.5f;
-        [OverrideLabel("Stop Distance")]
+        [OverrideLabel("Stop Distance (m)")]
         public float stopChargeDistance = 10;
         [OverrideLabel("Time Prep Before Charge (sec)")]
         public float chargePrepTime = 1;

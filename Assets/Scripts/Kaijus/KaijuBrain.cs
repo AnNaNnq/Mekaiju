@@ -14,6 +14,7 @@ namespace Mekaiju.AI
 
         private KaijuAttackContainer _attackGraph;
         private KaijuMotor _motor;
+        [Header("Pas touche c'est juste du debug")]
         [SerializeField]
         private string _lastAttack;
 
