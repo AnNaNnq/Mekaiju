@@ -28,8 +28,8 @@ namespace Mekaiju.AI
         {
             base.Active(kaiju);
 
-            kaiju.motor.agent.isStopped = true;
-            kaiju.motor.agent.enabled = false;
+            kaiju.motor.StopAI();
+            
 
             kaiju.StartCoroutine(Attack(kaiju));
 
@@ -46,6 +46,7 @@ namespace Mekaiju.AI
                 yield return new WaitForSeconds(0.01f);
                 t_time += 0.01f;
             }
+            kaiju.motor.enabled = false;
             float t_elapsedTime = 0f;
             Vector3 t_startPos = kaiju.transform.position;
             Vector3 t_direction = (t_targetPosition - t_startPos).normalized;
@@ -61,9 +62,9 @@ namespace Mekaiju.AI
             }
 
             kaiju.transform.position = t_targetPos;
-           
-            kaiju.motor.agent.enabled = true;
-            kaiju.motor.agent.isStopped = false;
+
+            kaiju.motor.enabled = true;
+            kaiju.motor.StartIA();
 
             SendDamage(damage, kaiju);
         }

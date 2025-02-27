@@ -12,10 +12,9 @@ namespace Mekaiju.AI {
 
         [HideInInspector]
         public bool canUse;
-        [ReadOnly]
-        public float sphereRadius = 1.5f;
-        [ReadOnly]
-        public float forwardOffset = 2.5f;
+
+        public float sphereRadius = 4f;
+        public float forwardOffset = 7f;
         public LayerMask layerMask;
 
         public IAttack()
@@ -52,6 +51,7 @@ namespace Mekaiju.AI {
             {
                 return hitCollider.GetComponent<MechaInstance>();
             }
+            
 
             return null;
         }
@@ -59,6 +59,7 @@ namespace Mekaiju.AI {
         public void SendDamage(float p_damage, KaijuInstance p_kaiju, Effect p_effet = null, float p_effetDuration = -1)
         {
             MechaInstance mecha = GetPlayerInstance(p_kaiju);
+            Debug.Log(mecha.name);
             if (mecha != null)
             {
                 float t_damage = p_kaiju.stats.dmg * (1 + (p_damage / 100));
