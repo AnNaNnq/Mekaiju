@@ -55,5 +55,21 @@ namespace Mekaiju.AI {
 
             return null;
         }
+
+        public void SendDamage(float p_damage, KaijuInstance p_kaiju, Effect p_effet = null, float p_effetDuration = -1)
+        {
+            MechaInstance mecha = GetPlayerInstance(p_kaiju);
+            if (mecha != null)
+            {
+                float t_damage = p_kaiju.stats.dmg * (1 + (p_damage / 100));
+                mecha.TakeDamage(t_damage);
+                p_kaiju.AddDPS(t_damage);
+                p_kaiju.UpdateUI();
+                if(p_effet != null)
+                {
+                    mecha.AddEffect(p_effet, p_effetDuration);
+                }
+            }
+        }
     }
 }

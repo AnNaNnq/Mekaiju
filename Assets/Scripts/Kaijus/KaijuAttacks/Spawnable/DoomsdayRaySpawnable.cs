@@ -43,7 +43,9 @@ namespace Mekaiju.AI.Attack
                     _damagable = false;
                     if (hit.collider.TryGetComponent(out MechaInstance _mecha))
                     {
-                        _mecha.TakeDamage(_stat.damage);
+                        float p_damage = _instnace.stats.dmg * (1 + (_stat.damage / 100));
+                        _mecha.TakeDamage(p_damage);
+                        _instnace.AddDPS(p_damage);
                         StartCoroutine(DamagableCooldown());
                     }
                 }

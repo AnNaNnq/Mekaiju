@@ -29,6 +29,7 @@ namespace Mekaiju.AI
             yield return new WaitForSeconds(timeBeforeAttack);
             Debug.Log($"Sharp Blow + fait {damage} degats");
             kaiju.brain.MakeAction();
+            SendDamage(damage, kaiju);
         }
 
     }
