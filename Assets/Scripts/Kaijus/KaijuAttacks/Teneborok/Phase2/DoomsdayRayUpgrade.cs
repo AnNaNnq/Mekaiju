@@ -8,6 +8,7 @@ namespace Mekaiju.AI
     public class DoomsdayRayUpgrade : IAttack
     {
         [Separator]
+        [OverrideLabel("Damage (% of DMG)")]
         public int damage = 10;
         [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject doomsdayObject;
         [HideInInspector] public Transform start;

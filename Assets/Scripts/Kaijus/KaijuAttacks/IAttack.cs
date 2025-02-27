@@ -1,3 +1,4 @@
+using MyBox;
 using System.Collections;
 using UnityEngine;
 
@@ -11,6 +12,11 @@ namespace Mekaiju.AI {
 
         [HideInInspector]
         public bool canUse;
+        [ReadOnly]
+        public float sphereRadius = 1.5f;
+        [ReadOnly]
+        public float forwardOffset = 2.5f;
+        public LayerMask layerMask;
 
         public IAttack()
         {
@@ -32,6 +38,22 @@ namespace Mekaiju.AI {
         public virtual IEnumerator Attack(KaijuInstance kaiju)
         {
             yield return null;
+        }
+
+        public MechaInstance GetPlayerInstance(KaijuInstance kaiju)
+        {
+            // Calculer la position devant l'objet en tenant compte de sa rotation
+            Vector3 spherePosition = kaiju.transform.position + kaiju.transform.forward * forwardOffset;
+
+            // Détection des objets dans la sphère
+            Collider[] hitColliders = Physics.OverlapSphere(spherePosition, sphereRadius, layerMask);
+
+            foreach (Collider hitCollider in hitColliders)
+            {
+                return hitCollider.GetComponent<MechaInstance>();
+            }
+
+            return null;
         }
     }
 }
