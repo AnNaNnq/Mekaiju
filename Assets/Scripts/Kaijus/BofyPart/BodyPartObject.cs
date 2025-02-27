@@ -11,7 +11,7 @@ namespace Mekaiju.AI.Body
             _instance = GetComponentInParent<KaijuInstance>();
         }
 
-        public void TakeDamage(int p_damage)
+        public void TakeDamage(float p_damage)
         {
             _instance.TakeDamage(gameObject, p_damage);
         }
