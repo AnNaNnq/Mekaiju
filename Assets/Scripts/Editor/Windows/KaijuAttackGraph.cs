@@ -12,7 +12,6 @@ public class KaijuAttackGraph : EditorWindow
 {
     private KaijuAttackGraphView _graphView;
     private string _fileName = "New Attack";
-    private static BasicAI _selectedPrefab;
 
     [MenuItem("Graph/Attack Graph")]
     public static void OpenKaijuGraphWindow()
@@ -26,14 +25,6 @@ public class KaijuAttackGraph : EditorWindow
         ConstructGraphView();
         GenerateToolBar();
         GenerateMiniMap();
-        LoadBasicAIData();
-    }
-
-    public static void OpenKaijuGraphWindowWithPrefab(BasicAI prefab)
-    {
-        var window = GetWindow<KaijuAttackGraph>();
-        window.titleContent = new GUIContent("Kaiju Attack Graph");
-        _selectedPrefab = prefab;
     }
 
     private void GenerateMiniMap()
@@ -155,23 +146,5 @@ public class KaijuAttackGraph : EditorWindow
     private void OnDisable()
     {
         rootVisualElement.Remove(_graphView);
-    }
-
-    private void LoadBasicAIData()
-    {
-        if (_selectedPrefab == null)
-        {
-            Debug.LogWarning("No Prefab Selected!");
-            return;
-        }
-
-        BasicAI aiScript = _selectedPrefab.GetComponentInChildren<BasicAI>();
-        if (aiScript == null)
-        {
-            Debug.LogError("BasicAI script not found in the selected prefab!");
-            return;
-        }
-
-        Debug.Log($"Loaded BasicAI Data: Phase = {aiScript.nbPhase}");
     }
 }

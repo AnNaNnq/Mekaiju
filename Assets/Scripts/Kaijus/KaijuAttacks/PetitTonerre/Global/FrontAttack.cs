@@ -41,7 +41,7 @@ namespace Mekaiju.AI
 
         public void AttackFront(KaijuInstance kaiju)
         {
-            Debug.Log("Attack !");
+            SendDamage(damage, kaiju);
             kaiju.brain.MakeAction();
 
         }

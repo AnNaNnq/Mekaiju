@@ -6,6 +6,7 @@ using System.Linq;
 using Mekaiju.Attribute;
 using Mekaiju.Utils;
 using System;
+using System.Collections;
 
 namespace Mekaiju.AI
 {
@@ -60,6 +61,9 @@ namespace Mekaiju.AI
         [Header("Debug")]
         public bool checkRange;
         [ConditionalField(nameof(checkRange))] public float debugRange;
+        public float dps;
+
+        private KaijuDebug _debug;
 
         bool _isInFight;
 
@@ -80,6 +84,10 @@ namespace Mekaiju.AI
                 behavior.Init(target, gameObject);
             }
 
+            _debug = FindFirstObjectByType<KaijuDebug>();
+
+            dps = 0;
+
             _currentPhase = 1;
 
             // We add the BodyPartObject script to bodyParts objects if they don't already have it
@@ -95,6 +103,7 @@ namespace Mekaiju.AI
             }
 
             CheckAllBehaviorsDisabeled();
+            StartCoroutine(resetDps());
         }
 
         private void Update()
@@ -158,25 +167,11 @@ namespace Mekaiju.AI
         {
             return Vector3.Distance(target.transform.position, transform.position) <= p_range;
         }
+        #region setters & getters
 
         public Vector3 GetTargetPos()
         {
             return target.transform.position;
-        }
-
-        private void OnDrawGizmos()
-        {
-            foreach (var behavior in behaviors.Where(b => b.showGizmo))
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(transform.position, behavior.triggerArea);
-            }
-
-            if (checkRange)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(transform.position, debugRange);
-            }
         }
 
         /// <summary>
@@ -234,6 +229,9 @@ namespace Mekaiju.AI
             return null;
         }
 
+        #endregion
+
+        #region implemation of IEntityInstance
         public override EnumArray<ModifierTarget, ModifierCollection> modifiers => context.modifiers;
 
         public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
@@ -278,6 +276,8 @@ namespace Mekaiju.AI
                 p_bodyPart.isDestroyed = true;
             }
 
+            UpdateUI();
+
             onTakeDamage.Invoke(p_amonunt);
         }
 
@@ -289,5 +289,42 @@ namespace Mekaiju.AI
                 TakeDamage(part, t_amountForPart);
             }
         }
+        #endregion
+
+        #region debug
+        private void OnDrawGizmos()
+        {
+            foreach (var behavior in behaviors.Where(b => b.showGizmo))
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(transform.position, behavior.triggerArea);
+            }
+
+            if (checkRange)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(transform.position, debugRange);
+            }
+        }
+
+        public IEnumerator resetDps()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(1);
+                dps = 0;
+            }
+        }
+
+        public void AddDPS(float p_amount)
+        {
+            dps += p_amount;
+        }
+
+        public void UpdateUI()
+        {
+            if(_debug != null) _debug.UpdateUI();
+        }
+        #endregion
     }
 }

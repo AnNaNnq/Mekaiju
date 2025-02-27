@@ -64,6 +64,8 @@ namespace Mekaiju.AI
            
             kaiju.motor.agent.enabled = true;
             kaiju.motor.agent.isStopped = false;
+
+            SendDamage(damage, kaiju);
         }
     }
 }
