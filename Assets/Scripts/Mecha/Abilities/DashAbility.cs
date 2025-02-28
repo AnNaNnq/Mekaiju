@@ -66,24 +66,34 @@ namespace Mekaiju
             _isAcitve   = false;
             _elapedTime = 0;
 
-            _ghost = p_self.Mecha.gameObject.AddComponent<MeshTrailTut>();
+            _ghost = p_self.mecha.gameObject.AddComponent<MeshTrailTut>();
             _ghost.config = _meshTrailConfig;
 
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
         }
 
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return (
+                !_isAcitve && 
+                !p_self.mecha.context.isMovementAltered && 
+                p_self.mecha.stamina - _consumption >= 0f &&
+                Mathf.Abs(p_self.mecha.context.moveAction.ReadValue<Vector2>().magnitude) > 0    
+            );
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
-            if (!_isAcitve && !p_self.Mecha.Context.IsMovementAltered)
+            if (IsAvailable(p_self, p_opt))
             {
-                Vector2   t_input     = p_self.Mecha.Context.MoveAction.ReadValue<Vector2>();
-                Transform t_transform = p_self.Mecha.transform;
+                Vector2   t_input     = p_self.mecha.context.moveAction.ReadValue<Vector2>();
+                Transform t_transform = p_self.mecha.transform;
                 _direction = (t_input.y * t_transform.forward + t_input.x * t_transform.right).normalized;
 
                 if (Mathf.Abs(_direction.sqrMagnitude) > 0)
                 {
-                    p_self.Mecha.ConsumeStamina(_consumption);
-                    p_self.Mecha.Context.IsMovementOverrided = true;
+                    p_self.mecha.ConsumeStamina(_consumption);
+                    p_self.mecha.context.isMovementOverrided = true;
 
                     _ghost.Trigger(_duration);
                     var t_go = GameObject.Instantiate(_speedVfx, _camera.transform);
@@ -99,7 +109,7 @@ namespace Mekaiju
                     _isAcitve = false;
 
                     GameObject.Destroy(t_go);
-                    p_self.Mecha.Context.IsMovementOverrided = false;
+                    p_self.mecha.context.isMovementOverrided = false;
                 }
             }
 
@@ -110,15 +120,10 @@ namespace Mekaiju
         {
             if (_isAcitve)
             {
-                Rigidbody t_rb  = p_self.Mecha.Context.Rigidbody;
+                Rigidbody t_rb  = p_self.mecha.context.rigidbody;
                 Vector3   t_vel = _force * (1 - _elapedTime / _duration) * _direction;
                 t_rb.linearVelocity = new(t_vel.x, t_rb.linearVelocity.y, t_vel.z);
             }   
-        }
-
-        public override float Consumption(object p_opt)
-        {
-            return _consumption;
         }
     }
 }

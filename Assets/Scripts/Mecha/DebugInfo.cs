@@ -1,12 +1,14 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Mekaiju;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DebugInfo : MonoBehaviour
 {
-    public static DebugInfo Instance { get; private set; }
-
     private MechaInstance _inst;
 
     [SerializeField]
@@ -25,29 +27,39 @@ public class DebugInfo : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _legsHealthField;
 
-    public TextMeshProUGUI Sword;
-    public TextMeshProUGUI Gun;
+    [SerializeField]
+    private TextMeshProUGUI _dps;
+
+    [SerializeField]
+    private TextMeshProUGUI _effectField;
+
+    private float _maxHealth;
+    public Image healthBarUI;
+
+    public Image effectTimeRing;
+    public Transform effectTimeList;
+    private Dictionary<StatefullEffect, Image> _effectsMapping;
 
     private void Awake()
     {
-        // Singleton pattern to ensure only one instance of GameManager exists.
-        if (Instance == null)
-        {
-            Instance = this;
-            _inst = GameObject.Find("Player").GetComponent<MechaInstance>();
-
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
+        _inst = GameObject.Find("Player").GetComponent<MechaInstance>();
+        _effectsMapping = new();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _SetStamina();   
+        _SetStamina();
+        _inst.onAddEffect.AddListener(_SetEffects);
+        _inst.onRemoveEffect.AddListener(_RemoveEffects);
+        _inst.onDealDamage.AddListener(_OnDealDamage);
+        StartCoroutine(LateStart(1));
+    }
+
+    IEnumerator LateStart(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        _maxHealth = _inst.health;
     }
 
     // Update is called once per frame
@@ -55,6 +67,12 @@ public class DebugInfo : MonoBehaviour
     {
         _SetStamina();
         _SetHealth();
+        _SetHealthBar();
+
+        foreach (var (key, value) in _effectsMapping)
+        {
+            value.fillAmount = key.remainingTime / key.time;
+        }
     }
 
     private IEnumerator _SetTempValue(TextMeshProUGUI p_target, string p_text, float timout)
@@ -71,16 +89,38 @@ public class DebugInfo : MonoBehaviour
 
     private void _SetStamina()
     {
-        _staminaField.text = $"{_inst.Stamina:0.00}";
+        _staminaField.text = $"{_inst.stamina:0.00}";
+    }
+
+    private void _SetEffects(StatefullEffect p_effect)
+    {
+        var t_go  = Instantiate(effectTimeRing, effectTimeList);
+        _effectsMapping.Add(p_effect, t_go);
+    }
+
+    private void _RemoveEffects(StatefullEffect p_effect)
+    {
+        Destroy(_effectsMapping[p_effect].gameObject);
+        _effectsMapping.Remove(p_effect);
+    }
+
+    private void _OnDealDamage(float p_damage)
+    {
+        StartCoroutine(_SetTempValue(_dps, $"{p_damage:0.00}", 0.5f));
+    }
+
+    private void _SetHealthBar()
+    {
+        healthBarUI.fillAmount = _inst.health/_maxHealth;
     }
 
     private void _SetHealth()
     {
-        _healthField.text = $"{_inst.Health:0.00}";
-        _lArmHealthField.text = $"{_inst[MechaPart.LeftArm].Health:0.00}";
-        _rArmHealthField.text = $"{_inst[MechaPart.RightArm].Health:0.00}";
-        _headHealthField.text = $"{_inst[MechaPart.Head].Health:0.00}";
-        _chestHealthField.text = $"{_inst[MechaPart.Chest].Health:0.00}";
-        _legsHealthField.text = $"{_inst[MechaPart.Legs].Health:0.00}";
+        _healthField.text = $"{_inst.health:0.00}";
+        _lArmHealthField.text = $"{_inst[MechaPart.LeftArm].health:0.00}";
+        _rArmHealthField.text = $"{_inst[MechaPart.RightArm].health:0.00}";
+        _headHealthField.text = $"{_inst[MechaPart.Head].health:0.00}";
+        _chestHealthField.text = $"{_inst[MechaPart.Chest].health:0.00}";
+        _legsHealthField.text = $"{_inst[MechaPart.Legs].health:0.00}";
     }
 }

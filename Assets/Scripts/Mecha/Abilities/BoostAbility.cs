@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mekaiju.AI;
@@ -32,32 +33,29 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private StatefullEffect _effectRef;
-
-        private bool _isAcive;
+        private bool _isActive;
 
         public override void Initialize(MechaPartInstance p_self)
         {
-            _isAcive   = false;
-            _effectRef = null;
+            _isActive   = false;
+        }
+
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return !_isActive && p_self.mecha.stamina - _consumption >= 0f;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
-            if (!_isAcive)
+            if (IsAvailable(p_self, p_opt))
             {
-                p_self.Mecha.ConsumeStamina(_consumption);
+                p_self.mecha.ConsumeStamina(_consumption);
 
-                _isAcive = true;
-                p_self.Mecha.AddEffect(_boostEffect, _duration);
+                _isActive = true;
+                p_self.mecha.AddEffect(_boostEffect, _duration);
                 yield return new WaitForSeconds(_duration);
-                _isAcive = false;
+                _isActive = false;
             }
-        }
-
-        public override float Consumption(object p_opt)
-        {
-            return _consumption;
         }
     }
 }

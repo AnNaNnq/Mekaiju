@@ -21,12 +21,6 @@ namespace Mekaiju
         /// </summary>
         [SerializeField]
         private int _rateOfFire;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        [SerializeField]
-        private int _consumption;
 
         /// <summary>
         /// Distance in m.
@@ -35,29 +29,24 @@ namespace Mekaiju
         private int _reachDistance;
 
         /// <summary>
-        /// 
+        /// Stamina consumption for a shot
         /// </summary>
-        private float _lastTriggerTime;
+        [SerializeField]
+        private int _consumption;
 
-        /// <summary>
-        /// 
-        /// </summary>
+        private float _lastTriggerTime;
         private float _minTimeBetweenFire => 1f / (_rateOfFire / 60f);
 
-        /// <summary>
-        /// 
-        /// </summary>
         public override void Initialize(MechaPartInstance p_self)
         {
             _lastTriggerTime = -1000f;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_self"></param>
-        /// <param name="p_target"></param>
-        /// <returns></returns>
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return Time.time - _lastTriggerTime >= _minTimeBetweenFire && p_self.mecha.stamina - _consumption >= 0f;
+        }
+
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {
             var t_now     = Time.time; 
@@ -66,37 +55,23 @@ namespace Mekaiju
             {
                 _lastTriggerTime = t_now;
 
-                // TODO: Launch animation
-                p_self.Mecha.Context.Animator.SetTrigger("swordAttack");
+                p_self.mecha.context.animationProxy.animator.SetTrigger("LArm");
 
-                p_self.Mecha.ConsumeStamina(_consumption);
+                p_self.mecha.ConsumeStamina(_consumption);
 
                 // Compute travel time
                 var t_tpos = p_target.transform.position;
                 var t_dist = Vector3.Distance(p_self.transform.position, t_tpos);
                 if (t_dist < _reachDistance)
                 {
-                    // TODO: remove cast
-                    var t_damage = p_self.Mecha.Context.Modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
+                    // Make damage
+                    var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
                     p_target.TakeDamage((int)t_damage);
-                    if (DebugInfo.Instance)
-                    {
-                        DebugInfo.Instance.SetTempValue(DebugInfo.Instance.Sword, t_damage.ToString(), 1f);
-                    }
+                    p_self.onDealDamage.Invoke(t_damage);
                 }
 
             }
             yield return null;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_opt"></param>
-        /// <returns></returns>
-        public override float Consumption(object p_opt)
-        {
-            return _consumption;
         }
     }
 

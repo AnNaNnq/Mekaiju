@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mekaiju.Utils;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Mekaiju
@@ -13,34 +15,28 @@ namespace Mekaiju
     [Serializable]
     public class InstanceContext
     {
-        public float LastAbilityTime = -1000f;
-        public float LastDamageTime = -1000f;
+        public EnumArray<ModifierTarget, ModifierCollection> modifiers = new(() => new());
 
-        // public float SpeedModifier   = 1f;
-        // public float DefenseModifier = 1f;
+        public bool isGrounded          = false;
+        public bool isMovementAltered   = false;
+        public bool isMovementOverrided = false;
 
-        public EnumArray<ModifierTarget, ModifierCollection> Modifiers = new(() => new());
+        public InputAction moveAction;
 
-        public bool IsGrounded          = false;
-        public bool IsMovementAltered   = false;
-        public bool IsMovementOverrided = false;
-
-        public InputAction MoveAction;
-
-        public Animator  Animator;
-        public Rigidbody Rigidbody;
+        public MechaAnimatorProxy animationProxy;
+        public Rigidbody rigidbody;
     }
 
 
     /// <summary>
     /// 
     /// </summary>
-    public class MechaInstance : MonoBehaviour
+    public class MechaInstance : IEntityInstance
     {
         /// <summary>
         /// 
         /// </summary>
-        public MechaDesc Desc;
+        public MechaConfig config { get; private set; }
 
         /// <summary>
         /// 
@@ -51,30 +47,40 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
-        private List<StatefullEffect> _effects;
+        [field: SerializeField]
+        public List<StatefullEffect> effects { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public float Health 
+        public float health 
         { 
             get
             {
-                return _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.Health; });
+                return _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.health; });
             } 
         }
 
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
-        public float Stamina { get; private set; }
+        [field: SerializeField]
+        public float stamina { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public InstanceContext Context { get; private set; }
+        public InstanceContext context { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public UnityEvent<StatefullEffect> onAddEffect;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public UnityEvent<StatefullEffect> onRemoveEffect;
 
         /// <summary>
         /// 
@@ -86,95 +92,14 @@ namespace Mekaiju
             get => _parts[p_part];
         }
 
-        private void Start()
-        {
-            // Desc = GameManager.Instance.PData.Mecha;
-
-            Debug.Assert(Desc.Prefab);
-            var t_main = Instantiate(Desc.Prefab, transform);
-
-            _parts = Desc.Parts.Select((key, part) => 
-                {
-                    var t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
-                    Debug.Assert(t_tr);
-
-                    t_tr.gameObject.SetActive(false);
-
-                    Debug.Assert(part.DefaultAbility.Prefab);
-                    var t_go = Instantiate(part.DefaultAbility.Prefab, t_tr);
-
-                    var t_inst = t_go.AddComponent<MechaPartInstance>();
-                    t_inst.Initialize(this, part);
-
-                    t_tr.gameObject.SetActive(true);
-
-                    return t_inst;
-                }
-            );
-
-            // TODO: remove
-            // t_main.SetActive(false);
-
-            // _effects = new();
-            _effects = new()
-            {
-                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
-                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal"), 10),
-            };
-
-            Stamina = Desc.Stamina;
-
-            Context = new()
-            {
-                Animator  = GetComponent<Animator>(),
-                Rigidbody = GetComponent<Rigidbody>(),
-                // Modifiers  = new()
-            };
-        }
-
-        private void Update()
-        {            
-            _effects.ForEach  (effect => effect.Tick());
-            _effects.RemoveAll(effect => effect.State == EffectState.Expired);
-        }
-
-        private void FixedUpdate()
-        {
-            _effects.ForEach(effect => effect.FixedTick());
-        }
-
+#region MechaInstance specifique implementation
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public bool IsAlive()
         {
-            return Health > 0;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_damage"></param>
-        public void TakeDamage(float p_damage)
-        {
-            foreach (var t_part in _parts)
-            {
-                // TODO: Maybe not divide
-                t_part.TakeDamage(p_damage / _parts.Count());    
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_amount"></param>
-        public void Heal(float p_amount)
-        {
-            foreach (var t_part in _parts)
-            {
-                t_part.Heal(p_amount);
-            }
+            return health > 0;
         }
 
         /// <summary>
@@ -182,10 +107,11 @@ namespace Mekaiju
         /// The effect will remain active indefinitely until it is manually removed.
         /// </summary>
         /// <param name="p_effect">The effect to be added.</param>
-        public StatefullEffect AddEffect(Effect p_effect)
+        public IDisposable AddEffect(Effect p_effect)
         {
-            _effects.Add(new(this, p_effect));
-            return _effects[^1];
+            effects.Add(new(this, p_effect));
+            onAddEffect.Invoke(effects[^1]);
+            return effects[^1];
         }
 
         /// <summary>
@@ -193,44 +119,133 @@ namespace Mekaiju
         /// </summary>
         /// <param name="p_effect">The effect to be added.</param>
         /// <param name="p_time">The duration of the effect in seconds.</param>
-        public StatefullEffect AddEffect(Effect p_effect, float p_time)
+        public IDisposable AddEffect(Effect p_effect, float p_time)
         {
-            _effects.Add(new(this, p_effect, p_time));
-            return _effects[^1];
-        }
-
-        public void RemoveEffect(StatefullEffect p_effect)
-        {
-            _effects.Remove(p_effect);
+            effects.Add(new(this, p_effect, p_time));
+            onAddEffect.Invoke(effects[^1]);
+            return effects[^1];
         }
 
         /// <summary>
-        /// 
+        /// Remove an effect.
         /// </summary>
-        /// <param name="p_consumption"></param>
-        /// <returns></returns>
-        public bool CanExecuteAbility(float p_consumption)
+        /// <param name="p_effect">The effect to remove.</param>
+        public void RemoveEffect(IDisposable p_effect)
         {
-            return Stamina - p_consumption > 0;
+            if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
+            {
+                onRemoveEffect.Invoke((StatefullEffect)p_effect);
+                effects.Remove((StatefullEffect)p_effect);
+                p_effect.Dispose();
+            }
+        }
+        #endregion
+
+        #region MonoBehaviour implementation
+        private void Awake()
+        {
+            onAddEffect = new();
+            onRemoveEffect = new();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_amount"></param>
-        public void RestoreStamina(float p_amount)
+        private void Start()
         {
-            Stamina = Math.Min(Desc.Stamina, Stamina + p_amount);
+            config = GameManager.instance.playerData.mechaConfig;
+
+            effects = new()
+            {
+                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Stamina")),
+                new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal")),
+            };
+
+            stamina = config.desc.stamina;
+
+            context = new()
+            {
+                animationProxy = GetComponent<MechaAnimatorProxy>(),
+                rigidbody      = GetComponent<Rigidbody>(),
+            };
+
+            var t_main = Instantiate(config.desc.prefab, transform);
+            _parts = config.parts.Select((key, part) => 
+                {
+                    Transform  t_tr;
+                    GameObject t_go;
+                    MechaPartInstance t_inst;
+
+                    t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
+                    Debug.Assert(t_tr, $"Unable to find an anchor for {Enum.GetName(typeof(MechaPart), key)}!");
+                    t_tr.gameObject.SetActive(false);
+
+                    t_go = t_tr.Find(part.ability.objectName).gameObject;
+                    Debug.Assert(t_go, $"Unable to find the GameObject associated to the ability {part.ability.name}!");
+
+                    t_inst = t_go.AddComponent<MechaPartInstance>();
+                    t_inst.Initialize(this, part);
+
+                    t_tr.gameObject.SetActive(true);
+
+                    return t_inst;
+                }
+            );
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_amount"></param>
-        public void ConsumeStamina(float p_amount)
-        {
-            Stamina = Math.Max(0, Stamina - p_amount);
+        private void Update()
+        {            
+            effects.ForEach  (effect => effect.Tick());
+            effects.RemoveAll(effect => 
+            {
+                if (effect.state == EffectState.Expired)
+                {
+                    onRemoveEffect.Invoke(effect);
+                    effect.Dispose();
+                    return true;
+                }
+                return false;
+            });
         }
+
+        private void FixedUpdate()
+        {
+            effects.ForEach(effect => effect.FixedTick());
+        }
+#endregion
+
+#region IEntityInstance implementation
+        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => context.modifiers;
+
+        public override float baseStamina => config.desc.stamina;
+
+        public override float baseHealth => config.desc.parts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
+
+        public override bool isAlive => health > 0;
+
+        public override void RestoreStamina(float p_amount)
+        {
+            stamina = Math.Min(config.desc.stamina, stamina + p_amount);
+        }
+
+        public override void ConsumeStamina(float p_amount)
+        {
+            stamina = Math.Max(0, stamina - p_amount);
+        }
+
+        public override void Heal(float p_amount)
+        {
+            foreach (var t_part in _parts)
+            {
+                t_part.Heal(p_amount);
+            }
+        }
+
+        public override void TakeDamage(float p_damage)
+        {
+            foreach (var t_part in _parts)
+            {
+                // TODO: Maybe not divide
+                t_part.TakeDamage(p_damage / _parts.Count());    
+            }
+        }
+#endregion
     }
-
 }

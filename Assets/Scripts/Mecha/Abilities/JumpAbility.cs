@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Mekaiju.AI;
 using UnityEngine;
@@ -10,50 +11,96 @@ namespace Mekaiju
     public class JumpAbility : IAbilityBehaviour
     {
         /// <summary>
-        /// 
+        /// The phisycs force applied
         /// </summary>
         [SerializeField]
         private float _force;
 
         /// <summary>
-        /// 
+        /// Time to wait to be able to jump again
         /// </summary>
         [SerializeField]
-        private int _consumption;
+        private float _cooldown;
 
-        /// <summary>
-        /// 
-        /// </summary>
+        private float _endTriggerTimout    = 5f;
+        private float _actionTriggerTimout = 5f;
+
         private bool _requested;
+        private bool _isActive;
+        private bool _inCooldown;
+        private bool _isAnimationAction;
+        private bool _isAnimationEnd;
 
         public override void Initialize(MechaPartInstance p_self)
         {
-            _requested = false;
+            _requested  = false;
+            _isActive   = false;
+            _inCooldown = false;
+            _isAnimationAction = false;
+            _isAnimationEnd    = false;
+            p_self.mecha.context.animationProxy.onJump.AddListener(_OnJumpAnimationEvent);
+        }
+
+        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        {
+            return !_isActive && p_self.mecha.context.isGrounded && !_requested && !_inCooldown;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {  
-            if (p_self.Mecha.Context.IsGrounded && !_requested)
+            if (IsAvailable(p_self, p_opt))
             {
-                p_self.Mecha.ConsumeStamina(_consumption);
-                _requested = true;
+                _isActive = true;
+                p_self.mecha.context.animationProxy.animator.SetTrigger("Jump");
+
+                // Wait for animation action
+                float t_timout = _actionTriggerTimout;
+                yield return new WaitUntil(() =>_isAnimationAction || (t_timout -= Time.deltaTime) <= 0);
+
+                _isAnimationAction = false;
+                _requested         = true;
+
+                // Wait for physic jump performed
+                yield return new WaitUntil(() => !_requested && !p_self.mecha.context.isGrounded);
+
+                // Wait for jump animation end
+                t_timout = _endTriggerTimout;
+                yield return new WaitUntil(() => p_self.mecha.context.isGrounded && (_isAnimationEnd || (t_timout -= Time.deltaTime) <= 0));
+
+                _inCooldown     = true;
+                _isAnimationEnd = false;
+
+                // Wait for cooldown
+                yield return new WaitForSeconds(_cooldown);
+
+                _inCooldown = false;
+                _isActive   = false;
             }
-            yield return null;
         }
 
         public override void FixedTick(MechaPartInstance p_self)
         {
+            // Perform physic jump if requested
             if (_requested)
             {
-                p_self.Mecha.Context.Animator.SetTrigger("Jump");
-                p_self.Mecha.Context.Rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
+                p_self.mecha.context.rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
                 _requested = false;
             }
         }
 
-        public override float Consumption(object p_opt)
+        private void _OnJumpAnimationEvent(AnimationEventType p_eType)
         {
-            return _consumption;
+            switch (p_eType)
+            {
+                case AnimationEventType.Action:
+                    _isAnimationAction = true;
+                    break;
+                case AnimationEventType.End:
+                    _isAnimationEnd = true;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using Mekaiju.AI;
+using Mekaiju.Utils;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Mekaiju
 {
@@ -10,58 +12,37 @@ namespace Mekaiju
     /// 
     /// </summary>
     [Serializable]
-    public class MechaPartInstance : MonoBehaviour
+    public class MechaPartInstance : IEntityInstance
     {
         /// <summary>
         /// 
         /// </summary>
-        public MechaInstance Mecha { get; private set; }
+        public MechaInstance mecha { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        private MechaPartDesc _desc;
+        private MechaPartConfig _config;
 
         /// <summary>
         /// 
         /// </summary>
         [field: SerializeField]
-        public float Health { get; private set; }
+        public float health { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="p_inst"></param>
         /// <param name="p_config"></param>
-        public void Initialize(MechaInstance p_inst, MechaPartDesc p_config)
+        public void Initialize(MechaInstance p_inst, MechaPartConfig p_config)
         {
-            Mecha   = p_inst;
+            mecha   = p_inst;
 
-            _desc  = p_config;
-            Health = p_config.Health;
+            _config = p_config;
+            health = p_config.desc.health;
 
-            _desc.DefaultAbility.Behaviour?.Initialize(this);
-            if (_desc.HasSpecial)
-            {
-                _desc.SpecialAbility.Behaviour?.Initialize(this);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_damage"></param>
-        public void TakeDamage(float p_damage)
-        {
-            var t_damage = Mecha.Context.Modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
-            
-            Mecha.Context.LastDamageTime = Time.time;
-            Health = Mathf.Max(0f, Health - t_damage);
-        }
-
-        public void Heal(float p_heal)
-        {
-            Health = Mathf.Min(_desc.Health, Health + p_heal);
+            _config.ability.behaviour?.Initialize(this);
         }
 
         /// <summary>
@@ -70,67 +51,58 @@ namespace Mekaiju
         /// <param name="p_target"></param>
         /// <param name="p_opt"></param>
         /// <returns></returns>
-        public IEnumerator TriggerDefaultAbility(BodyPartObject p_target, object p_opt)
+        public IEnumerator TriggerAbility(BodyPartObject p_target, object p_opt)
         {
-            if (Mecha.CanExecuteAbility(_desc.DefaultAbility.Behaviour.Consumption(p_opt)))
+            if (_config.ability.behaviour.IsAvailable(this, p_opt))
             {
-                Mecha.Context.LastAbilityTime = Time.time;
-                yield return _desc.DefaultAbility.Behaviour.Trigger(this, p_target, p_opt);
+                mecha.timePoints[TimePoint.LastAbilityTriggered] = Time.time;
+                yield return _config.ability.behaviour.Trigger(this, p_target, p_opt);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public void ReleaseDefaultAbility()
+        public void ReleaseAbility()
         {
-            _desc.DefaultAbility.Behaviour.Release();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_target"></param>
-        /// <param name="p_opt"></param>
-        /// <returns></returns>
-        public IEnumerator TriggerSpecialAbility(BodyPartObject p_target, object p_opt)
-        {   
-            if (_desc.HasSpecial)
-            {
-                if (Mecha.CanExecuteAbility(_desc.SpecialAbility.Behaviour.Consumption(p_opt)))
-                {
-                    Mecha.Context.LastAbilityTime = Time.time;
-                    yield return _desc.SpecialAbility.Behaviour.Trigger(this, p_target, p_opt);    
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void ReleaseSpecialAbility()
-        {
-            _desc.SpecialAbility.Behaviour.Release();
+            _config.ability.behaviour.Release();
         }
 
         private void Update()
         {
-            _desc.DefaultAbility.Behaviour?.Tick(this);
-            if (_desc.SpecialAbility)
-            {
-                _desc.SpecialAbility.Behaviour?.Tick(this);
-            }
+            _config.ability.behaviour?.Tick(this);
         }
 
         private void FixedUpdate()
         {
-            _desc.DefaultAbility.Behaviour?.FixedTick(this);
-            if (_desc.SpecialAbility)
-            {
-                _desc.SpecialAbility.Behaviour?.FixedTick(this);
-            }
+            _config.ability.behaviour?.FixedTick(this);
         }
 
-    }
+#region IEntityInstance implementation
 
+        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => mecha.modifiers;
+
+        public override UnityEvent<float> onTakeDamage => mecha.onTakeDamage;
+        public override UnityEvent<float> onDealDamage => mecha.onDealDamage;
+
+        public override bool isAlive => health > 0f;
+
+        public override float baseHealth => _config.desc.health;
+
+        public override void TakeDamage(float p_damage)
+        {
+            var t_damage = mecha.context.modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
+            
+            mecha.timePoints[TimePoint.LastDamage] = Time.time;
+            health = Mathf.Max(0f, health - t_damage);
+
+            onTakeDamage.Invoke(t_damage);
+        }
+
+        public override void Heal(float p_heal)
+        {
+            health = Mathf.Min(_config.desc.health, health + p_heal);
+        }
+    }
+#endregion
 }

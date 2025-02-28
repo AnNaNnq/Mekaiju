@@ -1,0 +1,152 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb21259124df937458b8e9a96bee5aaf, type: 3}
+  m_Name: Teneborok
+  m_EditorClassIdentifier: 
+  NodeLinks:
+  - BaseNodeGUID: 0cfc64a4-0f80-4eb9-9777-08edbd83a35f
+    PortName: Next
+    TargetNodeGUID: b5a74a81-edc1-4018-95f2-606b6fc917c3
+  - BaseNodeGUID: 2f5397d0-a237-4381-87ad-fe124430fd78
+    PortName: Attack 1
+    TargetNodeGUID: 17d90176-fb4a-4591-b5f7-829d276f4fb7
+  - BaseNodeGUID: 2f5397d0-a237-4381-87ad-fe124430fd78
+    PortName: Attack 2
+    TargetNodeGUID: c7ef30cc-37af-442c-bf36-af37ef645e19
+  - BaseNodeGUID: 2f5397d0-a237-4381-87ad-fe124430fd78
+    PortName: Attack 3
+    TargetNodeGUID: a1a8f41e-0842-454c-a54f-b4a2589df124
+  - BaseNodeGUID: 8c57be23-6a6b-4f18-95fa-95ca30636630
+    PortName: Attack 1
+    TargetNodeGUID: 3e5c73fe-1469-4988-805d-f8b2d5b2d123
+  - BaseNodeGUID: 8c57be23-6a6b-4f18-95fa-95ca30636630
+    PortName: Attack 2
+    TargetNodeGUID: 27ef24ef-df39-4aea-90bf-e5430fe146b5
+  - BaseNodeGUID: 8c57be23-6a6b-4f18-95fa-95ca30636630
+    PortName: Attack 3
+    TargetNodeGUID: e0534aad-773f-4c4d-9638-82dd4fe61537
+  - BaseNodeGUID: cf8c9a3c-26a5-4d47-b930-8cc78929163b
+    PortName: Attack 1
+    TargetNodeGUID: be621a13-b47c-4973-bc3e-c896ae319efe
+  - BaseNodeGUID: cf8c9a3c-26a5-4d47-b930-8cc78929163b
+    PortName: Attack 2
+    TargetNodeGUID: 666d109b-a358-4139-a9c1-980857d580d8
+  - BaseNodeGUID: cf8c9a3c-26a5-4d47-b930-8cc78929163b
+    PortName: Attack 3
+    TargetNodeGUID: 10a09a78-5690-4d92-ba53-c712ceef2e0a
+  - BaseNodeGUID: 8fa36bc4-fde9-4cbd-b23f-0142b2e5ae87
+    PortName: Attack 1
+    TargetNodeGUID: d399943e-7fb9-4ca5-bd34-92b753b9cb93
+  - BaseNodeGUID: 8fa36bc4-fde9-4cbd-b23f-0142b2e5ae87
+    PortName: Attack 2
+    TargetNodeGUID: b8d66993-04cb-47f2-9637-828b872f1dfd
+  - BaseNodeGUID: 8fa36bc4-fde9-4cbd-b23f-0142b2e5ae87
+    PortName: Attack 3
+    TargetNodeGUID: 875357ad-6b5a-4bfe-b905-c0693dd7a678
+  - BaseNodeGUID: 40ba8eda-a546-4bf4-91d8-24f0dad550a5
+    PortName: Attack 1
+    TargetNodeGUID: d5828e19-ab24-4347-bd67-705892e1c319
+  - BaseNodeGUID: 40ba8eda-a546-4bf4-91d8-24f0dad550a5
+    PortName: Attack 2
+    TargetNodeGUID: cd4d4c1c-48be-4a5d-87b8-53324aa6cfcb
+  - BaseNodeGUID: 40ba8eda-a546-4bf4-91d8-24f0dad550a5
+    PortName: Attack 3
+    TargetNodeGUID: 98c22467-9d50-4614-904a-d61b6b001311
+  - BaseNodeGUID: 6712369d-d68f-4a7d-8b0a-c306918bf917
+    PortName: Attack 1
+    TargetNodeGUID: 5ee5e036-20b7-4fdd-9229-a8f29f46b1eb
+  - BaseNodeGUID: 6712369d-d68f-4a7d-8b0a-c306918bf917
+    PortName: Attack 2
+    TargetNodeGUID: d74029f7-6a6f-4ea3-8c77-3f95ae36f291
+  - BaseNodeGUID: 6712369d-d68f-4a7d-8b0a-c306918bf917
+    PortName: Attack 3
+    TargetNodeGUID: 88b061cf-fea9-4845-b4b0-dc8aec352afd
+  NodeData:
+  - guid: b5a74a81-edc1-4018-95f2-606b6fc917c3
+    name: SharpBlow
+    position: {x: 134, y: 0}
+  - guid: c7ef30cc-37af-442c-bf36-af37ef645e19
+    name: RimeVoid
+    position: {x: 385, y: 227}
+  - guid: 17d90176-fb4a-4591-b5f7-829d276f4fb7
+    name: AbyssalVortex
+    position: {x: 385, y: 126}
+  - guid: a1a8f41e-0842-454c-a54f-b4a2589df124
+    name: SnakeStrike
+    position: {x: 385, y: 340}
+  - guid: 3e5c73fe-1469-4988-805d-f8b2d5b2d123
+    name: DoomsdayRay
+    position: {x: 732, y: -308}
+  - guid: 27ef24ef-df39-4aea-90bf-e5430fe146b5
+    name: DarkeningStorm
+    position: {x: 732, y: -205}
+  - guid: e0534aad-773f-4c4d-9638-82dd4fe61537
+    name: SharpBlow
+    position: {x: 732, y: -105}
+  - guid: be621a13-b47c-4973-bc3e-c896ae319efe
+    name: DoomsdayRay
+    position: {x: 1148, y: 189}
+  - guid: 666d109b-a358-4139-a9c1-980857d580d8
+    name: RimeVoid
+    position: {x: 1148, y: 302}
+  - guid: 10a09a78-5690-4d92-ba53-c712ceef2e0a
+    name: SnakeStrike
+    position: {x: 1162, y: 442}
+  - guid: d399943e-7fb9-4ca5-bd34-92b753b9cb93
+    name: AbyssalVortex
+    position: {x: 1520, y: -166}
+  - guid: b8d66993-04cb-47f2-9637-828b872f1dfd
+    name: RimeVoid
+    position: {x: 1604, y: -79}
+  - guid: 875357ad-6b5a-4bfe-b905-c0693dd7a678
+    name: SharpBlow
+    position: {x: 1584, y: 88}
+  - guid: d5828e19-ab24-4347-bd67-705892e1c319
+    name: DarkeningStorm
+    position: {x: -24, y: -408}
+  - guid: cd4d4c1c-48be-4a5d-87b8-53324aa6cfcb
+    name: AbyssalVortex
+    position: {x: -24, y: -308}
+  - guid: 98c22467-9d50-4614-904a-d61b6b001311
+    name: SharpBlow
+    position: {x: -35, y: -200}
+  - guid: 5ee5e036-20b7-4fdd-9229-a8f29f46b1eb
+    name: DoomsdayRay
+    position: {x: -339, y: 0}
+  - guid: d74029f7-6a6f-4ea3-8c77-3f95ae36f291
+    name: RimeVoid
+    position: {x: -296, y: 77}
+  - guid: 88b061cf-fea9-4845-b4b0-dc8aec352afd
+    name: SharpBlow
+    position: {x: -269, y: 263}
+  StartNodeData:
+  - guid: 0cfc64a4-0f80-4eb9-9777-08edbd83a35f
+    name: Start
+    position: {x: 0, y: 0}
+  - guid: 2f5397d0-a237-4381-87ad-fe124430fd78
+    name: SharpBlow
+    position: {x: -5, y: 126}
+  - guid: 8c57be23-6a6b-4f18-95fa-95ca30636630
+    name: SnakeStrike
+    position: {x: 371, y: -308}
+  - guid: cf8c9a3c-26a5-4d47-b930-8cc78929163b
+    name: DarkeningStorm
+    position: {x: 760, y: 189}
+  - guid: 8fa36bc4-fde9-4cbd-b23f-0142b2e5ae87
+    name: DoomsdayRay
+    position: {x: 1199, y: -166}
+  - guid: 40ba8eda-a546-4bf4-91d8-24f0dad550a5
+    name: RimeVoid
+    position: {x: -339, y: -356}
+  - guid: 6712369d-d68f-4a7d-8b0a-c306918bf917
+    name: AbyssalVortex
+    position: {x: -629, y: 49}

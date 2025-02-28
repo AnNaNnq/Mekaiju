@@ -1,3 +1,7 @@
+using Mekaiju.AI;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mekaiju.Utils
@@ -6,16 +10,32 @@ namespace Mekaiju.Utils
     {
         public static float GetGround(Vector3 pos)
         {
-            if (Physics.Raycast(pos, Vector3.down, out RaycastHit hit, 1000, LayerMask.GetMask("Walkable")))
+            RaycastHit[] hits = Physics.RaycastAll(pos + Vector3.up * 10, Vector3.down, 1000, LayerMask.GetMask("Walkable"));
+
+            if (hits.Length > 0)
             {
-                return hit.point.y;
-            }
-            if (Physics.Raycast(pos, Vector3.up, out hit, 1000, LayerMask.GetMask("Walkable")))
-            {
-                return hit.point.y;
+                float minY = float.MaxValue;
+                foreach (var hit in hits)
+                {
+                    if (hit.point.y < minY)
+                    {
+                        minY = hit.point.y; // Prend le point le plus bas
+                    }
+                }
+                return minY;
             }
 
-            return 0;
+            return pos.y; // Retourne la hauteur actuelle si aucun hit
+        }
+
+        /// <summary>
+        /// Countdown function
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerator CooldownRoutine(float cooldown, System.Action onCooldownEnd)
+        {
+            yield return new WaitForSeconds(cooldown);
+            onCooldownEnd?.Invoke();
         }
     }
 }

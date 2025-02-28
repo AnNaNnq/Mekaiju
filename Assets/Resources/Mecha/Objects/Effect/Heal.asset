@@ -12,15 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fae5a4eb88f481a9d0d7b32424867b, type: 3}
   m_Name: Heal
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Heal
-  <Description>k__BackingField: Heal
-  <Behaviour>k__BackingField:
-    rid: 3772134358241509541
+  <description>k__BackingField: Heal
+  <behaviour>k__BackingField:
+    rid: 2512019433379594312
   references:
     version: 2
     RefIds:
-    - rid: 3772134358241509541
+    - rid: 2512019433379594312
       type: {class: HealEffect, ns: Mekaiju, asm: Assembly-CSharp}
       data:
-        _heal: 0
-        canHeal: 0
+        _heal: 1
+        _timeBeforeHeal: 5
