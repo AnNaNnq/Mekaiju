@@ -29,6 +29,8 @@ namespace Mekaiju.AI
         public List<StatefullEffect> effects { get; private set; }
         public InstanceContext context { get; private set; }
 
+        public List<KaijuPassive> passives;
+
         [SerializeField]
         private bool _canBehaviorSwitch = true;
 
@@ -102,6 +104,11 @@ namespace Mekaiju.AI
                 }
             }
 
+            foreach(var passive in passives)
+            {
+                passive.passive.OnStart();
+            }
+
             CheckAllBehaviorsDisabeled();
             StartCoroutine(resetDps());
         }
@@ -168,6 +175,8 @@ namespace Mekaiju.AI
         {
             return Vector3.Distance(target.transform.position, transform.position) <= p_range;
         }
+
+
         #region setters & getters
 
         public Vector3 GetTargetPos()
@@ -230,6 +239,19 @@ namespace Mekaiju.AI
             return null;
         }
 
+        public List<KaijuPassive> GetPassivesActive()
+        {
+            List<KaijuPassive> t_passives = new List<KaijuPassive>();
+            foreach (var passive in passives)
+            {
+                if (passive.passive.isUsed)
+                {
+                    t_passives.Add(passive);
+                }
+            }
+            return t_passives;
+        }
+
         #endregion
 
         #region implemation of IEntityInstance
@@ -278,6 +300,11 @@ namespace Mekaiju.AI
             }
 
             UpdateUI();
+
+            foreach (var passive in passives)
+            {
+                passive.passive.OnDamage();
+            }
 
             onTakeDamage.Invoke(p_amonunt);
         }
