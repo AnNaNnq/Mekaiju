@@ -1,7 +1,6 @@
-using TMPro;
 using UnityEngine;
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Attack.Instance
 {
     public class DoomsdyRayUpgradeObject : MonoBehaviour
     {

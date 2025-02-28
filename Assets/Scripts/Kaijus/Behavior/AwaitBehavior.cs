@@ -1,8 +1,4 @@
-using MyBox;
-using NUnit.Framework.Internal;
-using UnityEngine;
-
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Behavior
 {
     public class AwaitBehavior : KaijuBehavior
     {

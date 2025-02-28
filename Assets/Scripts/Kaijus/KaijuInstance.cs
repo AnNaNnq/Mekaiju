@@ -7,7 +7,9 @@ using Mekaiju.Attribute;
 using Mekaiju.Utils;
 using System;
 using System.Collections;
-using UnityEngine.Events;
+using Mekaiju.AI.Objet;
+using Mekaiju.AI.Body;
+using Mekaiju.AI.Behavior;
 
 namespace Mekaiju.AI
 {
@@ -32,8 +34,7 @@ namespace Mekaiju.AI
 
         public List<KaijuPassive> passives;
 
-        [SerializeField]
-        private bool _canBehaviorSwitch = true;
+        //private bool _canBehaviorSwitch = true;
 
         public GameObject target { get; private set; }
 
@@ -334,12 +335,6 @@ namespace Mekaiju.AI
         #region debug
         private void OnDrawGizmos()
         {
-            foreach (var behavior in behaviors.Where(b => b.showGizmo))
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(transform.position, behavior.triggerArea);
-            }
-
             if (checkRange)
             {
                 Gizmos.color = Color.red;

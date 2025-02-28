@@ -2,7 +2,7 @@ using MyBox;
 using System.Collections;
 using UnityEngine;
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Attack
 {
     public class SharpBlow : IAttack
     {

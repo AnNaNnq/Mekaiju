@@ -1,12 +1,10 @@
-﻿using Mekaiju;
-using Mekaiju.AI;
-using Mekaiju.Utils;
+﻿using Mekaiju.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Mekaiju.AI.Attack
+namespace Mekaiju.AI.Attack.Instance
 {
     public class RimVoidInstance : MonoBehaviour
     {

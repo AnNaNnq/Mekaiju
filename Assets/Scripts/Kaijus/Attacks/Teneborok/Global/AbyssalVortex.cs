@@ -1,11 +1,9 @@
-using Mekaiju.AI;
-using Mekaiju.Attacks;
 using Mekaiju.Attribute;
 using MyBox;
 using UnityEngine;
 
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Attack
 {
     public class AbyssalVortex : IAttack
     {

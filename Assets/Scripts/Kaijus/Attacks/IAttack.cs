@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using Mekaiju.Entity.Effect;
 
-namespace Mekaiju.AI {
+namespace Mekaiju.AI.Attack {
     [System.Serializable]
     public abstract class IAttack
     {

@@ -1,8 +1,8 @@
-using Mekaiju.AI;
+using Mekaiju.AI.Attack.Instance;
 using System.Collections;
 using UnityEngine;
 
-namespace Mekaiju.Attacks
+namespace Mekaiju.AI.Attack
 {
     public class GravitationalZone : MonoBehaviour
     {

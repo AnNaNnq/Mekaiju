@@ -1,7 +1,8 @@
+using Mekaiju.AI.Attack;
 using Mekaiju.Attributes;
 using UnityEngine;
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Objet
 {
     [CreateAssetMenu(fileName = "New Attack", menuName = "Kaiju/Attack")]
     public class KaijuAttack : ScriptableObject

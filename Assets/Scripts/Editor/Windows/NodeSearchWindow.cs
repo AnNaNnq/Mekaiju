@@ -56,7 +56,7 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
         new SearchTreeGroupEntry(new GUIContent("Add Attack"), 0)
     };
 
-        Type attackInterface = typeof(Mekaiju.AI.IAttack);
+        Type attackInterface = typeof(Mekaiju.AI.Attack.IAttack);
         var attackTypes = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(type => attackInterface.IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract);
