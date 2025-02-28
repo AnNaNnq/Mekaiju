@@ -9,8 +9,6 @@ namespace Mekaiju.AI.Attack
         [Separator]
         [OverrideLabel("Damage (% of DMG)")]
         public float damage = 50;
-        [HideInInspector]
-        //public float timeBeforeAttack = 1; //Sera util plus tard fait pas une syncope alex
         public float attackRange = 10;
         [OverrideLabel("Sprint Speed (% of Speed")]
         public float sprintSpeed = 110;

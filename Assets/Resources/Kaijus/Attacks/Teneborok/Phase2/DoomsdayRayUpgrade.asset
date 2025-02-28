@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: DoomsdayRayUpgrade
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 3772134698131652781
+    rid: 3772134765917896958
   references:
     version: 2
     RefIds:
-    - rid: 3772134698131652781
-      type: {class: DoomsdayRayUpgrade, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 3772134765917896958
+      type: {class: DoomsdayRayUpgrade, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
-        cooldown: 10
-        range: 50
-        blockable: 1
+        cooldown: 12.5
+        range: 30
+        blockable: 0
         canUse: 1
         sphereRadius: 4
         forwardOffset: 7
@@ -32,7 +32,7 @@ MonoBehaviour:
         damage: 10
         doomsdayObject: {fileID: 3009096104523879044, guid: 5fbdef867ce21e247a0678745d0dd082, type: 3}
         start: {fileID: 0}
-        speed: 25
+        speed: 10
         bounceDamping: 1.2
         nbBounce: 5
-        bounceForce: 20
+        bounceForce: 10

@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Charge
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 3772134743586898041
+    rid: 3772134765917896948
   references:
     version: 2
     RefIds:
-    - rid: 3772134743586898041
-      type: {class: Charge, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 3772134765917896948
+      type: {class: Charge, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
-        cooldown: 2
-        range: 100
+        cooldown: 1
+        range: 50
         blockable: 0
         canUse: 1
         sphereRadius: 4
@@ -29,7 +29,7 @@ MonoBehaviour:
         layerMask:
           serializedVersion: 2
           m_Bits: 256
-        damage: 50
+        damage: 100
         chargeSpeed: 10
         chargeDuration: 0.5
         stopChargeDistance: 10
