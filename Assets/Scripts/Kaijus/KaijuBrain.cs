@@ -111,12 +111,24 @@ namespace Mekaiju.AI
 
         public void Attack(List<string> p_attackGUID)
         {
+            List<KaijuPassive> t_activePassives = _instance.GetPassivesActive();
+            if (t_activePassives.Count > 0)
+            {
+                foreach (KaijuPassive passive in t_activePassives)
+                {
+                    passive.passive.Passive(_instance);
+                }
+                _canAttack = false;
+                return;
+            }
+
             if (!_canAttack)
             {
                 if (_motor.agent.enabled == false && !_motor.agent.isOnNavMesh) return;
                 _motor.MoveTo(_instance.target.transform.position, 100);
                 return;
             }
+
 
             List<KaijuAttack> t_kaijuAttacks = PotentialAttacks(p_attackGUID);
 
