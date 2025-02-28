@@ -11,13 +11,13 @@ namespace Mekaiju.AI
         public float damage = 50;
         [HideInInspector]
         public float timeBeforeAttack = 1; //Sera util plus tard fait pas une syncope alex
-        public float sprintRange = 30;
+        public float attackRange = 10;
         [OverrideLabel("Sprint Speed (% of Speed")]
         public float sprintSpeed = 110;
 
         public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
-            bool t_return = (canUse && kaiju.TargetInRange(range)) || (canUse && kaiju.TargetInRange(sprintRange));
+            bool t_return = (canUse && kaiju.TargetInRange(range)) || (canUse && kaiju.TargetInRange(attackRange));
             if (otherRange > 0)
             {
                 t_return &= !kaiju.TargetInRange(otherRange);
@@ -28,9 +28,10 @@ namespace Mekaiju.AI
         public override void Active(KaijuInstance kaiju)
         {
             base.Active(kaiju);
-            if(kaiju.TargetInRange(sprintRange))
+            if(kaiju.TargetInRange(range) && !kaiju.TargetInRange(attackRange))
             {
-                kaiju.motor.MoveTo(kaiju.target.transform.position, sprintSpeed, range);
+                Debug.Log("sprint");
+                kaiju.motor.MoveTo(kaiju.target.transform.position, sprintSpeed, attackRange);
                 kaiju.StartCoroutine(SprintDuration(kaiju));
             }
             else
@@ -41,14 +42,14 @@ namespace Mekaiju.AI
 
         public void AttackFront(KaijuInstance kaiju)
         {
-            Debug.Log("Attack !");
+            SendDamage(damage, kaiju);
             kaiju.brain.MakeAction();
 
         }
 
         IEnumerator SprintDuration(KaijuInstance kaiju)
         {
-            while(Vector3.Distance(kaiju.transform.position, kaiju.GetTargetPos()) > range)
+            while(Vector3.Distance(kaiju.transform.position, kaiju.GetTargetPos()) > attackRange)
             {
                 yield return new WaitForSeconds(0.1f);
             }

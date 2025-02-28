@@ -23,7 +23,7 @@ namespace Mekaiju.Attacks
             {
                 GameObject t_kaillou = Instantiate(_stat.gameObjectRock, GetRandomPointInCircle(_stat.radius), Quaternion.identity);
                 FallRock t_fr = t_kaillou.GetComponent<FallRock>();
-                t_fr.SetUp(_stat);
+                t_fr.SetUp(_stat, _kaiju);
                 Destroy(t_kaillou, 10f);
                 yield return new WaitForSeconds(0.2f);
             }
