@@ -44,7 +44,6 @@ namespace Mekaiju.AI
         {
             SendDamage(damage, kaiju);
             kaiju.brain.MakeAction();
-
         }
 
         IEnumerator SprintDuration(KaijuInstance kaiju)

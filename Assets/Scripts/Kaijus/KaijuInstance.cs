@@ -7,6 +7,7 @@ using Mekaiju.Attribute;
 using Mekaiju.Utils;
 using System;
 using System.Collections;
+using UnityEngine.Events;
 
 namespace Mekaiju.AI
 {
@@ -108,6 +109,8 @@ namespace Mekaiju.AI
             {
                 passive.passive.OnStart();
             }
+
+            context = new();
 
             CheckAllBehaviorsDisabeled();
             StartCoroutine(resetDps());
@@ -293,8 +296,17 @@ namespace Mekaiju.AI
 
         public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
         {
+            
+
+            var t_defense = context.modifiers[ModifierTarget.Defense].ComputeValuePercentage(stats.def);
+            var t_damage = context.modifiers[ModifierTarget.Damage].ComputeValue(p_amonunt);
+            Debug.Log(t_defense);
+
+            var t_realDamage = t_damage * (1- (t_defense/100));
+
             p_bodyPart.health -= p_amonunt;
-            if(!p_bodyPart.isDestroyed && p_bodyPart.health <= 0)
+
+            if (!p_bodyPart.isDestroyed && p_bodyPart.health <= 0)
             {
                 p_bodyPart.isDestroyed = true;
             }
