@@ -40,7 +40,7 @@ public class KaijuMotor : MonoBehaviour
     /// <param name="p_stopping"></param>
     public void MoveTo(Vector3 p_pos, float p_speed, float p_stopping = 10f)
     {
-        if (!_agent.enabled) return;
+        if (_agent.enabled == false) return;
         p_stopping = Mathf.Max(p_stopping, 10f);
 
         float t_speed = _instance.stats.speed * (1 + (p_speed / 100));
@@ -52,7 +52,7 @@ public class KaijuMotor : MonoBehaviour
 
     public void Stop()
     {
-        if (!_agent.enabled) return;
+        if (!_agent.enabled && !_agent.isOnNavMesh) return;
         _agent.ResetPath();
     }
 
@@ -84,6 +84,16 @@ public class KaijuMotor : MonoBehaviour
         _agent.ResetPath();
         _agent.enabled = false;
         yield return new WaitForSeconds(p_time);
+        _agent.enabled = true;
+    }
+
+    public void StopAI()
+    {
+        _agent.enabled = false;
+    }
+
+    public void StartIA()
+    {
         _agent.enabled = true;
     }
 }

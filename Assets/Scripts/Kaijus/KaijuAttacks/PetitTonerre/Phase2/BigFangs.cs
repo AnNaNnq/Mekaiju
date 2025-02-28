@@ -25,9 +25,7 @@ namespace Mekaiju.AI
         {
             base.Active(kaiju);
 
-            MechaInstance t_player = GetPlayerInstance(kaiju);
-
-            t_player.AddEffect(effect, effectDuration);
+            SendDamage(damage, kaiju, effect, effectDuration);
         }
     }
 }

@@ -156,7 +156,10 @@ namespace Mekaiju.AI.Attack
         {
             while (_damagable)
             {
-                p_mecha.TakeDamage(_stat.damage);
+                float t_damage = _instance.stats.dmg * (1 + (_stat.damage / 100)); ;
+                p_mecha.TakeDamage(t_damage);
+                _instance.AddDPS(t_damage);
+                _instance.UpdateUI();
                 yield return new WaitForSeconds(_stat.rimVoidHitCooldown);
             }
         }
