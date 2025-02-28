@@ -1,3 +1,4 @@
+using Mekaiju.Attribute;
 using MyBox;
 using System.Collections;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace Mekaiju.AI
         public float speed = 50;
         public int nbHit = 3;
         private int currentHit = 0;
+        [SOSelector]
+        public Effect defenseEffect;
 
         public override void Passive(KaijuInstance kaiju)
         {
@@ -24,6 +27,7 @@ namespace Mekaiju.AI
 
         public IEnumerator defense(KaijuInstance kaiju)
         {
+            var t_effet = kaiju.AddEffect(defenseEffect);
             float t_time = 0;
             while(t_time < duration)
             {
@@ -33,6 +37,7 @@ namespace Mekaiju.AI
                 t_time += 0.01f;
             }
             isUsed = false;
+            kaiju.RemoveEffect(t_effet);
         }
 
         public override void OnDamage()
