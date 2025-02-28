@@ -3,7 +3,7 @@ using MyBox;
 using System.Collections;
 using UnityEngine;
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Passive
 {
     public class BallDefense : IPassive
     {

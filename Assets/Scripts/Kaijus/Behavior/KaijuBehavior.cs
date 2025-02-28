@@ -2,7 +2,7 @@ using MyBox;
 using UnityEngine;
 using System;
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Behavior
 {
     [Serializable]
     public abstract class KaijuBehavior
@@ -11,7 +11,6 @@ namespace Mekaiju.AI
         public bool canTrigger = false;
         [ConditionalField(nameof(canTrigger))] public float triggerArea = 30f;
         [ConditionalField(nameof(canTrigger))] public bool triggerOnce = false;
-        [ConditionalField(nameof(canTrigger))] public bool showGizmo = false;
 
         protected GameObject _target;
         protected GameObject _kaiju;

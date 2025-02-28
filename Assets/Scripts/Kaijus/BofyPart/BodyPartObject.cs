@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Body
 {
     public class BodyPartObject : MonoBehaviour
     {

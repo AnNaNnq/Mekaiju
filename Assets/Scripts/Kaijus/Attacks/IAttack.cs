@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Mekaiju.AI {
+namespace Mekaiju.AI.Attack {
     [System.Serializable]
     public abstract class IAttack
     {

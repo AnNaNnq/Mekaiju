@@ -1,9 +1,9 @@
-using Mekaiju.AI.Attack;
+using Mekaiju.AI.Attack.Instance;
 using Mekaiju.Attribute;
 using MyBox;
 using UnityEngine;
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Attack
 {
     public class RimeVoid : IAttack
     {

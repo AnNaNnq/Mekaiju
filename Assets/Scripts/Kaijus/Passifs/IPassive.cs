@@ -1,7 +1,4 @@
-using UnityEngine;
-
-
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Passive
 {
     [System.Serializable]
     public abstract class IPassive

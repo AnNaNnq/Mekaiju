@@ -1,6 +1,4 @@
-using UnityEngine;
-
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Behavior
 {
     public class AgroBehavior : KaijuBehavior
     {

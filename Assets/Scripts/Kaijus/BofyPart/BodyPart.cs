@@ -1,10 +1,13 @@
 using UnityEngine;
 
-[System.Serializable]
-public class BodyPart
+namespace Mekaiju.AI.Body
 {
-    public string nom;
-    public GameObject[] part;
-    public float health;
-    public bool isDestroyed;
+    [System.Serializable]
+    public class BodyPart
+    {
+        public string nom;
+        public GameObject[] part;
+        public float health;
+        public bool isDestroyed;
+    }
 }

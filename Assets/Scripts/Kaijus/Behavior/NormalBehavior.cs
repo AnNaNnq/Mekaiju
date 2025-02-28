@@ -1,7 +1,7 @@
 using Mekaiju.Attribute;
 using UnityEngine;
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Behavior
 {
     public class NormalBehavior : KaijuBehavior
     {

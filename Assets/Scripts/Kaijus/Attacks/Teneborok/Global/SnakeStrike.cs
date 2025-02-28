@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using MyBox;
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Attack
 {
     public class SnakeStrike : IAttack
     {

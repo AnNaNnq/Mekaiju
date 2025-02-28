@@ -1,9 +1,7 @@
 using Mekaiju.Attribute;
 using MyBox;
-using UnityEditor;
-using UnityEngine;
 
-namespace Mekaiju.AI
+namespace Mekaiju.AI.Attack
 {
     public class BigFangs : IAttack
     {

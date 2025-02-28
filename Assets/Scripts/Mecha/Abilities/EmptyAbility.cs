@@ -1,6 +1,6 @@
 using System.Collections;
 using Mekaiju;
-using Mekaiju.AI;
+using Mekaiju.AI.Body;
 
 public class EmptyAbility : IAbilityBehaviour
 {
