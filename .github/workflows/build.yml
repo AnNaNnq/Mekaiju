@@ -7,37 +7,72 @@ on:
       - main
 
 
+# jobs:
+#   buildForAllSupportedPlatforms:
+#     name: Build for ${{ matrix.targetPlatform }}
+#     runs-on: ubuntu-latest
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         targetPlatform:
+#           - StandaloneWindows64 # Build a Windows standalone.
+#     steps:
+#       - uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+#           lfs: true
+
+#       - uses: actions/cache@v3
+#         with:
+#           path: Library
+#           key: Library-${{ matrix.targetPlatform }}
+#           restore-keys: Library-
+
+#       - uses: game-ci/unity-builder@v4
+#         env:
+#           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+#           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+#           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+#         with:
+#           targetPlatform: ${{ matrix.targetPlatform }}
+
+#       - uses: actions/upload-artifact@v4
+#         with:
+#           name: Build-${{ matrix.targetPlatform }}
+#           path: build/${{ matrix.targetPlatform }}
+#           overwrite: true
+
 jobs:
-  buildForAllSupportedPlatforms:
-    name: Build for ${{ matrix.targetPlatform }}
+  build:
+    name: Build my project ✨
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        targetPlatform:
-          - StandaloneWindows # Build a Windows standalone.
     steps:
-      - uses: actions/checkout@v4
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           lfs: true
 
+      # Cache
       - uses: actions/cache@v3
         with:
           path: Library
-          key: Library-${{ matrix.targetPlatform }}
-          restore-keys: Library-
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
 
-      - uses: game-ci/unity-builder@v4
+      # Build
+      - name: Build project
+        uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          targetPlatform: ${{ matrix.targetPlatform }}
+          targetPlatform: StandaloneWindows
 
-      - uses: actions/upload-artifact@v4
+      # Output
+      - uses: actions/upload-artifact@v3
         with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
-          overwrite: true
+          name: Build
+          path: build
