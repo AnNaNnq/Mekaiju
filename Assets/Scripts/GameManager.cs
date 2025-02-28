@@ -34,16 +34,18 @@ namespace Mekaiju
             {
                 _instance = this;
                 playerData = new();
-
-
-                DontDestroyOnLoad(gameObject);
             }
             else if (_instance != this)
             {
                 Destroy(gameObject);
             }
         }
-        
+
+        private void Start()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+
     }
 
 }
