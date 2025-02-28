@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: SharpBlow
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 3772134609141629007
+    rid: 3772134765917896956
   references:
     version: 2
     RefIds:
-    - rid: 3772134609141629007
-      type: {class: SharpBlow, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 3772134765917896956
+      type: {class: SharpBlow, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
         cooldown: 0
-        range: 10
+        range: 0
         blockable: 1
         canUse: 1
         sphereRadius: 4
@@ -29,5 +29,5 @@ MonoBehaviour:
         layerMask:
           serializedVersion: 2
           m_Bits: 256
-        damage: 50
-        timeBeforeAttack: 0.2
+        damage: 100
+        timeBeforeAttack: 1

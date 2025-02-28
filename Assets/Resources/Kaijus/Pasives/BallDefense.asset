@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: BallDefense
   m_EditorClassIdentifier: 
   <passive>k__BackingField:
-    rid: 3772134765917896791
+    rid: 3772134765917896947
   references:
     version: 2
     RefIds:
-    - rid: 3772134765917896791
-      type: {class: BallDefense, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 3772134765917896947
+      type: {class: BallDefense, ns: Mekaiju.AI.Passive, asm: Assembly-CSharp}
       data:
         cooldown: 10
-        launchTime: 1.5
+        launchTime: 2
         duration: 3
         speed: 50
         nbHit: 3
