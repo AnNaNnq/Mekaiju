@@ -37,13 +37,12 @@ namespace Mekaiju
         private float _endTriggerTimout = 10;
 
         private bool _isActive;
-        private bool _isAnimationEnd;
+
+        private AnimationState _animationState;
 
         public override void Initialize(MechaPartInstance p_self)
         {
-            _isActive       = false;
-            _isAnimationEnd = false;
-
+            _isActive = false;
             p_self.mecha.context.animationProxy.onLArm.AddListener(_OnAnimationEvent);
         }
 
@@ -57,7 +56,7 @@ namespace Mekaiju
             if (IsAvailable(p_self, p_opt))
             {
                 _isActive       = true;
-                _isAnimationEnd = false;
+                _animationState = AnimationState.Idle;
 
                 p_self.mecha.context.animationProxy.animator.SetTrigger("LArm");
                 p_self.mecha.ConsumeStamina(_consumption);
@@ -76,23 +75,16 @@ namespace Mekaiju
 
                 // Wait for animation end
                 var t_timout = _endTriggerTimout;
-                yield return new WaitUntil(() => _isAnimationEnd || (t_timout -= Time.deltaTime) <= 0);
+                yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
 
                 _isActive = false;
             }
             yield return null;
         }
 
-        private void _OnAnimationEvent(AnimationEventType p_eType)
+        private void _OnAnimationEvent(AnimationEvent p_event)
         {
-            switch (p_eType)
-            {
-                case AnimationEventType.End:
-                    _isAnimationEnd = true;
-                    break;
-                default:
-                    break;
-            }
+            _animationState = p_event.state;
         }
     }
 

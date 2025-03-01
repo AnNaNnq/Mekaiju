@@ -46,14 +46,12 @@ namespace Mekaiju
         private float _projectileDestructionTimout = 10f;
 
         private bool _isActive;
-        private bool _isAnimationAction;
-        private bool _isAnimationEnd;
+
+        private AnimationState _animationState;
 
         public override void Initialize(MechaPartInstance p_self)
         {
             _isActive = false;
-            _isAnimationAction = false;
-            _isAnimationEnd    = false;
             p_self.mecha.context.animationProxy.onRArm.AddListener(_OnAnimationEvent);
         }
 
@@ -66,14 +64,14 @@ namespace Mekaiju
         {
             if (IsAvailable(p_self, p_opt))
             {
-                _isActive = true;
+                _isActive       = true;
+                _animationState = AnimationState.Idle;
 
                 p_self.mecha.context.animationProxy.animator.SetTrigger("RArm");
 
                 // Wait for animation action
                 float t_timout = _actionTriggerTimout;
-                yield return new WaitUntil(() => _isAnimationAction || (t_timout -= Time.deltaTime) <= 0);
-                _isAnimationAction = false;
+                yield return new WaitUntil(() => _animationState == AnimationState.Trigger || (t_timout -= Time.deltaTime) <= 0);
 
                 p_self.mecha.ConsumeStamina(_consumption);
 
@@ -97,26 +95,15 @@ namespace Mekaiju
 
                 // Wait for animation end
                 t_timout = _endTriggerTimout;
-                yield return new WaitUntil(() => _isAnimationEnd || (t_timout -= Time.deltaTime) <= 0);
-                _isAnimationEnd = false;
+                yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
 
                 _isActive = false;
             }
         }
 
-        private void _OnAnimationEvent(AnimationEventType p_eType)
+        private void _OnAnimationEvent(AnimationEvent p_event)
         {
-            switch (p_eType)
-            {
-                case AnimationEventType.Action:
-                    _isAnimationAction = true;
-                    break;
-                case AnimationEventType.End:
-                    _isAnimationEnd = true;
-                    break;
-                default:
-                    break;
-            }
+            _animationState = p_event.state;
         }
     }
 
