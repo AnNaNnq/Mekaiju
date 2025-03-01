@@ -14,6 +14,7 @@ namespace Mekaiju.AI
 
         private KaijuAttackContainer _attackGraph;
         private KaijuMotor _motor;
+        [Header("Pas touche c'est juste du debug")]
         [SerializeField]
         private string _lastAttack;
 
@@ -112,6 +113,7 @@ namespace Mekaiju.AI
         {
             if (!_canAttack)
             {
+                if (_motor.agent.enabled == false && !_motor.agent.isOnNavMesh) return;
                 _motor.MoveTo(_instance.target.transform.position, 100);
                 return;
             }
