@@ -2255,8 +2255,6 @@ MonoBehaviour:
     linkedSlots:
     - outputSlot: {fileID: 8926484042661617800}
       inputSlot: {fileID: 8926484042661617855}
-    - outputSlot: {fileID: 8926484042661617800}
-      inputSlot: {fileID: 8926484042661617864}
     position: {x: 1854.6666, y: -142.66667}
     expandedSlots: []
     expanded: 1
@@ -2296,7 +2294,6 @@ MonoBehaviour:
   m_Direction: 1
   m_LinkedSlots:
   - {fileID: 8926484042661617855}
-  - {fileID: 8926484042661617864}
 --- !u!114 &8926484042661617801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3933,7 +3930,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 10
+      m_SerializableObject: 1
     m_Space: -1
   m_Property:
     name: _Lifetime
@@ -3941,8 +3938,7 @@ MonoBehaviour:
       m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
   m_Direction: 0
-  m_LinkedSlots:
-  - {fileID: 8926484042661617800}
+  m_LinkedSlots: []
 --- !u!114 &8926484042661617865
 MonoBehaviour:
   m_ObjectHideFlags: 0

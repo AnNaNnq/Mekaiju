@@ -39,6 +39,20 @@ namespace Mekaiju
         [Tooltip("The projectil prefab to be thrown")]
         [SerializeField]
         private GameObject _projectile;
+
+        /// <summary>
+        /// The impact vfx prefab
+        /// </summary>
+        [Tooltip("The impact vfx")]
+        [SerializeField]
+        private GameObject _impactVfx;
+
+        /// <summary>
+        /// The impact decal prefab (used to project the impact decal)
+        /// </summary>
+        [Tooltip("The impact decal prefab")]
+        [SerializeField]
+        private GameObject _impactDecal;
 #endregion
 
         private float _endTriggerTimout    = 5f;
@@ -87,6 +101,20 @@ namespace Mekaiju
                             p_target.TakeDamage(t_damage);
                             p_self.onDealDamage.Invoke(t_damage);
                         }
+
+                        // Compute tranform for both vfx and decal
+                        var t_contact = t_collision.GetContact(0);
+                        var t_contactPosition = t_contact.point + t_contact.normal * 0.5f;
+                        var t_contactRotation = Quaternion.FromToRotation(Vector3.back, t_contact.normal);
+
+                        // Instanciate vfx
+                        var t_vfx = GameObject.Instantiate(_impactVfx, t_contactPosition, t_contactRotation);
+                        GameObject.Destroy(t_vfx, 1);
+
+                        // Instanciate decal
+                        var t_decal = GameObject.Instantiate(_impactDecal, t_contactPosition, t_contactRotation);
+                        GameObject.Destroy(t_decal, 10f);
+
                         GameObject.Destroy(t_go);
                     }
                 );
