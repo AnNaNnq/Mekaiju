@@ -91,7 +91,7 @@ namespace Mekaiju
 
         public override void TakeDamage(float p_damage)
         {
-            var t_damage = mecha.context.modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
+            var t_damage = p_damage - p_damage * modifiers[ModifierTarget.Defense].ComputeValue(mecha.desc.defense);
             
             mecha.timePoints[TimePoint.LastDamage] = Time.time;
             health = Mathf.Max(0f, health - t_damage);
