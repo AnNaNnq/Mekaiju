@@ -27,9 +27,12 @@ public class PlayerController : MonoBehaviour
 
     
     [Foldout("Movement Attributes")]
-    [SerializeField] private float _groundCheckRadius = 0.5f;
-    [SerializeField] private float _baseSpeed = 5f;
-    [SerializeField] private float _speed;
+    [SerializeField] 
+    private float _groundCheckRadius = 0.5f;
+    [SerializeField] 
+    private float _speedFactor = 5f;
+    [SerializeField, ReadOnly] 
+    private float _speed;
 
 
     [Foldout("Camera Attributes")]
@@ -57,8 +60,6 @@ public class PlayerController : MonoBehaviour
         _playerActions = new MechaPlayerActions();
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
-
-        _speed = _baseSpeed;
 
         _groundLayerMask = LayerMask.GetMask("Walkable");
 
@@ -286,8 +287,7 @@ public class PlayerController : MonoBehaviour
 
         if (!_instance.context.isMovementOverrided)
         {
-            _speed = _instance.context.modifiers[ModifierTarget.Speed]?.ComputeValue(_baseSpeed) ?? _baseSpeed;
-            // _speed = _baseSpeed * _instance.Context.SpeedModifier;
+            _speed = _instance.modifiers[ModifierTarget.Speed].ComputeValue(_instance.desc.speed) * _speedFactor;
 
             if (_isGrounded)
             {
