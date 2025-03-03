@@ -1,7 +1,7 @@
 using Mekaiju.AI.Attack.Instance;
 using Mekaiju.Attribute;
-using Mekaiju.Utils;
 using MyBox;
+using System.Collections;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack
@@ -13,11 +13,7 @@ namespace Mekaiju.AI.Attack
         public int damage = 10;
         [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject doomsdayObject;
         [HideInInspector] public Transform start;
-        [OverrideLabel("Ray Speed")] public float speed = 10f;
-        [Range(1,2)]
-        public float bounceDamping = 1.2f;
-        public int nbBounce = 5;
-        public float bounceForce = 10f;
+        public int maxBounce = 5;
 
         public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
@@ -27,15 +23,24 @@ namespace Mekaiju.AI.Attack
         public override void Active(KaijuInstance kaiju)
         {
             base.Active(kaiju);
-            start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
-            Vector3 t_pos = new Vector3(kaiju.transform.position.x, UtilsFunctions.GetGround(kaiju.transform.position), kaiju.transform.position.z) + (kaiju.transform.forward * 10);
+            kaiju.StartCoroutine(Attack(kaiju));
 
-            kaiju.motor.StopKaiju(.2f);
-            
-            GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, start.transform.position, Quaternion.identity);
-            DoomsdyRayUpgradeObject t_obj = t_doomsday.GetComponent<DoomsdyRayUpgradeObject>();
+            Transform start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
 
-            t_obj.Init(this, t_pos);
+            GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, start.position, Quaternion.identity);
+            DoomsdayRayUpgradeObject t_druo = t_doomsday.GetComponent<DoomsdayRayUpgradeObject>();
+
+            t_druo.Init(this);
+        }
+
+        public override IEnumerator Attack(KaijuInstance kaiju)
+        {
+            base.Attack(kaiju);
+            while (true)
+            {
+                yield return new WaitForSeconds(0.1f);
+                
+            }
         }
     }
 }
