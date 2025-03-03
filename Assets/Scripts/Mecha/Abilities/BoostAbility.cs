@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Mekaiju.AI;
-using Mekaiju.Utils;
 using UnityEngine;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju
 {

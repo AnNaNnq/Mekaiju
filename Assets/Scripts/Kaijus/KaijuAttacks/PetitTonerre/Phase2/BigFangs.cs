@@ -1,7 +1,6 @@
 using Mekaiju.Attribute;
 using MyBox;
-using UnityEditor;
-using UnityEngine;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju.AI
 {

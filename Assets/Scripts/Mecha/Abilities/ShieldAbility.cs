@@ -2,6 +2,7 @@ using System.Collections;
 using Mekaiju.AI;
 using UnityEngine;
 using UnityEngine.VFX;
+using Mekaiju.Entity;
 
 namespace Mekaiju
 {

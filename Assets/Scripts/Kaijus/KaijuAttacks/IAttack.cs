@@ -1,6 +1,6 @@
-using MyBox;
 using System.Collections;
 using UnityEngine;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju.AI {
     [System.Serializable]
@@ -44,7 +44,7 @@ namespace Mekaiju.AI {
             // Calculer la position devant l'objet en tenant compte de sa rotation
             Vector3 spherePosition = kaiju.transform.position + kaiju.transform.forward * forwardOffset;
 
-            // Détection des objets dans la sphère
+            // Dï¿½tection des objets dans la sphï¿½re
             Collider[] hitColliders = Physics.OverlapSphere(spherePosition, sphereRadius, layerMask);
 
             foreach (Collider hitCollider in hitColliders)

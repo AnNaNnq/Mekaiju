@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Mekaiju;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using Mekaiju.Entity.Effect;
+using System.Linq;
 
 public class DebugInfo : MonoBehaviour
 {

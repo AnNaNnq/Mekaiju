@@ -2,7 +2,7 @@ using Mekaiju.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Mekaiju
+namespace Mekaiju.Entity
 {
     /// <summary>
     /// A base class for all entity instance

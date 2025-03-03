@@ -7,6 +7,8 @@ using Mekaiju.Attribute;
 using Mekaiju.Utils;
 using System;
 using System.Collections;
+using Mekaiju.Entity;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju.AI
 {

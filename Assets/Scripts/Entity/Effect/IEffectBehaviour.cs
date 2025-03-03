@@ -1,6 +1,6 @@
 using System;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
 
     /// <summary>
