@@ -61,7 +61,11 @@ namespace Mekaiju
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return !_isActive && Time.time - _lastTriggerTime >= _minTimeBetweenFire && p_self.mecha.stamina - _consumption >= 0f;
+            return (
+                !_isActive && Time.time - _lastTriggerTime >= _minTimeBetweenFire && 
+                !p_self.states[State.Stun] &&
+                p_self.mecha.stamina - _consumption >= 0f
+            );
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -110,7 +114,7 @@ namespace Mekaiju
                 // Make damage if projectile has collide
                 if (t_hasCollide)
                 {
-                    var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue(_damage);
+                    var t_damage = p_self.modifiers[ModifierTarget.Damage].ComputeValue(_damage);
                     // @TODO: wait for parameter to be float
                     p_target.TakeDamage((int)t_damage);
                     p_self.onDealDamage.Invoke(t_damage);

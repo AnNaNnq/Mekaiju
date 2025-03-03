@@ -4,6 +4,7 @@ using Mekaiju.AI;
 using Mekaiju.Utils;
 using UnityEngine;
 using UnityEngine.Events;
+using Mekaiju.Entity;
 
 namespace Mekaiju
 {
@@ -82,6 +83,9 @@ namespace Mekaiju
 
         public override EnumArray<ModifierTarget, ModifierCollection> modifiers => mecha.modifiers;
 
+        public override EnumArray<TimePoint, float> timePoints => mecha.timePoints;
+        public override EnumArray<State,     bool> states     => mecha.states;
+
         public override UnityEvent<float> onTakeDamage => mecha.onTakeDamage;
         public override UnityEvent<float> onDealDamage => mecha.onDealDamage;
 
@@ -89,19 +93,19 @@ namespace Mekaiju
 
         public override float baseHealth => _config.desc.health;
 
+        public override void Heal(float p_heal)
+        {
+            health = Mathf.Min(_config.desc.health, health + p_heal);
+        }
+
         public override void TakeDamage(float p_damage)
         {
-            var t_damage = mecha.context.modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
+            var t_damage = mecha.modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
             
             mecha.timePoints[TimePoint.LastDamage] = Time.time;
             health = Mathf.Max(0f, health - t_damage);
 
             onTakeDamage.Invoke(t_damage);
-        }
-
-        public override void Heal(float p_heal)
-        {
-            health = Mathf.Min(_config.desc.health, health + p_heal);
         }
     }
 #endregion

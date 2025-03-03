@@ -77,7 +77,8 @@ namespace Mekaiju
         {
             return (
                 !_isAcitve && 
-                !p_self.mecha.context.isMovementAltered && 
+                !p_self.states[State.Protected] && 
+                !p_self.states[State.Stun] &&
                 p_self.mecha.stamina - _consumption >= 0f &&
                 Mathf.Abs(p_self.mecha.context.moveAction.ReadValue<Vector2>().magnitude) > 0    
             );
@@ -94,7 +95,7 @@ namespace Mekaiju
                 if (Mathf.Abs(_direction.sqrMagnitude) > 0)
                 {
                     p_self.mecha.ConsumeStamina(_consumption);
-                    p_self.mecha.context.isMovementOverrided = true;
+                    p_self.states[State.MovementOverrided] = true;
 
                     _ghost.Trigger(_duration);
                     var t_go = GameObject.Instantiate(_speedVfx, _camera.transform);
@@ -110,7 +111,7 @@ namespace Mekaiju
                     _isAcitve = false;
 
                     GameObject.Destroy(t_go);
-                    p_self.mecha.context.isMovementOverrided = false;
+                    p_self.states[State.MovementOverrided] = false;
                 }
             }
 
