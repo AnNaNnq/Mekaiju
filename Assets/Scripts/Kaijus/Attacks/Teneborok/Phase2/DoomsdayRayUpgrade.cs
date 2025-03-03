@@ -9,11 +9,16 @@ namespace Mekaiju.AI.Attack
     public class DoomsdayRayUpgrade : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
+        [OverrideLabel("Impact damage (% of DMG)")]
         public int damage = 10;
+        [OverrideLabel("Fire tick damage (% of DMG)")]
+        public float fireDamage;
+        public float fireTick = 0.2f;
         [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject doomsdayObject;
+        [OpenPrefabButton] public GameObject fireZone;
         [HideInInspector] public Transform start;
         public int maxBounce = 5;
+        public float speed = 10;
 
         public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
