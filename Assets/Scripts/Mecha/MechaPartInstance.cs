@@ -23,7 +23,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private MechaPartConfig _config;
+        private MechaPartDesc _desc;
 
         /// <summary>
         /// 
@@ -36,14 +36,14 @@ namespace Mekaiju
         /// </summary>
         /// <param name="p_inst"></param>
         /// <param name="p_config"></param>
-        public void Initialize(MechaInstance p_inst, MechaPartConfig p_config)
+        public void Initialize(MechaInstance p_inst, MechaPartDesc p_desc)
         {
             mecha   = p_inst;
 
-            _config = p_config;
-            health = p_config.desc.health;
+            _desc  = p_desc;
+            health = p_desc.health;
 
-            _config.ability.behaviour?.Initialize(this);
+            _desc.ability.behaviour?.Initialize(this);
         }
 
         /// <summary>
@@ -54,10 +54,10 @@ namespace Mekaiju
         /// <returns></returns>
         public IEnumerator TriggerAbility(BodyPartObject p_target, object p_opt)
         {
-            if (_config.ability.behaviour.IsAvailable(this, p_opt))
+            if (_desc.ability.behaviour.IsAvailable(this, p_opt))
             {
                 mecha.timePoints[TimePoint.LastAbilityTriggered] = Time.time;
-                yield return _config.ability.behaviour.Trigger(this, p_target, p_opt);
+                yield return _desc.ability.behaviour.Trigger(this, p_target, p_opt);
             }
         }
 
@@ -66,17 +66,17 @@ namespace Mekaiju
         /// </summary>
         public void ReleaseAbility()
         {
-            _config.ability.behaviour.Release();
+            _desc.ability.behaviour.Release();
         }
 
         private void Update()
         {
-            _config.ability.behaviour?.Tick(this);
+            _desc.ability.behaviour?.Tick(this);
         }
 
         private void FixedUpdate()
         {
-            _config.ability.behaviour?.FixedTick(this);
+            _desc.ability.behaviour?.FixedTick(this);
         }
 
 #region IEntityInstance implementation
@@ -88,11 +88,11 @@ namespace Mekaiju
 
         public override bool isAlive => health > 0f;
 
-        public override float baseHealth => _config.desc.health;
+        public override float baseHealth => _desc.health;
 
         public override void TakeDamage(float p_damage)
         {
-            var t_damage = mecha.context.modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
+            var t_damage = p_damage - p_damage * modifiers[ModifierTarget.Defense].ComputeValue(mecha.desc.defense);
             
             mecha.timePoints[TimePoint.LastDamage] = Time.time;
             health = Mathf.Max(0f, health - t_damage);
@@ -102,7 +102,7 @@ namespace Mekaiju
 
         public override void Heal(float p_heal)
         {
-            health = Mathf.Min(_config.desc.health, health + p_heal);
+            health = Mathf.Min(_desc.health, health + p_heal);
         }
     }
 #endregion
