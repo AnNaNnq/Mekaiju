@@ -235,8 +235,6 @@ namespace Mekaiju.AI
         #endregion
 
         #region implemation of IEntityInstance
-        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => context.modifiers;
-
         public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
 
         public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
