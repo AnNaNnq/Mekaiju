@@ -6,6 +6,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Mekaiju.Entity;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju
 {

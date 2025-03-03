@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using Mekaiju;
 using Mekaiju.Utils;
 using UnityEngine;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
     /// <summary>
     /// 

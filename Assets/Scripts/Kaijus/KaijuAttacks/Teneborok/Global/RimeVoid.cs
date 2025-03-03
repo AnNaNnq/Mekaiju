@@ -2,6 +2,7 @@ using Mekaiju.AI.Attack;
 using Mekaiju.Attribute;
 using MyBox;
 using UnityEngine;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju.AI
 {

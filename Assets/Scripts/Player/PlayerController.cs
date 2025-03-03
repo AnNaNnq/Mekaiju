@@ -6,6 +6,7 @@ using MyBox;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mekaiju.Entity;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
