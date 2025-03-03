@@ -45,7 +45,11 @@ namespace Mekaiju
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return Time.time - _lastTriggerTime >= _minTimeBetweenFire && p_self.mecha.stamina - _consumption >= 0f;
+            return (
+                Time.time - _lastTriggerTime >= _minTimeBetweenFire && 
+                !p_self.states[State.Stun] &&
+                p_self.mecha.stamina - _consumption >= 0f
+            );
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -66,7 +70,7 @@ namespace Mekaiju
                 if (t_dist < _reachDistance)
                 {
                     // Make damage
-                    var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
+                    var t_damage = p_self.modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
                     p_target.TakeDamage((int)t_damage);
                     p_self.onDealDamage.Invoke(t_damage);
                 }

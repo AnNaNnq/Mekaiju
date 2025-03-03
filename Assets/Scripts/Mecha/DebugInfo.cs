@@ -100,8 +100,11 @@ public class DebugInfo : MonoBehaviour
 
     private void _RemoveEffects(StatefullEffect p_effect)
     {
-        Destroy(_effectsMapping[p_effect].gameObject);
-        _effectsMapping.Remove(p_effect);
+        if (_effectsMapping.ContainsKey(p_effect))
+        {
+            Destroy(_effectsMapping[p_effect].gameObject);
+            _effectsMapping.Remove(p_effect);
+        }
     }
 
     private void _OnDealDamage(float p_damage)

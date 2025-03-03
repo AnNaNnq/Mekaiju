@@ -17,12 +17,6 @@ namespace Mekaiju
     [Serializable]
     public class InstanceContext
     {
-        public EnumArray<ModifierTarget, ModifierCollection> modifiers = new(() => new());
-
-        public bool isGrounded          = false;
-        public bool isMovementAltered   = false;
-        public bool isMovementOverrided = false;
-
         public InputAction moveAction;
 
         public MechaAnimatorProxy animationProxy;
@@ -214,23 +208,9 @@ namespace Mekaiju
 #endregion
 
 #region IEntityInstance implementation
-        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => context.modifiers;
-
-        public override float baseStamina => config.desc.stamina;
-
-        public override float baseHealth => config.desc.parts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
-
         public override bool isAlive => health > 0;
 
-        public override void RestoreStamina(float p_amount)
-        {
-            stamina = Math.Min(config.desc.stamina, stamina + p_amount);
-        }
-
-        public override void ConsumeStamina(float p_amount)
-        {
-            stamina = Math.Max(0, stamina - p_amount);
-        }
+        public override float baseHealth => config.desc.parts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
 
         public override void Heal(float p_amount)
         {
@@ -247,6 +227,18 @@ namespace Mekaiju
                 // TODO: Maybe not divide
                 t_part.TakeDamage(p_damage / _parts.Count());    
             }
+        }
+
+        public override float baseStamina => config.desc.stamina;
+
+        public override void RestoreStamina(float p_amount)
+        {
+            stamina = Math.Min(config.desc.stamina, stamina + p_amount);
+        }
+
+        public override void ConsumeStamina(float p_amount)
+        {
+            stamina = Math.Max(0, stamina - p_amount);
         }
 #endregion
     }

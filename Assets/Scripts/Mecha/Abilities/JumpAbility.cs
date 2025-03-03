@@ -44,7 +44,12 @@ namespace Mekaiju
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return !_isActive && p_self.mecha.context.isGrounded && !_requested && !_inCooldown;
+            return (
+                !_isActive && 
+                 p_self.states[State.Grounded] && 
+                !p_self.states[State.Stun] && 
+                !_requested && !_inCooldown
+            );
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -62,11 +67,11 @@ namespace Mekaiju
                 _requested         = true;
 
                 // Wait for physic jump performed
-                yield return new WaitUntil(() => !_requested && !p_self.mecha.context.isGrounded);
+                yield return new WaitUntil(() => !_requested && !p_self.states[State.Grounded]);
 
                 // Wait for jump animation end
                 t_timout = _endTriggerTimout;
-                yield return new WaitUntil(() => p_self.mecha.context.isGrounded && (_isAnimationEnd || (t_timout -= Time.deltaTime) <= 0));
+                yield return new WaitUntil(() => p_self.states[State.Grounded] && (_isAnimationEnd || (t_timout -= Time.deltaTime) <= 0));
 
                 _inCooldown     = true;
                 _isAnimationEnd = false;
