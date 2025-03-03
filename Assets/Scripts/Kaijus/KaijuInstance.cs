@@ -9,12 +9,16 @@ using System;
 using System.Collections;
 using Mekaiju.Entity;
 using Mekaiju.Entity.Effect;
+using Mekaiju.AI.Objet;
+using Mekaiju.AI.Body;
+using Mekaiju.AI.Behavior;
 
 namespace Mekaiju.AI
 {
     [RequireComponent(typeof(KaijuBrain))]
     [RequireComponent(typeof(KaijuMotor))]
     [RequireComponent(typeof(KaijuAnimatorController))]
+    [RequireComponent(typeof(Rigidbody))]
     public class KaijuInstance : IEntityInstance
     {
         [Header("General")]
@@ -31,8 +35,9 @@ namespace Mekaiju.AI
         public List<StatefullEffect> effects { get; private set; }
         public InstanceContext context { get; private set; }
 
-        [SerializeField]
-        private bool _canBehaviorSwitch = true;
+        public List<KaijuPassive> passives;
+
+        //private bool _canBehaviorSwitch = true;
 
         public GameObject target { get; private set; }
 
@@ -69,6 +74,8 @@ namespace Mekaiju.AI
 
         bool _isInFight;
 
+        public event Action<Collision> OnCollision;
+
         public KaijuAttackContainer GetGraph()
         {
             if (_currentPhase == 1) return attackGraphPhaseOne;
@@ -103,6 +110,13 @@ namespace Mekaiju.AI
                     }
                 }
             }
+
+            foreach(var passive in passives)
+            {
+                passive.passive.OnStart();
+            }
+
+            context = new();
 
             CheckAllBehaviorsDisabeled();
             StartCoroutine(resetDps());
@@ -170,6 +184,12 @@ namespace Mekaiju.AI
         {
             return Vector3.Distance(target.transform.position, transform.position) <= p_range;
         }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            OnCollision?.Invoke(collision);  // Passe la collision � l'�v�nement
+        }
+
         #region setters & getters
 
         public Vector3 GetTargetPos()
@@ -232,6 +252,19 @@ namespace Mekaiju.AI
             return null;
         }
 
+        public List<KaijuPassive> GetPassivesActive()
+        {
+            List<KaijuPassive> t_passives = new List<KaijuPassive>();
+            foreach (var passive in passives)
+            {
+                if (passive.passive.isUsed)
+                {
+                    t_passives.Add(passive);
+                }
+            }
+            return t_passives;
+        }
+
         #endregion
 
         #region implemation of IEntityInstance
@@ -271,13 +304,27 @@ namespace Mekaiju.AI
 
         public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
         {
+            
+
+            var t_defense = modifiers[ModifierTarget.Defense].ComputeValuePercentage(stats.def);
+            var t_damage  = modifiers[ModifierTarget.Damage].ComputeValue(p_amonunt);
+            Debug.Log(t_defense);
+
+            var t_realDamage = t_damage * (1- (t_defense/100));
+
             p_bodyPart.health -= p_amonunt;
-            if(!p_bodyPart.isDestroyed && p_bodyPart.health <= 0)
+
+            if (!p_bodyPart.isDestroyed && p_bodyPart.health <= 0)
             {
                 p_bodyPart.isDestroyed = true;
             }
 
             UpdateUI();
+
+            foreach (var passive in passives)
+            {
+                passive.passive.OnDamage();
+            }
 
             onTakeDamage.Invoke(p_amonunt);
         }
@@ -295,12 +342,6 @@ namespace Mekaiju.AI
         #region debug
         private void OnDrawGizmos()
         {
-            foreach (var behavior in behaviors.Where(b => b.showGizmo))
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(transform.position, behavior.triggerArea);
-            }
-
             if (checkRange)
             {
                 Gizmos.color = Color.red;

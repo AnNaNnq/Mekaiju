@@ -1,5 +1,6 @@
 using System.Collections;
 using Mekaiju.AI;
+using Mekaiju.AI.Body;
 using UnityEngine;
 using UnityEngine.VFX;
 using Mekaiju.Entity;

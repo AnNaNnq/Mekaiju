@@ -13,23 +13,22 @@ MonoBehaviour:
   m_Name: FrontAttack
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 3772134743586898040
+    rid: 3772134765917896949
   references:
     version: 2
     RefIds:
-    - rid: 3772134743586898040
-      type: {class: FrontAttack, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 3772134765917896949
+      type: {class: FrontAttack, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
         cooldown: 0
-        range: 30
-        blockable: 0
+        range: 20
+        blockable: 1
         canUse: 1
         sphereRadius: 4
         forwardOffset: 7
         layerMask:
           serializedVersion: 2
           m_Bits: 256
-        damage: 50
-        timeBeforeAttack: 1
-        attackRange: 8
-        sprintSpeed: 110
+        damage: 100
+        attackRange: 10
+        sprintSpeed: 200

@@ -13,23 +13,23 @@ MonoBehaviour:
   m_Name: RimeVoid
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 3772134676528103491
+    rid: 3772134765917896954
   references:
     version: 2
     RefIds:
-    - rid: 3772134676528103491
-      type: {class: RimeVoid, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 3772134765917896954
+      type: {class: RimeVoid, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
         cooldown: 10
-        range: 20
+        range: 30
         blockable: 0
         canUse: 1
         sphereRadius: 4
         forwardOffset: 7
         layerMask:
           serializedVersion: 2
-          m_Bits: 256
-        damage: 50
+          m_Bits: 0
+        damage: 100
         gameObjectRimVoid: {fileID: 8796084795391207267, guid: f8a8dee523c18c645b5f8a61b77489eb, type: 3}
         gameObjectRimVoidFire: {fileID: 5250174984945250790, guid: d5a60c170b5ff834bab0dd7b9a00d95c, type: 3}
         rimVoidDuration: 2

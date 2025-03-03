@@ -26,9 +26,9 @@ public class KaijuMotor : MonoBehaviour
     /// </summary>
     /// <param name="p_pos"></param>
     /// <param name="p_stopping"></param>
-    public void BackOff(Vector3 p_pos, float p_speed, float p_stopping = 0.2f)
+    public void BackOff(Vector3 p_pos, float p_speed, float p_stopping = 10f)
     {
-        MoveTo(p_pos, p_stopping);
+        MoveTo(p_pos, p_speed, p_stopping);
         LookTarget();
     }
 
@@ -71,6 +71,18 @@ public class KaijuMotor : MonoBehaviour
             Quaternion t_targetRotation = Quaternion.LookRotation(t_direction);
             transform.rotation = Quaternion.Lerp(transform.rotation, t_targetRotation, _agent.angularSpeed * Time.deltaTime);
         }
+    }
+
+    /// <summary>
+    /// Recover the position behind the Kaiju
+    /// </summary>
+    /// <param name="p_distance"></param>
+    /// <returns></returns>
+    public Vector3 GetPositionBehind(float p_distance)
+    {
+        // Take the target direction and reverse it
+        Vector3 direction = (transform.position - _target.transform.position).normalized;
+        return transform.position + direction * p_distance;
     }
 
     public void StopKaiju(float p_time)
