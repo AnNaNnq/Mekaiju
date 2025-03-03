@@ -16,6 +16,7 @@ namespace Mekaiju.AI
     [RequireComponent(typeof(KaijuBrain))]
     [RequireComponent(typeof(KaijuMotor))]
     [RequireComponent(typeof(KaijuAnimatorController))]
+    [RequireComponent(typeof(Rigidbody))]
     public class KaijuInstance : IEntityInstance
     {
         [Header("General")]
@@ -70,6 +71,8 @@ namespace Mekaiju.AI
         private KaijuDebug _debug;
 
         bool _isInFight;
+
+        public event Action<Collision> OnCollision;
 
         public KaijuAttackContainer GetGraph()
         {
@@ -180,6 +183,10 @@ namespace Mekaiju.AI
             return Vector3.Distance(target.transform.position, transform.position) <= p_range;
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            OnCollision?.Invoke(collision);  // Passe la collision à l'événement
+        }
 
         #region setters & getters
 
