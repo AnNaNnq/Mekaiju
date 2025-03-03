@@ -18,7 +18,7 @@ namespace Mekaiju.LockOnTargetSystem
         public float verticalAngle = 0f; // Angle vertical fixe
 
         [Header("Paramètres de Debug")]
-        [SerializeField] private Transform _lockedTarget; // Cible verrouillée
+        [SerializeField] private Transform _lockedTarget = null; // Cible verrouillée
 
         private List<Transform> _potentialTargets = new List<Transform>(); // Liste des cibles
         private int _targetIndex = 0; // Index pour changer de cible
@@ -33,7 +33,6 @@ namespace Mekaiju.LockOnTargetSystem
         private void Update()
         {
             _DetectTargets();
-            Debug.Log(GetTargetBodyPartObject());
         }
 
         // Détecte les cibles proches dans la portée du Lock-On
