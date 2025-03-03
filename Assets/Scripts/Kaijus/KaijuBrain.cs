@@ -33,6 +33,10 @@ namespace Mekaiju.AI
             _allAttacks = LoadAllAttacks();
             _lastAttack = "Start";
             StartCoroutine(CheckAttack());
+            foreach(KaijuAttack attack in _allAttacks)
+            {
+                attack.attack.Init();
+            }
         }
 
         public void StarFight()

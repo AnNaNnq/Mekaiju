@@ -1,3 +1,4 @@
+using Mekaiju.Utils;
 using System.Collections;
 using UnityEngine;
 
@@ -9,14 +10,13 @@ namespace Mekaiju.AI.Attack {
         public float range;
         public bool blockable;
 
-        [HideInInspector]
-        public bool canUse;
+        protected bool canUse;
 
         public float sphereRadius = 4f;
         public float forwardOffset = 7f;
         public LayerMask layerMask;
 
-        public IAttack()
+        public void Init()
         {
             canUse = true;
         }
@@ -31,7 +31,7 @@ namespace Mekaiju.AI.Attack {
             return t_return;
         }
 
-        public virtual void Active(KaijuInstance kaiju) { }
+        public virtual void Active(KaijuInstance kaiju) { canUse = false; }
 
         public virtual IEnumerator Attack(KaijuInstance kaiju)
         {
@@ -58,6 +58,7 @@ namespace Mekaiju.AI.Attack {
         public void SendDamage(float p_damage, KaijuInstance p_kaiju, Effect p_effet = null, float p_effetDuration = -1)
         {
             MechaInstance mecha = GetPlayerInstance(p_kaiju);
+
             if (mecha != null)
             {
                 float t_damage = p_kaiju.stats.dmg * (1 + (p_damage / 100));
@@ -69,6 +70,12 @@ namespace Mekaiju.AI.Attack {
                     mecha.AddEffect(p_effet, p_effetDuration);
                 }
             }
+            p_kaiju.StartCoroutine(Cooldown(p_kaiju));
+        }
+
+        public IEnumerator Cooldown(KaijuInstance p_kaiju)
+        {
+           yield return p_kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
         }
     }
 }

@@ -11,13 +11,14 @@ namespace Mekaiju.AI.Attack
         public float damage = 50;
         [OverrideLabel("Charge Speed (Force Pulse)")]
         [Tooltip("Not % of speed")]
+        [Range(100, 300)]
         public float chargeSpeed = 10;
-        [OverrideLabel("Charge Duration (sec)")]
-        public float chargeDuration = 0.5f;
-        [OverrideLabel("Stop Distance (m)")]
-        public float stopChargeDistance = 10;
         [OverrideLabel("Time Prep Before Charge (sec)")]
         public float chargePrepTime = 1;
+
+        KaijuInstance _kaiju;
+
+        Rigidbody _rb;
 
         public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
@@ -27,9 +28,12 @@ namespace Mekaiju.AI.Attack
         public override void Active(KaijuInstance kaiju)
         {
             base.Active(kaiju);
+            kaiju.OnCollision += HandleCollision;
+            _rb = kaiju.GetComponent<Rigidbody>();
+            _kaiju = kaiju;
 
             kaiju.motor.StopAI();
-            
+
 
             kaiju.StartCoroutine(Attack(kaiju));
 
@@ -39,6 +43,7 @@ namespace Mekaiju.AI.Attack
         {
             float t_time = 0;
             Vector3 t_targetPosition = kaiju.GetTargetPos();
+
             while (t_time < chargePrepTime)
             {
                 kaiju.motor.LookTarget();
@@ -46,27 +51,21 @@ namespace Mekaiju.AI.Attack
                 yield return new WaitForSeconds(0.01f);
                 t_time += 0.01f;
             }
+
             kaiju.motor.enabled = false;
-            float t_elapsedTime = 0f;
             Vector3 t_startPos = kaiju.transform.position;
             Vector3 t_direction = (t_targetPosition - t_startPos).normalized;
-            Vector3 t_targetPos = t_targetPosition - t_direction * stopChargeDistance;
 
-            t_targetPos.y = t_startPos.y;
-
-            while (t_elapsedTime < chargeDuration)
-            {
-                kaiju.transform.position = Vector3.Lerp(t_startPos, t_targetPos, t_elapsedTime / chargeDuration);
-                t_elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-
-            kaiju.transform.position = t_targetPos;
-
-            kaiju.motor.enabled = true;
-            kaiju.motor.StartIA();
-
+            _rb.AddForce(t_direction * chargeSpeed, ForceMode.Impulse);
             SendDamage(damage, kaiju);
+        }
+
+        void HandleCollision(Collision collision)
+        {
+            if (collision.collider.CompareTag("Player"))
+            {
+                SendDamage(damage, _kaiju);
+            }
         }
     }
 }
