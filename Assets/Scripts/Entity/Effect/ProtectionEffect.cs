@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
     public class ProtectionEffect : IEffectBehaviour
     {
