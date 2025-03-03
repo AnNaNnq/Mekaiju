@@ -27,9 +27,14 @@ namespace Mekaiju.Entity
         public virtual EnumArray<TimePoint, float> timePoints { get; } = new(() => float.MinValue);
 
         /// <summary>
+        /// Define usefull states on an entity
+        /// </summary>
+        public virtual EnumArray<State, bool> states { get; } = new(() => false);
+
+        /// <summary>
         /// Allow buff/debuff effect
         /// </summary>
-        public abstract EnumArray<ModifierTarget, ModifierCollection> modifiers { get; }
+        public virtual EnumArray<ModifierTarget, ModifierCollection> modifiers { get; } = new(() => new());
 
         /// <summary>
         /// Return if entity is alive
