@@ -1,6 +1,7 @@
 using System.Linq;
 using Mekaiju;
 using Mekaiju.AI;
+using Mekaiju.AI.Body;
 using Mekaiju.LockOnTargetSystem;
 using MyBox;
 using Unity.Cinemachine;

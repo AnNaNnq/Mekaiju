@@ -1,5 +1,6 @@
 using System.Collections;
 using Mekaiju.AI;
+using Mekaiju.AI.Body;
 using UnityEngine;
 
 namespace Mekaiju
