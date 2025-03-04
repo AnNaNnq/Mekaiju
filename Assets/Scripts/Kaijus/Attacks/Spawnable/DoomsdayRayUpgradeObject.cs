@@ -101,7 +101,10 @@ namespace Mekaiju.AI.Attack.Instance
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Player");
+                MechaInstance t_mecha = other.GetComponent<MechaInstance>();
+                float t_dmg = _kaiju.GetRealDamage(_stat.damage);
+                t_mecha.TakeDamage(t_dmg);
+                _kaiju.AddDPS(t_dmg);
             }
             else if (other.CompareTag("Ground"))
             {

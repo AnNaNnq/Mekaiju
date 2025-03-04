@@ -13,7 +13,7 @@ namespace Mekaiju.AI.Attack.Instance
         public void SetUp(AbyssalVortex p_stat, KaijuInstance p_instance)
         {
             _stat = p_stat;
-            _dmg = p_instance.stats.dmg * (1 + (_stat.damage / 100));
+            _dmg = p_instance.GetRealDamage(p_stat.damage);
             _instance = p_instance;
         }
 
