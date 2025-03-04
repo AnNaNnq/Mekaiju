@@ -80,6 +80,12 @@ namespace Mekaiju.AI
             else return attackGraphPhaseTow;
         }
 
+        public float GetRealDamage(float p_damage)
+        {
+            var t_damage = context.modifiers[ModifierTarget.Damage].ComputeValuePercentage(p_damage);
+            return (t_damage / 100) * stats.dmg;
+        }
+
         private void Start()
         {
             _motor = GetComponent<KaijuMotor>();
@@ -307,12 +313,11 @@ namespace Mekaiju.AI
             
 
             var t_defense = context.modifiers[ModifierTarget.Defense].ComputeValuePercentage(stats.def);
-            var t_damage = context.modifiers[ModifierTarget.Damage].ComputeValue(p_amonunt);
             Debug.Log(t_defense);
 
-            var t_realDamage = t_damage * (1- (t_defense/100));
+            var t_realDamage = p_amonunt * (1- (t_defense/100));
 
-            p_bodyPart.health -= p_amonunt;
+            p_bodyPart.health -= t_realDamage;
 
             if (!p_bodyPart.isDestroyed && p_bodyPart.health <= 0)
             {
@@ -365,6 +370,7 @@ namespace Mekaiju.AI
         public void AddDPS(float p_amount)
         {
             dps += p_amount;
+            UpdateUI();
         }
 
         public void UpdateUI()

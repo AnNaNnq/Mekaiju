@@ -13,7 +13,7 @@ namespace Mekaiju.AI.Attack
         public int damage = 10;
         [OverrideLabel("Fire tick damage (% of DMG)")]
         public float fireDamage;
-        public float fireTick = 0.2f;
+        public float fireTickRate = 0.2f;
         [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject doomsdayObject;
         [OpenPrefabButton] public GameObject fireZone;
         [HideInInspector] public Transform start;
@@ -35,7 +35,7 @@ namespace Mekaiju.AI.Attack
             GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, start.position, Quaternion.identity);
             DoomsdayRayUpgradeObject t_druo = t_doomsday.GetComponent<DoomsdayRayUpgradeObject>();
 
-            t_druo.Init(this);
+            t_druo.Init(this, kaiju);
         }
 
         public override IEnumerator Attack(KaijuInstance kaiju)

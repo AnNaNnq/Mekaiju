@@ -7,16 +7,18 @@ namespace Mekaiju.AI.Attack.Instance
     public class DoomsdayRayUpgradeObject : MonoBehaviour
     {
         DoomsdayRayUpgrade _stat;
+        KaijuInstance _kaiju;
 
         List<Vector3> _firePos = new List<Vector3>();
 
         private Transform _startPoint;
         public LayerMask layerMask;
 
-        public void Init(DoomsdayRayUpgrade p_stat)
+        public void Init(DoomsdayRayUpgrade p_stat, KaijuInstance p_kaiju)
         {
             _stat = p_stat;
             _startPoint = transform;
+            _kaiju = p_kaiju;
 
             _firePos.Clear();
             CastLaser(transform.position, transform.forward + (-transform.up));
@@ -103,7 +105,9 @@ namespace Mekaiju.AI.Attack.Instance
             }
             else if (other.CompareTag("Ground"))
             {
-                Instantiate(_stat.fireZone, other.ClosestPoint(transform.position), Quaternion.identity);
+                GameObject t_fire = Instantiate(_stat.fireZone, other.ClosestPoint(transform.position), Quaternion.identity);
+                FireZone t_fireZone = t_fire.GetComponent<FireZone>();
+                t_fireZone.Init(_stat, _kaiju);
             }
         }
     }
