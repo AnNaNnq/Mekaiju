@@ -1,25 +1,37 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.VFX;
 
 [RequireComponent(typeof(Rigidbody))]
 public class WeaponBullet : MonoBehaviour
 {
-    public UnityEvent<Collision> OnCollide;
+    public UnityEvent<GameObject, Collision> OnCollide;
+
     private Rigidbody _rb;
-    private Vector3 _velocity;
+    private Vector3   _velocity;
+    private bool      _canBeDestroyed;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         _velocity = Vector3.zero;
+        _canBeDestroyed = false;
     }
 
     private void OnCollisionEnter(Collision p_collision)
     {
-        OnCollide.Invoke(p_collision);
+        OnCollide.Invoke(gameObject, p_collision);
     }
 
+    private void FixedUpdate()
+    {
+        _rb.linearVelocity = _velocity;
+    }
+
+    /// <summary>
+    /// Launch the bullet with the given speed and given direction
+    /// </summary>
+    /// <param name="p_velocity">The target velocity</param>
+    /// <param name="p_direction">The target direction</param>
     public void Launch(Vector3 p_velocity, Vector3 p_direction)
     {
         _velocity = p_velocity;
@@ -27,8 +39,12 @@ public class WeaponBullet : MonoBehaviour
         transform.Rotate(new (0, 90, 0));
     }
 
-    private void FixedUpdate()
+    /// <summary>
+    /// Destroy the projectile after the given timout
+    /// </summary>
+    /// <param name="p_timout">The max time the projectile can stay alive</param>
+    public void Timout(float p_timout)
     {
-        _rb.linearVelocity = _velocity;
+        Destroy(gameObject, p_timout);
     }
 }

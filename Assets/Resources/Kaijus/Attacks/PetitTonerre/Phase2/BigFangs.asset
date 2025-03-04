@@ -13,22 +13,22 @@ MonoBehaviour:
   m_Name: BigFangs
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 3772134743586898054
+    rid: 3772134765917896950
   references:
     version: 2
     RefIds:
-    - rid: 3772134743586898054
-      type: {class: BigFangs, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 3772134765917896950
+      type: {class: BigFangs, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
-        cooldown: 5
+        cooldown: 10
         range: 10
-        blockable: 1
+        blockable: 0
         canUse: 1
         sphereRadius: 4
         forwardOffset: 7
         layerMask:
           serializedVersion: 2
           m_Bits: 256
-        damage: 50
+        damage: 100
         effect: {fileID: 11400000, guid: 79497b3c2bddd429984715566a0a88d2, type: 2}
         effectDuration: 2

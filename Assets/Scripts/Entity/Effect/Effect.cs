@@ -1,7 +1,7 @@
 using Mekaiju.Attributes;
 using UnityEngine;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
     [CreateAssetMenu(fileName = "New Effect", menuName = "Entity/Effect")]
     public class Effect : ScriptableObject

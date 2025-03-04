@@ -33,6 +33,7 @@ AnimatorState:
   - {fileID: 4529575268698198064}
   m_StateMachineBehaviours:
   - {fileID: -5396569489374500915}
+  - {fileID: -5317102487895599657}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -188,6 +189,7 @@ AnimatorState:
   - {fileID: -1497177112775425641}
   m_StateMachineBehaviours:
   - {fileID: 3021422054920170531}
+  - {fileID: 9144764045549962124}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -212,6 +214,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63f6bddfdd49d4727ac2a6fffa7fdf44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: Jump
+--- !u!114 &-5317102487895599657
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3439eecec004c4ce0ac4da6aeb7ef19e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: Jump
@@ -262,6 +277,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-463233165222303906
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3439eecec004c4ce0ac4da6aeb7ef19e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: LArm
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -495,6 +523,7 @@ AnimatorState:
   - {fileID: -6199803841120542447}
   m_StateMachineBehaviours:
   - {fileID: -6475424103361508548}
+  - {fileID: -463233165222303906}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -534,3 +563,16 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &9144764045549962124
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3439eecec004c4ce0ac4da6aeb7ef19e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: RArm
