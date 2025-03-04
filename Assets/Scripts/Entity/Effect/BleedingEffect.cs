@@ -11,7 +11,7 @@ namespace Mekaiju.Entity.Effect
     public class BleedingEffect : IEffectBehaviour
     {
         [SerializeField]
-        private int _damage;
+        private float _damage;
 
         /// <summary>
         /// 
