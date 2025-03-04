@@ -1,5 +1,6 @@
 using Mekaiju.Attribute;
 using MyBox;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju.AI.Attack
 {

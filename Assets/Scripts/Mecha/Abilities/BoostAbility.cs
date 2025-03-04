@@ -3,6 +3,7 @@ using Mekaiju.AI;
 using Mekaiju.AI.Body;
 using Mekaiju.Utils;
 using UnityEngine;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju
 {

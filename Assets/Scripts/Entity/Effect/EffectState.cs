@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using System.Linq;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
     /// <summary>
     /// 

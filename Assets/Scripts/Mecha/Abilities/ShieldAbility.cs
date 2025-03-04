@@ -3,6 +3,7 @@ using Mekaiju.AI;
 using Mekaiju.AI.Body;
 using UnityEngine;
 using UnityEngine.VFX;
+using Mekaiju.Entity;
 
 namespace Mekaiju
 {
@@ -71,7 +72,10 @@ namespace Mekaiju
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return !_isActive && p_self.mecha.stamina - _consumption >= 0f;
+            return (
+                !_isActive && p_self.mecha.stamina - _consumption >= 0f &&
+                !p_self.states[State.Stun]
+            );
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -84,15 +88,15 @@ namespace Mekaiju
                 p_self.mecha.context.animationProxy.animator.SetBool("IsShielding", true);
                 
                 // TODO: rework if other modifier
-                var t_sMod = p_self.mecha.context.modifiers[ModifierTarget.Speed]  .Add(_speedModifier);
-                var t_dMod = p_self.mecha.context.modifiers[ModifierTarget.Defense].Add(_defenseModifier);
+                var t_sMod = p_self.modifiers[ModifierTarget.Speed]  .Add(_speedModifier);
+                var t_dMod = p_self.modifiers[ModifierTarget.Defense].Add(_defenseModifier);
 
-                p_self.mecha.context.isMovementAltered = true;
+                p_self.states[State.Protected] = true;
 
                 while (!_isStopRequested && p_self.mecha.stamina - (_consumption * Time.deltaTime) >= 0)
                 {
                     p_self.mecha.ConsumeStamina(_consumption * Time.deltaTime);
-                    p_self.mecha.timePoints[TimePoint.LastAbilityTriggered] = Time.time;
+                    p_self.timePoints[TimePoint.LastAbilityTriggered] = Time.time;
                     yield return null;
                 }
 
@@ -100,10 +104,10 @@ namespace Mekaiju
 
                 p_self.mecha.context.animationProxy.animator.SetBool("IsShielding", false);
                 // TODO: rework if other modifier
-                p_self.mecha.context.modifiers[ModifierTarget.Speed]  .Remove(t_sMod);
-                p_self.mecha.context.modifiers[ModifierTarget.Defense].Remove(t_dMod);
+                p_self.modifiers[ModifierTarget.Speed]  .Remove(t_sMod);
+                p_self.modifiers[ModifierTarget.Defense].Remove(t_dMod);
 
-                p_self.mecha.context.isMovementAltered = false;
+                p_self.states[State.Protected] = false;
                 
                 _vfxBreak.enabled = true;
                 yield return new WaitForSeconds(_breakTime);

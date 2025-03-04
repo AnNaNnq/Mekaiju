@@ -1,4 +1,5 @@
 using Mekaiju.Attribute;
+using Mekaiju.Entity.Effect;
 using MyBox;
 using System.Collections;
 using UnityEngine;

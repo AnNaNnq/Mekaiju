@@ -1,7 +1,7 @@
 using Mekaiju.Utils;
 using UnityEngine;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
     /// <summary>
     /// 

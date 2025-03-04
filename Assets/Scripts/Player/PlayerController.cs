@@ -7,6 +7,7 @@ using MyBox;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mekaiju.Entity;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -259,7 +260,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _instance.context.isGrounded = _isGrounded;
+        _instance.states[State.Grounded] = _isGrounded;
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
@@ -286,7 +287,7 @@ public class PlayerController : MonoBehaviour
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
-        if (!_instance.context.isMovementOverrided)
+        if (!_instance.states[State.MovementOverrided] && !_instance.states[State.Stun])
         {
             _speed = _instance.modifiers[ModifierTarget.Speed].ComputeValue(_instance.desc.speed) * _speedFactor;
 

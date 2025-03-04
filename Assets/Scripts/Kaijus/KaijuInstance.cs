@@ -7,6 +7,8 @@ using Mekaiju.Attribute;
 using Mekaiju.Utils;
 using System;
 using System.Collections;
+using Mekaiju.Entity;
+using Mekaiju.Entity.Effect;
 using Mekaiju.AI.Objet;
 using Mekaiju.AI.Body;
 using Mekaiju.AI.Behavior;
@@ -185,7 +187,7 @@ namespace Mekaiju.AI
 
         private void OnCollisionEnter(Collision collision)
         {
-            OnCollision?.Invoke(collision);  // Passe la collision à l'événement
+            OnCollision?.Invoke(collision);  // Passe la collision ï¿½ l'ï¿½vï¿½nement
         }
 
         #region setters & getters
@@ -266,8 +268,6 @@ namespace Mekaiju.AI
         #endregion
 
         #region implemation of IEntityInstance
-        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => context.modifiers;
-
         public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
 
         public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
@@ -306,8 +306,8 @@ namespace Mekaiju.AI
         {
             
 
-            var t_defense = context.modifiers[ModifierTarget.Defense].ComputeValuePercentage(stats.def);
-            var t_damage = context.modifiers[ModifierTarget.Damage].ComputeValue(p_amonunt);
+            var t_defense = modifiers[ModifierTarget.Defense].ComputeValuePercentage(stats.def);
+            var t_damage  = modifiers[ModifierTarget.Damage].ComputeValue(p_amonunt);
             Debug.Log(t_defense);
 
             var t_realDamage = t_damage * (1- (t_defense/100));

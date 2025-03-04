@@ -1,5 +1,6 @@
 using System.Collections;
 using Mekaiju.AI;
+using Mekaiju.Entity;
 using Mekaiju.AI.Body;
 using MyBox;
 using UnityEngine;
@@ -72,7 +73,7 @@ namespace Mekaiju
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return !_isActive && p_self.mecha.stamina - _consumption >= 0f;
+            return !_isActive && !p_self.states[State.Stun] && p_self.mecha.stamina - _consumption >= 0f;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
