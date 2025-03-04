@@ -13,7 +13,7 @@ namespace Mekaiju.Entity.Effect
         /// 
         /// </summary>
         [SerializeField]
-        private int _heal;
+        private float _heal;
 
         /// <summary>
         /// 
