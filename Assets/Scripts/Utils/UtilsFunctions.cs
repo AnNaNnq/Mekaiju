@@ -1,7 +1,4 @@
-using Mekaiju.AI;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mekaiju.Utils
@@ -36,6 +33,18 @@ namespace Mekaiju.Utils
         {
             yield return new WaitForSeconds(cooldown);
             onCooldownEnd?.Invoke();
+        }
+
+        public static Vector3 GetRandomPointInCircle(float radius, Transform transform)
+        {
+            float angle = Random.Range(0f, Mathf.PI * 2); // Angle aléatoire en radians
+            float distance = Mathf.Sqrt(Random.Range(0f, 1f)) * radius; // Rayon aléatoire (évite une distribution biaisée)
+
+            float x = transform.position.x + Mathf.Cos(angle) * distance;
+            float z = transform.position.z + Mathf.Sin(angle) * distance;
+            float y = transform.position.y + 20; // Hauteur fixée
+
+            return new Vector3(x, y, z);
         }
     }
 }
