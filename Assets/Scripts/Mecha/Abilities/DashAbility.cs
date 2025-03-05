@@ -48,30 +48,13 @@ namespace Mekaiju
         [SerializeField]
         private InputActionReference _input;
 
-        /// <summary>
-        /// 
-        /// </summary>
         private bool _isAcitve;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private Vector3 _direction;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private MeshTrailTut _ghost;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private GameObject _camera;
-
-        /// <summary>
-        /// 
-        /// </summary>
         private float _elapedTime;
+
+        private Vector3      _direction;
+        private MeshTrailTut _ghost;
+        private GameObject   _camera;
+        private Rigidbody    _rigidbody;
 
         public override void Initialize(MechaPartInstance p_self)
         {
@@ -82,6 +65,15 @@ namespace Mekaiju
             _ghost.config = _meshTrailConfig;
 
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
+
+            if (p_self.mecha.TryGetComponent<Rigidbody>(out var t_rb))
+            {
+                _rigidbody = t_rb;
+            }
+            else
+            {
+                Debug.LogWarning("Unable to find rigidbody on mecha!");
+            }
         }
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
@@ -133,9 +125,8 @@ namespace Mekaiju
         {
             if (_isAcitve)
             {
-                Rigidbody t_rb  = p_self.mecha.context.rigidbody;
-                Vector3   t_vel = _force * (1 - _elapedTime / _duration) * _direction;
-                t_rb.linearVelocity = new(t_vel.x, t_rb.linearVelocity.y, t_vel.z);
+                Vector3 t_vel = _force * (1 - _elapedTime / _duration) * _direction;
+                _rigidbody.linearVelocity = new(t_vel.x, _rigidbody.linearVelocity.y, t_vel.z);
             }   
         }
     }

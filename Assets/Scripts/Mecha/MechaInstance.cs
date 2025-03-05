@@ -63,11 +63,6 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public InstanceContext context { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public UnityEvent<StatefullEffect> onAddEffect;
 
         /// <summary>
@@ -152,12 +147,6 @@ namespace Mekaiju
             };
 
             stamina = desc.stamina;
-
-            context = new()
-            {
-                animationProxy = GetComponent<MechaAnimatorProxy>(),
-                rigidbody      = GetComponent<Rigidbody>(),
-            };
 
             var t_main = Instantiate(desc.prefab, transform);
             _parts = desc.parts.Select((key, part) => 

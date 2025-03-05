@@ -63,12 +63,23 @@ namespace Mekaiju
 
         private bool _isActive;
 
-        private AnimationState _animationState;
+        private AnimationState     _animationState;
+        private MechaAnimatorProxy _animationProxy;
 
         public override void Initialize(MechaPartInstance p_self)
         {
             _isActive = false;
-            p_self.mecha.context.animationProxy.onRArm.AddListener(_OnAnimationEvent);
+
+            if (p_self.mecha.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
+            {
+                _animationProxy = t_proxy;
+            }
+            else
+            {
+                Debug.LogWarning("Unable to find animator proxy on mecha!");
+            }
+
+            _animationProxy.onRArm.AddListener(_OnAnimationEvent);
         }
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
@@ -83,7 +94,7 @@ namespace Mekaiju
                 _isActive       = true;
                 _animationState = AnimationState.Idle;
 
-                p_self.mecha.context.animationProxy.animator.SetTrigger("RArm");
+                _animationProxy.animator.SetTrigger("RArm");
 
                 // Wait for animation action
                 float t_timout = _actionTriggerTimout;
