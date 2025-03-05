@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using MyBox;
+using Mekaiju.Entity;
 
 namespace Mekaiju.AI.Attack
 {
@@ -16,18 +17,21 @@ namespace Mekaiju.AI.Attack
             return base.CanUse(kaiju, otherRange);
         }
 
-        public override void Active(KaijuInstance kaiju)
+        public override void Active(IEntityInstance kaiju)
         {
             base.Active(kaiju);
             kaiju.StartCoroutine(Attack(kaiju));
         }
 
-        public override IEnumerator Attack(KaijuInstance kaiju)
+        public override IEnumerator Attack(IEntityInstance kaiju)
         {
             base.Attack(kaiju);
-            kaiju.animator.AttackAnimation(nameof(SnakeStrike));
+
+            KaijuInstance t_kaiju = (KaijuInstance)kaiju;
+
+            t_kaiju.animator.AttackAnimation(nameof(SnakeStrike));
             yield return new WaitForSeconds(timeBeforeAttack);
-            kaiju.brain.MakeAction();
+            t_kaiju.brain.MakeAction();
             SendDamage(damage, kaiju);
         }
     }

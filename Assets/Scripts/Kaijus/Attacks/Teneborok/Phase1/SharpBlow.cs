@@ -1,3 +1,4 @@
+using Mekaiju.Entity;
 using MyBox;
 using System.Collections;
 using UnityEngine;
@@ -16,18 +17,20 @@ namespace Mekaiju.AI.Attack
             return base.CanUse(kaiju, otherRange);
         }
 
-        public override void Active(KaijuInstance kaiju)
+        public override void Active(IEntityInstance kaiju)
         {
             base.Active(kaiju);
             kaiju.StartCoroutine(Attack(kaiju));
         }
 
-        public override IEnumerator Attack(KaijuInstance kaiju)
+        public override IEnumerator Attack(IEntityInstance kaiju)
         {
             base.Attack(kaiju);
-            kaiju.animator.AttackAnimation(nameof(SharpBlow));
+
+            KaijuInstance t_kaiju = (KaijuInstance)kaiju;
+            t_kaiju.animator.AttackAnimation(nameof(SharpBlow));
             yield return new WaitForSeconds(timeBeforeAttack);
-            kaiju.brain.MakeAction();
+            t_kaiju.brain.MakeAction();
             SendDamage(damage, kaiju);
         }
 

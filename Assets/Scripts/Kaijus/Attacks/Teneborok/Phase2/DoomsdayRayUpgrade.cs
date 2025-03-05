@@ -1,5 +1,6 @@
 using Mekaiju.AI.Attack.Instance;
 using Mekaiju.Attribute;
+using Mekaiju.Entity;
 using MyBox;
 using System.Collections;
 using UnityEngine;
@@ -25,27 +26,18 @@ namespace Mekaiju.AI.Attack
             return base.CanUse(kaiju, otherRange);
         }
 
-        public override void Active(KaijuInstance kaiju)
+        public override void Active(IEntityInstance kaiju)
         {
             base.Active(kaiju);
-            kaiju.StartCoroutine(Attack(kaiju));
+
+            KaijuInstance t_kaiju = (KaijuInstance)kaiju;
 
             Transform start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
 
             GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, start.position, Quaternion.identity);
             DoomsdayRayUpgradeObject t_druo = t_doomsday.GetComponent<DoomsdayRayUpgradeObject>();
 
-            t_druo.Init(this, kaiju);
-        }
-
-        public override IEnumerator Attack(KaijuInstance kaiju)
-        {
-            base.Attack(kaiju);
-            while (true)
-            {
-                yield return new WaitForSeconds(0.1f);
-                
-            }
+            t_druo.Init(this, t_kaiju);
         }
     }
 }

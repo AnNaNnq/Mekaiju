@@ -1,6 +1,6 @@
+using Mekaiju.Entity;
 using Mekaiju.Utils;
 using MyBox;
-using System.Collections;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack
@@ -16,7 +16,7 @@ namespace Mekaiju.AI.Attack
             return base.CanUse(kaiju, otherRange);
         }
 
-        public override void Active(KaijuInstance kaiju)
+        public override void Active(IEntityInstance kaiju)
         {
             base.Active(kaiju);
             for (int i = 0; i < nbParasites; i++)

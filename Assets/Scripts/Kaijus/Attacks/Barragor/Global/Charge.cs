@@ -1,3 +1,4 @@
+using Mekaiju.Entity;
 using MyBox;
 using System.Collections;
 using UnityEngine;
@@ -25,34 +26,36 @@ namespace Mekaiju.AI.Attack
             return base.CanUse(kaiju, otherRange);
         }
 
-        public override void Active(KaijuInstance kaiju)
+        public override void Active(IEntityInstance kaiju)
         {
-            base.Active(kaiju);
-            kaiju.OnCollision += HandleCollision;
-            _rb = kaiju.GetComponent<Rigidbody>();
-            _kaiju = kaiju;
+            KaijuInstance t_kaiju = kaiju as KaijuInstance;
+            base.Active(t_kaiju);
+            t_kaiju.OnCollision += HandleCollision;
+            _rb = t_kaiju.GetComponent<Rigidbody>();
+            _kaiju = t_kaiju;
 
-            kaiju.motor.StopAI();
+            t_kaiju.motor.StopAI();
 
 
-            kaiju.StartCoroutine(Attack(kaiju));
+            t_kaiju.StartCoroutine(Attack(t_kaiju));
 
         }
 
-        public override IEnumerator Attack(KaijuInstance kaiju)
+        public override IEnumerator Attack(IEntityInstance kaiju)
         {
             float t_time = 0;
-            Vector3 t_targetPosition = kaiju.GetTargetPos();
+            KaijuInstance t_kaiju = kaiju as KaijuInstance;
+            Vector3 t_targetPosition = t_kaiju.GetTargetPos();
 
             while (t_time < chargePrepTime)
             {
-                kaiju.motor.LookTarget();
-                t_targetPosition = kaiju.GetTargetPos();
+                t_kaiju.motor.LookTarget();
+                t_targetPosition = t_kaiju.GetTargetPos();
                 yield return new WaitForSeconds(0.01f);
                 t_time += 0.01f;
             }
 
-            kaiju.motor.enabled = false;
+            t_kaiju.motor.enabled = false;
             Vector3 t_startPos = kaiju.transform.position;
             Vector3 t_direction = (t_targetPosition - t_startPos).normalized;
 
