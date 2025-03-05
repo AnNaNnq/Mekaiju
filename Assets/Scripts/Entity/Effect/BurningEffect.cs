@@ -8,7 +8,7 @@ namespace Mekaiju.Entity.Effect
     /// 
     /// </summary>
     [Serializable]
-    public class BleedingEffect : IEffectBehaviour
+    public class BurningEffect : IEffectBehaviour
     {
         [SerializeField]
         private float _damage;

@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52fae5a4eb88f481a9d0d7b32424867b, type: 3}
-  m_Name: Resistance
+  m_Name: Burning
   m_EditorClassIdentifier: 
-  <description>k__BackingField: Resistance
+  <description>k__BackingField: Burning
   <behaviour>k__BackingField:
-    rid: 7991043907599204417
+    rid: 7991043907599204418
   references:
     version: 2
     RefIds:
-    - rid: 7991043907599204417
-      type: {class: ProtectionEffect, ns: Mekaiju.Entity.Effect, asm: Assembly-CSharp}
+    - rid: 7991043907599204418
+      type: {class: BurningEffect, ns: Mekaiju.Entity.Effect, asm: Assembly-CSharp}
       data:
-        _defensePercentage: 75
+        _damage: 8
