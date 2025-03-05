@@ -1,7 +1,8 @@
-using System;
 using System.Collections;
 using Mekaiju.AI;
+using Mekaiju.AI.Body;
 using UnityEngine;
+using Mekaiju.Entity;
 
 namespace Mekaiju
 {
@@ -28,47 +29,50 @@ namespace Mekaiju
         private bool _requested;
         private bool _isActive;
         private bool _inCooldown;
-        private bool _isAnimationAction;
-        private bool _isAnimationEnd;
+
+        private AnimationState _animationState;
 
         public override void Initialize(MechaPartInstance p_self)
         {
             _requested  = false;
             _isActive   = false;
             _inCooldown = false;
-            _isAnimationAction = false;
-            _isAnimationEnd    = false;
             p_self.mecha.context.animationProxy.onJump.AddListener(_OnJumpAnimationEvent);
         }
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return !_isActive && p_self.mecha.context.isGrounded && !_requested && !_inCooldown;
+            return (
+                !_isActive && 
+                 p_self.states[State.Grounded] && 
+                !p_self.states[State.Stun] && 
+                !_requested && !_inCooldown
+            );
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
         {  
             if (IsAvailable(p_self, p_opt))
             {
-                _isActive = true;
+                _isActive       = true;
+                _animationState = AnimationState.Idle;
+
                 p_self.mecha.context.animationProxy.animator.SetTrigger("Jump");
 
                 // Wait for animation action
                 float t_timout = _actionTriggerTimout;
-                yield return new WaitUntil(() =>_isAnimationAction || (t_timout -= Time.deltaTime) <= 0);
+                yield return new WaitUntil(() => _animationState == AnimationState.Trigger || (t_timout -= Time.deltaTime) <= 0);
 
-                _isAnimationAction = false;
-                _requested         = true;
+                _requested = true;
 
                 // Wait for physic jump performed
-                yield return new WaitUntil(() => !_requested && !p_self.mecha.context.isGrounded);
+                yield return new WaitUntil(() => !_requested && !p_self.states[State.Grounded]);
 
                 // Wait for jump animation end
                 t_timout = _endTriggerTimout;
-                yield return new WaitUntil(() => p_self.mecha.context.isGrounded && (_isAnimationEnd || (t_timout -= Time.deltaTime) <= 0));
+                yield return new WaitUntil(() => p_self.states[State.Grounded] && (_animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0));
 
-                _inCooldown     = true;
-                _isAnimationEnd = false;
+                _inCooldown = true;
 
                 // Wait for cooldown
                 yield return new WaitForSeconds(_cooldown);
@@ -88,19 +92,9 @@ namespace Mekaiju
             }
         }
 
-        private void _OnJumpAnimationEvent(AnimationEventType p_eType)
+        private void _OnJumpAnimationEvent(AnimationEvent p_event)
         {
-            switch (p_eType)
-            {
-                case AnimationEventType.Action:
-                    _isAnimationAction = true;
-                    break;
-                case AnimationEventType.End:
-                    _isAnimationEnd = true;
-                    break;
-                default:
-                    break;
-            }
+            _animationState = p_event.state;
         }
     }
 }

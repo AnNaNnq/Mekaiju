@@ -469,6 +469,7 @@ GameObject:
   - component: {fileID: 8610327776798930001}
   - component: {fileID: 3542776749811644157}
   - component: {fileID: 1733689174530891390}
+  - component: {fileID: 3845815912413110113}
   m_Layer: 0
   m_Name: Kaiju
   m_TagString: Kaiju
@@ -538,12 +539,12 @@ MonoBehaviour:
     health: 100
     isDestroyed: 0
   behaviors:
-  - rid: 3772134562093072529
-  - rid: 3772134562093072530
-  - rid: 3772134562093072587
+  - rid: 7914790548137836689
+  - rid: 7914790548137836690
+  - rid: 7914790548137836691
   timeBetweenTowAction: 2
   <effects>k__BackingField: []
-  _canBehaviorSwitch: 1
+  passives: []
   _currentPhase: 1
   attackGraphPhaseOne: {fileID: 11400000, guid: 74ecf6242186e604eb76c0e683c0b8ac, type: 2}
   attackGraphPhaseTow: {fileID: 11400000, guid: 49a579f92cf023a499d7558b1ae3e818, type: 2}
@@ -553,32 +554,29 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3772134562093072529
-      type: {class: NormalBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 7914790548137836689
+      type: {class: NormalBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
       data:
         speed: 100
         canTrigger: 0
         triggerArea: 30
         triggerOnce: 0
-        showGizmo: 0
         nest: {fileID: 0}
-    - rid: 3772134562093072530
-      type: {class: AwaitBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
-      data:
-        speed: 75
-        canTrigger: 1
-        triggerArea: 75
-        triggerOnce: 0
-        showGizmo: 0
-        playerDistance: 50
-    - rid: 3772134562093072587
-      type: {class: AgroBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 7914790548137836690
+      type: {class: AwaitBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
       data:
         speed: 100
         canTrigger: 1
-        triggerArea: 40
+        triggerArea: 30
+        triggerOnce: 0
+        playerDistance: 20
+    - rid: 7914790548137836691
+      type: {class: AgroBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
+      data:
+        speed: 100
+        canTrigger: 1
+        triggerArea: 30
         triggerOnce: 1
-        showGizmo: 0
 --- !u!114 &258508486715786093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -661,6 +659,33 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!54 &3845815912413110113
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276911127515905678}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3489572259349122008
 GameObject:
   m_ObjectHideFlags: 0

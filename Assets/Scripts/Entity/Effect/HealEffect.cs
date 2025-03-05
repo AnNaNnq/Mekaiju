@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
     /// <summary>
     /// 
@@ -13,7 +13,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private int _heal;
+        private float _heal;
 
         /// <summary>
         /// 

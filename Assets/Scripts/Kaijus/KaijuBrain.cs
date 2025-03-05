@@ -1,3 +1,4 @@
+using Mekaiju.AI.Objet;
 using Mekaiju.Utils;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,6 +33,10 @@ namespace Mekaiju.AI
             _allAttacks = LoadAllAttacks();
             _lastAttack = "Start";
             StartCoroutine(CheckAttack());
+            foreach(KaijuAttack attack in _allAttacks)
+            {
+                attack.attack.Init();
+            }
         }
 
         public void StarFight()
@@ -111,12 +116,24 @@ namespace Mekaiju.AI
 
         public void Attack(List<string> p_attackGUID)
         {
+            List<KaijuPassive> t_activePassives = _instance.GetPassivesActive();
+            if (t_activePassives.Count > 0)
+            {
+                foreach (KaijuPassive passive in t_activePassives)
+                {
+                    passive.passive.Passive(_instance);
+                }
+                _canAttack = false;
+                return;
+            }
+
             if (!_canAttack)
             {
                 if (_motor.agent.enabled == false && !_motor.agent.isOnNavMesh) return;
                 _motor.MoveTo(_instance.target.transform.position, 100);
                 return;
             }
+
 
             List<KaijuAttack> t_kaijuAttacks = PotentialAttacks(p_attackGUID);
 

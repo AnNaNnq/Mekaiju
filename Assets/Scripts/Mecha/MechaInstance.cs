@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mekaiju.Utils;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Mekaiju.Entity;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju
 {
@@ -15,12 +16,6 @@ namespace Mekaiju
     [Serializable]
     public class InstanceContext
     {
-        public EnumArray<ModifierTarget, ModifierCollection> modifiers = new(() => new());
-
-        public bool isGrounded          = false;
-        public bool isMovementAltered   = false;
-        public bool isMovementOverrided = false;
-
         public InputAction moveAction;
 
         public MechaAnimatorProxy animationProxy;
@@ -36,7 +31,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        public MechaConfig config { get; private set; }
+        public MechaDesc desc { get; private set; }
 
         /// <summary>
         /// 
@@ -150,7 +145,7 @@ namespace Mekaiju
 
         private void Start()
         {
-            config = GameManager.instance.playerData.mechaConfig;
+            desc = GameManager.instance.playerData.mechaDesc;
 
             effects = new()
             {
@@ -158,7 +153,7 @@ namespace Mekaiju
                 new(this, Resources.Load<Effect>("Mecha/Objects/Effect/Heal")),
             };
 
-            stamina = config.desc.stamina;
+            stamina = desc.stamina;
 
             context = new()
             {
@@ -166,8 +161,8 @@ namespace Mekaiju
                 rigidbody      = GetComponent<Rigidbody>(),
             };
 
-            var t_main = Instantiate(config.desc.prefab, transform);
-            _parts = config.parts.Select((key, part) => 
+            var t_main = Instantiate(desc.prefab, transform);
+            _parts = desc.parts.Select((key, part) => 
                 {
                     Transform  t_tr;
                     GameObject t_go;
@@ -212,23 +207,9 @@ namespace Mekaiju
 #endregion
 
 #region IEntityInstance implementation
-        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => context.modifiers;
-
-        public override float baseStamina => config.desc.stamina;
-
-        public override float baseHealth => config.desc.parts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
+        public override float baseHealth => desc.parts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
 
         public override bool isAlive => health > 0;
-
-        public override void RestoreStamina(float p_amount)
-        {
-            stamina = Math.Min(config.desc.stamina, stamina + p_amount);
-        }
-
-        public override void ConsumeStamina(float p_amount)
-        {
-            stamina = Math.Max(0, stamina - p_amount);
-        }
 
         public override void Heal(float p_amount)
         {
@@ -245,6 +226,18 @@ namespace Mekaiju
                 // TODO: Maybe not divide
                 t_part.TakeDamage(p_damage / _parts.Count());    
             }
+        }
+
+        public override float baseStamina => desc.stamina;
+
+        public override void RestoreStamina(float p_amount)
+        {
+            stamina = Math.Min(desc.stamina, stamina + p_amount);
+        }
+
+        public override void ConsumeStamina(float p_amount)
+        {
+            stamina = Math.Max(0, stamina - p_amount);
         }
 #endregion
     }

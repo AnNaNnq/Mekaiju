@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 4418045945003567329}
   - component: {fileID: 3200126101891067494}
   - component: {fileID: 3899138011651576022}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 4224891898796545370}
   - component: {fileID: 6714252256739744265}
   - component: {fileID: 888809222292055429}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 7861200488738353921}
   - component: {fileID: 1382295430838674307}
   - component: {fileID: 4135222043850406622}
+  - component: {fileID: 5469719740575974775}
   m_Layer: 0
   m_Name: Kaiju
   m_TagString: Kaiju
@@ -412,47 +413,45 @@ MonoBehaviour:
     health: 100
     isDestroyed: 0
   behaviors:
-  - rid: 3772134743586897920
-  - rid: 3772134743586897921
-  - rid: 3772134743586897922
+  - rid: 7914790548137836613
+  - rid: 7914790548137836614
+  - rid: 7914790548137836615
   timeBetweenTowAction: 1
   <effects>k__BackingField: []
-  _canBehaviorSwitch: 1
+  passives:
+  - {fileID: 11400000, guid: 7fbf25004e117774aa6da691d9484439, type: 2}
   _currentPhase: 2
   attackGraphPhaseOne: {fileID: 11400000, guid: e361eb976566cde499d92635c7b56823, type: 2}
   attackGraphPhaseTow: {fileID: 11400000, guid: cd0b871fee59b4a4990f43c4c114b170, type: 2}
   checkRange: 1
-  debugRange: 10
+  debugRange: 100
   dps: 0
   references:
     version: 2
     RefIds:
-    - rid: 3772134743586897920
-      type: {class: NormalBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 7914790548137836613
+      type: {class: NormalBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
       data:
-        speed: 75
+        speed: 100
         canTrigger: 0
         triggerArea: 30
         triggerOnce: 0
-        showGizmo: 0
         nest: {fileID: 0}
-    - rid: 3772134743586897921
-      type: {class: AwaitBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
-      data:
-        speed: 75
-        canTrigger: 1
-        triggerArea: 200
-        triggerOnce: 0
-        showGizmo: 0
-        playerDistance: 150
-    - rid: 3772134743586897922
-      type: {class: AgroBehavior, ns: Mekaiju.AI, asm: Assembly-CSharp}
+    - rid: 7914790548137836614
+      type: {class: AwaitBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
       data:
         speed: 100
         canTrigger: 1
-        triggerArea: 110
+        triggerArea: 200
+        triggerOnce: 0
+        playerDistance: 150
+    - rid: 7914790548137836615
+      type: {class: AgroBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
+      data:
+        speed: 3
+        canTrigger: 1
+        triggerArea: 100
         triggerOnce: 1
-        showGizmo: 1
 --- !u!114 &3373670591803114353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -535,6 +534,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00e08b5fcb585a2419eedd9e133694d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &5469719740575974775
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3592290967890215276}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &5085126965866158908
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,7 +574,7 @@ GameObject:
   - component: {fileID: 1380230947398575736}
   - component: {fileID: 5702160623097464291}
   - component: {fileID: 2064932037642004203}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -790,7 +816,7 @@ GameObject:
   - component: {fileID: 1845582978107748161}
   - component: {fileID: 6380586805254670503}
   - component: {fileID: 5220333571709490357}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -911,7 +937,7 @@ GameObject:
   - component: {fileID: 7218659621229104344}
   - component: {fileID: 5581945481630586695}
   - component: {fileID: 3361558731183194650}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

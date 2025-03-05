@@ -1,11 +1,13 @@
 using System.Linq;
 using Mekaiju;
 using Mekaiju.AI;
+using Mekaiju.AI.Body;
 using Mekaiju.LockOnTargetSystem;
 using MyBox;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mekaiju.Entity;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -27,9 +29,12 @@ public class PlayerController : MonoBehaviour
 
     
     [Foldout("Movement Attributes")]
-    [SerializeField] private float _groundCheckRadius = 0.5f;
-    [SerializeField] private float _baseSpeed = 5f;
-    [SerializeField] private float _speed;
+    [SerializeField] 
+    private float _groundCheckRadius = 0.5f;
+    [SerializeField] 
+    private float _speedFactor = 5f;
+    [SerializeField, ReadOnly] 
+    private float _speed;
 
 
     [Foldout("Camera Attributes")]
@@ -57,8 +62,6 @@ public class PlayerController : MonoBehaviour
         _playerActions = new MechaPlayerActions();
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
-
-        _speed = _baseSpeed;
 
         _groundLayerMask = LayerMask.GetMask("Walkable");
 
@@ -257,7 +260,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _instance.context.isGrounded = _isGrounded;
+        _instance.states[State.Grounded] = _isGrounded;
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
@@ -284,10 +287,9 @@ public class PlayerController : MonoBehaviour
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
-        if (!_instance.context.isMovementOverrided)
+        if (!_instance.states[State.MovementOverrided] && !_instance.states[State.Stun])
         {
-            _speed = _instance.context.modifiers[ModifierTarget.Speed]?.ComputeValue(_baseSpeed) ?? _baseSpeed;
-            // _speed = _baseSpeed * _instance.Context.SpeedModifier;
+            _speed = _instance.modifiers[ModifierTarget.Speed].ComputeValue(_instance.desc.speed) * _speedFactor;
 
             if (_isGrounded)
             {

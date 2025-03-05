@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Mekaiju
 {
@@ -46,5 +45,10 @@ namespace Mekaiju
         {
             return p_baseValue + _values.Aggregate(0f, (t_acc, t_mod) => t_acc + (t_mod.value * p_baseValue));
         }    
+
+        public float ComputeValuePercentage(float p_baseValue)
+        {
+            return Math.Max(_values.Aggregate(0f, (t_acc, t_mod) => t_acc + (t_mod.value + p_baseValue)), p_baseValue);
+        }
     }
 }

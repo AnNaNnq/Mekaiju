@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
 
     /// <summary>
@@ -11,7 +11,7 @@ namespace Mekaiju
     public class BleedingEffect : IEffectBehaviour
     {
         [SerializeField]
-        private int _damage;
+        private float _damage;
 
         /// <summary>
         /// 
