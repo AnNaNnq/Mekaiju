@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb21259124df937458b8e9a96bee5aaf, type: 3}
+  m_Name: Parasite
+  m_EditorClassIdentifier: 
+  NodeLinks:
+  - BaseNodeGUID: 898ef260-b0f1-4793-9ce9-d29dcb46d48a
+    PortName: Next
+    TargetNodeGUID: 44f0b159-1e87-4ad1-b3eb-a32b84a7a0ec
+  NodeData:
+  - guid: 44f0b159-1e87-4ad1-b3eb-a32b84a7a0ec
+    name: SharpBlow
+    position: {x: 256, y: 130}
+  StartNodeData:
+  - guid: 898ef260-b0f1-4793-9ce9-d29dcb46d48a
+    name: Start
+    position: {x: 0, y: 0}

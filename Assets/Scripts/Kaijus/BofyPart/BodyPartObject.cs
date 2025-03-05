@@ -1,19 +1,26 @@
+using Mekaiju.Entity;
 using UnityEngine;
 
 namespace Mekaiju.AI.Body
 {
     public class BodyPartObject : MonoBehaviour
     {
-        KaijuInstance _instance;
+        [SerializeField]
+        IEntityInstance _instance;
+
+        public bool isOnKaiju = true;
 
         void Start()
         {
-            _instance = GetComponentInParent<KaijuInstance>();
+            if(isOnKaiju) _instance = GetComponentInParent<KaijuInstance>();
+            else _instance = GetComponent<LittleKaijuInstance>();
         }
 
         public void TakeDamage(float p_damage)
         {
-            _instance.TakeDamage(gameObject, p_damage);
+            if (isOnKaiju) (_instance as KaijuInstance).TakeDamage(gameObject, p_damage);
+            else { (_instance as LittleKaijuInstance).TakeDamage(p_damage); Debug.Log("dmg"); }
+
         }
     }
 }
