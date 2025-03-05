@@ -54,6 +54,8 @@ namespace Mekaiju
         private bool _isActive;
         private bool _isStopRequested;
 
+        private MechaAnimatorProxy _animationProxy;
+
         public override void Initialize(MechaPartInstance p_self)
         {
             GameObject t_go;
@@ -68,6 +70,15 @@ namespace Mekaiju
 
             _isActive = false;
             _isStopRequested = false;
+
+            if (p_self.mecha.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
+            {
+                _animationProxy = t_proxy;
+            }
+            else
+            {
+                Debug.LogWarning("Unable to find animator proxy on mecha!");
+            }
         }
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
@@ -85,7 +96,7 @@ namespace Mekaiju
                 _isActive = true;
                 _vfxDefault.enabled = true;
 
-                p_self.mecha.context.animationProxy.animator.SetBool("IsShielding", true);
+                _animationProxy.animator.SetBool("IsShielding", true);
                 
                 // TODO: rework if other modifier
                 var t_sMod = p_self.modifiers[Statistics.Speed]  .Add(_speedModifier);
@@ -102,7 +113,7 @@ namespace Mekaiju
 
                 _vfxDefault.enabled = false;
 
-                p_self.mecha.context.animationProxy.animator.SetBool("IsShielding", false);
+                _animationProxy.animator.SetBool("IsShielding", false);
                 // TODO: rework if other modifier
                 p_self.modifiers[Statistics.Speed]  .Remove(t_sMod);
                 p_self.modifiers[Statistics.Defense].Remove(t_dMod);
