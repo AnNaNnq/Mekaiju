@@ -21,9 +21,10 @@ MonoBehaviour:
       type: {class: SharpBlow, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
         cooldown: 0
-        range: 0
-        blockable: 1
+        range: 10
         canUse: 1
+        canMakeDamage: 1
+        blockable: 1
         sphereRadius: 4
         forwardOffset: 7
         layerMask:
