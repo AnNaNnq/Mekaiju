@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using System.Linq;
 
 namespace Mekaiju.Menu
 {
@@ -10,32 +11,41 @@ namespace Mekaiju.Menu
         // UI elements
         public TMP_Dropdown resolutionDropdown;  // Dropdown for screen resolution selection
         public TMP_Dropdown qualityDropdown;     // Dropdown for graphics quality selection
-        public Toggle reflectionsToggle;     // Toggle for real-time reflections
-        public Toggle vSyncToggle;           // Toggle for V-Sync
-        public Toggle fullscreenToggle;      // Toggle for fullscreen mode
+        public Toggle reflectionsToggle;         // Toggle for real-time reflections
+        public Toggle vSyncToggle;               // Toggle for V-Sync
+        public Toggle fullscreenToggle;          // Toggle for fullscreen mode
 
-        private Resolution[] _resolutions;   // Available screen resolutions
+        private Resolution[] _resolutions;       // Available screen resolutions
+        private List<Resolution> _filteredResolutions; // Filtered unique resolutions
 
         void Start()
         {
             // Load available screen resolutions
             _resolutions = Screen.resolutions;
             resolutionDropdown.ClearOptions();
-            List<string> t_options = new List<string>();
+            HashSet<string> resolutionSet = new HashSet<string>();
+            _filteredResolutions = new List<Resolution>();
 
             int t_currentResolutionIndex = 0;
             for (int i = 0; i < _resolutions.Length; i++)
             {
                 string t_option = _resolutions[i].width + " x " + _resolutions[i].height;
-                t_options.Add(t_option);
 
+                if (resolutionSet.Add(t_option)) // Add resolution only if it's not already in the set
+                {
+                    _filteredResolutions.Add(_resolutions[i]);
+                }
+
+                //Check if this resolution matches the current screen resolution
                 if (_resolutions[i].width == Screen.currentResolution.width &&
                     _resolutions[i].height == Screen.currentResolution.height)
                 {
-                    t_currentResolutionIndex = i;
+                    t_currentResolutionIndex = _filteredResolutions.Count - 1;
                 }
             }
 
+            // Convert to string list and add to the dropdown options
+            List<string> t_options = _filteredResolutions.Select(r => r.width + " x " + r.height).ToList();
             resolutionDropdown.AddOptions(t_options);
             resolutionDropdown.value = t_currentResolutionIndex;
             resolutionDropdown.RefreshShownValue();
@@ -61,7 +71,7 @@ namespace Mekaiju.Menu
 
         private void _SetResolution(int p_index)
         {
-            Screen.SetResolution(_resolutions[p_index].width, _resolutions[p_index].height, Screen.fullScreen);
+            Screen.SetResolution(_filteredResolutions[p_index].width, _filteredResolutions[p_index].height, Screen.fullScreen);
         }
 
         private void _SetQuality(int p_index)

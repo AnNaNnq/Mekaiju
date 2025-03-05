@@ -1,163 +1,99 @@
 using UnityEngine;
-using TMPro; 
-using UnityEngine.InputSystem; 
-
+using TMPro;
+using UnityEngine.InputSystem;
 
 namespace Mekaiju.Menu
 {
-public class ControlsTabManager : MonoBehaviour
-{
-    // These variables hold references to your TextMeshPro UI elements.
-    [Header("UI TMP Text References")]
-    public TMP_Text upText;
-    public TMP_Text downText;
-    public TMP_Text leftText;
-    public TMP_Text rightText;
-    public TMP_Text jumpText;
-    public TMP_Text cameraText;
-    public TMP_Text lockChangeText;
-    public TMP_Text lockOnOffText;
-    public TMP_Text shieldText;
-    public TMP_Text leftArmActionText;
-    public TMP_Text rightArmActionText;
-    public TMP_Text dashText;
-    public TMP_Text chestText;
-    public TMP_Text headText;
-    public TMP_Text healText;
-
-    // This is the InputActionAsset that contains your input mappings (the .inputactions file).
-    [Header("Reference to the InputActionAsset")]
-    public InputActionAsset inputActions;
-
-    private void Start()
+    public class ControlsTabManager : MonoBehaviour
     {
-        // Update the UI with the current keybinds from the InputActionAsset.
-        _DisplayKeybinds();
-    }
+        [Header("UI TMP Text References")]
+        // UI elements to display key bindings for keyboard and gamepad
+        public TMP_Text upText, upGamePadText;
+        public TMP_Text downText, downGamePadText;
+        public TMP_Text leftText, leftGamePadText;
+        public TMP_Text rightText, rightGamePadText;
+        public TMP_Text jumpText, jumpGamePadText;
+        public TMP_Text cameraText, cameraGamePadText;
+        public TMP_Text lockChangeText, lockChangeGamePadText;
+        public TMP_Text lockOnOffText, lockOnOffGamePadText;
+        public TMP_Text shieldText, shieldGamePadText;
+        public TMP_Text leftArmActionText, leftArmActionGamePadText;
+        public TMP_Text rightArmActionText, rightArmActionGamePadText;
+        public TMP_Text dashText, dashGamePadText;
+        public TMP_Text torseText, torseGamePadText;
+        public TMP_Text headText, headGamePadText;
+        public TMP_Text healText, healGamePadText;
+        public TMP_Text pauseText, pauseGamePadText;
 
-    // Retrieves the keybindings from the InputActionAsset and updates the TMP texts.
-    private void _DisplayKeybinds()
-    {
-        // Attempt to find the Action Map named "Player" in the InputActionAsset.
-        InputActionMap playerMap = inputActions.FindActionMap("Player", throwIfNotFound: false);
-        // If the "Player" Action Map isn't found, log an error and exit the method.
-        if (playerMap == null)
+        [Header("Reference to the InputActionAsset")]
+        // Reference to the input actions asset
+        public InputActionAsset inputActions;
+
+        private void Start()
         {
-            Debug.LogError("Could not find the 'Player' Action Map in the InputActionAsset.");
-            return;
+            _DisplayKeybinds(); // Initialize key binding display on start
         }
 
-        // For each action, we try to retrieve its first binding and then update
-        // the corresponding TMP text with a human-readable string.
-        // If an action or its binding isn't found, nothing happens.
+        private void _DisplayKeybinds()
+        {
+            // Retrieve the "Player" action map from the InputActionAsset
+            InputActionMap playerMap = inputActions.FindActionMap("Player", throwIfNotFound: false);
+            if (playerMap == null)
+            {
+                Debug.LogError("Could not find the 'Player' Action Map in the InputActionAsset.");
+                return;
+            }
 
-        // Update the "Up" action text.
-        if (upText)
-        {
-            InputAction action = playerMap.FindAction("Up", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                upText.text = action.bindings[0].ToDisplayString();
+            // Update key binding text for various actions
+            _UpdateActionText(playerMap, "Move", upText, upGamePadText, 1);
+            _UpdateActionText(playerMap, "Move", downText, downGamePadText, 2);
+            _UpdateActionText(playerMap, "Move", leftText, leftGamePadText, 3);
+            _UpdateActionText(playerMap, "Move", rightText, rightGamePadText, 4);
+            _UpdateActionText(playerMap, "Jump", jumpText, jumpGamePadText);
+            _UpdateActionText(playerMap, "Look", cameraText, cameraGamePadText);
+            _UpdateActionText(playerMap, "Lock", lockChangeText, lockChangeGamePadText);
+            _UpdateActionText(playerMap, "LockSwitch", lockOnOffText, lockOnOffGamePadText);
+            _UpdateActionText(playerMap, "Shield", shieldText, shieldGamePadText);
+            _UpdateActionText(playerMap, "LeftArm", leftArmActionText, leftArmActionGamePadText);
+            _UpdateActionText(playerMap, "RightArm", rightArmActionText, rightArmActionGamePadText);
+            _UpdateActionText(playerMap, "Dash", dashText, dashGamePadText);
+            _UpdateActionText(playerMap, "Torse", torseText, torseGamePadText);
+            _UpdateActionText(playerMap, "Head", headText, headGamePadText);
+            _UpdateActionText(playerMap, "Heal", healText, healGamePadText);
+            _UpdateActionText(playerMap, "Pause", pauseText, pauseGamePadText);
         }
-        // Update the "Down" action text.
-        if (downText)
+
+        private void _UpdateActionText(InputActionMap map, string actionName, TMP_Text keyboardText, TMP_Text gamepadText, int index = 0)
         {
-            InputAction action = playerMap.FindAction("Down", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                downText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Left" action text.
-        if (leftText)
-        {
-            InputAction action = playerMap.FindAction("Left", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                leftText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Right" action text.
-        if (rightText)
-        {
-            InputAction action = playerMap.FindAction("Right", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                rightText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Jump" action text.
-        if (jumpText)
-        {
-            InputAction action = playerMap.FindAction("Jump", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                jumpText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Camera" action text.
-        if (cameraText)
-        {
-            InputAction action = playerMap.FindAction("Camera", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                cameraText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "LockChange" action text.
-        if (lockChangeText)
-        {
-            InputAction action = playerMap.FindAction("LockChange", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                lockChangeText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "LockOn/Off" action text.
-        if (lockOnOffText)
-        {
-            InputAction action = playerMap.FindAction("LockOnOff", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                lockOnOffText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Shield" action text.
-        if (shieldText)
-        {
-            InputAction action = playerMap.FindAction("Shield", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                shieldText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "LeftArmAction" action text.
-        if (leftArmActionText)
-        {
-            InputAction action = playerMap.FindAction("LeftArmAction", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                leftArmActionText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "RightArmAction" action text.
-        if (rightArmActionText)
-        {
-            InputAction action = playerMap.FindAction("RightArmAction", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                rightArmActionText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Dash" action text.
-        if (dashText)
-        {
-            InputAction action = playerMap.FindAction("Dash", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                dashText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Chest" action text.
-        if (chestText)
-        {
-            InputAction action = playerMap.FindAction("Chest", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                chestText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Head" action text.
-        if (headText)
-        {
-            InputAction action = playerMap.FindAction("Head", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                headText.text = action.bindings[0].ToDisplayString();
-        }
-        // Update the "Heal" action text.
-        if (healText)
-        {
-            InputAction action = playerMap.FindAction("Heal", throwIfNotFound: false);
-            if (action != null && action.bindings.Count > 0)
-                healText.text = action.bindings[0].ToDisplayString();
+            // Find the action in the map
+            InputAction action = map.FindAction(actionName, throwIfNotFound: false);
+            if (action == null) return;
+
+            string keyboardBinding = "Not Assigned";
+            string gamepadBinding = "Not Assigned";
+
+            // Iterate through action bindings to determine their inputs
+            foreach (var binding in action.bindings)
+            {
+                if (binding.isComposite) continue; // Skip composite bindings
+
+                if (binding.path.Contains("<Keyboard>") || binding.path.Contains("<Mouse>"))
+                {
+                    keyboardBinding = binding.ToDisplayString(); // Assign keyboard/mouse binding
+                }
+                else if (binding.path.Contains("<Gamepad>"))
+                {
+                    gamepadBinding = binding.ToDisplayString(); // Assign gamepad binding
+                }
+                else if (binding.path.Contains("Pointer")) // Additional check for pointer input
+                {
+                    keyboardBinding = binding.ToDisplayString();
+                }
+            }
+
+            // Update UI text with detected bindings
+            if (keyboardText) keyboardText.text = keyboardBinding;
+            if (gamepadText) gamepadText.text = gamepadBinding;
         }
     }
 }
-
-}
-
