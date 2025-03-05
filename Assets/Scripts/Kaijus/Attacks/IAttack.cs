@@ -2,6 +2,7 @@ using Mekaiju.Utils;
 using System.Collections;
 using UnityEngine;
 using Mekaiju.Entity.Effect;
+using MyBox;
 
 namespace Mekaiju.AI.Attack {
     [System.Serializable]
@@ -9,12 +10,18 @@ namespace Mekaiju.AI.Attack {
     {
         public float cooldown;
         public float range;
-        public bool blockable;
-
+       
         protected bool canUse;
 
+        public bool canMakeDamage = true;
+
+        [ConditionalField(nameof(canMakeDamage))]
+        public bool blockable;
+        [ConditionalField(nameof(canMakeDamage))]
         public float sphereRadius = 4f;
+        [ConditionalField(nameof(canMakeDamage))]
         public float forwardOffset = 7f;
+        [ConditionalField(nameof(canMakeDamage))]
         public LayerMask layerMask;
 
         public void Init()
