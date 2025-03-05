@@ -2,13 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mekaiju
+namespace Mekaiju.Entity
 {
-    public enum ModifierTarget
-    {
-        Speed, Defense, Damage
-    }
-
     [Serializable]
     public class Modifier
     {

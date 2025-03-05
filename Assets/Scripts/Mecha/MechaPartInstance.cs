@@ -80,7 +80,7 @@ namespace Mekaiju
 
 #region IEntityInstance implementation
 
-        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => mecha.modifiers;
+        public override EnumArray<Statistics, ModifierCollection> modifiers => mecha.modifiers;
 
         public override UnityEvent<float> onTakeDamage => mecha.onTakeDamage;
         public override UnityEvent<float> onDealDamage => mecha.onDealDamage;
@@ -91,7 +91,7 @@ namespace Mekaiju
 
         public override void TakeDamage(float p_damage)
         {
-            var t_damage = p_damage - p_damage * modifiers[ModifierTarget.Defense].ComputeValue(mecha.desc.defense);
+            var t_damage = p_damage - p_damage * modifiers[Statistics.Defense].ComputeValue(mecha.desc.defense);
             
             mecha.timePoints[TimePoint.LastDamage] = Time.time;
             health = Mathf.Max(0f, health - t_damage);
