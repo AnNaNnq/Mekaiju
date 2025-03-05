@@ -12,7 +12,7 @@ namespace Mekaiju.AI.Attack
         public float timeBeforeAttack = 1;
         [OverrideLabel("Second attack damage (% of DMG)")]
         public float secondDamage = 50;
-        public float timeBeforeSecondAttack = 1;
+        public float timeBeforeSecondAttack = 1; 
 
         public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
