@@ -37,8 +37,6 @@ namespace Mekaiju.AI
 
         public List<KaijuPassive> passives;
 
-        //private bool _canBehaviorSwitch = true;
-
         public GameObject target { get; private set; }
 
         [HideInInspector]
