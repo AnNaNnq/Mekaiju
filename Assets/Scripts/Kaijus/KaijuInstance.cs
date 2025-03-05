@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using MyBox;
 using System.Linq;
 using Mekaiju.Attribute;
-using Mekaiju.Utils;
 using System;
 using System.Collections;
 using Mekaiju.Entity;
@@ -182,6 +181,11 @@ namespace Mekaiju.AI
         public void Combat()
         {
             _isInFight = true;
+        }
+
+        public float TargetInRange()
+        {
+            return Vector3.Distance(target.transform.position, transform.position);
         }
 
         public bool TargetInRange(float p_range)

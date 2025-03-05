@@ -1,6 +1,7 @@
 using Mekaiju.Attribute;
 using MyBox;
 using Mekaiju.Entity.Effect;
+using Mekaiju.Entity;
 
 namespace Mekaiju.AI.Attack
 {
@@ -20,7 +21,7 @@ namespace Mekaiju.AI.Attack
             return base.CanUse(kaiju, otherRange);
         }
 
-        public override void Active(KaijuInstance kaiju)
+        public override void Active(IEntityInstance kaiju)
         {
             base.Active(kaiju);
 

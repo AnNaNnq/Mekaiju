@@ -7,8 +7,6 @@ using UnityEngine;
 
 namespace Mekaiju.AI
 {
-    [RequireComponent(typeof(KaijuInstance))]
-    [RequireComponent(typeof(KaijuMotor))]
     public class KaijuBrain : MonoBehaviour
     {
         KaijuInstance _instance;

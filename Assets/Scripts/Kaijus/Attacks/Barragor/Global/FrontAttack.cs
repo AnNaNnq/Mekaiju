@@ -1,3 +1,4 @@
+using Mekaiju.Entity;
 using MyBox;
 using System.Collections;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace Mekaiju.AI.Attack
 
         public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
+            
             bool t_return = (canUse && kaiju.TargetInRange(range)) || (canUse && kaiju.TargetInRange(attackRange));
             if (otherRange > 0)
             {
@@ -23,18 +25,20 @@ namespace Mekaiju.AI.Attack
             return t_return;
         }
 
-        public override void Active(KaijuInstance kaiju)
+        public override void Active(IEntityInstance kaiju)
         {
             base.Active(kaiju);
-            if(kaiju.TargetInRange(range) && !kaiju.TargetInRange(attackRange))
+
+            KaijuInstance p_kaiju = (KaijuInstance)kaiju;
+            if (p_kaiju.TargetInRange(range) && !p_kaiju.TargetInRange(attackRange))
             {
                 Debug.Log("sprint");
-                kaiju.motor.MoveTo(kaiju.target.transform.position, sprintSpeed, attackRange);
-                kaiju.StartCoroutine(SprintDuration(kaiju));
+                p_kaiju.motor.MoveTo(p_kaiju.target.transform.position, sprintSpeed, attackRange);
+                kaiju.StartCoroutine(SprintDuration(p_kaiju));
             }
             else
             {
-                AttackFront(kaiju);
+                AttackFront(p_kaiju);
             }
         }
 

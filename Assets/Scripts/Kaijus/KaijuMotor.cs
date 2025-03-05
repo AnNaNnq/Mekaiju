@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(KaijuInstance))]
 [RequireComponent(typeof(NavMeshAgent))]
 public class KaijuMotor : MonoBehaviour
 {
