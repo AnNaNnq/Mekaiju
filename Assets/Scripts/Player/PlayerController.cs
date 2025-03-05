@@ -289,7 +289,7 @@ public class PlayerController : MonoBehaviour
 
         if (!_instance.states[State.MovementOverrided] && !_instance.states[State.Stun])
         {
-            _speed = _instance.modifiers[Statistics.Speed].ComputeValue(_instance.desc.speed) * _speedFactor;
+            _speed = _instance.modifiers[Statistics.Speed].ComputeValue(_instance.desc.statistics[Statistics.Speed]) * _speedFactor;
 
             if (_isGrounded)
             {

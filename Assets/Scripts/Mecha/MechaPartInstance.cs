@@ -42,7 +42,7 @@ namespace Mekaiju
             mecha   = p_inst;
 
             _desc  = p_desc;
-            health = p_desc.health;
+            health = baseHealth;
 
             _desc.ability.behaviour?.Initialize(this);
         }
@@ -92,16 +92,16 @@ namespace Mekaiju
 
         public override bool isAlive => health > 0f;
 
-        public override float baseHealth => _desc.health;
+        public override float baseHealth => _desc.healthPercent * mecha.baseHealth;
 
         public override void Heal(float p_heal)
         {
-            health = Mathf.Min(_desc.health, health + p_heal);
+            health = Mathf.Min(baseHealth, health + p_heal);
         }
 
         public override void TakeDamage(float p_damage)
         {
-            var t_damage = p_damage - p_damage * modifiers[Statistics.Defense].ComputeValue(mecha.desc.defense);
+            var t_damage = p_damage - p_damage * modifiers[Statistics.Defense].ComputeValue(mecha.desc.statistics[Statistics.Defense]);
             
             mecha.timePoints[TimePoint.LastDamage] = Time.time;
             health = Mathf.Max(0f, health - t_damage);

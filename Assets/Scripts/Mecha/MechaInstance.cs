@@ -207,7 +207,7 @@ namespace Mekaiju
 #endregion
 
 #region IEntityInstance implementation
-        public override float baseHealth => desc.parts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
+        public override float baseHealth => desc.statistics[Statistics.Health];
 
         public override bool isAlive => health > 0;
 
