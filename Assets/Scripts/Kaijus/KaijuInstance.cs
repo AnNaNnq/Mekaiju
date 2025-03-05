@@ -175,6 +175,12 @@ namespace Mekaiju.AI
             }
         }
 
+        public float GetRealDamage(float p_amonunt)
+        {
+            var t_damage = modifiers[ModifierTarget.Damage].ComputeValue(p_amonunt);
+            return stats.dmg * (t_damage/100);
+        }
+
         public void Combat()
         {
             _isInFight = true;
@@ -307,10 +313,9 @@ namespace Mekaiju.AI
             
 
             var t_defense = modifiers[ModifierTarget.Defense].ComputeValuePercentage(stats.def);
-            var t_damage  = modifiers[ModifierTarget.Damage].ComputeValue(p_amonunt);
             Debug.Log(t_defense);
 
-            var t_realDamage = t_damage * (1- (t_defense/100));
+            var t_realDamage = p_amonunt * (1- (t_defense/100));
 
             p_bodyPart.health -= p_amonunt;
 
