@@ -91,6 +91,19 @@ public class KaijuMotor : MonoBehaviour
         StartCoroutine(Stop(p_time));
     }
 
+    public void StopKaiju()
+    {
+        if (!_agent.enabled) return;
+        _agent.ResetPath();
+        _agent.enabled = false;
+    }
+
+    public void StartKaiju()
+    {
+        if (_agent.enabled) return;
+        _agent.enabled = true;
+    }
+
     private IEnumerator Stop(float p_time)
     {
         _agent.ResetPath();
