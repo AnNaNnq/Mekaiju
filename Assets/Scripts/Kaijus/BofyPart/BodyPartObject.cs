@@ -18,8 +18,14 @@ namespace Mekaiju.AI.Body
 
         public void TakeDamage(float p_damage)
         {
-            if (isOnKaiju) (_instance as KaijuInstance).TakeDamage(gameObject, p_damage);
-            else { (_instance as LittleKaijuInstance).TakeDamage(p_damage); Debug.Log("dmg"); }
+            if (isOnKaiju) 
+            { 
+                (_instance as KaijuInstance).TakeDamage(gameObject, p_damage); 
+            }
+            else 
+            { 
+                (_instance as LittleKaijuInstance).TakeDamage(p_damage); 
+            }
 
         }
     }

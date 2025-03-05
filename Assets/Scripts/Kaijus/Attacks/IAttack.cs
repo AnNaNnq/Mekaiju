@@ -11,7 +11,6 @@ namespace Mekaiju.AI.Attack {
     {
         public float cooldown;
         public float range;
-        [SerializeField]
         protected bool canUse;
 
         public bool canMakeDamage = true;
@@ -32,8 +31,14 @@ namespace Mekaiju.AI.Attack {
 
         public virtual bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
-            return CanUse(kaiju.TargetInRange(), otherRange);
+            bool t_return = canUse && kaiju.TargetInRange(range);
+            if (otherRange > 0)
+            {
+                t_return &= !kaiju.TargetInRange(otherRange);
+            }
+            return t_return;
         }
+
 
         public bool CanUse(float p_range, float otherRange = 0)
         {
