@@ -306,8 +306,8 @@ namespace Mekaiju.AI
         {
             
 
-            var t_defense = modifiers[ModifierTarget.Defense].ComputeValuePercentage(stats.def);
-            var t_damage  = modifiers[ModifierTarget.Damage].ComputeValue(p_amonunt);
+            var t_defense = modifiers[Statistics.Defense].ComputeValuePercentage(stats.def);
+            var t_damage  = modifiers[Statistics.Damage].ComputeValue(p_amonunt);
             Debug.Log(t_defense);
 
             var t_realDamage = t_damage * (1- (t_defense/100));

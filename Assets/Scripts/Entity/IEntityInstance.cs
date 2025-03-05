@@ -34,7 +34,7 @@ namespace Mekaiju.Entity
         /// <summary>
         /// Allow buff/debuff effect
         /// </summary>
-        public virtual EnumArray<ModifierTarget, ModifierCollection> modifiers { get; } = new(() => new());
+        public virtual EnumArray<Statistics, ModifierCollection> modifiers { get; } = new(() => new());
 
         /// <summary>
         /// Return if entity is alive

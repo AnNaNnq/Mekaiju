@@ -10,13 +10,13 @@ namespace Mekaiju.Entity.Effect
 
         public override void OnAdd(IEntityInstance p_self)
         {
-            _defenseMod = p_self.modifiers[ModifierTarget.Defense].Add(_defensePercentage);
+            _defenseMod = p_self.modifiers[Statistics.Defense].Add(_defensePercentage);
             Debug.Log("ProtectionEffect: OnAdd");
         }
 
         public override void OnRemove(IEntityInstance p_self)
         {
-            p_self.modifiers[ModifierTarget.Defense].Remove(_defenseMod);
+            p_self.modifiers[Statistics.Defense].Remove(_defenseMod);
         }
     }
 }

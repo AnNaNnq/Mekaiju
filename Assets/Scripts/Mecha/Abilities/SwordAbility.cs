@@ -70,7 +70,7 @@ namespace Mekaiju
                 if (t_dist < _reachDistance)
                 {
                     // Make damage
-                    var t_damage = _damageFactor * p_self.mecha.modifiers[ModifierTarget.Damage].ComputeValue(p_self.mecha.desc.damage);
+                    var t_damage = _damageFactor * p_self.mecha.modifiers[Statistics.Damage].ComputeValue(p_self.mecha.desc.damage);
                     p_target.TakeDamage(t_damage);
                     p_self.onDealDamage.Invoke(t_damage);
                 }
