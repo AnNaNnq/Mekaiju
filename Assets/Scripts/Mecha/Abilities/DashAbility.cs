@@ -3,6 +3,7 @@ using Mekaiju.AI;
 using Mekaiju.Entity;
 using Mekaiju.AI.Body;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Mekaiju
 {
@@ -11,6 +12,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        [Header("General")]
         [SerializeField]
         private float _force;
 
@@ -29,6 +31,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        [Header("Visual Effects")]
         [SerializeField]
         private MeshTrailConfig _meshTrailConfig;
 
@@ -37,6 +40,13 @@ namespace Mekaiju
         /// </summary>
         [SerializeField]
         private GameObject _speedVfx;
+
+        /// <summary>
+        /// WASD input
+        /// </summary>
+        [Header("Input")]
+        [SerializeField]
+        private InputActionReference _input;
 
         /// <summary>
         /// 
@@ -81,7 +91,7 @@ namespace Mekaiju
                 !p_self.states[State.Protected] && 
                 !p_self.states[State.Stun] &&
                 p_self.mecha.stamina - _consumption >= 0f &&
-                Mathf.Abs(p_self.mecha.context.moveAction.ReadValue<Vector2>().magnitude) > 0    
+                Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0    
             );
         }
 
@@ -89,7 +99,7 @@ namespace Mekaiju
         {
             if (IsAvailable(p_self, p_opt))
             {
-                Vector2   t_input     = p_self.mecha.context.moveAction.ReadValue<Vector2>();
+                Vector2   t_input     = _input.action.ReadValue<Vector2>();
                 Transform t_transform = p_self.mecha.transform;
                 _direction = (t_input.y * t_transform.forward + t_input.x * t_transform.right).normalized;
 

@@ -87,8 +87,6 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Torse.performed += OnTorse;
         _playerActions.Player.Pause.performed += OnPause;
 
-        _instance.context.moveAction = _moveAction;
-
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
         Cursor.visible = false; // Make the cursor invisible during gameplay
 

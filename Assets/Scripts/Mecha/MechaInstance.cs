@@ -16,8 +16,6 @@ namespace Mekaiju
     [Serializable]
     public class InstanceContext
     {
-        public InputAction moveAction;
-
         public MechaAnimatorProxy animationProxy;
         public Rigidbody rigidbody;
     }
