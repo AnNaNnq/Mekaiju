@@ -11,6 +11,22 @@ namespace Mekaiju.Entity
     public abstract class IEntityInstance : MonoBehaviour
     {
         /// <summary>
+        /// Bind base entity stats.
+        /// Must be overrided to use computedStats.
+        /// </summary>
+        protected virtual EnumArray<Statistics, float> baseStatistics { get; } = new(() => new());
+
+        /// <summary>
+        /// Compute stats with modifiers.
+        /// </summary>
+        /// <param name="p_kind">The targeted statistics.</param>
+        /// <returns>The computed statistic.</returns>
+        public virtual float ComputedStatistics(Statistics p_kind)
+        {
+            return modifiers[p_kind].ComputeValue(baseStatistics[p_kind]);
+        }
+
+        /// <summary>
         /// Must be invoke in TakeDamage implementation
         /// </summary>
         public virtual UnityEvent<float> onTakeDamage { get; private set; } = new();

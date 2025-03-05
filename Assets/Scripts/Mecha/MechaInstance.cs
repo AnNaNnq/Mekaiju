@@ -134,9 +134,9 @@ namespace Mekaiju
                 p_effect.Dispose();
             }
         }
-        #endregion
+#endregion
 
-        #region MonoBehaviour implementation
+#region MonoBehaviour implementation
         private void Awake()
         {
             onAddEffect = new();
@@ -207,6 +207,8 @@ namespace Mekaiju
 #endregion
 
 #region IEntityInstance implementation
+        protected override EnumArray<Statistics, float> baseStatistics => desc.statistics;
+
         public override float baseHealth => desc.statistics[Statistics.Health];
 
         public override bool isAlive => health > 0;

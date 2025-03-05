@@ -81,6 +81,10 @@ namespace Mekaiju
         }
 
 #region IEntityInstance implementation
+        public override float ComputedStatistics(Statistics p_kind)
+        {
+            return mecha.ComputedStatistics(p_kind);
+        }
 
         public override EnumArray<Statistics, ModifierCollection> modifiers => mecha.modifiers;
 
@@ -101,7 +105,7 @@ namespace Mekaiju
 
         public override void TakeDamage(float p_damage)
         {
-            var t_damage = p_damage - p_damage * modifiers[Statistics.Defense].ComputeValue(mecha.desc.statistics[Statistics.Defense]);
+            var t_damage = p_damage - p_damage * ComputedStatistics(Statistics.Defense);
             
             mecha.timePoints[TimePoint.LastDamage] = Time.time;
             health = Mathf.Max(0f, health - t_damage);
