@@ -10,6 +10,9 @@ namespace Mekaiju.AI.Attack
         [OverrideLabel("Damage (% of DMG)")]
         public float damage = 50;
         public float timeBeforeAttack = 1;
+        [OverrideLabel("Second attack damage (% of DMG)")]
+        public float secondDamage = 50;
+        public float timeBeforeSecondAttack = 1;
 
         public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
         {
@@ -27,9 +30,11 @@ namespace Mekaiju.AI.Attack
             base.Attack(kaiju);
             kaiju.animator.AttackAnimation(nameof(SharpBlowUpgrade));
             yield return new WaitForSeconds(timeBeforeAttack);
-            Debug.Log($"Sharp Blow + fait {damage} degats");
-            kaiju.brain.MakeAction();
             SendDamage(damage, kaiju);
+
+            yield return new WaitForSeconds(timeBeforeSecondAttack);
+            SendDamage(secondDamage, kaiju);
+            kaiju.brain.MakeAction();
         }
 
     }
