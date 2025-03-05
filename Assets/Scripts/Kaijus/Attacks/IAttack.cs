@@ -11,7 +11,7 @@ namespace Mekaiju.AI.Attack {
     {
         public float cooldown;
         public float range;
-       
+        [SerializeField]
         protected bool canUse;
 
         public bool canMakeDamage = true;
@@ -75,7 +75,7 @@ namespace Mekaiju.AI.Attack {
 
             if (mecha != null)
             {
-                if(p_kaiju as KaijuInstance != null)
+                if(p_kaiju as KaijuInstance)
                 {
                     KaijuInstance t_kaiju = p_kaiju as KaijuInstance;
                     float t_damage = t_kaiju.GetRealDamage(p_damage);
@@ -83,20 +83,23 @@ namespace Mekaiju.AI.Attack {
                     t_kaiju.AddDPS(t_damage);
                     t_kaiju.UpdateUI();
                 }
+                else if (p_kaiju as LittleKaijuInstance)
+                {
+                    LittleKaijuInstance t_little = p_kaiju as LittleKaijuInstance;
+                    float t_damage = t_little.GetRealDamage(p_damage);
+                    mecha.TakeDamage(t_damage);
+                }
                 
                 if(p_effet != null)
                 {
                     mecha.AddEffect(p_effet, p_effetDuration);
                 }
             }
-            if (p_kaiju as KaijuInstance != null)
-            {
-                KaijuInstance t_kaiju = p_kaiju as KaijuInstance;
-                p_kaiju.StartCoroutine(Cooldown(t_kaiju));
-            }
+
+            p_kaiju.StartCoroutine(Cooldown(p_kaiju));
         }
 
-        public IEnumerator Cooldown(KaijuInstance p_kaiju)
+        public IEnumerator Cooldown(IEntityInstance p_kaiju)
         {
            yield return p_kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
         }
