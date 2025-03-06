@@ -34,7 +34,7 @@ namespace Mekaiju
         private MechaAnimatorProxy _animationProxy;
         private Rigidbody          _rigidbody;
 
-        public override void Initialize(MechaPartInstance p_self)
+        public override void Initialize(EntityInstance p_self)
         {
             _requested  = false;
             _isActive   = false;
@@ -61,7 +61,7 @@ namespace Mekaiju
             _animationProxy.onJump.AddListener(_OnJumpAnimationEvent);
         }
 
-        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return (
                 !_isActive && 
@@ -71,7 +71,7 @@ namespace Mekaiju
             );
         }
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
+        public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {  
             if (IsAvailable(p_self, p_opt))
             {
@@ -103,7 +103,7 @@ namespace Mekaiju
             }
         }
 
-        public override void FixedTick(MechaPartInstance p_self)
+        public override void FixedTick(EntityInstance p_self)
         {
             // Perform physic jump if requested
             if (_requested)

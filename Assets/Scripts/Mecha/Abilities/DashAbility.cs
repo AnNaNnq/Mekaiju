@@ -56,7 +56,7 @@ namespace Mekaiju
         private GameObject   _camera;
         private Rigidbody    _rigidbody;
 
-        public override void Initialize(MechaPartInstance p_self)
+        public override void Initialize(EntityInstance p_self)
         {
             _isAcitve   = false;
             _elapedTime = 0;
@@ -76,7 +76,7 @@ namespace Mekaiju
             }
         }
 
-        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return (
                 !_isAcitve && 
@@ -87,7 +87,7 @@ namespace Mekaiju
             );
         }
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
+        public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
@@ -121,7 +121,7 @@ namespace Mekaiju
             yield return null;
         }
 
-        public override void FixedTick(MechaPartInstance p_self)
+        public override void FixedTick(EntityInstance p_self)
         {
             if (_isAcitve)
             {

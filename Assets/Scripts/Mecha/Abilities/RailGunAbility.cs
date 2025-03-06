@@ -66,7 +66,7 @@ namespace Mekaiju
         private AnimationState     _animationState;
         private MechaAnimatorProxy _animationProxy;
 
-        public override void Initialize(MechaPartInstance p_self)
+        public override void Initialize(EntityInstance p_self)
         {
             _isActive = false;
 
@@ -82,12 +82,12 @@ namespace Mekaiju
             _animationProxy.onRArm.AddListener(_OnAnimationEvent);
         }
 
-        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return !_isActive && !p_self.states[State.Stun] && p_self.stamina - _consumption >= 0f;
         }
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
+        public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
