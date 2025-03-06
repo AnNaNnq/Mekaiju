@@ -11,6 +11,7 @@ using Mekaiju.Entity.Effect;
 using Mekaiju.AI.Objet;
 using Mekaiju.AI.Body;
 using Mekaiju.AI.Behavior;
+using Mekaiju.AI.PhaseAttack;
 
 namespace Mekaiju.AI
 {
@@ -60,6 +61,10 @@ namespace Mekaiju.AI
         [SOSelector]
         [OverrideLabel("Attack Graph (Phase 2)")]
         public KaijuAttackContainer attackGraphPhaseTow;
+
+        [Separator]
+        [SOSelector]
+        public KaijuPhaseAttack changePhaseAction;
 
         [Separator]
         [Header("Debug")]
@@ -114,6 +119,10 @@ namespace Mekaiju.AI
             }
 
             context = new();
+            if(changePhaseAction != null)
+            {
+                changePhaseAction.attack.Init(this);
+            }
 
             CheckAllBehaviorsDisabeled();
             StartCoroutine(resetDps());
@@ -140,6 +149,11 @@ namespace Mekaiju.AI
                 return false;
             });
 
+
+            if(Input.GetKeyDown(KeyCode.N))
+            {
+                ChangePhase();
+            }
         }
 
         private void FixedUpdate()
@@ -154,6 +168,13 @@ namespace Mekaiju.AI
                 behavior.Trigger();
                 if (behavior.active) behavior.Run();
             }
+        }
+
+        public void ChangePhase()
+        {
+            _currentPhase = 2;
+            motor.StopKaiju();
+            changePhaseAction.attack.Action();
         }
 
         public bool canSwitch()
@@ -306,6 +327,7 @@ namespace Mekaiju.AI
 
         public void TakeDamage(GameObject p_bodyPart, float p_amonunt)
         {
+            Debug.Log(name);
             BodyPart t_part = GetBodyPartWithGameObject(p_bodyPart);
             TakeDamage(t_part, p_amonunt);
         }

@@ -49,12 +49,6 @@ public class KaijuMotor : MonoBehaviour
         _agent.stoppingDistance = p_stopping;
     }
 
-    public void Stop()
-    {
-        if (!_agent.enabled && !_agent.isOnNavMesh) return;
-        _agent.ResetPath();
-    }
-
 
     /// <summary>
     /// Forces the Kaiju to look at the player
