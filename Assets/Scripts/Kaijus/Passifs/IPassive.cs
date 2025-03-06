@@ -24,7 +24,7 @@ namespace Mekaiju.AI.Passive
             _using = true;
         }
 
-        public virtual void Passive(KaijuInstance kaiju) { }
+        public virtual void Passive(KaijuInstance p_kaiju) { }
 
         public virtual void OnDamage() { }
 

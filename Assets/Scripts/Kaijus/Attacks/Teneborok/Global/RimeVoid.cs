@@ -16,18 +16,13 @@ namespace Mekaiju.AI.Attack
         [OverrideLabel("Hit cooldown (sec)")] public float rimVoidHitCooldown = 0.1f;
         [OverrideLabel("Modifier")][SOSelector] public Effect rimVoidEffect;
 
-        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public override void Active(IEntityInstance p_kaiju)
         {
-            return base.CanUse(kaiju, otherRange);
-        }
+            base.Active(p_kaiju);
 
-        public override void Active(IEntityInstance kaiju)
-        {
-            base.Active(kaiju);
-
-            KaijuInstance t_kaiju = (KaijuInstance)kaiju;
+            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
             t_kaiju.motor.StopKaiju(1f);
-            GameObject t_rim = GameObject.Instantiate(gameObjectRimVoid, kaiju.transform.position, Quaternion.identity);
+            GameObject t_rim = GameObject.Instantiate(gameObjectRimVoid, p_kaiju.transform.position, Quaternion.identity);
             RimVoidInstance t_rv = t_rim.GetComponent<RimVoidInstance>();
             t_rv.SetUp(t_kaiju, this);
         }

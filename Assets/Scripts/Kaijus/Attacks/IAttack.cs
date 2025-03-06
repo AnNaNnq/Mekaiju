@@ -32,38 +32,38 @@ namespace Mekaiju.AI.Attack {
             canUse = true;
         }
 
-        public virtual bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public virtual bool CanUse(KaijuInstance p_kaiju, float p_otherRange = 0)
         {
-            bool t_return = canUse && kaiju.TargetInRange(range);
-            if (otherRange > 0)
+            bool t_return = canUse && p_kaiju.TargetInRange(range);
+            if (p_otherRange > 0)
             {
-                t_return &= !kaiju.TargetInRange(otherRange);
+                t_return &= !p_kaiju.TargetInRange(p_otherRange);
             }
             return t_return;
         }
 
 
-        public bool CanUse(float p_range, float otherRange = 0)
+        public bool CanUse(float p_range, float p_otherRange = 0)
         {
             bool t_return = canUse && p_range <= range;
-            if (otherRange > 0)
+            if (p_otherRange > 0)
             {
-                t_return &= !(otherRange <= range);
+                t_return &= !(p_otherRange <= range);
             }
             return t_return;
         }
 
-        public virtual void Active(IEntityInstance kaiju) { canUse = false; }
+        public virtual void Active(IEntityInstance p_kaiju) { canUse = false; }
 
-        public virtual IEnumerator Attack(IEntityInstance kaiju)
+        public virtual IEnumerator Attack(IEntityInstance p_kaiju)
         {
             yield return null;
         }
 
-        public MechaInstance GetPlayerInstance(IEntityInstance kaiju)
+        public MechaInstance GetPlayerInstance(IEntityInstance p_kaiju)
         {
             // Calculer la position devant l'objet en tenant compte de sa rotation
-            Vector3 spherePosition = kaiju.transform.position + kaiju.transform.forward * forwardOffset;
+            Vector3 spherePosition = p_kaiju.transform.position + p_kaiju.transform.forward * forwardOffset;
 
             // D�tection des objets dans la sph�re
             Collider[] hitColliders = Physics.OverlapSphere(spherePosition, sphereRadius, layerMask);
