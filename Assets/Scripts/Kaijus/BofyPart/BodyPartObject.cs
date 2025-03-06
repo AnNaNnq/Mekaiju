@@ -19,7 +19,6 @@ namespace Mekaiju.AI.Body
 
         public void TakeDamage(float p_damage)
         {
-            Debug.Log(_instance.name);
             _instance.TakeDamage(gameObject, p_damage);
         }
     }
