@@ -60,18 +60,18 @@ namespace Mekaiju
         {
             GameObject t_go;
 
-            t_go = GameObject.Instantiate(_vfxDefaultPrefab, p_self.mecha.transform.Find("ChestPivot"));
+            t_go = GameObject.Instantiate(_vfxDefaultPrefab, p_self.parent.transform.Find("ChestPivot"));
             _vfxDefault = t_go.GetComponent<VisualEffect>();
             _vfxDefault.enabled = false;
 
-            t_go = GameObject.Instantiate(_vfxBreakPrefab, p_self.mecha.transform.Find("ChestPivot"));
+            t_go = GameObject.Instantiate(_vfxBreakPrefab, p_self.parent.transform.Find("ChestPivot"));
             _vfxBreak = t_go.GetComponent<VisualEffect>();
             _vfxBreak.enabled = false;
 
             _isActive = false;
             _isStopRequested = false;
 
-            if (p_self.mecha.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
+            if (p_self.parent.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
             {
                 _animationProxy = t_proxy;
             }
@@ -84,7 +84,7 @@ namespace Mekaiju
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
             return (
-                !_isActive && p_self.mecha.stamina - _consumption >= 0f &&
+                !_isActive && p_self.stamina - _consumption >= 0f &&
                 !p_self.states[State.Stun]
             );
         }
@@ -104,9 +104,9 @@ namespace Mekaiju
 
                 p_self.states[State.Protected] = true;
 
-                while (!_isStopRequested && p_self.mecha.stamina - (_consumption * Time.deltaTime) >= 0)
+                while (!_isStopRequested && p_self.stamina - (_consumption * Time.deltaTime) >= 0)
                 {
-                    p_self.mecha.ConsumeStamina(_consumption * Time.deltaTime);
+                    p_self.ConsumeStamina(_consumption * Time.deltaTime);
                     p_self.timePoints[TimePoint.LastAbilityTriggered] = Time.time;
                     yield return null;
                 }

@@ -40,7 +40,7 @@ namespace Mekaiju
             _isActive   = false;
             _inCooldown = false;
 
-            if (p_self.mecha.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
+            if (p_self.parent.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
             {
                 _animationProxy = t_proxy;
             }
@@ -49,7 +49,7 @@ namespace Mekaiju
                 Debug.LogWarning("Unable to find animator proxy on mecha!");
             }
 
-            if (p_self.mecha.TryGetComponent<Rigidbody>(out var t_rb))
+            if (p_self.parent.TryGetComponent<Rigidbody>(out var t_rb))
             {
                 _rigidbody = t_rb;
             }

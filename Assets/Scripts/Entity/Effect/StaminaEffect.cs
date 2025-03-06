@@ -9,7 +9,7 @@ namespace Mekaiju.Entity.Effect
         [SerializeField, Range(0f, 1f)]
         private float _percentPerSec;
 
-        public override void Tick(IEntityInstance self)
+        public override void Tick(EntityInstance self)
         {
             if (Time.time - self.timePoints[TimePoint.LastAbilityTriggered] > 2f)
             {
