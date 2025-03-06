@@ -17,7 +17,7 @@ namespace Mekaiju.Entity.Effect
         /// 
         /// </summary>
         /// <param name="self"></param>
-        public override void Tick(IEntityInstance p_self)
+        public override void Tick(EntityInstance p_self)
         {
             p_self.TakeDamage(_damage * Time.deltaTime);
         }

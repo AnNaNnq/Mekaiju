@@ -61,12 +61,12 @@ namespace Mekaiju
             _isAcitve   = false;
             _elapedTime = 0;
 
-            _ghost = p_self.mecha.gameObject.AddComponent<MeshTrailTut>();
+            _ghost = p_self.parent.gameObject.AddComponent<MeshTrailTut>();
             _ghost.config = _meshTrailConfig;
 
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
 
-            if (p_self.mecha.TryGetComponent<Rigidbody>(out var t_rb))
+            if (p_self.parent.TryGetComponent<Rigidbody>(out var t_rb))
             {
                 _rigidbody = t_rb;
             }
@@ -82,7 +82,7 @@ namespace Mekaiju
                 !_isAcitve && 
                 !p_self.states[State.Protected] && 
                 !p_self.states[State.Stun] &&
-                p_self.mecha.stamina - _consumption >= 0f &&
+                p_self.stamina - _consumption >= 0f &&
                 Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0    
             );
         }
@@ -92,12 +92,12 @@ namespace Mekaiju
             if (IsAvailable(p_self, p_opt))
             {
                 Vector2   t_input     = _input.action.ReadValue<Vector2>();
-                Transform t_transform = p_self.mecha.transform;
+                Transform t_transform = p_self.parent.transform;
                 _direction = (t_input.y * t_transform.forward + t_input.x * t_transform.right).normalized;
 
                 if (Mathf.Abs(_direction.sqrMagnitude) > 0)
                 {
-                    p_self.mecha.ConsumeStamina(_consumption);
+                    p_self.ConsumeStamina(_consumption);
                     p_self.states[State.MovementOverrided] = true;
 
                     _ghost.Trigger(_duration);

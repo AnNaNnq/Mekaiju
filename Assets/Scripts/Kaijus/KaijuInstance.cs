@@ -19,7 +19,7 @@ namespace Mekaiju.AI
     [RequireComponent(typeof(KaijuMotor))]
     [RequireComponent(typeof(KaijuAnimatorController))]
     [RequireComponent(typeof(Rigidbody))]
-    public class KaijuInstance : IEntityInstance
+    public class KaijuInstance : EntityInstance
     {
         [Header("General")]
         [Tag] public string targetTag;
@@ -32,7 +32,6 @@ namespace Mekaiju.AI
         public float timeBetweenTowAction = 1f;
         
         [field: SerializeField]
-        public List<StatefullEffect> effects { get; private set; }
         public InstanceContext context { get; private set; }
 
         public List<KaijuPassive> passives;
@@ -122,8 +121,9 @@ namespace Mekaiju.AI
             StartCoroutine(resetDps());
         }
 
-        private void Update()
+        public override void Update()
         {
+            base.Update();
             if (_isInFight)
             {
                 _brain.StarFight();
@@ -132,22 +132,11 @@ namespace Mekaiju.AI
             {
                 UseBehavior();
             }
-            effects.ForEach(effect => effect.Tick());
-            effects.RemoveAll(effect =>
-            {
-                if (effect.state == EffectState.Expired)
-                {
-                    effect.Dispose();
-                    return true;
-                }
-                return false;
-            });
-
         }
 
-        private void FixedUpdate()
+        public override void FixedUpdate()
         {
-            effects.ForEach(effect => effect.FixedTick());
+            base.FixedUpdate();
         }
 
         public void UseBehavior()
@@ -198,41 +187,6 @@ namespace Mekaiju.AI
         }
 
         /// <summary>
-        /// Adds a new effect to the list of active effects without a timeout. 
-        /// The effect will remain active indefinitely until it is manually removed.
-        /// </summary>
-        /// <param name="p_effect">The effect to be added.</param>
-        public IDisposable AddEffect(Effect p_effect)
-        {
-            effects.Add(new(this, p_effect));
-            return effects[^1];
-        }
-
-        /// <summary>
-        /// Adds a new effect to the list of active effects, with a specified duration.
-        /// </summary>
-        /// <param name="p_effect">The effect to be added.</param>
-        /// <param name="p_time">The duration of the effect in seconds.</param>
-        public IDisposable AddEffect(Effect p_effect, float p_time)
-        {
-            effects.Add(new(this, p_effect, p_time));
-            return effects[^1];
-        }
-
-        /// <summary>
-        /// Remove an effect.
-        /// </summary>
-        /// <param name="p_effect">The effect to remove.</param>
-        public void RemoveEffect(IDisposable p_effect)
-        {
-            if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
-            {
-                effects.Remove((StatefullEffect)p_effect);
-                p_effect.Dispose();
-            }
-        }
-
-        /// <summary>
         /// Get the body part with the GameObject
         /// </summary>
         /// <param name="p_object"></param>
@@ -268,9 +222,10 @@ namespace Mekaiju.AI
         #endregion
 
         #region implemation of IEntityInstance
-        public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
-
         public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
+
+        public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
+        public override float health     => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
 
         public void Heal(GameObject p_bodyPart, float p_amonunt)
         {
@@ -304,8 +259,6 @@ namespace Mekaiju.AI
 
         public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
         {
-            
-
             var t_defense = modifiers[Statistics.Defense].ComputeValuePercentage(stats.def);
             var t_damage  = modifiers[Statistics.Damage].ComputeValue(p_amonunt);
             Debug.Log(t_defense);

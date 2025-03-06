@@ -14,7 +14,7 @@ namespace Mekaiju
     /// 
     /// </summary>
     [Serializable]
-    public class MechaPartInstance : IEntityInstance
+    public class MechaPartInstance : EntityInstance
     {
         /// <summary>
         /// 
@@ -29,8 +29,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [field: SerializeField]
-        public float health { get; private set; }
+        private float _health;
 
         /// <summary>
         /// 
@@ -39,10 +38,11 @@ namespace Mekaiju
         /// <param name="p_config"></param>
         public void Initialize(MechaInstance p_inst, MechaPartDesc p_desc)
         {
-            mecha   = p_inst;
+            mecha  = p_inst;
+            parent = p_inst;
 
-            _desc  = p_desc;
-            health = baseHealth;
+            _desc   = p_desc;
+            _health = baseHealth;
 
             _desc.ability.behaviour?.Initialize(this);
         }
@@ -70,47 +70,59 @@ namespace Mekaiju
             _desc.ability.behaviour.Release();
         }
 
-        private void Update()
+        public override void Update()
         {
             _desc.ability.behaviour?.Tick(this);
         }
 
-        private void FixedUpdate()
+        public override void FixedUpdate()
         {
             _desc.ability.behaviour?.FixedTick(this);
         }
 
-#region IEntityInstance implementation
+        #region IEntityInstance implementation
         public override float ComputedStatistics(Statistics p_kind)
         {
-            return mecha.ComputedStatistics(p_kind);
+            return parent.ComputedStatistics(p_kind);
         }
 
-        public override EnumArray<Statistics, ModifierCollection> modifiers => mecha.modifiers;
+        public override EnumArray<Statistics, ModifierCollection> modifiers => parent.modifiers;
 
-        public override EnumArray<TimePoint, float> timePoints => mecha.timePoints;
-        public override EnumArray<State,     bool> states     => mecha.states;
+        public override EnumArray<TimePoint, float> timePoints => parent.timePoints;
+        public override EnumArray<State,     bool> states     => parent.states;
 
-        public override UnityEvent<float> onTakeDamage => mecha.onTakeDamage;
-        public override UnityEvent<float> onDealDamage => mecha.onDealDamage;
+        public override UnityEvent<float> onTakeDamage => parent.onTakeDamage;
+        public override UnityEvent<float> onDealDamage => parent.onDealDamage;
 
         public override bool isAlive => health > 0f;
 
-        public override float baseHealth => _desc.healthPercent * mecha.baseHealth;
+        public override float baseHealth => _desc.healthPercent * parent.baseHealth;
+        public override float health     => _health;
 
         public override void Heal(float p_heal)
         {
-            health = Mathf.Min(baseHealth, health + p_heal);
+            _health = Mathf.Min(baseHealth, _health + p_heal);
         }
 
         public override void TakeDamage(float p_damage)
         {
             var t_damage = p_damage - p_damage * ComputedStatistics(Statistics.Defense);
-            
-            mecha.timePoints[TimePoint.LastDamage] = Time.time;
-            health = Mathf.Max(0f, health - t_damage);
-
+            timePoints[TimePoint.LastDamage] = Time.time;
+            _health = Mathf.Max(0f, _health - t_damage);
             onTakeDamage.Invoke(t_damage);
+        }
+
+        public override float baseStamina => parent.baseStamina;
+        public override float stamina     => parent.stamina;
+
+        public override void ConsumeStamina(float p_amount)
+        {
+            parent.ConsumeStamina(p_amount);
+        }
+
+        public override void RestoreStamina(float p_amount)
+        {
+            parent.RestoreStamina(p_amount);
         }
     }
 #endregion

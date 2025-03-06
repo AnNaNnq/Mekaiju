@@ -47,7 +47,7 @@ namespace Mekaiju
         {
             _isActive = false;
 
-            if (p_self.mecha.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
+            if (p_self.parent.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
             {
                 _animationProxy = t_proxy;
             }
@@ -61,7 +61,7 @@ namespace Mekaiju
 
         public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
         {
-            return !_isActive && !p_self.states[State.Stun] && p_self.mecha.stamina - _consumption >= 0f;
+            return !_isActive && !p_self.states[State.Stun] && p_self.stamina - _consumption >= 0f;
         }
 
         public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
@@ -81,7 +81,7 @@ namespace Mekaiju
                 if (t_dist < _reachDistance)
                 {
                     // Make damage
-                    var t_damage = _damageFactor * p_self.mecha.ComputedStatistics(Statistics.Damage);
+                    var t_damage = _damageFactor * p_self.ComputedStatistics(Statistics.Damage);
                     p_target.TakeDamage(t_damage);
                     p_self.onDealDamage.Invoke(t_damage);
                 }
