@@ -60,18 +60,18 @@ namespace Mekaiju
         {
             GameObject t_go;
 
-            t_go = GameObject.Instantiate(_vfxDefaultPrefab, p_self.parent.transform.Find("ChestPivot"));
+            t_go = GameObject.Instantiate(_vfxDefaultPrefab, p_self.transform.Find("ChestPivot"));
             _vfxDefault = t_go.GetComponent<VisualEffect>();
             _vfxDefault.enabled = false;
 
-            t_go = GameObject.Instantiate(_vfxBreakPrefab, p_self.parent.transform.Find("ChestPivot"));
+            t_go = GameObject.Instantiate(_vfxBreakPrefab, p_self.transform.Find("ChestPivot"));
             _vfxBreak = t_go.GetComponent<VisualEffect>();
             _vfxBreak.enabled = false;
 
             _isActive = false;
             _isStopRequested = false;
 
-            if (p_self.parent.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
+            if (p_self.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
             {
                 _animationProxy = t_proxy;
             }
