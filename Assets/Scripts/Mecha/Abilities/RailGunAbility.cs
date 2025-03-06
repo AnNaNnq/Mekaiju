@@ -50,7 +50,7 @@ namespace Mekaiju
         private bool _isAnimationAction;
         private bool _isAnimationEnd;
 
-        public override void Initialize(MechaPartInstance p_self)
+        public override void Initialize(EntityInstance p_self)
         {
             _lastTriggerTime = 0f;
             _isActive = false;
@@ -59,7 +59,7 @@ namespace Mekaiju
             p_self.mecha.context.animationProxy.onRArm.AddListener(_OnAnimationEvent);
         }
 
-        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return (
                 !_isActive && Time.time - _lastTriggerTime >= _minTimeBetweenFire && 
@@ -68,7 +68,7 @@ namespace Mekaiju
             );
         }
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
+        public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             var t_now     = Time.time;
             var t_elapsed = t_now - _lastTriggerTime;
