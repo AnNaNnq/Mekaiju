@@ -10,24 +10,24 @@ namespace Mekaiju.AI.Attack
         [Separator]
         public float timeBeforeAttack = 1;
 
-        public override void Active(IEntityInstance kaiju)
+        public override void Active(IEntityInstance p_kaiju)
         {
-            base.Active(kaiju);
+            base.Active(p_kaiju);
 
-            kaiju.StartCoroutine(Attack(kaiju));
+            p_kaiju.StartCoroutine(Attack(p_kaiju));
         }
 
-        public override IEnumerator Attack(IEntityInstance kaiju)
+        public override IEnumerator Attack(IEntityInstance p_kaiju)
         {
-            base.Attack(kaiju);
+            base.Attack(p_kaiju);
 
-            KaijuInstance _instance = (KaijuInstance)kaiju;
+            KaijuInstance t_instance = (KaijuInstance)p_kaiju;
 
-            _instance.animator.AttackAnimation(nameof(SharpMandible));
+            t_instance.animator.AttackAnimation(nameof(SharpMandible));
 
             yield return new WaitForSeconds(timeBeforeAttack);
 
-            SendDamage(damage, kaiju);
+            SendDamage(damage, p_kaiju);
         }
     }
 }

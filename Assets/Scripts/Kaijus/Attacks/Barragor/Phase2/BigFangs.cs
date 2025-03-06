@@ -14,16 +14,11 @@ namespace Mekaiju.AI.Attack
         [OverrideLabel("Effect duration (sec)")]
         public float effectDuration = 2;
 
-        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public override void Active(IEntityInstance p_kaiju)
         {
-            return base.CanUse(kaiju, otherRange);
-        }
+            base.Active(p_kaiju);
 
-        public override void Active(IEntityInstance kaiju)
-        {
-            base.Active(kaiju);
-
-            SendDamage(damage, kaiju, effect, effectDuration);
+            SendDamage(damage, p_kaiju, effect, effectDuration);
         }
     }
 }

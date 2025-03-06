@@ -21,24 +21,24 @@ namespace Mekaiju.AI.Attack
 
         Transform _start;
 
-        public override void Active(IEntityInstance kaiju)
+        public override void Active(IEntityInstance p_kaiju)
         {
-            base.Active(kaiju);
+            base.Active(p_kaiju);
 
-            KaijuInstance t_kaiju = (KaijuInstance)kaiju;
+            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
 
             _start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
             t_kaiju.motor.StopKaiju();
 
             _rend = _start.GetComponent<MeshRenderer>();
-            kaiju.StartCoroutine(Attack(kaiju));
+            p_kaiju.StartCoroutine(Attack(p_kaiju));
         }
 
-        public override IEnumerator Attack(IEntityInstance kaiju)
+        public override IEnumerator Attack(IEntityInstance p_kaiju)
         {
-            base.Attack(kaiju);
+            base.Attack(p_kaiju);
 
-            KaijuInstance t_kaiju = (KaijuInstance)kaiju;
+            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
 
             bool t_stop = false;
             float t_time = 0;

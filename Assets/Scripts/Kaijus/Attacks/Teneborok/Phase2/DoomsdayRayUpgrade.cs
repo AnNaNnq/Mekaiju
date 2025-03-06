@@ -2,7 +2,6 @@ using Mekaiju.AI.Attack.Instance;
 using Mekaiju.Attribute;
 using Mekaiju.Entity;
 using MyBox;
-using System.Collections;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack
@@ -19,20 +18,15 @@ namespace Mekaiju.AI.Attack
         public int maxBounce = 5;
         public float speed = 10;
 
-        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public override void Active(IEntityInstance p_kaiju)
         {
-            return base.CanUse(kaiju, otherRange);
-        }
+            base.Active(p_kaiju);
 
-        public override void Active(IEntityInstance kaiju)
-        {
-            base.Active(kaiju);
+            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
 
-            KaijuInstance t_kaiju = (KaijuInstance)kaiju;
+            Transform t_start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
 
-            Transform start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
-
-            GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, start.position, Quaternion.identity);
+            GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, t_start.position, Quaternion.identity);
             DoomsdayRayUpgradeObject t_druo = t_doomsday.GetComponent<DoomsdayRayUpgradeObject>();
 
             t_druo.Init(this, t_kaiju);

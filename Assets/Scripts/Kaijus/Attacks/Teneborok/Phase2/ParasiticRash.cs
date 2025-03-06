@@ -11,19 +11,14 @@ namespace Mekaiju.AI.Attack
         public int nbParasites = 3;
         public GameObject parasitePrefab;
 
-        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public override void Active(IEntityInstance p_kaiju)
         {
-            return base.CanUse(kaiju, otherRange);
-        }
-
-        public override void Active(IEntityInstance kaiju)
-        {
-            base.Active(kaiju);
+            base.Active(p_kaiju);
             for (int i = 0; i < nbParasites; i++)
             {
-                Vector3 p_pos = UtilsFunctions.GetRandomPointInCircle(range, kaiju.transform);
-                p_pos = new Vector3(p_pos.x, UtilsFunctions.GetGround(p_pos), p_pos.z);
-                GameObject t_parasite = GameObject.Instantiate(parasitePrefab, p_pos, Quaternion.identity);
+                Vector3 t_pos = UtilsFunctions.GetRandomPointInCircle(range, p_kaiju.transform);
+                t_pos = new Vector3(t_pos.x, UtilsFunctions.GetGround(t_pos), t_pos.z);
+                GameObject t_parasite = GameObject.Instantiate(parasitePrefab, t_pos, Quaternion.identity);
             }
         }
 

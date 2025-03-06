@@ -19,14 +19,9 @@ namespace Mekaiju.AI.Attack
 
         Rigidbody _rb;
 
-        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public override void Active(IEntityInstance p_kaiju)
         {
-            return base.CanUse(kaiju, otherRange);
-        }
-
-        public override void Active(IEntityInstance kaiju)
-        {
-            KaijuInstance t_kaiju = kaiju as KaijuInstance;
+            KaijuInstance t_kaiju = p_kaiju as KaijuInstance;
             base.Active(t_kaiju);
             t_kaiju.OnCollision += HandleCollision;
             _rb = t_kaiju.GetComponent<Rigidbody>();
@@ -39,10 +34,10 @@ namespace Mekaiju.AI.Attack
 
         }
 
-        public override IEnumerator Attack(IEntityInstance kaiju)
+        public override IEnumerator Attack(IEntityInstance p_kaiju)
         {
             float t_time = 0;
-            KaijuInstance t_kaiju = kaiju as KaijuInstance;
+            KaijuInstance t_kaiju = p_kaiju as KaijuInstance;
             Vector3 t_targetPosition = t_kaiju.GetTargetPos();
 
             while (t_time < chargePrepTime)
@@ -54,16 +49,16 @@ namespace Mekaiju.AI.Attack
             }
 
             t_kaiju.motor.enabled = false;
-            Vector3 t_startPos = kaiju.transform.position;
+            Vector3 t_startPos = p_kaiju.transform.position;
             Vector3 t_direction = (t_targetPosition - t_startPos).normalized;
 
             _rb.AddForce(t_direction * chargeSpeed, ForceMode.Impulse);
-            SendDamage(damage, kaiju);
+            SendDamage(damage, p_kaiju);
         }
 
-        void HandleCollision(Collision collision)
+        void HandleCollision(Collision p_collision)
         {
-            if (collision.collider.CompareTag("Player"))
+            if (p_collision.collider.CompareTag("Player"))
             {
                 SendDamage(damage, _kaiju);
             }

@@ -11,7 +11,6 @@ using Mekaiju.Entity.Effect;
 using Mekaiju.AI.Objet;
 using Mekaiju.AI.Body;
 using Mekaiju.AI.Behavior;
-using Mekaiju.AI.PhaseAttack;
 
 namespace Mekaiju.AI
 {
