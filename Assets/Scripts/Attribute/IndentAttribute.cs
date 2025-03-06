@@ -18,8 +18,6 @@ namespace Mekaiju.Attribute
         }
     }
 }
-
-// Création du PropertyDrawer associé
 #if UNITY_EDITOR
 namespace Mekaiju.Internal
 {
@@ -37,5 +35,5 @@ namespace Mekaiju.Internal
             EditorGUI.indentLevel = previousIndent;
         }
     }
-#endif
 }
+#endif
