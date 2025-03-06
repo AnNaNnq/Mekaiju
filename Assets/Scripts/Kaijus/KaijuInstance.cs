@@ -327,7 +327,6 @@ namespace Mekaiju.AI
 
         public void TakeDamage(GameObject p_bodyPart, float p_amonunt)
         {
-            Debug.Log(name);
             BodyPart t_part = GetBodyPartWithGameObject(p_bodyPart);
             TakeDamage(t_part, p_amonunt);
         }
@@ -356,6 +355,11 @@ namespace Mekaiju.AI
             }
 
             onTakeDamage.Invoke(p_amonunt);
+
+            if (IsDeath())
+            {
+                Destroy(gameObject);
+            }
         }
 
         public override void TakeDamage(float p_damage)
@@ -365,6 +369,18 @@ namespace Mekaiju.AI
             {
                 TakeDamage(part, t_amountForPart);
             }
+        }
+
+        public bool IsDeath()
+        {
+            foreach(BodyPart t_part in bodyParts)
+            {
+                if (!t_part.isDestroyed)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         #endregion
 
