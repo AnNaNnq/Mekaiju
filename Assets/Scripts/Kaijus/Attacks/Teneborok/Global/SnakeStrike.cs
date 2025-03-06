@@ -8,8 +8,6 @@ namespace Mekaiju.AI.Attack
     public class SnakeStrike : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
         public float timeBeforeAttack = 1;
 
         public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)

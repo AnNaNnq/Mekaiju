@@ -8,8 +8,6 @@ namespace Mekaiju.AI.Attack
     public class BigFangs : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
         [SOSelector]
         [OverrideLabel("Effect")]
         public Effect effect;

@@ -10,8 +10,6 @@ namespace Mekaiju.AI.Attack
     public class RockLook : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
         [OverrideLabel("Look Duration (sec)")]
         public float lookDuration = 2f;
         [SOSelector]

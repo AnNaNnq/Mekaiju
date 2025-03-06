@@ -8,8 +8,6 @@ namespace Mekaiju.AI.Attack
     public class SharpBlowUpgrade : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
         public float timeBeforeAttack = 1;
         [OverrideLabel("Second attack damage (% of DMG)")]
         public float secondDamage = 50;

@@ -10,8 +10,6 @@ namespace Mekaiju.AI.Attack
     public class RimeVoid : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
         [OverrideLabel("Rim prefab")][OpenPrefabButton] public GameObject gameObjectRimVoid;
         [OverrideLabel("Fire prefab")][OpenPrefabButton] public GameObject gameObjectRimVoidFire;
         [OverrideLabel("Duration (sec)")] public int rimVoidDuration = 2;

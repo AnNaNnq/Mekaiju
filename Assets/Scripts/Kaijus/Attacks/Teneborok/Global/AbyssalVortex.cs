@@ -9,8 +9,6 @@ namespace Mekaiju.AI.Attack
     public class AbyssalVortex : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
         [OverrideLabel("Gravitational zone prefab")][OpenPrefabButton] public GameObject gameObjectAbyssalVortex;
         [OverrideLabel("Kaillou prefab")][OpenPrefabButton] public GameObject gameObjectRock;
         [OverrideLabel("Vortex Radius")] public float radius = 10f;

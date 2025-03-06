@@ -8,8 +8,6 @@ namespace Mekaiju.AI.Attack
     public class Charge : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
         [OverrideLabel("Charge Speed (Force Pulse)")]
         [Tooltip("Not % of speed")]
         [Range(100, 300)]
