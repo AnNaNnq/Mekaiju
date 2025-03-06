@@ -21,7 +21,7 @@ namespace Mekaiju.AI.Attack
         {
             base.Attack(kaiju);
 
-            LittleKaijuInstance _instance = (LittleKaijuInstance)kaiju;
+            KaijuInstance _instance = (KaijuInstance)kaiju;
 
             _instance.animator.AttackAnimation(nameof(SharpMandible));
 

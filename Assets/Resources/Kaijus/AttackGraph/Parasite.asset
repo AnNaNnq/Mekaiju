@@ -15,12 +15,21 @@ MonoBehaviour:
   NodeLinks:
   - BaseNodeGUID: 898ef260-b0f1-4793-9ce9-d29dcb46d48a
     PortName: Next
-    TargetNodeGUID: 44f0b159-1e87-4ad1-b3eb-a32b84a7a0ec
+    TargetNodeGUID: dc11b5f0-2a11-416b-9d38-913a3593caa9
+  - BaseNodeGUID: f59e5f1a-4cd0-4227-bc9a-e301683bca68
+    PortName: Attack 1
+    TargetNodeGUID: 6f5d1c44-b6df-406b-9860-ad34c37f8fcc
   NodeData:
-  - guid: 44f0b159-1e87-4ad1-b3eb-a32b84a7a0ec
-    name: SharpBlow
-    position: {x: 256, y: 130}
+  - guid: dc11b5f0-2a11-416b-9d38-913a3593caa9
+    name: SharpMandible
+    position: {x: 218, y: 67}
+  - guid: 6f5d1c44-b6df-406b-9860-ad34c37f8fcc
+    name: SharpMandible
+    position: {x: 443, y: 241}
   StartNodeData:
   - guid: 898ef260-b0f1-4793-9ce9-d29dcb46d48a
     name: Start
     position: {x: 0, y: 0}
+  - guid: f59e5f1a-4cd0-4227-bc9a-e301683bca68
+    name: SharpMandible
+    position: {x: 30, y: 241}

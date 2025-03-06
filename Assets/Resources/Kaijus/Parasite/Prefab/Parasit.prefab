@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 778982917194888651}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.2319865, y: 1.445, z: -1.2407584}
+  m_LocalPosition: {x: 0.038354993, y: 1.445, z: 0.2834038}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -583,7 +583,7 @@ Transform:
   m_GameObject: {fileID: 3081483534454118439}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.2183415, y: 1.768, z: -1.2211622}
+  m_LocalPosition: {x: 0.052, y: 1.768, z: 0.303}
   m_LocalScale: {x: 4, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -925,7 +925,7 @@ Transform:
   m_GameObject: {fileID: 3682152459484819300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.2319865, y: 1.6195003, z: -1.2407584}
+  m_LocalPosition: {x: 0.038354993, y: 1.6195003, z: 0.2834038}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -946,13 +946,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3484389796809755718}
-  - component: {fileID: 7759839395007113295}
+  - component: {fileID: 5435266232935017257}
   - component: {fileID: -4089865425118230419}
   - component: {fileID: 4850046717014816842}
   - component: {fileID: 5598165714789465786}
   - component: {fileID: 6090387611900626272}
-  - component: {fileID: 6066111778540442398}
   - component: {fileID: 531402681230691959}
+  - component: {fileID: 2693807773875493286}
+  - component: {fileID: 8885435871738780090}
   m_Layer: 9
   m_Name: Parasit
   m_TagString: Untagged
@@ -979,7 +980,7 @@ Transform:
   - {fileID: 8208327067666342281}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7759839395007113295
+--- !u!114 &5435266232935017257
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -988,21 +989,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 4004609287388799233}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2333d20389f5c248adb37cc7b87a0d8, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e772473092a5da41a4744cebedb3c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 0
+  targetTag: Player
   stats:
     health: 1
-    dmg: 50
-    def: 0
+    dmg: 1000
+    def: 10
     speed: 3.5
-  targetTag: Player
-  timeBetweenTowAttack: 1
+  bodyParts:
+  - nom: Body
+    part:
+    - {fileID: 4004609287388799233}
+    health: 1
+    isDestroyed: 0
+  behaviors:
+  - rid: 7914790620855009409
+  timeBetweenTowAction: 1
   <effects>k__BackingField: []
-  attacks:
-  - {fileID: 11400000, guid: 521cabaea2382fd4b93ba7fec3b6ab8c, type: 2}
   passives: []
+  _currentPhase: 2
+  attackGraphPhaseOne: {fileID: 11400000, guid: b2d194cc3f89bfd4e8c2d1da84c27659, type: 2}
+  attackGraphPhaseTow: {fileID: 11400000, guid: b2d194cc3f89bfd4e8c2d1da84c27659, type: 2}
+  changePhaseAction: {fileID: 0}
+  checkRange: 0
+  debugRange: 0
+  dps: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 7914790620855009409
+      type: {class: AgroBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
+      data:
+        speed: 100
+        canTrigger: 0
+        triggerArea: 30
+        triggerOnce: 0
 --- !u!54 &-4089865425118230419
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1086,20 +1109,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00e08b5fcb585a2419eedd9e133694d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6066111778540442398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4004609287388799233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02cd06fc653fbc94e9b9f25ab3c61636, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _instance: {fileID: 7759839395007113295}
-  isOnKaiju: 0
 --- !u!65 &531402681230691959
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1115,12 +1124,38 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2.4606507, y: 2.7006066, z: 4.026755}
+  m_Center: {x: 0.049236655, y: 1.4251007, z: 0.30768186}
+--- !u!114 &2693807773875493286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4004609287388799233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e09045f5883ced84b89a2eb6ea61e5a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lastAttack: Start
+  _canAttack: 1
+--- !u!114 &8885435871738780090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4004609287388799233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53af2620ee7ce5a4cbb7f5fcf3c7990e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4420231074985410534
 GameObject:
   m_ObjectHideFlags: 0
@@ -2160,7 +2195,7 @@ Transform:
   m_GameObject: {fileID: 9119411371022489653}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.2319865, y: 1.6195003, z: -1.2407584}
+  m_LocalPosition: {x: 0.038354993, y: 1.6195003, z: 0.2834038}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
