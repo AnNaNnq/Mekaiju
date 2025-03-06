@@ -97,10 +97,10 @@ namespace Mekaiju
                 t_wb.OnCollide.AddListener(
                     (t_go, t_collision) => 
                     {
-                        if (t_collision.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
+                        if (t_collision.collider.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
                         {
                             var t_damage = _damageFactor * p_self.mecha.modifiers[ModifierTarget.Damage].ComputeValue(p_self.mecha.desc.damage);
-                            p_target.TakeDamage(t_damage);
+                            t_bpo.TakeDamage(t_damage);
                             p_self.onDealDamage.Invoke(t_damage);
                         }
 

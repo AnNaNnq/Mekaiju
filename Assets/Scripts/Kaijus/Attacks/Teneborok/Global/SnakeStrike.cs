@@ -1,34 +1,31 @@
 using UnityEngine;
 using System.Collections;
 using MyBox;
+using Mekaiju.Entity;
 
 namespace Mekaiju.AI.Attack
 {
     public class SnakeStrike : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
         public float timeBeforeAttack = 1;
 
-        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public override void Active(IEntityInstance p_kaiju)
         {
-            return base.CanUse(kaiju, otherRange);
+            base.Active(p_kaiju);
+            p_kaiju.StartCoroutine(Attack(p_kaiju));
         }
 
-        public override void Active(KaijuInstance kaiju)
+        public override IEnumerator Attack(IEntityInstance p_kaiju)
         {
-            base.Active(kaiju);
-            kaiju.StartCoroutine(Attack(kaiju));
-        }
+            base.Attack(p_kaiju);
 
-        public override IEnumerator Attack(KaijuInstance kaiju)
-        {
-            base.Attack(kaiju);
-            kaiju.animator.AttackAnimation(nameof(SnakeStrike));
+            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
+
+            t_kaiju.animator.AttackAnimation(nameof(SnakeStrike));
             yield return new WaitForSeconds(timeBeforeAttack);
-            kaiju.brain.MakeAction();
-            SendDamage(damage, kaiju);
+            t_kaiju.brain.MakeAction();
+            SendDamage(damage, p_kaiju);
         }
     }
 }

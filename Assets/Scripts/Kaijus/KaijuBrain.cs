@@ -7,8 +7,6 @@ using UnityEngine;
 
 namespace Mekaiju.AI
 {
-    [RequireComponent(typeof(KaijuInstance))]
-    [RequireComponent(typeof(KaijuMotor))]
     public class KaijuBrain : MonoBehaviour
     {
         KaijuInstance _instance;
@@ -151,7 +149,7 @@ namespace Mekaiju.AI
 
                 if (t_canAttack)
                 {
-                    _motor.Stop();
+                    _motor.agent.ResetPath();
                     _motor.LookTarget();
                     t_kaijuAttacks[i].attack.Active(_instance);
                     _lastAttack = t_kaijuAttacks[i].name;

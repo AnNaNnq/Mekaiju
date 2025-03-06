@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb21259124df937458b8e9a96bee5aaf, type: 3}
+  m_Name: Parasite
+  m_EditorClassIdentifier: 
+  NodeLinks:
+  - BaseNodeGUID: 898ef260-b0f1-4793-9ce9-d29dcb46d48a
+    PortName: Next
+    TargetNodeGUID: dc11b5f0-2a11-416b-9d38-913a3593caa9
+  - BaseNodeGUID: f59e5f1a-4cd0-4227-bc9a-e301683bca68
+    PortName: Attack 1
+    TargetNodeGUID: 6f5d1c44-b6df-406b-9860-ad34c37f8fcc
+  NodeData:
+  - guid: dc11b5f0-2a11-416b-9d38-913a3593caa9
+    name: SharpMandible
+    position: {x: 218, y: 67}
+  - guid: 6f5d1c44-b6df-406b-9860-ad34c37f8fcc
+    name: SharpMandible
+    position: {x: 443, y: 241}
+  StartNodeData:
+  - guid: 898ef260-b0f1-4793-9ce9-d29dcb46d48a
+    name: Start
+    position: {x: 0, y: 0}
+  - guid: f59e5f1a-4cd0-4227-bc9a-e301683bca68
+    name: SharpMandible
+    position: {x: 30, y: 241}

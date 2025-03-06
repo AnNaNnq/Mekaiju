@@ -1,7 +1,7 @@
 using Mekaiju.AI.Attack.Instance;
 using Mekaiju.Attribute;
+using Mekaiju.Entity;
 using MyBox;
-using System.Collections;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack
@@ -9,43 +9,27 @@ namespace Mekaiju.AI.Attack
     public class DoomsdayRayUpgrade : IAttack
     {
         [Separator]
-        [OverrideLabel("Impact damage (% of DMG)")]
-        public int damage = 10;
         [OverrideLabel("Fire tick damage (% of DMG)")]
         public float fireDamage;
-        public float fireTick = 0.2f;
+        public float fireTickRate = 0.2f;
         [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject doomsdayObject;
         [OpenPrefabButton] public GameObject fireZone;
         [HideInInspector] public Transform start;
         public int maxBounce = 5;
         public float speed = 10;
 
-        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public override void Active(IEntityInstance p_kaiju)
         {
-            return base.CanUse(kaiju, otherRange);
-        }
+            base.Active(p_kaiju);
 
-        public override void Active(KaijuInstance kaiju)
-        {
-            base.Active(kaiju);
-            kaiju.StartCoroutine(Attack(kaiju));
+            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
 
-            Transform start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
+            Transform t_start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
 
-            GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, start.position, Quaternion.identity);
+            GameObject t_doomsday = GameObject.Instantiate(doomsdayObject, t_start.position, Quaternion.identity);
             DoomsdayRayUpgradeObject t_druo = t_doomsday.GetComponent<DoomsdayRayUpgradeObject>();
 
-            t_druo.Init(this);
-        }
-
-        public override IEnumerator Attack(KaijuInstance kaiju)
-        {
-            base.Attack(kaiju);
-            while (true)
-            {
-                yield return new WaitForSeconds(0.1f);
-                
-            }
+            t_druo.Init(this, t_kaiju);
         }
     }
 }
