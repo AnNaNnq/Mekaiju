@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using MyBox;
 using System.Linq;
 using Mekaiju.Attribute;
-using Mekaiju.Utils;
 using System;
 using System.Collections;
 using Mekaiju.Entity;
@@ -36,8 +35,6 @@ namespace Mekaiju.AI
 
         public List<KaijuPassive> passives;
 
-        //private bool _canBehaviorSwitch = true;
-
         public GameObject target { get; private set; }
 
         [HideInInspector]
@@ -62,6 +59,10 @@ namespace Mekaiju.AI
         [SOSelector]
         [OverrideLabel("Attack Graph (Phase 2)")]
         public KaijuAttackContainer attackGraphPhaseTow;
+
+        [Separator]
+        [SOSelector]
+        public KaijuPhaseAttack changePhaseAction;
 
         [Separator]
         [Header("Debug")]
@@ -116,6 +117,10 @@ namespace Mekaiju.AI
             }
 
             context = new();
+            if(changePhaseAction != null)
+            {
+                changePhaseAction.attack.Init(this);
+            }
 
             CheckAllBehaviorsDisabeled();
             StartCoroutine(resetDps());
@@ -132,6 +137,12 @@ namespace Mekaiju.AI
             {
                 UseBehavior();
             }
+
+
+            if(Input.GetKeyDown(KeyCode.N))
+            {
+                ChangePhase();
+            }
         }
 
         public override void FixedUpdate()
@@ -146,6 +157,13 @@ namespace Mekaiju.AI
                 behavior.Trigger();
                 if (behavior.active) behavior.Run();
             }
+        }
+
+        public void ChangePhase()
+        {
+            _currentPhase = 2;
+            motor.StopKaiju();
+            changePhaseAction.attack.Action();
         }
 
         public bool canSwitch()
@@ -164,9 +182,20 @@ namespace Mekaiju.AI
             }
         }
 
+        public float GetRealDamage(float p_amonunt)
+        {
+            var t_damage = modifiers[Statistics.Damage].ComputeValue(p_amonunt);
+            return stats.dmg * (t_damage/100);
+        }
+
         public void Combat()
         {
             _isInFight = true;
+        }
+
+        public float TargetInRange()
+        {
+            return Vector3.Distance(target.transform.position, transform.position);
         }
 
         public bool TargetInRange(float p_range)
@@ -260,10 +289,9 @@ namespace Mekaiju.AI
         public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
         {
             var t_defense = modifiers[Statistics.Defense].ComputeValuePercentage(stats.def);
-            var t_damage  = modifiers[Statistics.Damage].ComputeValue(p_amonunt);
             Debug.Log(t_defense);
 
-            var t_realDamage = t_damage * (1- (t_defense/100));
+            var t_realDamage = p_amonunt * (1- (t_defense/100));
 
             p_bodyPart.health -= p_amonunt;
 
@@ -280,6 +308,11 @@ namespace Mekaiju.AI
             }
 
             onTakeDamage.Invoke(p_amonunt);
+
+            if (IsDeath())
+            {
+                Destroy(gameObject);
+            }
         }
 
         public override void TakeDamage(float p_damage)
@@ -289,6 +322,18 @@ namespace Mekaiju.AI
             {
                 TakeDamage(part, t_amountForPart);
             }
+        }
+
+        public bool IsDeath()
+        {
+            foreach(BodyPart t_part in bodyParts)
+            {
+                if (!t_part.isDestroyed)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         #endregion
 

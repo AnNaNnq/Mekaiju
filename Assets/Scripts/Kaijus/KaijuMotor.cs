@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(KaijuInstance))]
 [RequireComponent(typeof(NavMeshAgent))]
 public class KaijuMotor : MonoBehaviour
 {
@@ -50,12 +49,6 @@ public class KaijuMotor : MonoBehaviour
         _agent.stoppingDistance = p_stopping;
     }
 
-    public void Stop()
-    {
-        if (!_agent.enabled && !_agent.isOnNavMesh) return;
-        _agent.ResetPath();
-    }
-
 
     /// <summary>
     /// Forces the Kaiju to look at the player
@@ -89,6 +82,19 @@ public class KaijuMotor : MonoBehaviour
     {
         if (!_agent.enabled) return;
         StartCoroutine(Stop(p_time));
+    }
+
+    public void StopKaiju()
+    {
+        if (!_agent.enabled) return;
+        _agent.ResetPath();
+        _agent.enabled = false;
+    }
+
+    public void StartKaiju()
+    {
+        if (_agent.enabled) return;
+        _agent.enabled = true;
     }
 
     private IEnumerator Stop(float p_time)

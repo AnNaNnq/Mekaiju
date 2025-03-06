@@ -1,3 +1,4 @@
+using Mekaiju.Entity;
 using MyBox;
 using System.Collections;
 using UnityEngine;
@@ -7,29 +8,30 @@ namespace Mekaiju.AI.Attack
     public class SharpBlowUpgrade : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
         public float timeBeforeAttack = 1;
+        [OverrideLabel("Second attack damage (% of DMG)")]
+        public float secondDamage = 50;
+        public float timeBeforeSecondAttack = 1; 
 
-        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public override void Active(EntityInstance p_kaiju)
         {
-            return base.CanUse(kaiju, otherRange);
+            base.Active(p_kaiju);
+            p_kaiju.StartCoroutine(Attack(p_kaiju));
         }
 
-        public override void Active(KaijuInstance kaiju)
+        public override IEnumerator Attack(EntityInstance p_kaiju)
         {
-            base.Active(kaiju);
-            kaiju.StartCoroutine(Attack(kaiju));
-        }
+            base.Attack(p_kaiju);
 
-        public override IEnumerator Attack(KaijuInstance kaiju)
-        {
-            base.Attack(kaiju);
-            kaiju.animator.AttackAnimation(nameof(SharpBlowUpgrade));
+            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
+
+            t_kaiju.animator.AttackAnimation(nameof(SharpBlowUpgrade));
             yield return new WaitForSeconds(timeBeforeAttack);
-            Debug.Log($"Sharp Blow + fait {damage} degats");
-            kaiju.brain.MakeAction();
-            SendDamage(damage, kaiju);
+            SendDamage(damage, p_kaiju);
+
+            yield return new WaitForSeconds(timeBeforeSecondAttack);
+            SendDamage(secondDamage, p_kaiju);
+            t_kaiju.brain.MakeAction();
         }
 
     }

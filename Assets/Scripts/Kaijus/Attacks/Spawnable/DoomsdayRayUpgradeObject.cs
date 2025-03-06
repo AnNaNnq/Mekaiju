@@ -10,13 +10,15 @@ namespace Mekaiju.AI.Attack.Instance
 
         List<Vector3> _firePos = new List<Vector3>();
 
+        KaijuInstance _instance;
         private Transform _startPoint;
         public LayerMask layerMask;
 
-        public void Init(DoomsdayRayUpgrade p_stat)
+        public void Init(DoomsdayRayUpgrade p_stat, KaijuInstance p_kaiju)
         {
             _stat = p_stat;
             _startPoint = transform;
+            _instance = p_kaiju;
 
             _firePos.Clear();
             CastLaser(transform.position, transform.forward + (-transform.up));
@@ -99,7 +101,8 @@ namespace Mekaiju.AI.Attack.Instance
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Player");
+                MechaInstance mechaInstance = other.GetComponent<MechaInstance>();
+                mechaInstance.TakeDamage(_instance.GetRealDamage(_stat.damage));
             }
             else if (other.CompareTag("Ground"))
             {
