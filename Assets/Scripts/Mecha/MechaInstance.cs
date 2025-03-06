@@ -42,6 +42,8 @@ namespace Mekaiju
         [SerializeField] 
         private EnumArray<MechaPart, MechaPartInstance> _parts;
 
+        public Ability shieldAbility;
+
         /// <summary>
         /// 
         /// </summary>
@@ -61,6 +63,9 @@ namespace Mekaiju
             AddEffect(Resources.Load<Effect>("Mecha/Objects/Effect/Heal"));
 
             _stamina = desc.stamina;
+
+            shieldAbility = Resources.Load<Ability>("Mecha/Objects/Ability/ShieldAbility");
+            shieldAbility.behaviour.Initialize(this);
 
             var t_main = Instantiate(desc.prefab, transform);
             _parts = desc.parts.Select((key, part) => 

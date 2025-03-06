@@ -203,12 +203,12 @@ public class PlayerController : MonoBehaviour
     
     private void OnShield(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.Chest].TriggerAbility(null, null));
+        StartCoroutine(_instance.shieldAbility.behaviour.Trigger(_instance, null, null));
     }
     
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
-        _instance[MechaPart.Chest].ReleaseAbility();
+        _instance.shieldAbility.behaviour.Release();
     }
     
     private void OnJump(InputAction.CallbackContext p_context)
