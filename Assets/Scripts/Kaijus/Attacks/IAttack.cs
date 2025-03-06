@@ -4,6 +4,7 @@ using UnityEngine;
 using Mekaiju.Entity.Effect;
 using MyBox;
 using Mekaiju.Entity;
+using Mekaiju.Attribute;
 
 namespace Mekaiju.AI.Attack {
     [System.Serializable]
@@ -15,13 +16,15 @@ namespace Mekaiju.AI.Attack {
 
         public bool canMakeDamage = true;
 
-        [ConditionalField(nameof(canMakeDamage))]
+        [ConditionalField(nameof(canMakeDamage))] [Indent]
+        public float damage = 50;
+        [ConditionalField(nameof(canMakeDamage))] [Indent]
         public bool blockable;
-        [ConditionalField(nameof(canMakeDamage))]
+        [ConditionalField(nameof(canMakeDamage))] [Indent]
         public float sphereRadius = 4f;
-        [ConditionalField(nameof(canMakeDamage))]
+        [ConditionalField(nameof(canMakeDamage))] [Indent]
         public float forwardOffset = 7f;
-        [ConditionalField(nameof(canMakeDamage))]
+        [ConditionalField(nameof(canMakeDamage))] [Indent]
         public LayerMask layerMask;
 
         public void Init()

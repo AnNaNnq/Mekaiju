@@ -8,8 +8,6 @@ namespace Mekaiju.AI.Attack
     public class FrontAttack : IAttack
     {
         [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
         public float attackRange = 10;
         [OverrideLabel("Sprint Speed (% of Speed")]
         public float sprintSpeed = 110;

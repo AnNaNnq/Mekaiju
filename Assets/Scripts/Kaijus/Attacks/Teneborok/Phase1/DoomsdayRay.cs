@@ -10,7 +10,6 @@ namespace Mekaiju.AI
     public class DoomsdayRay : IAttack
     {
         [Separator]
-        public int damage = 10;
         [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject doomsdayObject;
         [HideInInspector] public Transform start;
         [OverrideLabel("Ray Speed")] public float speed = 10f;

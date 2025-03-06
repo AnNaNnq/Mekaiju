@@ -10,8 +10,6 @@ namespace Mekaiju.AI.Attack
     public class DoomsdayRayUpgrade : IAttack
     {
         [Separator]
-        [OverrideLabel("Impact damage (% of DMG)")]
-        public int damage = 10;
         [OverrideLabel("Fire tick damage (% of DMG)")]
         public float fireDamage;
         public float fireTickRate = 0.2f;
