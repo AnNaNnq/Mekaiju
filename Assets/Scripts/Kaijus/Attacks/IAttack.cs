@@ -91,12 +91,6 @@ namespace Mekaiju.AI.Attack {
                     t_kaiju.AddDPS(t_damage);
                     t_kaiju.UpdateUI();
                 }
-                else if (p_kaiju as LittleKaijuInstance)
-                {
-                    LittleKaijuInstance t_little = p_kaiju as LittleKaijuInstance;
-                    float t_damage = t_little.GetRealDamage(p_damage);
-                    mecha.TakeDamage(t_damage);
-                }
                 
                 if(p_effet != null)
                 {

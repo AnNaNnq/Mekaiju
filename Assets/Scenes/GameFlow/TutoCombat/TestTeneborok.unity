@@ -5586,83 +5586,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 455302254}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &459496888 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4004609287388799233, guid: 20ecb1f7033925845a94daef1711ac76, type: 3}
-  m_PrefabInstance: {fileID: 1520727389}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &459496897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 459496888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53af2620ee7ce5a4cbb7f5fcf3c7990e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &459496898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 459496888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e09045f5883ced84b89a2eb6ea61e5a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _lastAttack: Start
-  _canAttack: 1
---- !u!114 &459496899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 459496888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e772473092a5da41a4744cebedb3c88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetTag: Player
-  stats:
-    health: 1
-    dmg: 1000
-    def: 10
-    speed: 3.5
-  bodyParts:
-  - nom: Body
-    part:
-    - {fileID: 459496888}
-    health: 1
-    isDestroyed: 0
-  behaviors:
-  - rid: 7914790620855009409
-  timeBetweenTowAction: 1
-  <effects>k__BackingField: []
-  passives: []
-  _currentPhase: 2
-  attackGraphPhaseOne: {fileID: 11400000, guid: b2d194cc3f89bfd4e8c2d1da84c27659, type: 2}
-  attackGraphPhaseTow: {fileID: 0}
-  changePhaseAction: {fileID: 0}
-  checkRange: 0
-  debugRange: 0
-  dps: 0
-  references:
-    version: 2
-    RefIds:
-    - rid: 7914790620855009409
-      type: {class: AgroBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
-      data:
-        speed: 100
-        canTrigger: 0
-        triggerArea: 30
-        triggerOnce: 0
 --- !u!1 &468519516
 GameObject:
   m_ObjectHideFlags: 0
@@ -16295,25 +16218,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Parasit
       objectReference: {fileID: 0}
-    - target: {fileID: 6066111778540442398, guid: 20ecb1f7033925845a94daef1711ac76, type: 3}
-      propertyPath: _instance
-      value: 
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7759839395007113295, guid: 20ecb1f7033925845a94daef1711ac76, type: 3}
-    - {fileID: 6066111778540442398, guid: 20ecb1f7033925845a94daef1711ac76, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4004609287388799233, guid: 20ecb1f7033925845a94daef1711ac76, type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 459496899}
-    - targetCorrespondingSourceObject: {fileID: 4004609287388799233, guid: 20ecb1f7033925845a94daef1711ac76, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 459496898}
-    - targetCorrespondingSourceObject: {fileID: 4004609287388799233, guid: 20ecb1f7033925845a94daef1711ac76, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 459496897}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20ecb1f7033925845a94daef1711ac76, type: 3}
 --- !u!1 &1521185347
 GameObject:
