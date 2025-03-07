@@ -5,13 +5,21 @@ using System.Linq;
 namespace Mekaiju.Entity
 {
     [Serializable]
+    public enum ModifierKind
+    {
+        Flat, Percent
+    }
+
+    [Serializable]
     public class Modifier
     {
-        public float value;
+        public float        value;
+        public ModifierKind kind;
 
-        public Modifier(float p_value)
+        public Modifier(float p_value, ModifierKind p_kind)
         {
             value = p_value;
+            kind  = p_kind;
         }
     }
 
@@ -25,9 +33,9 @@ namespace Mekaiju.Entity
             _values = new();
         }
 
-        public Modifier Add(float value)
+        public Modifier Add(float p_value, ModifierKind p_kind)
         {
-            _values.Add(new(value));
+            _values.Add(new(p_value, p_kind));
             return _values[^1];
         }
 
@@ -38,12 +46,10 @@ namespace Mekaiju.Entity
 
         public float ComputeValue(float p_baseValue)
         {
-            return p_baseValue + _values.Aggregate(0f, (t_acc, t_mod) => t_acc + (t_mod.value * p_baseValue));
-        }    
-
-        public float ComputeValuePercentage(float p_baseValue)
-        {
-            return Math.Max(_values.Aggregate(0f, (t_acc, t_mod) => t_acc + (t_mod.value + p_baseValue)), p_baseValue);
+            return p_baseValue + _values.Aggregate(
+                0f, 
+                (t_acc, t_mod) => t_acc + (t_mod.kind == ModifierKind.Flat ? t_mod.value : (t_mod.value * p_baseValue))
+            );
         }
     }
 }

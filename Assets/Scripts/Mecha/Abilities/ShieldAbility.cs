@@ -99,8 +99,8 @@ namespace Mekaiju
                 _animationProxy.animator.SetBool("IsShielding", true);
                 
                 // TODO: rework if other modifier
-                var t_sMod = p_self.modifiers[Statistics.Speed]  .Add(_speedModifier);
-                var t_dMod = p_self.modifiers[Statistics.Defense].Add(_defenseModifier);
+                var t_sMod = p_self.modifiers[Statistics.Speed]  .Add(_speedModifier,   ModifierKind.Percent);
+                var t_dMod = p_self.modifiers[Statistics.Defense].Add(_defenseModifier, ModifierKind.Flat);
 
                 p_self.states[State.Protected] = true;
 
