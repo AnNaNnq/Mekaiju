@@ -47,6 +47,11 @@ namespace Mekaiju.AI
             Attack(t_startAttack);
         }
 
+        public void ResetAttack()
+        {
+            _lastAttack = "Start";
+        }
+
         public string GetGUIDStartWithName(string p_name)
         {
             return _attackGraph.StartNodeData
@@ -119,7 +124,7 @@ namespace Mekaiju.AI
             {
                 foreach (KaijuPassive passive in t_activePassives)
                 {
-                    passive.passive.Passive(_instance);
+                    passive.passive.Run(_instance);
                 }
                 _canAttack = false;
                 return;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class Charge : IAttack
+    public class Charge : Attack
     {
         [Separator]
         [OverrideLabel("Charge Speed (Force Pulse)")]
@@ -30,11 +30,11 @@ namespace Mekaiju.AI.Attack
             t_kaiju.motor.StopAI();
 
 
-            t_kaiju.StartCoroutine(Attack(t_kaiju));
+            t_kaiju.StartCoroutine(AttackEnumerator(t_kaiju));
 
         }
 
-        public override IEnumerator Attack(EntityInstance p_kaiju)
+        public override IEnumerator AttackEnumerator(EntityInstance p_kaiju)
         {
             float t_time = 0;
             KaijuInstance t_kaiju = p_kaiju as KaijuInstance;

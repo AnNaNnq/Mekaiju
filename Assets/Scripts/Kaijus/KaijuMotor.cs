@@ -109,9 +109,4 @@ public class KaijuMotor : MonoBehaviour
     {
         _agent.enabled = false;
     }
-
-    public void StartIA()
-    {
-        _agent.enabled = true;
-    }
 }

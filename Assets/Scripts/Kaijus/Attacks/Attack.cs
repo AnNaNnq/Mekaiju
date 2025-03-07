@@ -8,7 +8,7 @@ using Mekaiju.Attribute;
 
 namespace Mekaiju.AI.Attack {
     [System.Serializable]
-    public abstract class IAttack
+    public abstract class Attack
     {
         public float cooldown;
         public float range;
@@ -55,7 +55,7 @@ namespace Mekaiju.AI.Attack {
 
         public virtual void Active(EntityInstance p_kaiju) { canUse = false; }
 
-        public virtual IEnumerator Attack(EntityInstance p_kaiju)
+        public virtual IEnumerator AttackEnumerator(EntityInstance p_kaiju)
         {
             yield return null;
         }

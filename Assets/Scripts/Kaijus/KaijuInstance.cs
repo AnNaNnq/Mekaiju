@@ -29,7 +29,7 @@ namespace Mekaiju.AI
         [field: SerializeReference, SubclassPicker]
         public List<KaijuBehavior> behaviors = new List<KaijuBehavior>();
         public float timeBetweenTowAction = 1f;
-        
+
         [field: SerializeField]
         public InstanceContext context { get; private set; }
 
@@ -50,8 +50,7 @@ namespace Mekaiju.AI
 
         private KaijuAnimatorController _animation;
 
-        [SerializeField]
-        private int _currentPhase = 2;
+        public int currentPhase = 2;
 
         [SOSelector]
         [OverrideLabel("Attack Graph (Phase 1)")]
@@ -78,7 +77,7 @@ namespace Mekaiju.AI
 
         public KaijuAttackContainer GetGraph()
         {
-            if (_currentPhase == 1) return attackGraphPhaseOne;
+            if (currentPhase == 1) return attackGraphPhaseOne;
             else return attackGraphPhaseTow;
         }
 
@@ -97,7 +96,7 @@ namespace Mekaiju.AI
 
             dps = 0;
 
-            _currentPhase = 1;
+            currentPhase = 1;
 
             // We add the BodyPartObject script to bodyParts objects if they don't already have it
             foreach (BodyPart t_part in bodyParts)
@@ -161,9 +160,14 @@ namespace Mekaiju.AI
 
         public void ChangePhase()
         {
-            _currentPhase = 2;
             motor.StopKaiju();
             changePhaseAction.attack.Action();
+        }
+
+        public void SetPhase(int p_phase)
+        {
+            currentPhase = p_phase;
+            _brain.ResetAttack();
         }
 
         public bool canSwitch()
@@ -251,10 +255,11 @@ namespace Mekaiju.AI
         #endregion
 
         #region implemation of IEntityInstance
-        public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
+        public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.maxHealth);
 
-        public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
-        public override float health     => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
+        public override float health => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.currentHealth);
+
+        public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
 
         public void Heal(GameObject p_bodyPart, float p_amonunt)
         {
@@ -264,8 +269,8 @@ namespace Mekaiju.AI
 
         public void Heal(BodyPart p_bodyPart, float p_amonunt)
         {
-            p_bodyPart.health += p_amonunt;
-            if (p_bodyPart.isDestroyed && p_bodyPart.health > 0)
+            p_bodyPart.currentHealth += p_amonunt;
+            if (p_bodyPart.isDestroyed && p_bodyPart.currentHealth > 0)
             {
                 p_bodyPart.isDestroyed = false;
             }
@@ -293,9 +298,9 @@ namespace Mekaiju.AI
 
             var t_realDamage = p_amonunt * (1- (t_defense/100));
 
-            p_bodyPart.health -= p_amonunt;
+            p_bodyPart.currentHealth -= p_amonunt;
 
-            if (!p_bodyPart.isDestroyed && p_bodyPart.health <= 0)
+            if (!p_bodyPart.isDestroyed && p_bodyPart.currentHealth <= 0)
             {
                 p_bodyPart.isDestroyed = true;
             }
@@ -312,6 +317,11 @@ namespace Mekaiju.AI
             if (IsDeath())
             {
                 Destroy(gameObject);
+            }
+
+            if(currentPhase == 1 && (health <= (baseHealth / 50)))
+            {
+                ChangePhase();
             }
         }
 

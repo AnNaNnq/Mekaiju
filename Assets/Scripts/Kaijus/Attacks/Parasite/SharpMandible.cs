@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace Mekaiju.AI.Attack
 {
-    public class SharpMandible : IAttack
+    public class SharpMandible : Attack
     {
         [Separator]
         public float timeBeforeAttack = 1;
@@ -14,12 +14,12 @@ namespace Mekaiju.AI.Attack
         {
             base.Active(p_kaiju);
 
-            p_kaiju.StartCoroutine(Attack(p_kaiju));
+            p_kaiju.StartCoroutine(AttackEnumerator(p_kaiju));
         }
 
-        public override IEnumerator Attack(EntityInstance p_kaiju)
+        public override IEnumerator AttackEnumerator(EntityInstance p_kaiju)
         {
-            base.Attack(p_kaiju);
+            base.AttackEnumerator(p_kaiju);
 
             KaijuInstance t_instance = (KaijuInstance)p_kaiju;
 

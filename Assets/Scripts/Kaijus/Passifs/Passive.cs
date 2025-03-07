@@ -1,7 +1,7 @@
 namespace Mekaiju.AI.Passive
 {
     [System.Serializable]
-    public abstract class IPassive
+    public abstract class Passive
     {
         public float cooldown;
         public float launchTime;
@@ -12,7 +12,7 @@ namespace Mekaiju.AI.Passive
 
         protected bool _canUse = true;
 
-        public IPassive()
+        public Passive()
         {
             isUsed = true;
             _using = true;
@@ -24,7 +24,7 @@ namespace Mekaiju.AI.Passive
             _using = true;
         }
 
-        public virtual void Passive(KaijuInstance p_kaiju) { }
+        public virtual void Run(KaijuInstance p_kaiju) { }
 
         public virtual void OnDamage() { }
 
