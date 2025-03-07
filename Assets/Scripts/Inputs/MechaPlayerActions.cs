@@ -1039,6 +1039,33 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""E"",
+                    ""type"": ""Button"",
+                    ""id"": ""302dee20-e598-4df1-b819-79a2eec4436d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Space"",
+                    ""type"": ""Button"",
+                    ""id"": ""5baaf094-d989-482a-a6d9-231975a4482e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""R"",
+                    ""type"": ""Button"",
+                    ""id"": ""843ffeb7-390b-40f5-a84e-018788cae35a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1061,6 +1088,72 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Q"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1584a304-a627-43f3-9fe1-5ae1aee3ce7f"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""E"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""738f39f1-5cf8-4c18-9529-3965d126477f"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""E"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""001b834b-08cd-4770-a2e9-ebd0cfffa5dc"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Space"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f13196d-0208-4173-bc89-e836db31c25b"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Space"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a6e4ff7-7922-4bd1-8404-1452fd94c95c"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""R"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""255d29cc-2f80-4fcc-8692-5495eba7523b"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""R"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1160,6 +1253,9 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         // QTE
         m_QTE = asset.FindActionMap("QTE", throwIfNotFound: true);
         m_QTE_Q = m_QTE.FindAction("Q", throwIfNotFound: true);
+        m_QTE_E = m_QTE.FindAction("E", throwIfNotFound: true);
+        m_QTE_Space = m_QTE.FindAction("Space", throwIfNotFound: true);
+        m_QTE_R = m_QTE.FindAction("R", throwIfNotFound: true);
     }
 
     ~@MechaPlayerActions()
@@ -1489,11 +1585,17 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_QTE;
     private List<IQTEActions> m_QTEActionsCallbackInterfaces = new List<IQTEActions>();
     private readonly InputAction m_QTE_Q;
+    private readonly InputAction m_QTE_E;
+    private readonly InputAction m_QTE_Space;
+    private readonly InputAction m_QTE_R;
     public struct QTEActions
     {
         private @MechaPlayerActions m_Wrapper;
         public QTEActions(@MechaPlayerActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Q => m_Wrapper.m_QTE_Q;
+        public InputAction @E => m_Wrapper.m_QTE_E;
+        public InputAction @Space => m_Wrapper.m_QTE_Space;
+        public InputAction @R => m_Wrapper.m_QTE_R;
         public InputActionMap Get() { return m_Wrapper.m_QTE; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1506,6 +1608,15 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Q.started += instance.OnQ;
             @Q.performed += instance.OnQ;
             @Q.canceled += instance.OnQ;
+            @E.started += instance.OnE;
+            @E.performed += instance.OnE;
+            @E.canceled += instance.OnE;
+            @Space.started += instance.OnSpace;
+            @Space.performed += instance.OnSpace;
+            @Space.canceled += instance.OnSpace;
+            @R.started += instance.OnR;
+            @R.performed += instance.OnR;
+            @R.canceled += instance.OnR;
         }
 
         private void UnregisterCallbacks(IQTEActions instance)
@@ -1513,6 +1624,15 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Q.started -= instance.OnQ;
             @Q.performed -= instance.OnQ;
             @Q.canceled -= instance.OnQ;
+            @E.started -= instance.OnE;
+            @E.performed -= instance.OnE;
+            @E.canceled -= instance.OnE;
+            @Space.started -= instance.OnSpace;
+            @Space.performed -= instance.OnSpace;
+            @Space.canceled -= instance.OnSpace;
+            @R.started -= instance.OnR;
+            @R.performed -= instance.OnR;
+            @R.canceled -= instance.OnR;
         }
 
         public void RemoveCallbacks(IQTEActions instance)
@@ -1607,5 +1727,8 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
     public interface IQTEActions
     {
         void OnQ(InputAction.CallbackContext context);
+        void OnE(InputAction.CallbackContext context);
+        void OnSpace(InputAction.CallbackContext context);
+        void OnR(InputAction.CallbackContext context);
     }
 }
