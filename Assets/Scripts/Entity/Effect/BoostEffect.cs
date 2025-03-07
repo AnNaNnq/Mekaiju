@@ -1,3 +1,4 @@
+using System;
 using Mekaiju.Utils;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Mekaiju.Entity.Effect
         /// 
         /// </summary>
         [SerializeField]
-        private EnumArray<Statistics, float> _modifiers;
+        private EnumArray<Statistics, Modifier> _modifiers;
 
         /// <summary>
         /// 
@@ -23,7 +24,7 @@ namespace Mekaiju.Entity.Effect
         {
             _modifierRefs = new();
             _modifiers.ForEach((t_key, t_value) => {
-                _modifierRefs[t_key] = p_self.modifiers[t_key].Add(t_value);
+                _modifierRefs[t_key] = p_self.modifiers[t_key].Add(t_value.value, t_value.kind);
             });
         }
 
