@@ -257,7 +257,7 @@ namespace Mekaiju.AI
         #region implemation of IEntityInstance
         public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.maxHealth);
 
-        public float currentHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.currentHealth);
+        public override float health => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.currentHealth);
 
         public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
 
@@ -319,7 +319,7 @@ namespace Mekaiju.AI
                 Destroy(gameObject);
             }
 
-            if(currentPhase == 1 && (currentHealth <= (baseHealth / 50)))
+            if(currentPhase == 1 && (health <= (baseHealth / 50)))
             {
                 ChangePhase();
             }
