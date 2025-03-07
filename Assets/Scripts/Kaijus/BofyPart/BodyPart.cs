@@ -7,7 +7,8 @@ namespace Mekaiju.AI.Body
     {
         public string nom;
         public GameObject[] part;
-        public float health;
+        public float maxHealth;
+        public float currentHealth;
         public bool isDestroyed;
     }
 }

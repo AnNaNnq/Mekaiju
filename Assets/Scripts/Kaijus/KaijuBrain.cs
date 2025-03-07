@@ -47,6 +47,11 @@ namespace Mekaiju.AI
             Attack(t_startAttack);
         }
 
+        public void ResetAttack()
+        {
+            _lastAttack = "Start";
+        }
+
         public string GetGUIDStartWithName(string p_name)
         {
             return _attackGraph.StartNodeData
