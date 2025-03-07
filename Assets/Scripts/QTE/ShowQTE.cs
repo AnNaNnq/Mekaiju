@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,8 @@ namespace Mekaiju.QTE
         public Image outline;
 
         public GameObject qteUI;
+
+        public TextMeshProUGUI inputName;
 
         private void Awake()
         {
@@ -32,5 +35,9 @@ namespace Mekaiju.QTE
             outline.fillAmount = p_value;
         }
 
+        public void SetName(string p_name)
+        {
+            inputName.text = p_name;
+        }
     }
 }

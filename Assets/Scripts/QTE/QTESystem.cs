@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Mekaiju.AI.PhaseAttack;
 using System.Collections;
 using UnityEngine;
-
 namespace Mekaiju.QTE
 {
     public class QTESystem
@@ -35,7 +34,10 @@ namespace Mekaiju.QTE
             _currentInput = 0;
 
             _qteAction.Enable();
-            _qteAction.QTE.Q.performed += QTE_Q;
+            _qteAction.QTE.Q.performed += (context) => QTEPressed(context, 0);
+            _qteAction.QTE.E.performed += (context) => QTEPressed(context, 1);
+            _qteAction.QTE.R.performed += (context) => QTEPressed(context, 3);
+            _qteAction.QTE.Space.performed += (context) => QTEPressed(context, 2);
 
             _showQTE = ShowQTE.instance;
             _showQTE.SetForeground(0);
@@ -43,15 +45,10 @@ namespace Mekaiju.QTE
             _showQTE.qteUI.SetActive(false);
         }
 
-        private void QTE_Q(InputAction.CallbackContext p_context)
+        public void QTEPressed(InputAction.CallbackContext p_context, int p_input)
         {
             if (!_qteActive) return;
-            QTEPressed(_phaseAttack.input, 0);
-        }
-
-        public void QTEPressed(int p_input, int p_currentInput)
-        {
-            if(p_currentInput == p_input)
+            if (_phaseAttack.input == p_input)
             {
                 _currentInput++;
             }
@@ -65,6 +62,8 @@ namespace Mekaiju.QTE
             _showQTE.qteUI.SetActive(true);
 
             _showQTE.StartCoroutine(qteSpam());
+
+            _showQTE.SetName(qteInputActions[_phaseAttack.input].GetBindingDisplayString(0));
         }
 
         public IEnumerator qteSpam()
