@@ -19,7 +19,7 @@ namespace Mekaiju.AI.Attack
 
         Rigidbody _rb;
 
-        public override void Active(IEntityInstance p_kaiju)
+        public override void Active(EntityInstance p_kaiju)
         {
             KaijuInstance t_kaiju = p_kaiju as KaijuInstance;
             base.Active(t_kaiju);
@@ -34,7 +34,7 @@ namespace Mekaiju.AI.Attack
 
         }
 
-        public override IEnumerator Attack(IEntityInstance p_kaiju)
+        public override IEnumerator Attack(EntityInstance p_kaiju)
         {
             float t_time = 0;
             KaijuInstance t_kaiju = p_kaiju as KaijuInstance;

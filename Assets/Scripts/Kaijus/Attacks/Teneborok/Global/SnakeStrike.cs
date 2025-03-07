@@ -10,13 +10,13 @@ namespace Mekaiju.AI.Attack
         [Separator]
         public float timeBeforeAttack = 1;
 
-        public override void Active(IEntityInstance p_kaiju)
+        public override void Active(EntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
             p_kaiju.StartCoroutine(Attack(p_kaiju));
         }
 
-        public override IEnumerator Attack(IEntityInstance p_kaiju)
+        public override IEnumerator Attack(EntityInstance p_kaiju)
         {
             base.Attack(p_kaiju);
 

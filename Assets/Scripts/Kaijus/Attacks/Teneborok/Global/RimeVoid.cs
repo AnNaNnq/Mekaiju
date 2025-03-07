@@ -16,7 +16,7 @@ namespace Mekaiju.AI.Attack
         [OverrideLabel("Hit cooldown (sec)")] public float rimVoidHitCooldown = 0.1f;
         [OverrideLabel("Modifier")][SOSelector] public Effect rimVoidEffect;
 
-        public override void Active(IEntityInstance p_kaiju)
+        public override void Active(EntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
 

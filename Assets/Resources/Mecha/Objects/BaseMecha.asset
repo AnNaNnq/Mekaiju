@@ -13,24 +13,27 @@ MonoBehaviour:
   m_Name: BaseMecha
   m_EditorClassIdentifier: 
   <stamina>k__BackingField: 100
-  <damage>k__BackingField: 100
-  <defense>k__BackingField: 0
-  <speed>k__BackingField: 50
+  statistics:
+    _array:
+    - 100
+    - 0
+    - 100
+    - 1600
   <prefab>k__BackingField: {fileID: 4060840817664273264, guid: d043022a11d9a4bb68702ba78e43d53b, type: 3}
   <parts>k__BackingField:
     _array:
-    - <health>k__BackingField: 250
+    - <healthPercent>k__BackingField: 0.15625
       <isAbilityReplaceable>k__BackingField: 1
       ability: {fileID: 11400000, guid: 498a1c5da7ac444a99ef89b5962522be, type: 2}
-    - <health>k__BackingField: 500
+    - <healthPercent>k__BackingField: 0.3125
       <isAbilityReplaceable>k__BackingField: 1
-      ability: {fileID: 11400000, guid: f345f41745b724afd86c9717339e9ef9, type: 2}
-    - <health>k__BackingField: 250
+      ability: {fileID: 11400000, guid: 9b5a1aa128757411d802cfea6168083a, type: 2}
+    - <healthPercent>k__BackingField: 0.15625
       <isAbilityReplaceable>k__BackingField: 1
       ability: {fileID: 11400000, guid: d0e9dd6c574bf490b99b630046a00346, type: 2}
-    - <health>k__BackingField: 250
+    - <healthPercent>k__BackingField: 0.15625
       <isAbilityReplaceable>k__BackingField: 1
       ability: {fileID: 11400000, guid: f10b9573766e54572ad4f6fb3bc05198, type: 2}
-    - <health>k__BackingField: 350
+    - <healthPercent>k__BackingField: 0.21875
       <isAbilityReplaceable>k__BackingField: 0
       ability: {fileID: 11400000, guid: 589ff5f39c3dc430ab2b635edf0ad02f, type: 2}

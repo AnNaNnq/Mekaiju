@@ -4,6 +4,7 @@ using Mekaiju.AI;
 using Mekaiju.AI.Body;
 using Mekaiju.Utils;
 using UnityEngine;
+using Mekaiju.Entity;
 
 namespace Mekaiju
 {
@@ -49,7 +50,7 @@ namespace Mekaiju
             }
         }
 
-        public override void Initialize(MechaPartInstance p_self)
+        public override void Initialize(EntityInstance p_self)
         {
             foreach (var t_ability in _abilities)
             {
@@ -60,7 +61,7 @@ namespace Mekaiju
             };
         }
 
-        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             if (typeof(E).IsAssignableFrom(p_opt.GetType()))
             {
@@ -74,7 +75,7 @@ namespace Mekaiju
             return false;
         }
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
+        public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (typeof(E).IsAssignableFrom(p_opt.GetType()))
             {
@@ -91,7 +92,7 @@ namespace Mekaiju
             }
         }
 
-        public override void Tick(MechaPartInstance p_self)
+        public override void Tick(EntityInstance p_self)
         {
             foreach (var t_ability in _abilities)
             {
@@ -102,7 +103,7 @@ namespace Mekaiju
             }
         }
 
-        public override void FixedTick(MechaPartInstance p_self)
+        public override void FixedTick(EntityInstance p_self)
         {
             foreach (var t_ability in _abilities)
             {

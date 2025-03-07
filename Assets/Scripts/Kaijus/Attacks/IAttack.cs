@@ -53,14 +53,14 @@ namespace Mekaiju.AI.Attack {
             return t_return;
         }
 
-        public virtual void Active(IEntityInstance p_kaiju) { canUse = false; }
+        public virtual void Active(EntityInstance p_kaiju) { canUse = false; }
 
-        public virtual IEnumerator Attack(IEntityInstance p_kaiju)
+        public virtual IEnumerator Attack(EntityInstance p_kaiju)
         {
             yield return null;
         }
 
-        public MechaInstance GetPlayerInstance(IEntityInstance p_kaiju)
+        public MechaInstance GetPlayerInstance(EntityInstance p_kaiju)
         {
             // Calculer la position devant l'objet en tenant compte de sa rotation
             Vector3 spherePosition = p_kaiju.transform.position + p_kaiju.transform.forward * forwardOffset;
@@ -77,7 +77,7 @@ namespace Mekaiju.AI.Attack {
             return null;
         }
 
-        public void SendDamage(float p_damage, IEntityInstance p_kaiju, Effect p_effet = null, float p_effetDuration = -1)
+        public void SendDamage(float p_damage, EntityInstance p_kaiju, Effect p_effet = null, float p_effetDuration = -1)
         {
             MechaInstance mecha = GetPlayerInstance(p_kaiju);
 
@@ -101,7 +101,7 @@ namespace Mekaiju.AI.Attack {
             p_kaiju.StartCoroutine(Cooldown(p_kaiju));
         }
 
-        public IEnumerator Cooldown(IEntityInstance p_kaiju)
+        public IEnumerator Cooldown(EntityInstance p_kaiju)
         {
            yield return p_kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
         }

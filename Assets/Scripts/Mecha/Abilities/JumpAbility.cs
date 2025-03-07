@@ -30,17 +30,38 @@ namespace Mekaiju
         private bool _isActive;
         private bool _inCooldown;
 
-        private AnimationState _animationState;
+        private AnimationState     _animationState;
+        private MechaAnimatorProxy _animationProxy;
+        private Rigidbody          _rigidbody;
 
-        public override void Initialize(MechaPartInstance p_self)
+        public override void Initialize(EntityInstance p_self)
         {
             _requested  = false;
             _isActive   = false;
             _inCooldown = false;
-            p_self.mecha.context.animationProxy.onJump.AddListener(_OnJumpAnimationEvent);
+
+            if (p_self.parent.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
+            {
+                _animationProxy = t_proxy;
+            }
+            else
+            {
+                Debug.LogWarning("Unable to find animator proxy on mecha!");
+            }
+
+            if (p_self.parent.TryGetComponent<Rigidbody>(out var t_rb))
+            {
+                _rigidbody = t_rb;
+            }
+            else
+            {
+                Debug.LogWarning("Unable to find rigidbody on mecha!");
+            }
+
+            _animationProxy.onJump.AddListener(_OnJumpAnimationEvent);
         }
 
-        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return (
                 !_isActive && 
@@ -50,14 +71,14 @@ namespace Mekaiju
             );
         }
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
+        public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {  
             if (IsAvailable(p_self, p_opt))
             {
                 _isActive       = true;
                 _animationState = AnimationState.Idle;
 
-                p_self.mecha.context.animationProxy.animator.SetTrigger("Jump");
+                _animationProxy.animator.SetTrigger("Jump");
 
                 // Wait for animation action
                 float t_timout = _actionTriggerTimout;
@@ -82,12 +103,12 @@ namespace Mekaiju
             }
         }
 
-        public override void FixedTick(MechaPartInstance p_self)
+        public override void FixedTick(EntityInstance p_self)
         {
             // Perform physic jump if requested
             if (_requested)
             {
-                p_self.mecha.context.rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
+                _rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
                 _requested = false;
             }
         }

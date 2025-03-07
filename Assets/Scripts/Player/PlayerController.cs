@@ -87,8 +87,6 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Torse.performed += OnTorse;
         _playerActions.Player.Pause.performed += OnPause;
 
-        _instance.context.moveAction = _moveAction;
-
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
         Cursor.visible = false; // Make the cursor invisible during gameplay
 
@@ -205,12 +203,12 @@ public class PlayerController : MonoBehaviour
     
     private void OnShield(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.Chest].TriggerAbility(null, null));
+        StartCoroutine(_instance.shieldAbility.behaviour.Trigger(_instance, null, null));
     }
     
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
-        _instance[MechaPart.Chest].ReleaseAbility();
+        _instance.shieldAbility.behaviour.Release();
     }
     
     private void OnJump(InputAction.CallbackContext p_context)
@@ -289,7 +287,7 @@ public class PlayerController : MonoBehaviour
 
         if (!_instance.states[State.MovementOverrided] && !_instance.states[State.Stun])
         {
-            _speed = _instance.modifiers[ModifierTarget.Speed].ComputeValue(_instance.desc.speed) * _speedFactor;
+            _speed = _instance.ComputedStatistics(Statistics.Speed) * _speedFactor;
 
             if (_isGrounded)
             {
