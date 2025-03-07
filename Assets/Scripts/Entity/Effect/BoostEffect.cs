@@ -12,12 +12,12 @@ namespace Mekaiju.Entity.Effect
         /// 
         /// </summary>
         [SerializeField]
-        private EnumArray<ModifierTarget, float> _modifiers;
+        private EnumArray<Statistics, float> _modifiers;
 
         /// <summary>
         /// 
         /// </summary>
-        private EnumArray<ModifierTarget, Modifier> _modifierRefs;
+        private EnumArray<Statistics, Modifier> _modifierRefs;
 
         public override void OnAdd(EntityInstance p_self)
         {

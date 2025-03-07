@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Mekaiju.Entity.Effect;
 using Mekaiju.Utils;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,17 +11,17 @@ namespace Mekaiju.Entity
     /// A base class for all entity instance
     /// Allow effects on them
     /// </summary>
-    public abstract class EntityInstance : MonoBehaviour
+    public abstract class EntityInstance : MonoBehaviour, IDamageable, IStaminable, IEffectable
     {
         /// <summary>
-        /// Must be invoke in TakeDamage implementation
+        /// Store effect to apply to the current entity.
         /// </summary>
-        public virtual UnityEvent<float> onTakeDamage { get; private set; } = new();
+        private List<StatefullEffect> effects = new();
 
         /// <summary>
-        /// 
+        /// Store a reference to the parent.
         /// </summary>
-        public virtual UnityEvent<float> onDealDamage { get; private set; } = new();
+        public EntityInstance parent { get; protected set; } = null;
 
         /// <summary>
         /// Allow time point tracking
@@ -32,50 +35,93 @@ namespace Mekaiju.Entity
         public virtual EnumArray<State, bool> states { get; } = new(() => false);
 
         /// <summary>
-        /// Allow buff/debuff effect
+        /// Bind base entity stats.
+        /// Must be overrided to use computedStats.
         /// </summary>
-        public virtual EnumArray<ModifierTarget, ModifierCollection> modifiers { get; } = new(() => new());
+        protected virtual EnumArray<Statistics, float> statistics { get; }
 
         /// <summary>
-        /// Return if entity is alive
+        /// Used to apply modifer on statistics.
         /// </summary>
-        public abstract bool isAlive { get; }
+        public virtual EnumArray<Statistics, ModifierCollection> modifiers { get; } = new(() => new());
 
         /// <summary>
-        /// Gets the base health of the entity.
+        /// Compute stats with modifiers.
         /// </summary>
+        /// <param name="p_kind">The targeted statistics.</param>
+        /// <returns>The computed statistic.</returns>
+        public virtual float ComputedStatistics(Statistics p_kind)
+        {
+            return modifiers[p_kind].ComputeValue(statistics[p_kind]);
+        }
+
+        public virtual UnityEvent<float> onTakeDamage { get; } = new();
+        public virtual UnityEvent<float> onDealDamage { get; } = new();
+        
+        public abstract bool isAlive    { get; }
+        public abstract float health     { get; }
         public abstract float baseHealth { get; }
 
-        /// <summary>
-        /// Heals the entity by restoring a specified amount of health points.
-        /// </summary>
-        /// <param name="p_amount">The amount of health to restore.</param>
-        public abstract void Heal(float p_amount);
-
-        /// <summary>
-        /// Inflicts damage on the entity, reducing its health points.
-        /// </summary>
-        /// <param name="p_damage">The amount of damage to deal.</param>
+        public abstract void Heal      (float p_amount);
         public abstract void TakeDamage(float p_damage);
 
-        /// <summary>
-        /// Gets the base stamina of the entity.
-        /// Can be overridden if stamina management is required.
-        /// </summary>
-        public virtual float baseStamina { get => 0f; }
+        public virtual float baseStamina => 0f;
+        public virtual float stamina     => 0f;
 
-        /// <summary>
-        /// Reduces the entity's stamina by consuming a specified amount.
-        /// Can be overridden if stamina management is required.
-        /// </summary>
-        /// <param name="p_amount">The amount of stamina to consume.</param>
         public virtual void ConsumeStamina(float p_amount) {}
+        public virtual void RestoreStamina(float p_amount) {}
+
+        public UnityEvent<StatefullEffect> onAddEffect    { get; } = new();
+        public UnityEvent<StatefullEffect> onRemoveEffect { get; } = new();
+
+        public IDisposable AddEffect(Effect.Effect p_effect)
+        {
+            effects.Add(new(this, p_effect));
+            onAddEffect.Invoke(effects[^1]);
+            return effects[^1];
+        }
+
+        public IDisposable AddEffect(Effect.Effect p_effect, float p_time)
+        {
+            effects.Add(new(this, p_effect, p_time));
+            onAddEffect.Invoke(effects[^1]);
+            return effects[^1];
+        }
+
+        public void RemoveEffect(IDisposable p_effect)
+        {
+            if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
+            {
+                onRemoveEffect.Invoke((StatefullEffect)p_effect);
+                effects.Remove((StatefullEffect)p_effect);
+                p_effect.Dispose();
+            }
+        }
 
         /// <summary>
-        /// Restores the entity's stamina by a specified amount.
-        /// Can be overridden if stamina management is required.
+        /// Tick effects
         /// </summary>
-        /// <param name="p_amount">The amount of stamina to restore.</param>
-        public virtual void RestoreStamina(float p_amount) {}
+        public virtual void Update()
+        {            
+            effects.ForEach  (effect => effect.Tick());
+            effects.RemoveAll(effect => 
+            {
+                if (effect.state == EffectState.Expired)
+                {
+                    onRemoveEffect.Invoke(effect);
+                    effect.Dispose();
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        /// <summary>
+        /// Fixed tick effect
+        /// </summary>
+        public virtual void FixedUpdate()
+        {
+            effects.ForEach(effect => effect.FixedTick());
+        }
     }   
 }

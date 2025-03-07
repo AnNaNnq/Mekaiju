@@ -12,12 +12,12 @@ namespace Mekaiju.Entity.Effect
 
         public override void OnAdd(EntityInstance p_self)
         {
-            _speedMod = p_self.modifiers[ModifierTarget.Speed].Add(-1 * ((float)_slownessPercentage / 100));
+            _speedMod = p_self.modifiers[Statistics.Speed].Add(-1 * ((float)_slownessPercentage / 100));
         }
 
         public override void OnRemove(EntityInstance p_self)
         {
-            p_self.modifiers[ModifierTarget.Speed].Remove(_speedMod);
+            p_self.modifiers[Statistics.Speed].Remove(_speedMod);
         }
     }
 }

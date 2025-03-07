@@ -63,43 +63,54 @@ namespace Mekaiju
 
         private bool _isActive;
 
-        private AnimationState _animationState;
+        private AnimationState     _animationState;
+        private MechaAnimatorProxy _animationProxy;
 
-        public override void Initialize(MechaPartInstance p_self)
+        public override void Initialize(EntityInstance p_self)
         {
             _isActive = false;
-            p_self.mecha.context.animationProxy.onRArm.AddListener(_OnAnimationEvent);
+
+            if (p_self.parent.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
+            {
+                _animationProxy = t_proxy;
+            }
+            else
+            {
+                Debug.LogWarning("Unable to find animator proxy on mecha!");
+            }
+
+            _animationProxy.onRArm.AddListener(_OnAnimationEvent);
         }
 
-        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return !_isActive && !p_self.states[State.Stun] && p_self.mecha.stamina - _consumption >= 0f;
+            return !_isActive && !p_self.states[State.Stun] && p_self.stamina - _consumption >= 0f;
         }
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
+        public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
                 _isActive       = true;
                 _animationState = AnimationState.Idle;
 
-                p_self.mecha.context.animationProxy.animator.SetTrigger("RArm");
+                _animationProxy.animator.SetTrigger("RArm");
 
                 // Wait for animation action
                 float t_timout = _actionTriggerTimout;
                 yield return new WaitUntil(() => _animationState == AnimationState.Trigger || (t_timout -= Time.deltaTime) <= 0);
 
-                p_self.mecha.ConsumeStamina(_consumption);
+                p_self.ConsumeStamina(_consumption);
 
                 // Setup projectile and launch
                 var t_wb = GameObject.Instantiate(_projectile).GetComponent<WeaponBullet>();
-                t_wb.transform.position = p_self.transform.position + new Vector3(0, 2.5f, 0) + (10f * p_self.mecha.transform.forward);
+                t_wb.transform.position = p_self.transform.position + new Vector3(0, 2.5f, 0) + (10f * p_self.parent.transform.forward);
                 t_wb.OnCollide.AddListener(
                     (t_go, t_collision) => 
                     {
                         if (t_collision.collider.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
                         {
-                            var t_damage = _damageFactor * p_self.mecha.modifiers[ModifierTarget.Damage].ComputeValue(p_self.mecha.desc.damage);
+                            var t_damage = _damageFactor * p_self.ComputedStatistics(Statistics.Damage);
                             t_bpo.TakeDamage(t_damage);
                             p_self.onDealDamage.Invoke(t_damage);
                         }
@@ -120,7 +131,7 @@ namespace Mekaiju
                         GameObject.Destroy(t_go);
                     }
                 );
-                t_wb.Launch(p_self.transform.forward.normalized * _projectileSpeed, p_self.mecha.transform.forward);
+                t_wb.Launch(p_self.parent.transform.forward.normalized * _projectileSpeed, p_self.parent.transform.forward);
                 t_wb.Timout(_projectileDestructionTimout);
 
                 // Wait for animation end
