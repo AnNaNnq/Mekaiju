@@ -1026,6 +1026,45 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""QTE"",
+            ""id"": ""5ed07c7b-36f4-4472-8c6a-2010db19cef0"",
+            ""actions"": [
+                {
+                    ""name"": ""Q"",
+                    ""type"": ""Button"",
+                    ""id"": ""90f7636b-ce5f-47ed-a31a-cffca00c9b53"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""8de20a00-df24-4963-8804-e8fa509e83da"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Q"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""56e6da06-5bf7-4846-ab2a-d7557ea66949"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Q"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1118,12 +1157,16 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // QTE
+        m_QTE = asset.FindActionMap("QTE", throwIfNotFound: true);
+        m_QTE_Q = m_QTE.FindAction("Q", throwIfNotFound: true);
     }
 
     ~@MechaPlayerActions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, MechaPlayerActions.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, MechaPlayerActions.UI.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_QTE.enabled, "This will cause a leak and performance issues, MechaPlayerActions.QTE.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -1441,6 +1484,52 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // QTE
+    private readonly InputActionMap m_QTE;
+    private List<IQTEActions> m_QTEActionsCallbackInterfaces = new List<IQTEActions>();
+    private readonly InputAction m_QTE_Q;
+    public struct QTEActions
+    {
+        private @MechaPlayerActions m_Wrapper;
+        public QTEActions(@MechaPlayerActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Q => m_Wrapper.m_QTE_Q;
+        public InputActionMap Get() { return m_Wrapper.m_QTE; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(QTEActions set) { return set.Get(); }
+        public void AddCallbacks(IQTEActions instance)
+        {
+            if (instance == null || m_Wrapper.m_QTEActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_QTEActionsCallbackInterfaces.Add(instance);
+            @Q.started += instance.OnQ;
+            @Q.performed += instance.OnQ;
+            @Q.canceled += instance.OnQ;
+        }
+
+        private void UnregisterCallbacks(IQTEActions instance)
+        {
+            @Q.started -= instance.OnQ;
+            @Q.performed -= instance.OnQ;
+            @Q.canceled -= instance.OnQ;
+        }
+
+        public void RemoveCallbacks(IQTEActions instance)
+        {
+            if (m_Wrapper.m_QTEActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IQTEActions instance)
+        {
+            foreach (var item in m_Wrapper.m_QTEActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_QTEActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public QTEActions @QTE => new QTEActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1514,5 +1603,9 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         void OnScrollWheel(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    public interface IQTEActions
+    {
+        void OnQ(InputAction.CallbackContext context);
     }
 }

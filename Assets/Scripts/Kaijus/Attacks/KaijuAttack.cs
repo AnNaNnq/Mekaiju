@@ -11,7 +11,7 @@ namespace Mekaiju.AI.Objet
         /// 
         /// </summary>
         [field: SerializeReference, SubclassPicker]
-        public IAttack attack { get; private set; }
+        public Attack.Attack attack { get; private set; }
 
         private void OnValidate()
         {

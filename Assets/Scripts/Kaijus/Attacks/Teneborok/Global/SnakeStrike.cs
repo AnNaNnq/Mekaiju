@@ -5,7 +5,7 @@ using Mekaiju.Entity;
 
 namespace Mekaiju.AI.Attack
 {
-    public class SnakeStrike : IAttack
+    public class SnakeStrike : Attack
     {
         [Separator]
         public float timeBeforeAttack = 1;
@@ -13,12 +13,12 @@ namespace Mekaiju.AI.Attack
         public override void Active(IEntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
-            p_kaiju.StartCoroutine(Attack(p_kaiju));
+            p_kaiju.StartCoroutine(AttackEnumerator(p_kaiju));
         }
 
-        public override IEnumerator Attack(IEntityInstance p_kaiju)
+        public override IEnumerator AttackEnumerator(IEntityInstance p_kaiju)
         {
-            base.Attack(p_kaiju);
+            base.AttackEnumerator(p_kaiju);
 
             KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
 

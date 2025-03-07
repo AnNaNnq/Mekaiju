@@ -119,7 +119,7 @@ namespace Mekaiju.AI
             {
                 foreach (KaijuPassive passive in t_activePassives)
                 {
-                    passive.passive.Passive(_instance);
+                    passive.passive.Run(_instance);
                 }
                 _canAttack = false;
                 return;

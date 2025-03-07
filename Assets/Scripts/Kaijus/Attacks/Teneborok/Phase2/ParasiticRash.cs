@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class ParasiticRash : IAttack
+    public class ParasiticRash : Attack
     {
         [Separator]
         public int nbParasites = 3;

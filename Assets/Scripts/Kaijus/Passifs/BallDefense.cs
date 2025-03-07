@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI.Passive
 {
-    public class BallDefense : IPassive
+    public class BallDefense : Passive
     {
         [Separator]
         public float duration = 5;
@@ -17,9 +17,9 @@ namespace Mekaiju.AI.Passive
         [SOSelector]
         public Effect defenseEffect;
 
-        public override void Passive(KaijuInstance p_kaiju)
+        public override void Run(KaijuInstance p_kaiju)
         {
-            base.Passive(p_kaiju);
+            base.Run(p_kaiju);
             if(!_using) return;
             _using = false;
             currentHit = 0;

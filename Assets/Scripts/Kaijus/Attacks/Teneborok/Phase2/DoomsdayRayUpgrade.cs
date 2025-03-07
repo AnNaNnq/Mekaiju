@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class DoomsdayRayUpgrade : IAttack
+    public class DoomsdayRayUpgrade : Attack
     {
         [Separator]
         [OverrideLabel("Fire tick damage (% of DMG)")]

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI
 {
-    public class DoomsdayRay : IAttack
+    public class DoomsdayRay : Attack.Attack
     {
         [Separator]
         [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject doomsdayObject;

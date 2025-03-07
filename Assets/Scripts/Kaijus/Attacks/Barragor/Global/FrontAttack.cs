@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class FrontAttack : IAttack
+    public class FrontAttack : Attack
     {
         [Separator]
         public float attackRange = 10;

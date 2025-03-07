@@ -8,7 +8,7 @@ namespace Mekaiju.AI.Objet
     public class KaijuPassive : ScriptableObject
     {
         [field: SerializeReference, SubclassPicker]
-        public IPassive passive { get; private set; }
+        public Passive.Passive passive { get; private set; }
 
         private void OnValidate()
         {

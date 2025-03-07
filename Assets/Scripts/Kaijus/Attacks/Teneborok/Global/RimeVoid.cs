@@ -7,7 +7,7 @@ using Mekaiju.Entity;
 
 namespace Mekaiju.AI.Attack
 {
-    public class RimeVoid : IAttack
+    public class RimeVoid : Attack
     {
         [Separator]
         [OverrideLabel("Rim prefab")][OpenPrefabButton] public GameObject gameObjectRimVoid;
