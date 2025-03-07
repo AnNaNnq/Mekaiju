@@ -14,7 +14,7 @@ namespace Mekaiju.AI.Attack
         [OverrideLabel("Effect duration (sec)")]
         public float effectDuration = 2;
 
-        public override void Active(IEntityInstance p_kaiju)
+        public override void Active(EntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
 

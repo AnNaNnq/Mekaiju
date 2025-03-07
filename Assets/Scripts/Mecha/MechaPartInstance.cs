@@ -14,7 +14,7 @@ namespace Mekaiju
     /// 
     /// </summary>
     [Serializable]
-    public class MechaPartInstance : IEntityInstance
+    public class MechaPartInstance : EntityInstance
     {
         /// <summary>
         /// 

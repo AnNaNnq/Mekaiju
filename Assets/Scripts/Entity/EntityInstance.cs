@@ -8,7 +8,7 @@ namespace Mekaiju.Entity
     /// A base class for all entity instance
     /// Allow effects on them
     /// </summary>
-    public abstract class IEntityInstance : MonoBehaviour
+    public abstract class EntityInstance : MonoBehaviour
     {
         /// <summary>
         /// Must be invoke in TakeDamage implementation

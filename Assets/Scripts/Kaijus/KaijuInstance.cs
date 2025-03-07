@@ -18,7 +18,7 @@ namespace Mekaiju.AI
     [RequireComponent(typeof(KaijuMotor))]
     [RequireComponent(typeof(KaijuAnimatorController))]
     [RequireComponent(typeof(Rigidbody))]
-    public class KaijuInstance : IEntityInstance
+    public class KaijuInstance : EntityInstance
     {
         [Header("General")]
         [Tag] public string targetTag;

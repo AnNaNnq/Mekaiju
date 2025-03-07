@@ -26,7 +26,7 @@ namespace Mekaiju
     /// <summary>
     /// 
     /// </summary>
-    public class MechaInstance : IEntityInstance
+    public class MechaInstance : EntityInstance
     {
         /// <summary>
         /// 
