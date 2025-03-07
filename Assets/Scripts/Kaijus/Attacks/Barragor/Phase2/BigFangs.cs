@@ -5,7 +5,7 @@ using Mekaiju.Entity;
 
 namespace Mekaiju.AI.Attack
 {
-    public class BigFangs : IAttack
+    public class BigFangs : Attack
     {
         [Separator]
         [SOSelector]

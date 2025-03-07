@@ -4,7 +4,7 @@ using MyBox;
 
 namespace Mekaiju.AI.PhaseAttack
 {
-    public class TeneborokPhaseAttack : IPhaseAttack
+    public class TeneborokPhaseAttack : PhaseAttack
     {
         [Separator]
         [SOSelector]

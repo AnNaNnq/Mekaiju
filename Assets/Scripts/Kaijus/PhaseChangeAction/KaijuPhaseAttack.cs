@@ -1,5 +1,4 @@
 using Mekaiju.AI.PhaseAttack;
-using Mekaiju.AI.Passive;
 using Mekaiju.Attributes;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ namespace Mekaiju.AI.Objet
     public class KaijuPhaseAttack : ScriptableObject
     {
         [field: SerializeReference, SubclassPicker]
-        public IPhaseAttack attack { get; private set; }
+        public PhaseAttack.PhaseAttack attack { get; private set; }
 
         private void OnValidate()
         {

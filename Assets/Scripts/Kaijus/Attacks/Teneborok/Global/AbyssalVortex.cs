@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class AbyssalVortex : IAttack
+    public class AbyssalVortex : Attack
     {
         [Separator]
         [OverrideLabel("Gravitational zone prefab")][OpenPrefabButton] public GameObject gameObjectAbyssalVortex;

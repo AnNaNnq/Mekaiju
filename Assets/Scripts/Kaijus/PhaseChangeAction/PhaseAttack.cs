@@ -1,11 +1,10 @@
 using Mekaiju.Attribute;
 using MyBox;
-using UnityEngine;
 
 namespace Mekaiju.AI.PhaseAttack
 {
     [System.Serializable]
-    public abstract class IPhaseAttack
+    public abstract class PhaseAttack
     {
         protected KaijuInstance _kaiju;
 

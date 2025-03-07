@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class DarkeningStorm : IAttack
+    public class DarkeningStorm : Attack
     {
         [Separator]
         [OpenPrefabButton] public GameObject prefab;
@@ -19,9 +19,9 @@ namespace Mekaiju.AI.Attack
             GameObject.Destroy(t_darkeningStorm, duration);
         }
 
-        public override IEnumerator Attack(IEntityInstance p_kaiju)
+        public override IEnumerator AttackEnumerator(IEntityInstance p_kaiju)
         {
-            base.Attack(p_kaiju);
+            base.AttackEnumerator(p_kaiju);
             yield return new WaitForSeconds(duration);
         }
     }
