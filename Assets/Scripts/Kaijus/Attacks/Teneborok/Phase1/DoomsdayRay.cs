@@ -15,7 +15,7 @@ namespace Mekaiju.AI
         [OverrideLabel("Ray Speed")] public float speed = 10f;
         [OverrideLabel("Duration (sec)")] public float duration = 5f;
 
-        public override void Active(IEntityInstance p_kaiju)
+        public override void Active(EntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
 

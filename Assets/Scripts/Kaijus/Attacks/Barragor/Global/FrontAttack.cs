@@ -23,7 +23,7 @@ namespace Mekaiju.AI.Attack
             return t_return;
         }
 
-        public override void Active(IEntityInstance p_kaiju)
+        public override void Active(EntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
 

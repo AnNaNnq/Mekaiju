@@ -21,7 +21,7 @@ namespace Mekaiju.AI.Attack
 
         Transform _start;
 
-        public override void Active(IEntityInstance p_kaiju)
+        public override void Active(EntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
 
@@ -34,7 +34,7 @@ namespace Mekaiju.AI.Attack
             p_kaiju.StartCoroutine(AttackEnumerator(p_kaiju));
         }
 
-        public override IEnumerator AttackEnumerator(IEntityInstance p_kaiju)
+        public override IEnumerator AttackEnumerator(EntityInstance p_kaiju)
         {
             base.AttackEnumerator(p_kaiju);
 

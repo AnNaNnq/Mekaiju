@@ -18,7 +18,7 @@ namespace Mekaiju.AI.Attack
         public int maxBounce = 5;
         public float speed = 10;
 
-        public override void Active(IEntityInstance p_kaiju)
+        public override void Active(EntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
 

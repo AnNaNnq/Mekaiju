@@ -11,7 +11,7 @@ namespace Mekaiju.AI.Attack
         public int nbParasites = 3;
         public GameObject parasitePrefab;
 
-        public override void Active(IEntityInstance p_kaiju)
+        public override void Active(EntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
             for (int i = 0; i < nbParasites; i++)

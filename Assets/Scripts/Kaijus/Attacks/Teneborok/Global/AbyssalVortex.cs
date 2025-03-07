@@ -14,7 +14,7 @@ namespace Mekaiju.AI.Attack
         [OverrideLabel("Vortex Radius")] public float radius = 10f;
         [OverrideLabel("Number of rock")] public int nbRock = 10;
 
-        public override void Active(IEntityInstance p_kaiju)
+        public override void Active(EntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
 
