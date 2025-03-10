@@ -207,6 +207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cd06fc653fbc94e9b9f25ab3c61636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _instance: {fileID: 0}
 --- !u!1 &2481524739238156992
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,6 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cd06fc653fbc94e9b9f25ab3c61636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _instance: {fileID: 0}
 --- !u!1 &3592290967890215276
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,12 +399,14 @@ MonoBehaviour:
   - nom: Corps
     part:
     - {fileID: 5551521203586782951}
-    health: 100
+    maxHealth: 0
+    currentHealth: 0
     isDestroyed: 0
   - nom: "T\xEAte"
     part:
     - {fileID: 2481524739238156992}
-    health: 100
+    maxHealth: 0
+    currentHealth: 0
     isDestroyed: 0
   - nom: Pattes
     part:
@@ -410,19 +414,23 @@ MonoBehaviour:
     - {fileID: 5085126965866158908}
     - {fileID: 2179837640039621086}
     - {fileID: 6714684652640316601}
-    health: 100
+    maxHealth: 0
+    currentHealth: 0
     isDestroyed: 0
   behaviors:
   - rid: 7914790548137836613
   - rid: 7914790548137836614
   - rid: 7914790548137836615
   timeBetweenTowAction: 1
-  <effects>k__BackingField: []
+  <context>k__BackingField:
+    animationProxy: {fileID: 0}
+    rigidbody: {fileID: 0}
   passives:
   - {fileID: 11400000, guid: 7fbf25004e117774aa6da691d9484439, type: 2}
-  _currentPhase: 2
+  currentPhase: 2
   attackGraphPhaseOne: {fileID: 11400000, guid: e361eb976566cde499d92635c7b56823, type: 2}
   attackGraphPhaseTow: {fileID: 11400000, guid: cd0b871fee59b4a4990f43c4c114b170, type: 2}
+  changePhaseAction: {fileID: 11400000, guid: 81d69875ac24a7f40a05761e4bba6591, type: 2}
   checkRange: 1
   debugRange: 100
   dps: 0
@@ -542,7 +550,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3592290967890215276}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 1000
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -682,6 +690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cd06fc653fbc94e9b9f25ab3c61636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _instance: {fileID: 0}
 --- !u!1 &5551521203586782951
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,6 +791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cd06fc653fbc94e9b9f25ab3c61636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _instance: {fileID: 0}
 --- !u!65 &6285822632489341017
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -924,6 +934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cd06fc653fbc94e9b9f25ab3c61636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _instance: {fileID: 0}
 --- !u!1 &6714684652640316601
 GameObject:
   m_ObjectHideFlags: 0
@@ -1045,3 +1056,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cd06fc653fbc94e9b9f25ab3c61636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _instance: {fileID: 0}
