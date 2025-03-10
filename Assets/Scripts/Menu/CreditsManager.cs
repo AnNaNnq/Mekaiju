@@ -3,12 +3,12 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-namespace Mekaiju.UI
+namespace Mekaiju.Menu
 {
     [System.Serializable]
     public class CreditSection
     {
-        public string categoryName; // Name of the category (e.g. "Developers")
+        public string categoryName; // Name of the category (e.g., "Developers")
         public List<string> names = new List<string>(); // List of names in this category
         public List<Sprite> images = new List<Sprite>(); // List of images to display
     }
@@ -16,73 +16,62 @@ namespace Mekaiju.UI
     public class CreditsManager : MonoBehaviour
     {
         [Header("UI Elements")]
-        [SerializeField] private TextMeshProUGUI _creditsText; // Single TextMeshProUGUI to display categories and names
-        [SerializeField] private RectTransform _creditsTransform; // RectTransform to scroll the content
-        [SerializeField] private GameObject _imagePrefab; // Image prefab to instantiate images
-        [SerializeField] private float _scrollSpeed = 30f; // Speed of the scrolling effect
+        [SerializeField] private RectTransform _creditsTransform; // Container for credits
+        [SerializeField] private GameObject _sectionPrefab; // Prefab containing the pre-configured VerticalLayoutGroup
+        [SerializeField] private GameObject _imagePrefab; // Prefab for images
+        [SerializeField] private GameObject _textPrefab; // Prefab for text
+        [SerializeField] private float _scrollSpeed = 30f; // Scrolling speed
 
         [Header("Credits Data")]
-        [SerializeField] private List<CreditSection> _creditSections = new List<CreditSection>(); // List of all credit sections
+        [SerializeField] private List<CreditSection> _creditSections = new List<CreditSection>();
 
-        // Called when the script is enabled to set up the credits
         private void OnEnable()
         {
-            _ResetCreditsPosition(); // Reset the scroll position to the top
-            _GenerateCreditsContent(); // Generate content with images and text
+            _ResetCreditsPosition();
+            _GenerateCreditsContent();
         }
 
-        // Called every frame to scroll the credits upwards
         private void Update()
         {
-            _creditsTransform.Translate(Vector3.up * (_scrollSpeed * Time.deltaTime)); // Move content upwards
+            _creditsTransform.anchoredPosition += new Vector2(0, _scrollSpeed * Time.deltaTime);
         }
 
-        // Method to generate the content (images + text) for the credits
         private void _GenerateCreditsContent()
         {
-            // Clear existing content
-            _creditsText.text = ""; // Clear any existing text
+            // Clear previous content to avoid duplication
+            foreach (Transform child in _creditsTransform)
+            {
+                Destroy(child.gameObject);
+            }
 
-            // Loop through each credit section
             foreach (var section in _creditSections)
             {
-                // Add the first image (if any)
+                // Use the section prefab that is already configured in the inspector
+                GameObject sectionContainer = Instantiate(_sectionPrefab, _creditsTransform);
+
+                // Add the image (if available)
                 if (section.images.Count > 0)
                 {
-                    GameObject imgObj = Instantiate(_imagePrefab, _creditsTransform); // Instantiate a new image
-                    Image imgComponent = imgObj.GetComponent<Image>(); // Get the Image component
-                    imgComponent.sprite = section.images[0]; // Set the image to the first in the list
-                    imgComponent.rectTransform.sizeDelta = new Vector2(200, 200); // Set the image size
-                    imgComponent.rectTransform.anchoredPosition = Vector2.zero; // Position image
+                    GameObject imgObj = Instantiate(_imagePrefab, sectionContainer.transform);
+                    Image imgComponent = imgObj.GetComponent<Image>();
+                    imgComponent.sprite = section.images[0];
                 }
 
-                // Add category title (e.g., "Developers")
-                _creditsText.text += $"<b>{section.categoryName}</b>\n"; // Bold category name
+                // Add the text for the category and names
+                GameObject textObj = Instantiate(_textPrefab, sectionContainer.transform);
+                TextMeshProUGUI textComponent = textObj.GetComponent<TextMeshProUGUI>();
+                textComponent.text = $"\n<b>{section.categoryName}</b>\n"; // Add a space before
 
-                // Add all the names in this section
                 foreach (var name in section.names)
                 {
-                    _creditsText.text += $"{name}\n"; // Add each name
-                }
-
-                _creditsText.text += "\n"; // Add a space between sections
-
-                // Add remaining images for the section (if any)
-                for (int i = 1; i < section.images.Count; i++) // Start from the second image
-                {
-                    GameObject imgObj = Instantiate(_imagePrefab, _creditsTransform); // Instantiate a new image
-                    Image imgComponent = imgObj.GetComponent<Image>(); // Get the Image component
-                    imgComponent.sprite = section.images[i]; // Set the image sprite
-                    imgComponent.rectTransform.sizeDelta = new Vector2(200, 200); // Set image size
-                    imgComponent.rectTransform.anchoredPosition = Vector2.zero; // Position image
+                    textComponent.text += $"{name}\n";
                 }
             }
         }
 
-        // Method to reset the credits' position to the top of the container
         private void _ResetCreditsPosition()
         {
-            _creditsTransform.anchoredPosition = new Vector2(_creditsTransform.anchoredPosition.x, 0); // Reset position
+            _creditsTransform.anchoredPosition = Vector2.zero;
         }
     }
 }

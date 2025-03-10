@@ -42,7 +42,6 @@ namespace Mekaiju.Menu
             InputActionMap t_playerMap = inputActions.FindActionMap("Player", throwIfNotFound: false);
             if (t_playerMap == null)
             {
-                Debug.LogError("Could not find the 'Player' Action Map in the InputActionAsset.");
                 return;
             }
 
