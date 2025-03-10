@@ -10,7 +10,7 @@ namespace Mekaiju.AI.Attack
         [Separator]
         [OverrideLabel("Charge Speed (Force Pulse)")]
         [Tooltip("Not % of speed")]
-        [Range(100, 300)]
+        [Range(200000, 300000)]
         public float chargeSpeed = 10;
         [OverrideLabel("Time Prep Before Charge (sec)")]
         public float chargePrepTime = 1;
