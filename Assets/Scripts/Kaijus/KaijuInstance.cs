@@ -293,7 +293,11 @@ namespace Mekaiju.AI
 
         public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
         {
+<<<<<<< HEAD
             var t_defense = modifiers[Statistics.Defense].ComputeValuePercentage(stats.def);
+=======
+            var t_defense = modifiers[Statistics.Defense].ComputeValue(stats.def);
+>>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
             Debug.Log(t_defense);
 
             var t_realDamage = p_amonunt * (1- (t_defense/100));

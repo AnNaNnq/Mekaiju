@@ -3,7 +3,11 @@ using MyBox;
 using Mekaiju.Entity.Effect;
 using Mekaiju.Entity;
 
+<<<<<<< HEAD
 namespace Mekaiju.AI
+=======
+namespace Mekaiju.AI.Attack
+>>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
 {
     public class BigFangs : Attack
     {
