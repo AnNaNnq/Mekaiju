@@ -1,9 +1,9 @@
-﻿using Mekaiju.AI.Attack.Instance;
+﻿using Mekaiju.AI.Attacks.Instance;
 using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Mekaiju.AI.Attack
+namespace Mekaiju.AI.Attacks
 {
     public class FireZone : MonoBehaviour
     {

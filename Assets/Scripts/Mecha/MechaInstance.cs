@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Mekaiju.Utils;
 using UnityEngine;
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
 using UnityEngine.Events;
 >>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
+=======
+using UnityEngine.Events;
+>>>>>>> Stashed changes
 using UnityEngine.InputSystem;
 using Mekaiju.Entity;
 using Mekaiju.Entity.Effect;
@@ -19,6 +23,7 @@ namespace Mekaiju
     [Serializable]
     public class InstanceContext
     {
+<<<<<<< Updated upstream
 <<<<<<< HEAD
         public float LastAbilityTime = -1000f;
 
@@ -39,21 +44,30 @@ namespace Mekaiju
         public MechaAnimatorProxy animationProxy;
         public Rigidbody rigidbody;
 >>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
+=======
+        public MechaAnimatorProxy animationProxy;
+        public Rigidbody rigidbody;
+>>>>>>> Stashed changes
     }
 
 
     /// <summary>
     /// 
     /// </summary>
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     public class MechaInstance : MonoBehaviour
 =======
     public class MechaInstance : EntityInstance
 >>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
+=======
+    public class MechaInstance : EntityInstance
+>>>>>>> Stashed changes
     {
         /// <summary>
         /// 
         /// </summary>
+<<<<<<< Updated upstream
 <<<<<<< HEAD
         public MechaConfig config { get; private set; }
 =======
@@ -64,20 +78,23 @@ namespace Mekaiju
         /// </summary>
         private float _stamina;
 >>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
+=======
+        public MechaDesc desc { get; private set; }
+>>>>>>> Stashed changes
 
         /// <summary>
-        /// 
+        /// The current stamina of this entity.
         /// </summary>
-        [SerializeField] 
-        private EnumArray<MechaPart, MechaPartInstance> _parts;
+        private float _stamina;
 
 <<<<<<< HEAD
         /// <summary>
         /// 
         /// </summary>
         [SerializeField]
-        private List<StatefullEffect> _effects;
+        private EnumArray<MechaPart, MechaPartInstance> _parts;
 
+<<<<<<< Updated upstream
         /// <summary>
         /// 
         /// </summary>
@@ -102,6 +119,9 @@ namespace Mekaiju
 =======
         public Ability shieldAbility;
 >>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
+=======
+        public Ability shieldAbility;
+>>>>>>> Stashed changes
 
         /// <summary>
         /// 
@@ -113,21 +133,24 @@ namespace Mekaiju
             get => _parts[p_part];
         }
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
+=======
+        #region MonoBehaviour implementation
+>>>>>>> Stashed changes
         private void Start()
         {
-            Debug.Assert(GameManager.Instance, "Missing GameManager. Please add one!");
-            config = GameManager.Instance.playerData.mechaConfig;
+            desc = GameManager.instance.playerData.mechaDesc;
 
-            var t_main = Instantiate(config.desc.Prefab, transform);
+            AddEffect(Resources.Load<Effect>("Mecha/Objects/Effect/Stamina"));
+            AddEffect(Resources.Load<Effect>("Mecha/Objects/Effect/Heal"));
 
-            _parts = config.parts.Select((key, part) => 
-                {
-                    var t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
-                    Debug.Assert(t_tr);
+            _stamina = desc.stamina;
 
-                    t_tr.gameObject.SetActive(false);
+            shieldAbility = Resources.Load<Ability>("Mecha/Objects/Ability/ShieldAbility");
+            shieldAbility.behaviour.Initialize(this);
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
                     Debug.Assert(part.Ability.Prefab);
                     var t_go = Instantiate(part.Ability.Prefab, t_tr);
@@ -181,54 +204,34 @@ namespace Mekaiju
 
             // _effects = new();
             _effects = new()
+=======
+            var t_main = Instantiate(desc.prefab, transform);
+            _parts = desc.parts.Select((key, part) =>
+>>>>>>> Stashed changes
             {
-                new(Resources.Load<Effect>("Mecha/Effect/Stamina")),
-                new(Resources.Load<Effect>("Mecha/Effect/Health")),
-            };
+                Transform t_tr;
+                GameObject t_go;
+                MechaPartInstance t_inst;
 
-            Stamina = config.desc.Stamina;
+                t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
+                Debug.Assert(t_tr, $"Unable to find an anchor for {Enum.GetName(typeof(MechaPart), key)}!");
+                t_tr.gameObject.SetActive(false);
 
-            Context = new()
-            {
-                Animator  = GetComponent<Animator>(),
-                Rigidbody = GetComponent<Rigidbody>(),
-                // Modifiers  = new()
-            };
-        }
+                t_go = t_tr.Find(part.ability.objectName).gameObject;
+                Debug.Assert(t_go, $"Unable to find the GameObject associated to the ability {part.ability.name}!");
 
-        private void Update()
-        {            
-            _effects.ForEach  (effect => effect.Tick(this));
-            _effects.RemoveAll(effect => effect.State == EffectState.Expired);
-        }
+                t_inst = t_go.AddComponent<MechaPartInstance>();
+                t_inst.Initialize(this, part);
 
-        private void FixedUpdate()
-        {
-            _effects.ForEach(effect => effect.FixedTick(this));
-        }
+                t_tr.gameObject.SetActive(true);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public bool IsAlive()
-        {
-            return Health > 0;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_damage"></param>
-        public void TakeDamage(float p_damage)
-        {
-            foreach (var t_part in _parts)
-            {
-                // TODO: Maybe not divide
-                t_part.TakeDamage(p_damage / _parts.Count());    
+                return t_inst;
             }
+            );
         }
+        #endregion
 
+<<<<<<< Updated upstream
         /// <summary>
         /// 
         /// </summary>
@@ -239,15 +242,25 @@ namespace Mekaiju
 #endregion
 
 #region IEntityInstance implementation
+=======
+        #region IEntityInstance implementation
+>>>>>>> Stashed changes
         protected override EnumArray<Statistics, float> statistics => desc.statistics;
 
         public override bool isAlive => health > 0;
 
+<<<<<<< Updated upstream
         public override float health     => _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.health; });
         public override float baseHealth => desc.statistics[Statistics.Health];
 
         public override void Heal(float p_amount)
 >>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
+=======
+        public override float health => _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.health; });
+        public override float baseHealth => desc.statistics[Statistics.Health];
+
+        public override void Heal(float p_amount)
+>>>>>>> Stashed changes
         {
             foreach (var t_part in _parts)
             {
@@ -255,75 +268,37 @@ namespace Mekaiju
             }
         }
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
         /// <summary>
         /// Get all the effects that are affecting the mecha
         /// </summary>
         public string GetEffects()
+=======
+        public override void TakeDamage(float p_damage)
+>>>>>>> Stashed changes
         {
-            var filteredEffects = _effects
-                .Select(effect => effect.effect.description)
-                .Where(desc => desc != "Heal" && desc != "Stamina")
-                .ToList();
-
-            return filteredEffects.Count > 0 ? string.Join(" & ", filteredEffects) : string.Empty;
+            foreach (var t_part in _parts)
+            {
+                t_part.TakeDamage(p_damage / _parts.Count());
+            }
         }
 
-        /// <summary>
-        /// Adds a new effect to the list of active effects without a timeout. 
-        /// The effect will remain active indefinitely until it is manually removed.
-        /// </summary>
-        /// <param name="p_effect">The effect to be added.</param>
-        public StatefullEffect AddEffect(Effect p_effect)
+        public override float stamina => _stamina;
+        public override float baseStamina => desc.stamina;
+
+        public override void RestoreStamina(float p_amount)
         {
-            _effects.Add(new(p_effect));
-            return _effects[^1];
+            _stamina = Math.Min(baseStamina, _stamina + p_amount);
         }
 
-        /// <summary>
-        /// Adds a new effect to the list of active effects, with a specified duration.
-        /// </summary>
-        /// <param name="p_effect">The effect to be added.</param>
-        /// <param name="p_time">The duration of the effect in seconds.</param>
-        public StatefullEffect AddEffect(Effect p_effect, float p_time)
+        public override void ConsumeStamina(float p_amount)
         {
-            _effects.Add(new(p_effect, p_time));
-            return _effects[^1];
+            _stamina = Math.Max(0, _stamina - p_amount);
         }
-
-        public void RemoveEffect(StatefullEffect p_effect)
-        {
-            _effects.Remove(p_effect);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_consumption"></param>
-        /// <returns></returns>
-        public bool CanExecuteAbility(float p_consumption)
-        {
-            return Stamina - p_consumption > 0;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_amount"></param>
-        public void RestoreStamina(float p_amount)
-        {
-            Stamina = Math.Min(config.desc.Stamina, Stamina + p_amount);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p_amount"></param>
-        public void ConsumeStamina(float p_amount)
-        {
-            Stamina = Math.Max(0, Stamina - p_amount);
-        }
+        #endregion
     }
+<<<<<<< Updated upstream
 
 =======
         public override void TakeDamage(float p_damage)
@@ -350,3 +325,6 @@ namespace Mekaiju
     }
 >>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
 }
+=======
+}
+>>>>>>> Stashed changes

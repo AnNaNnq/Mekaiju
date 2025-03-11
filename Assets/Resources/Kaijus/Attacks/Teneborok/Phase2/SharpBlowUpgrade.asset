@@ -13,21 +13,23 @@ MonoBehaviour:
   m_Name: SharpBlowUpgrade
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 3772134765917896957
+    rid: 7914790729425092690
   references:
     version: 2
     RefIds:
-    - rid: 3772134765917896957
-      type: {class: SharpBlowUpgrade, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
+    - rid: 7914790729425092690
+      type: {class: SharpBlowUpgrade, ns: Mekaiju.AI.Attacks, asm: Assembly-CSharp}
       data:
         cooldown: 0
         range: 10
+        canMakeDamage: 1
+        damage: 100
         blockable: 0
-        canUse: 1
         sphereRadius: 4
         forwardOffset: 7
         layerMask:
           serializedVersion: 2
           m_Bits: 256
-        damage: 100
         timeBeforeAttack: 1
+        secondDamage: 120
+        timeBeforeSecondAttack: 1

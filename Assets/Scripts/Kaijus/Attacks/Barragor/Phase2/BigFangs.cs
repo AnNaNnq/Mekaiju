@@ -2,6 +2,7 @@ using Mekaiju.Attribute;
 using MyBox;
 using Mekaiju.Entity.Effect;
 using Mekaiju.Entity;
+using Mekaiju.AI.Attacks;
 
 <<<<<<< HEAD
 namespace Mekaiju.AI

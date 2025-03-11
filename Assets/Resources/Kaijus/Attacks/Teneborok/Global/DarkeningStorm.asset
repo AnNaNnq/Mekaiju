@@ -13,21 +13,22 @@ MonoBehaviour:
   m_Name: DarkeningStorm
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 3772134765917896953
+    rid: 7914790729425092684
   references:
     version: 2
     RefIds:
-    - rid: 3772134765917896953
-      type: {class: DarkeningStorm, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
+    - rid: 7914790729425092684
+      type: {class: DarkeningStorm, ns: Mekaiju.AI.Attacks, asm: Assembly-CSharp}
       data:
         cooldown: 35
-        range: 80
+        range: 40
         canMakeDamage: 0
+        damage: 50
         blockable: 0
         sphereRadius: 4
         forwardOffset: 7
         layerMask:
           serializedVersion: 2
-          m_Bits: 256
+          m_Bits: 0
         prefab: {fileID: 4004846009892072983, guid: 4f5ae8cf3fc8ab943804c64ca2dc9d0e, type: 3}
         duration: 5

@@ -6,7 +6,7 @@ using MyBox;
 using Mekaiju.Entity;
 using Mekaiju.Attribute;
 
-namespace Mekaiju.AI.Attack {
+namespace Mekaiju.AI.Attacks {
     [System.Serializable]
     public abstract class Attack
     {
@@ -21,8 +21,10 @@ namespace Mekaiju.AI.Attack {
         [ConditionalField(nameof(canMakeDamage))] [Indent]
         public bool blockable;
         [ConditionalField(nameof(canMakeDamage))] [Indent]
+        [ReadOnly]
         public float sphereRadius = 4f;
         [ConditionalField(nameof(canMakeDamage))] [Indent]
+        [ReadOnly]
         public float forwardOffset = 7f;
         [ConditionalField(nameof(canMakeDamage))] [Indent]
         public LayerMask layerMask;

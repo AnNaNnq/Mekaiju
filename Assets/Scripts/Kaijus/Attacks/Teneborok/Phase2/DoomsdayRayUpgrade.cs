@@ -1,10 +1,10 @@
-using Mekaiju.AI.Attack.Instance;
+using Mekaiju.AI.Attacks.Instance;
 using Mekaiju.Attribute;
 using Mekaiju.Entity;
 using MyBox;
 using UnityEngine;
 
-namespace Mekaiju.AI.Attack
+namespace Mekaiju.AI.Attacks
 {
     public class DoomsdayRayUpgrade : Attack
     {

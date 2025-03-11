@@ -1,10 +1,14 @@
 using System.Collections;
 using Mekaiju.AI;
 using Mekaiju.Entity;
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
 using Mekaiju.AI.Body;
 >>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
+=======
+using Mekaiju.AI.Body;
+>>>>>>> Stashed changes
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -54,14 +58,14 @@ namespace Mekaiju
         private bool _isAcitve;
         private float _elapedTime;
 
-        private Vector3      _direction;
+        private Vector3 _direction;
         private MeshTrailTut _ghost;
-        private GameObject   _camera;
-        private Rigidbody    _rigidbody;
+        private GameObject _camera;
+        private Rigidbody _rigidbody;
 
         public override void Initialize(EntityInstance p_self)
         {
-            _isAcitve   = false;
+            _isAcitve = false;
             _elapedTime = 0;
 
             _ghost = p_self.parent.gameObject.AddComponent<MeshTrailTut>();
@@ -82,11 +86,11 @@ namespace Mekaiju
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return (
-                !_isAcitve && 
-                !p_self.states[State.Protected] && 
+                !_isAcitve &&
+                !p_self.states[State.Protected] &&
                 !p_self.states[State.Stun] &&
                 p_self.stamina - _consumption >= 0f &&
-                Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0    
+                Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0
             );
         }
 
@@ -94,7 +98,7 @@ namespace Mekaiju
         {
             if (IsAvailable(p_self, p_opt))
             {
-                Vector2   t_input     = _input.action.ReadValue<Vector2>();
+                Vector2 t_input = _input.action.ReadValue<Vector2>();
                 Transform t_transform = p_self.parent.transform;
                 _direction = (t_input.y * t_transform.forward + t_input.x * t_transform.right).normalized;
 
@@ -107,12 +111,12 @@ namespace Mekaiju
                     var t_go = GameObject.Instantiate(_speedVfx, _camera.transform);
                     t_go.transform.Translate(new(0, 0, 2f));
 
-                    _isAcitve   = true;
+                    _isAcitve = true;
                     _elapedTime = 0;
-                    yield return new WaitUntil(() => 
+                    yield return new WaitUntil(() =>
                     {
                         _elapedTime += Time.deltaTime;
-                        return _elapedTime >= _duration; 
+                        return _elapedTime >= _duration;
                     });
                     _isAcitve = false;
 
@@ -130,7 +134,7 @@ namespace Mekaiju
             {
                 Vector3 t_vel = _force * (1 - _elapedTime / _duration) * _direction;
                 _rigidbody.linearVelocity = new(t_vel.x, _rigidbody.linearVelocity.y, t_vel.z);
-            }   
+            }
         }
     }
 }

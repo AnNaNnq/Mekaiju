@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: SharpMandible
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 7914790595283386452
+    rid: 7914790729425092682
   references:
     version: 2
     RefIds:
-    - rid: 7914790595283386452
-      type: {class: SharpMandible, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
+    - rid: 7914790729425092682
+      type: {class: SharpMandible, ns: Mekaiju.AI.Attacks, asm: Assembly-CSharp}
       data:
-        cooldown: 2
+        cooldown: 0
         range: 10
         canMakeDamage: 1
         damage: 100
@@ -30,4 +30,4 @@ MonoBehaviour:
         layerMask:
           serializedVersion: 2
           m_Bits: 256
-        timeBeforeAttack: 0.23
+        timeBeforeAttack: 1

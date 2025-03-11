@@ -1,11 +1,11 @@
-using Mekaiju.AI.Attack.Instance;
+using Mekaiju.AI.Attacks.Instance;
 using Mekaiju.Attribute;
 using MyBox;
 using UnityEngine;
 using Mekaiju.Entity.Effect;
 using Mekaiju.Entity;
 
-namespace Mekaiju.AI.Attack
+namespace Mekaiju.AI.Attacks
 {
     public class RimeVoid : Attack
     {

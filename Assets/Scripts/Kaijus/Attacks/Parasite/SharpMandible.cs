@@ -3,7 +3,7 @@ using Mekaiju.Entity;
 using UnityEngine;
 using System.Collections;
 
-namespace Mekaiju.AI.Attack
+namespace Mekaiju.AI.Attacks
 {
     public class SharpMandible : Attack
     {

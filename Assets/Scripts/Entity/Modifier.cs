@@ -13,13 +13,13 @@ namespace Mekaiju.Entity
     [Serializable]
     public class Modifier
     {
-        public float        value;
+        public float value;
         public ModifierKind kind;
 
         public Modifier(float p_value, ModifierKind p_kind)
         {
             value = p_value;
-            kind  = p_kind;
+            kind = p_kind;
         }
     }
 
@@ -47,7 +47,7 @@ namespace Mekaiju.Entity
         public float ComputeValue(float p_baseValue)
         {
             return p_baseValue + _values.Aggregate(
-                0f, 
+                0f,
                 (t_acc, t_mod) => t_acc + (t_mod.kind == ModifierKind.Flat ? t_mod.value : (t_mod.value * p_baseValue))
             );
         }

@@ -13,21 +13,21 @@ MonoBehaviour:
   m_Name: SnakeStrike
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 3772134765917896955
+    rid: 7914790729425092686
   references:
     version: 2
     RefIds:
-    - rid: 3772134765917896955
-      type: {class: SnakeStrike, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
+    - rid: 7914790729425092686
+      type: {class: SnakeStrike, ns: Mekaiju.AI.Attacks, asm: Assembly-CSharp}
       data:
         cooldown: 0
         range: 10
+        canMakeDamage: 1
+        damage: 200
         blockable: 1
-        canUse: 1
         sphereRadius: 4
         forwardOffset: 7
         layerMask:
           serializedVersion: 2
           m_Bits: 256
-        damage: 200
-        timeBeforeAttack: 1.3
+        timeBeforeAttack: 1

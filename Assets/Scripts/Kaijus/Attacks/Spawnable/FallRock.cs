@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Mekaiju.AI.Attack.Instance
+namespace Mekaiju.AI.Attacks.Instance
 {
     public class FallRock : MonoBehaviour
     {

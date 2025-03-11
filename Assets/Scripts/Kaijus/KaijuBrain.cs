@@ -1,4 +1,4 @@
-using Mekaiju.AI.Objet;
+ï»¿using Mekaiju.AI.Objet;
 using Mekaiju.Utils;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace Mekaiju.AI
             _allAttacks = LoadAllAttacks();
             _lastAttack = "Start";
             StartCoroutine(CheckAttack());
-            foreach(KaijuAttack attack in _allAttacks)
+            foreach (KaijuAttack attack in _allAttacks)
             {
                 attack.attack.Init();
             }
@@ -41,9 +41,9 @@ namespace Mekaiju.AI
         {
             _attackGraph = _instance.GetGraph();
             string t_GUID = GetGUIDStartWithName(_lastAttack);
-            
+
             List<string> t_startAttack = GetNextNodes(t_GUID);
-            
+
             Attack(t_startAttack);
         }
 
@@ -82,7 +82,7 @@ namespace Mekaiju.AI
         public List<KaijuAttack> PotentialAttacks(List<string> p_attacksGUID)
         {
             List<KaijuAttack> t_kaijuAttacks = new List<KaijuAttack>();
-            foreach(string attack in p_attacksGUID)
+            foreach (string attack in p_attacksGUID)
             {
                 t_kaijuAttacks.Add(GetAttack(GetNameWithGUID(attack)));
             }
@@ -102,7 +102,7 @@ namespace Mekaiju.AI
 
             if (t_attacks == null || t_attacks.Length == 0)
             {
-                Debug.LogWarning("Aucun attack ScriptableObject trouvé dans Resources/Kaijus/Attacks");
+                Debug.LogWarning("Aucun attack ScriptableObject trouvï¿½ dans Resources/Kaijus/Attacks");
             }
 
             return t_attacks;
@@ -110,7 +110,7 @@ namespace Mekaiju.AI
 
         KaijuAttack GetAttack(string p_attackName)
         {
-            foreach(KaijuAttack attack in _allAttacks)
+            foreach (KaijuAttack attack in _allAttacks)
             {
                 if (p_attackName.Equals(attack.name)) return attack;
             }
@@ -145,7 +145,7 @@ namespace Mekaiju.AI
             {
                 if (i < t_kaijuAttacks.Count - 1)
                 {
-                    t_canAttack = t_kaijuAttacks[i].attack.CanUse(_instance, t_kaijuAttacks[i+1].attack.range);
+                    t_canAttack = t_kaijuAttacks[i].attack.CanUse(_instance, t_kaijuAttacks[i + 1].attack.range);
                 }
                 else
                 {
@@ -154,13 +154,13 @@ namespace Mekaiju.AI
 
                 if (t_canAttack)
                 {
-                    _motor.agent.ResetPath();
+                    _motor.StopKaiju();
                     _motor.LookTarget();
                     t_kaijuAttacks[i].attack.Active(_instance);
                     _lastAttack = t_kaijuAttacks[i].name;
                     _canAttack = false;
                     return;
-                }   
+                }
             }
 
             MakeAction();

@@ -5,7 +5,7 @@ using MyBox;
 using System.Collections;
 using UnityEngine;
 
-namespace Mekaiju.AI.Attack
+namespace Mekaiju.AI.Attacks
 {
     public class RockLook : Attack
     {

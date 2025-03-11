@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Mekaiju.AI.Attack.Instance
+namespace Mekaiju.AI.Attacks.Instance
 {
     public class DoomsdayRayUpgradeObject : MonoBehaviour
     {

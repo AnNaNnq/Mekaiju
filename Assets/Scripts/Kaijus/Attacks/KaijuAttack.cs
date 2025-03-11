@@ -1,4 +1,4 @@
-using Mekaiju.AI.Attack;
+using Mekaiju.AI.Attacks;
 using Mekaiju.Attributes;
 using UnityEngine;
 
@@ -11,7 +11,7 @@ namespace Mekaiju.AI.Objet
         /// 
         /// </summary>
         [field: SerializeReference, SubclassPicker]
-        public Attack.Attack attack { get; private set; }
+        public Attacks.Attack attack { get; private set; }
 
         private void OnValidate()
         {

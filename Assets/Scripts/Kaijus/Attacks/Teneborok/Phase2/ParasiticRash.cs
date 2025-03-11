@@ -3,7 +3,7 @@ using Mekaiju.Utils;
 using MyBox;
 using UnityEngine;
 
-namespace Mekaiju.AI.Attack
+namespace Mekaiju.AI.Attacks
 {
     public class ParasiticRash : Attack
     {

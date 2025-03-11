@@ -110,13 +110,13 @@ namespace Mekaiju.AI
                 }
             }
 
-            foreach(var passive in passives)
+            foreach (var passive in passives)
             {
                 passive.passive.OnStart();
             }
 
             context = new();
-            if(changePhaseAction != null)
+            if (changePhaseAction != null)
             {
                 changePhaseAction.attack.Init(this);
             }
@@ -138,7 +138,7 @@ namespace Mekaiju.AI
             }
 
 
-            if(Input.GetKeyDown(KeyCode.N))
+            if (Input.GetKeyDown(KeyCode.N))
             {
                 ChangePhase();
             }
@@ -151,7 +151,7 @@ namespace Mekaiju.AI
 
         public void UseBehavior()
         {
-            foreach(var behavior in behaviors)
+            foreach (var behavior in behaviors)
             {
                 behavior.Trigger();
                 if (behavior.active) behavior.Run();
@@ -161,7 +161,10 @@ namespace Mekaiju.AI
         public void ChangePhase()
         {
             motor.StopKaiju();
-            changePhaseAction.attack.Action();
+            if(changePhaseAction.attack != null)
+            {
+                changePhaseAction.attack.Action();
+            }
         }
 
         public void SetPhase(int p_phase)
@@ -189,7 +192,7 @@ namespace Mekaiju.AI
         public float GetRealDamage(float p_amonunt)
         {
             var t_damage = modifiers[Statistics.Damage].ComputeValue(p_amonunt);
-            return stats.dmg * (t_damage/100);
+            return stats.dmg * (t_damage / 100);
         }
 
         public void Combat()
@@ -279,7 +282,7 @@ namespace Mekaiju.AI
         public override void Heal(float p_amount)
         {
             float t_amountForPart = p_amount / bodyParts.Count();
-            foreach(var part in bodyParts)
+            foreach (var part in bodyParts)
             {
                 Heal(part, t_amountForPart);
             }
@@ -293,14 +296,18 @@ namespace Mekaiju.AI
 
         public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
         {
+<<<<<<< Updated upstream
 <<<<<<< HEAD
             var t_defense = modifiers[Statistics.Defense].ComputeValuePercentage(stats.def);
 =======
             var t_defense = modifiers[Statistics.Defense].ComputeValue(stats.def);
 >>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
+=======
+            var t_defense = modifiers[Statistics.Defense].ComputeValue(stats.def);
+>>>>>>> Stashed changes
             Debug.Log(t_defense);
 
-            var t_realDamage = p_amonunt * (1- (t_defense/100));
+            var t_realDamage = p_amonunt * (1 - (t_defense / 100));
 
             p_bodyPart.currentHealth -= p_amonunt;
 
@@ -323,7 +330,7 @@ namespace Mekaiju.AI
                 Destroy(gameObject);
             }
 
-            if(currentPhase == 1 && (health <= (baseHealth / 50)))
+            if (currentPhase == 1 && (health <= (baseHealth / 50)))
             {
                 ChangePhase();
             }
@@ -340,7 +347,7 @@ namespace Mekaiju.AI
 
         public bool IsDeath()
         {
-            foreach(BodyPart t_part in bodyParts)
+            foreach (BodyPart t_part in bodyParts)
             {
                 if (!t_part.isDestroyed)
                 {
@@ -381,7 +388,7 @@ namespace Mekaiju.AI
 
         public void UpdateUI()
         {
-            if(_debug != null) _debug.UpdateUI();
+            if (_debug != null) _debug.UpdateUI();
         }
         #endregion
     }

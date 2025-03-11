@@ -1,4 +1,4 @@
-using Mekaiju.AI.Attack;
+using Mekaiju.AI.Attacks;
 using Mekaiju.Attribute;
 using Mekaiju.Entity;
 using Mekaiju.Utils;
@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI
 {
-    public class DoomsdayRay : Attack.Attack
+    public class DoomsdayRay : Attacks.Attack
     {
         [Separator]
         [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject doomsdayObject;

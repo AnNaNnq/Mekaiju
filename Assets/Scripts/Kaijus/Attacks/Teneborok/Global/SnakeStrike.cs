@@ -3,7 +3,7 @@ using System.Collections;
 using MyBox;
 using Mekaiju.Entity;
 
-namespace Mekaiju.AI.Attack
+namespace Mekaiju.AI.Attacks
 {
     public class SnakeStrike : Attack
     {
