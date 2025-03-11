@@ -1,14 +1,7 @@
 using System.Collections;
 using Mekaiju.AI;
 using Mekaiju.Entity;
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
 using Mekaiju.AI.Body;
->>>>>>> 5f85662364b284b3df7b33ea749d4d53e2ca3f54
-=======
-using Mekaiju.AI.Body;
->>>>>>> Stashed changes
 using UnityEngine;
 using UnityEngine.InputSystem;
 
