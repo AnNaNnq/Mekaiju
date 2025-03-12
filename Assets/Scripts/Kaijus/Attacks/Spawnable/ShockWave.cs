@@ -12,6 +12,8 @@ namespace Mekaiju.AI.Attack.Instance
         int _pointCount = 30;
         float _angleBetweenPoint = 0;
         Vector3[] _positions = new Vector3[30];
+        Collider[] _cols;
+        Rigidbody _rb;
 
         public void SetUp(GroundStrike p_stats)
         {
@@ -35,10 +37,38 @@ namespace Mekaiju.AI.Attack.Instance
             _positions[_pointCount - 1] = _positions[0];
         }
 
-        void Update()
+        void FixedUpdate()
         {
-            SetPosition();
-            _radius += Time.deltaTime * _stats.shockwaveSpeed;
+            if(_radius <= _stats.maxRadius)
+            {
+                SetPosition();
+                ApplyForce();
+                _radius += Time.deltaTime * _stats.shockwaveSpeed;
+                _lr.widthMultiplier = (_stats.maxRadius - _radius) / _stats.maxRadius;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        void ApplyForce()
+        {
+            _cols = Physics.OverlapSphere(transform.position, _radius);
+            foreach (var col in _cols)
+            {
+                if (col.CompareTag("Player"))
+                {
+                    Rigidbody rb = col.GetComponent<Rigidbody>();
+                    if (rb != null)
+                    {
+                        Vector3 direction = (col.transform.position - transform.position).normalized;
+                        Vector3 force = direction * _stats.repulsionForce + Vector3.up * _stats.verticalForce;
+
+                        rb.AddForce(force, ForceMode.Impulse);
+                    }
+                }
+            }
         }
 
         void SetPosition()

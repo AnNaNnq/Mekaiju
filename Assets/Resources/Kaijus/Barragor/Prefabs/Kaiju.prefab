@@ -621,7 +621,7 @@ MonoBehaviour:
     currentHealth: 0
     isDestroyed: 0
   behaviors:
-  - rid: 7914790548137836613
+  - rid: 7914790751780995222
   - rid: 7914790548137836614
   - rid: 7914790548137836615
   timeBetweenTowAction: 1
@@ -640,14 +640,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 7914790548137836613
-      type: {class: NormalBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
-      data:
-        speed: 100
-        canTrigger: 0
-        triggerArea: 30
-        triggerOnce: 0
-        nest: {fileID: 0}
     - rid: 7914790548137836614
       type: {class: AwaitBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
       data:
@@ -663,6 +655,14 @@ MonoBehaviour:
         canTrigger: 1
         triggerArea: 100
         triggerOnce: 1
+    - rid: 7914790751780995222
+      type: {class: NormalBehavior, ns: Mekaiju.AI.Behavior, asm: Assembly-CSharp}
+      data:
+        speed: 100
+        canTrigger: 0
+        triggerArea: 30
+        triggerOnce: 0
+        nest: {fileID: 0}
 --- !u!114 &823405219933506410
 MonoBehaviour:
   m_ObjectHideFlags: 0

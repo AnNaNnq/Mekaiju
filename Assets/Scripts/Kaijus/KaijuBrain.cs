@@ -34,7 +34,6 @@ namespace Mekaiju.AI
             _attackGraph = _instance.GetGraph();
             _allAttacks = LoadAllAttacks();
             _lastAttack = "Start";
-            StartCoroutine(CheckAttack());
             foreach(KaijuAttack attack in _allAttacks)
             {
                 attack.attack.Init();
@@ -179,18 +178,15 @@ namespace Mekaiju.AI
             StartCoroutine(UtilsFunctions.CooldownRoutine(_instance.timeBetweenTowAction, () => { _canAttack = true; }));
         }
 
-        IEnumerator CheckAttack()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(_instance.timeBetweenTowAction + 1);
-                _canAttack = true;
-            }
-        }
-
         public void AttackTrigger()
         {
-            _currentAttack.attack.Action();
+            _currentAttack.attack.onAction();
+        }
+
+        public void EndTrigger()
+        {
+            _currentAttack.attack.onEnd();
+            MakeAction();
         }
     }
 }

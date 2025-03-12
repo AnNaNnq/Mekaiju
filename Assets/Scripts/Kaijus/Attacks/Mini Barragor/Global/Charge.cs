@@ -27,7 +27,7 @@ namespace Mekaiju.AI.Attack
             _rb = t_kaiju.GetComponent<Rigidbody>();
             _kaiju = t_kaiju;
 
-            t_kaiju.motor.StopAI();
+            t_kaiju.motor.StopKaiju();
 
 
             t_kaiju.StartCoroutine(AttackEnumerator(t_kaiju));

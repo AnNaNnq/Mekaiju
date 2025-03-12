@@ -93,7 +93,6 @@ public class KaijuMotor : MonoBehaviour
 
     public void StartKaiju()
     {
-        if (_agent.enabled) return;
         _agent.enabled = true;
     }
 
@@ -103,11 +102,6 @@ public class KaijuMotor : MonoBehaviour
         _agent.enabled = false;
         yield return new WaitForSeconds(p_time);
         _agent.enabled = true;
-    }
-
-    public void StopAI()
-    {
-        _agent.enabled = false;
     }
 
     public bool IsInMovement()

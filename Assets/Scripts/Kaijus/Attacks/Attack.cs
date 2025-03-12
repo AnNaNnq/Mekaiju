@@ -108,6 +108,8 @@ namespace Mekaiju.AI.Attack {
            yield return p_kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
         }
 
-        public virtual void Action() { }
+        public virtual void onAction() { }
+
+        public virtual void onEnd() { }
     }
 }
