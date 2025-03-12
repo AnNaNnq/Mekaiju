@@ -255,9 +255,9 @@ namespace Mekaiju.AI
         #endregion
 
         #region implemation of IEntityInstance
-        public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.maxHealth);
+        public override float baseHealth => bodyParts.Sum(p => p.maxHealth);
 
-        public override float health => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.currentHealth);
+        public override float health => bodyParts.Sum(p => p.currentHealth);
 
         public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
 

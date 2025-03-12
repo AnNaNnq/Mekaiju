@@ -109,4 +109,9 @@ public class KaijuMotor : MonoBehaviour
     {
         _agent.enabled = false;
     }
+
+    public bool IsInMovement()
+    {
+        return agent.velocity.magnitude > 0.1f && !agent.isStopped;
+    }
 }
