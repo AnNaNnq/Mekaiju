@@ -26,7 +26,10 @@ namespace Mekaiju
         /// <param name="p_self">The instance where the ability is loaded.</param>
         /// <param name="p_opt">An optional parameter (should be null if not needed).</param>
         /// <returns>true if capacity is able to be triggered, else false.</returns>
-        public abstract bool IsAvailable(EntityInstance p_self, object p_opt);
+        public virtual bool IsAvailable(EntityInstance p_self, object p_opt)
+        {
+            return !p_self.states[State.AbilityLocked];
+        }
 
         /// <summary>
         /// Simple overload of <see cref="Trigger(EntityInstance,BodyPartObject,object)"/>.

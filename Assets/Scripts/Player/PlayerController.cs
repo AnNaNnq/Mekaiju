@@ -285,7 +285,7 @@ public class PlayerController : MonoBehaviour
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
-        if (!_instance.states[State.MovementOverrided] && !_instance.states[State.Stun])
+        if (!_instance.states[State.MovementOverrided] && !_instance.states[State.MovementLocked])
         {
             _speed = _instance.ComputedStatistics(Statistics.Speed) * _speedFactor;
 
