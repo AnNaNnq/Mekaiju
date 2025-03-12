@@ -1,5 +1,6 @@
 using Mekaiju.AI.Objet;
 using Mekaiju.Utils;
+using MyBox;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace Mekaiju.AI
         [Header("Pas touche c'est juste du debug")]
         [SerializeField]
         private string _lastAttack;
+
+        [SerializeField, ReadOnly]
+        KaijuAttack _currentAttack;
 
         [SerializeField]
         private bool _canAttack = true;
@@ -146,10 +150,12 @@ namespace Mekaiju.AI
                 if (i < t_kaijuAttacks.Count - 1)
                 {
                     t_canAttack = t_kaijuAttacks[i].attack.CanUse(_instance, t_kaijuAttacks[i+1].attack.range);
+                    _currentAttack = t_kaijuAttacks[i];
                 }
                 else
                 {
                     t_canAttack = t_kaijuAttacks[i].attack.CanUse(_instance);
+                    _currentAttack = t_kaijuAttacks[i];
                 }
 
                 if (t_canAttack)
@@ -180,6 +186,11 @@ namespace Mekaiju.AI
                 yield return new WaitForSeconds(_instance.timeBetweenTowAction + 1);
                 _canAttack = true;
             }
+        }
+
+        public void AttackTrigger()
+        {
+            _currentAttack.attack.Action();
         }
     }
 }

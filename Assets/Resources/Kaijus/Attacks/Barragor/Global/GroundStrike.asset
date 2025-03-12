@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c81f28bfa57eadc47904e311de7feb8c, type: 3}
+  m_Name: GroundStrike
+  m_EditorClassIdentifier: 
+  <attack>k__BackingField:
+    rid: 7914790751780995154
+  references:
+    version: 2
+    RefIds:
+    - rid: 7914790751780995154
+      type: {class: GroundStrike, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
+      data:
+        cooldown: 0
+        range: 20
+        canMakeDamage: 1
+        damage: 100
+        blockable: 1
+        sphereRadius: 4
+        forwardOffset: 7
+        layerMask:
+          serializedVersion: 2
+          m_Bits: 256
+        timeBeforeFirstAttack: 0.2
+        timeBeforeSecondAttack: 0.2
+        shockwavePrefab: {fileID: 4463112248481850273, guid: 23ef9ca6fd70e204cbe381450a3c848f, type: 3}
+        shockwaveSpeed: 10

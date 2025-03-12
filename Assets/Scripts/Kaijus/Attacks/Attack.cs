@@ -21,8 +21,10 @@ namespace Mekaiju.AI.Attack {
         [ConditionalField(nameof(canMakeDamage))] [Indent]
         public bool blockable;
         [ConditionalField(nameof(canMakeDamage))] [Indent]
+        [ReadOnly]
         public float sphereRadius = 4f;
         [ConditionalField(nameof(canMakeDamage))] [Indent]
+        [ReadOnly]
         public float forwardOffset = 7f;
         [ConditionalField(nameof(canMakeDamage))] [Indent]
         public LayerMask layerMask;
@@ -105,5 +107,7 @@ namespace Mekaiju.AI.Attack {
         {
            yield return p_kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
         }
+
+        public virtual void Action() { }
     }
 }
