@@ -90,9 +90,21 @@ namespace Mekaiju
                 }
             );
         }
-#endregion
 
-#region IEntityInstance implementation
+        public override void Update()
+        {
+            base.Update();
+            shieldAbility.behaviour.Tick(this);
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            shieldAbility.behaviour.FixedTick(this);
+        }
+        #endregion
+
+        #region IEntityInstance implementation
         protected override EnumArray<Statistics, float> statistics => desc.statistics;
 
         public override bool isAlive => health > 0;
