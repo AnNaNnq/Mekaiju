@@ -61,7 +61,7 @@ namespace Mekaiju
 
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return !_isActive && !p_self.states[State.Stun] && p_self.stamina - _consumption >= 0f;
+            return base.IsAvailable(p_self, p_opt) && !_isActive && p_self.stamina - _consumption >= 0f;
         }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)

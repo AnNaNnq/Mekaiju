@@ -79,9 +79,9 @@ namespace Mekaiju
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return (
+                base.IsAvailable(p_self, p_opt) &&
                 !_isAcitve && 
                 !p_self.states[State.Protected] && 
-                !p_self.states[State.Stun] &&
                 p_self.stamina - _consumption >= 0f &&
                 Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0    
             );

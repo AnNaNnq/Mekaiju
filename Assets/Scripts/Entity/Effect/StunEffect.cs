@@ -9,12 +9,14 @@ namespace Mekaiju.Entity.Effect
     {
         public override void OnAdd(EntityInstance p_self)
         {
-            p_self.states[State.Stun] = true;
+            p_self.states[State.AbilityLocked]  = true;
+            p_self.states[State.MovementLocked] = true;
         }
 
         public override void OnRemove(EntityInstance p_self)
         {
-            p_self.states[State.Stun] = false;
+            p_self.states[State.AbilityLocked]  = false;
+            p_self.states[State.MovementLocked] = true;
         }
     }
 }

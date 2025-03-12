@@ -3,6 +3,7 @@ using Mekaiju.AI;
 using Mekaiju.AI.Body;
 using UnityEngine;
 using Mekaiju.Entity;
+using MyBox;
 
 namespace Mekaiju
 {
@@ -64,10 +65,9 @@ namespace Mekaiju
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return (
-                !_isActive && 
-                 p_self.states[State.Grounded] && 
-                !p_self.states[State.Stun] && 
-                !_requested && !_inCooldown
+                base.IsAvailable(p_self, p_opt) && 
+                p_self.states[State.Grounded] && 
+                !_isActive && !_requested && !_inCooldown
             );
         }
 
