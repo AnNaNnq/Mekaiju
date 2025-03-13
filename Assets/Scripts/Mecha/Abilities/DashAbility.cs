@@ -48,7 +48,6 @@ namespace Mekaiju
         [SerializeField]
         private InputActionReference _input;
 
-        private bool _isAcitve;
         private float _elapedTime;
 
         private Vector3      _direction;
@@ -58,7 +57,8 @@ namespace Mekaiju
 
         public override void Initialize(EntityInstance p_self)
         {
-            _isAcitve   = false;
+            base.Initialize(p_self);
+            
             _elapedTime = 0;
 
             _ghost = p_self.parent.gameObject.AddComponent<MeshTrailTut>();
@@ -80,7 +80,6 @@ namespace Mekaiju
         {
             return (
                 base.IsAvailable(p_self, p_opt) &&
-                !_isAcitve && 
                 !p_self.states[State.Protected] && 
                 p_self.stamina - _consumption >= 0f &&
                 Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0    
@@ -104,14 +103,14 @@ namespace Mekaiju
                     var t_go = GameObject.Instantiate(_speedVfx, _camera.transform);
                     t_go.transform.Translate(new(0, 0, 2f));
 
-                    _isAcitve   = true;
+                    state = AbilityState.Active;
                     _elapedTime = 0;
                     yield return new WaitUntil(() => 
                     {
                         _elapedTime += Time.deltaTime;
                         return _elapedTime >= _duration; 
                     });
-                    _isAcitve = false;
+                    state = AbilityState.Ready;
 
                     GameObject.Destroy(t_go);
                     p_self.states[State.MovementOverrided] = false;
@@ -123,7 +122,7 @@ namespace Mekaiju
 
         public override void FixedTick(EntityInstance p_self)
         {
-            if (_isAcitve)
+            if (state == AbilityState.Active)
             {
                 Vector3 t_vel = _force * (1 - _elapedTime / _duration) * _direction;
                 _rigidbody.linearVelocity = new(t_vel.x, _rigidbody.linearVelocity.y, t_vel.z);
