@@ -36,7 +36,7 @@ namespace Mekaiju
 
         void Awake()
         {
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             onJump   = new();
             onLArm   = new();
             onRArm   = new();

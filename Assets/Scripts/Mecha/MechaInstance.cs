@@ -67,7 +67,7 @@ namespace Mekaiju
             shieldAbility = Resources.Load<Ability>("Mecha/Objects/Ability/ShieldAbility");
             shieldAbility.behaviour.Initialize(this);
 
-            var t_main = Instantiate(desc.prefab, transform);
+            var t_main = GameObject.Find("Aegis");
             _parts = desc.parts.Select((key, part) => 
                 {
                     Transform  t_tr;
