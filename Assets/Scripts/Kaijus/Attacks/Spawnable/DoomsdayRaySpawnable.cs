@@ -12,7 +12,6 @@ namespace Mekaiju.AI.Attack
         private Transform _start;
         private bool _damagable = true;
 
-
         public void SetUp(Transform p_start, DoomsdayRay p_stat, KaijuInstance p_instnace)
         {
             _stat = p_stat;
