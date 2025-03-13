@@ -15,8 +15,6 @@ namespace Mekaiju.AI.Attack
         [OverrideLabel("Time Prep Before Charge (sec)")]
         public float chargePrepTime = 1;
 
-        KaijuInstance _kaiju;
-
         Rigidbody _rb;
 
         public override void Active(EntityInstance p_kaiju)
@@ -25,35 +23,33 @@ namespace Mekaiju.AI.Attack
             base.Active(t_kaiju);
             t_kaiju.OnCollision += HandleCollision;
             _rb = t_kaiju.GetComponent<Rigidbody>();
-            _kaiju = t_kaiju;
 
-            t_kaiju.motor.StopKaiju();
+            _kaiju.motor.StopKaiju();
 
 
-            t_kaiju.StartCoroutine(AttackEnumerator(t_kaiju));
+            _kaiju.StartCoroutine(AttackEnumerator(_kaiju));
 
         }
 
         public override IEnumerator AttackEnumerator(EntityInstance p_kaiju)
         {
             float t_time = 0;
-            KaijuInstance t_kaiju = p_kaiju as KaijuInstance;
-            Vector3 t_targetPosition = t_kaiju.GetTargetPos();
+            Vector3 t_targetPosition = _kaiju.GetTargetPos();
 
             while (t_time < chargePrepTime)
             {
-                t_kaiju.motor.LookTarget();
-                t_targetPosition = t_kaiju.GetTargetPos();
+                _kaiju.motor.LookTarget();
+                t_targetPosition = _kaiju.GetTargetPos();
                 yield return new WaitForSeconds(0.01f);
                 t_time += 0.01f;
             }
 
-            t_kaiju.motor.enabled = false;
-            Vector3 t_startPos = p_kaiju.transform.position;
+            //_kaiju.motor.enabled = false;
+            Vector3 t_startPos = _kaiju.transform.position;
             Vector3 t_direction = (t_targetPosition - t_startPos).normalized;
 
             _rb.AddForce(t_direction * chargeSpeed, ForceMode.Impulse);
-            SendDamage(damage, p_kaiju);
+            SendDamage(damage, _kaiju);
         }
 
         void HandleCollision(Collision p_collision)

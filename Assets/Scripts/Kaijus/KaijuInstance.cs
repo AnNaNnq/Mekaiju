@@ -60,7 +60,6 @@ namespace Mekaiju.AI
         public KaijuAttackContainer attackGraphPhaseTow;
 
         [Separator]
-        [SOSelector]
         public KaijuPhaseAttack changePhaseAction;
 
         [Separator]
@@ -139,6 +138,7 @@ namespace Mekaiju.AI
             {
                 UseBehavior();
             }
+        }
 
         public override void FixedUpdate()
         {

@@ -404,7 +404,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.55, y: 2.14, z: -9.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2556312979957223692}
   - {fileID: 7070086803294461532}
@@ -468,7 +468,7 @@ MonoBehaviour:
   currentPhase: 2
   attackGraphPhaseOne: {fileID: 11400000, guid: e361eb976566cde499d92635c7b56823, type: 2}
   attackGraphPhaseTow: {fileID: 11400000, guid: cd0b871fee59b4a4990f43c4c114b170, type: 2}
-  changePhaseAction: {fileID: 11400000, guid: 81d69875ac24a7f40a05761e4bba6591, type: 2}
+  changePhaseAction: {fileID: 0}
   checkRange: 1
   debugRange: 100
   dps: 0
