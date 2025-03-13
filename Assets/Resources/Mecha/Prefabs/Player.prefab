@@ -112,10 +112,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 3.89
-  m_Height: 7.3218665
+  m_Radius: 1.15
+  m_Height: 6.11
   m_Direction: 1
-  m_Center: {x: -0.03519976, y: 3.6818888, z: 0}
+  m_Center: {x: 0, y: 3.05, z: -0.05}
 --- !u!114 &1078583125285842341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86904fcce27b445869d3d5cc054dcd0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onCollide:
+    m_PersistentCalls:
+      m_Calls: []
   _parts:
     _array:
     - {fileID: 0}
@@ -593,8 +596,37 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9116010460608285378, guid: 469c3e07c7ba068498881d0c5a4ff039, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6097119435516394062}
   m_SourcePrefab: {fileID: 100100000, guid: 469c3e07c7ba068498881d0c5a4ff039, type: 3}
+--- !u!1 &550238891586990431 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9116010460608285378, guid: 469c3e07c7ba068498881d0c5a4ff039, type: 3}
+  m_PrefabInstance: {fileID: 8728051309898955677}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &6097119435516394062
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550238891586990431}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.45523682, y: 0.85883904, z: 0.5361358}
+  m_Center: {x: -0.4895005, y: 1.3967841, z: 0.093121104}
 --- !u!4 &3962439016759449931 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5754805543939121878, guid: 469c3e07c7ba068498881d0c5a4ff039, type: 3}
