@@ -25,10 +25,8 @@ namespace Mekaiju.AI.Attack
         {
             base.Active(p_kaiju);
 
-            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
-            t_kaiju.animator.AttackAnimation(nameof(GroundStrike));
-            t_kaiju.motor.StopKaiju();
-            _kaiju = t_kaiju;
+            _kaiju.animator.AttackAnimation(nameof(GroundStrike));
+            _kaiju.motor.StopKaiju();
 
             _start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
         }

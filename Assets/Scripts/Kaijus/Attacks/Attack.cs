@@ -6,7 +6,6 @@ using MyBox;
 using Mekaiju.Entity;
 using Mekaiju.Attribute;
 using TMPro;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 namespace Mekaiju.AI.Attack {
     [System.Serializable]
@@ -32,13 +31,15 @@ namespace Mekaiju.AI.Attack {
         [ConditionalField(nameof(canMakeDamage))] [Indent]
         public LayerMask layerMask;
 
-        [SerializeField]
+        Coroutine _atkCoroutine;
+
         MechaInstance _mecha;
 
         public void Init()
         {
             canUse = true;
             _mecha = null;
+            StopAttackCoroutine();
         }
 
         public virtual bool CanUse(KaijuInstance p_kaiju, float p_otherRange = 0)
@@ -164,6 +165,29 @@ namespace Mekaiju.AI.Attack {
         {
             if (p_mecha == _mecha) _mecha = null;
             Debug.Log(p_mecha.name);
+        }
+
+        public virtual void StartAttackCoroutine()
+        {
+            _atkCoroutine = _kaiju.StartCoroutine(AttackCoroutine());
+        }
+
+        public virtual void StopAttackCoroutine()
+        {
+            if(_atkCoroutine != null)
+            {
+                _kaiju.StopCoroutine(_atkCoroutine);
+                _atkCoroutine = null;
+            }
+        }
+
+        private IEnumerator AttackCoroutine()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(.1f);
+                SendDamage(damage);
+            }
         }
     }
 }

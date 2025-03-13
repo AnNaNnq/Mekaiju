@@ -188,5 +188,15 @@ namespace Mekaiju.AI
             _currentAttack.attack.OnEnd();
             MakeAction();
         }
+
+        public void StartAttackCoroutineTrigger()
+        {
+            _currentAttack.attack.StartAttackCoroutine();
+        }
+
+        public void StopAttackCoroutineTrigger()
+        {
+            _currentAttack.attack.StopAttackCoroutine();
+        }
     }
 }
