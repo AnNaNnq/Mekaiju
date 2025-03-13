@@ -101,11 +101,11 @@ namespace Mekaiju.AI
         public KaijuAttack[] LoadAllAttacks()
         {
             // Charger tous les ScriptableObjects de type Attack dans Resources/Kaijus/Attacks
-            KaijuAttack[] t_attacks = Resources.LoadAll<KaijuAttack>("Kaijus/Attacks");
+            KaijuAttack[] t_attacks = Resources.LoadAll<KaijuAttack>("Kaijus");
 
             if (t_attacks == null || t_attacks.Length == 0)
             {
-                Debug.LogWarning("Aucun attack ScriptableObject trouvé dans Resources/Kaijus/Attacks");
+                Debug.LogWarning("Aucun attack ScriptableObject trouvé dans Resources/Kaijus");
             }
 
             return t_attacks;

@@ -158,13 +158,11 @@ namespace Mekaiju.AI.Attack {
         public virtual void OnMechEnter(MechaInstance p_mecha)
         {
             _mecha = p_mecha;
-            Debug.Log(_mecha.name);
         }
 
         public virtual void OnMechExit(MechaInstance p_mecha)
         {
             if (p_mecha == _mecha) _mecha = null;
-            Debug.Log(p_mecha.name);
         }
 
         public virtual void StartAttackCoroutine()

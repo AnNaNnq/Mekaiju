@@ -15,12 +15,57 @@ MonoBehaviour:
   NodeLinks:
   - BaseNodeGUID: 42016d44-421e-4331-a171-8fa428edae14
     PortName: Next
-    TargetNodeGUID: 51179a7c-11d8-41b4-9eb2-c3659f7433c7
+    TargetNodeGUID: 8531489e-2511-4c64-92ac-84fcdfa7df1d
+  - BaseNodeGUID: e9f6ee89-c33e-4925-993a-6dadd4eb43d7
+    PortName: Attack 1
+    TargetNodeGUID: 8f2e0700-98a6-4de6-989b-b9bc95c1288a
+  - BaseNodeGUID: e9f6ee89-c33e-4925-993a-6dadd4eb43d7
+    PortName: Attack 2
+    TargetNodeGUID: 4db4ffb9-0d3f-46b2-b7f1-65d23bdaa67a
+  - BaseNodeGUID: 86231dee-d8a6-48d4-aa7d-c124383a5cbf
+    PortName: Attack 1
+    TargetNodeGUID: db4e3ae4-ba36-462b-8768-b5835ccc74ec
+  - BaseNodeGUID: 86231dee-d8a6-48d4-aa7d-c124383a5cbf
+    PortName: Attack 2
+    TargetNodeGUID: d24dc368-a192-4de4-a263-493bd65f6d51
+  - BaseNodeGUID: fbe2f35d-4110-423f-942c-5f528606e8cf
+    PortName: Attack 1
+    TargetNodeGUID: ad023117-6b1b-4ee0-b4f8-6776c677b27b
+  - BaseNodeGUID: fbe2f35d-4110-423f-942c-5f528606e8cf
+    PortName: Attack 2
+    TargetNodeGUID: f0658359-4707-4313-96c1-73bc3f58eee5
   NodeData:
-  - guid: 51179a7c-11d8-41b4-9eb2-c3659f7433c7
+  - guid: 8531489e-2511-4c64-92ac-84fcdfa7df1d
+    name: GroundStrike
+    position: {x: 194, y: 0}
+  - guid: 8f2e0700-98a6-4de6-989b-b9bc95c1288a
+    name: RollAndSlash
+    position: {x: 194, y: 143}
+  - guid: 4db4ffb9-0d3f-46b2-b7f1-65d23bdaa67a
     name: Spin
-    position: {x: 228, y: 0}
+    position: {x: 194, y: 282}
+  - guid: db4e3ae4-ba36-462b-8768-b5835ccc74ec
+    name: GroundStrike
+    position: {x: 234, y: 405}
+  - guid: d24dc368-a192-4de4-a263-493bd65f6d51
+    name: Spin
+    position: {x: 234, y: 508}
+  - guid: ad023117-6b1b-4ee0-b4f8-6776c677b27b
+    name: RollAndSlash
+    position: {x: 174, y: 642}
+  - guid: f0658359-4707-4313-96c1-73bc3f58eee5
+    name: GroundStrike
+    position: {x: 174, y: 752}
   StartNodeData:
   - guid: 42016d44-421e-4331-a171-8fa428edae14
     name: Start
     position: {x: 0, y: 0}
+  - guid: e9f6ee89-c33e-4925-993a-6dadd4eb43d7
+    name: GroundStrike
+    position: {x: -155, y: 181}
+  - guid: 86231dee-d8a6-48d4-aa7d-c124383a5cbf
+    name: RollAndSlash
+    position: {x: -127, y: 407}
+  - guid: fbe2f35d-4110-423f-942c-5f528606e8cf
+    name: Spin
+    position: {x: -131, y: 618}
