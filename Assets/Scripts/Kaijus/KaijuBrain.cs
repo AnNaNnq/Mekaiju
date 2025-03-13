@@ -180,12 +180,12 @@ namespace Mekaiju.AI
 
         public void AttackTrigger()
         {
-            _currentAttack.attack.onAction();
+            _currentAttack.attack.OnAction();
         }
 
         public void EndTrigger()
         {
-            _currentAttack.attack.onEnd();
+            _currentAttack.attack.OnEnd();
             MakeAction();
         }
     }

@@ -75,6 +75,9 @@ namespace Mekaiju.AI
 
         public event Action<Collision> OnCollision;
 
+        [Header("Pas touche")]
+        public KaijuCollsionDetector detector;
+
         public KaijuAttackContainer GetGraph()
         {
             if (currentPhase == 1) return attackGraphPhaseOne;

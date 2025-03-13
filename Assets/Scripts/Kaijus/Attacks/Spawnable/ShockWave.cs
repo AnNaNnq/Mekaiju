@@ -74,7 +74,7 @@ namespace Mekaiju.AI.Attack.Instance
                         if (t_rb != null && t_instance.states[Entity.State.Grounded])
                         {
                             t_instance.AddEffect(_stats.effect, _stats.effectDuration);
-                            _stats.SendDamage(_stats.damage, _stats.effect, _stats.effectDuration);
+                            _stats.SendDamage(_stats.shockwaveDamage, t_instance, _stats.effect, _stats.effectDuration);
                         }
                     }
                 }

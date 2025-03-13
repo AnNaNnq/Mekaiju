@@ -13,6 +13,7 @@ namespace Mekaiju.AI.Attack
         [Separator]
         public GameObject shockwavePrefab;
         public float shockwaveSpeed = 10f;
+        public float shockwaveDamage = 50f;
         public float maxRadius = 30f;
         [SOSelector]
         public Effect effect;
@@ -32,15 +33,16 @@ namespace Mekaiju.AI.Attack
             _start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
         }
 
-        public override void onAction()
+        public override void OnAction()
         {
-            base.onAction();
+            base.OnAction();
 
             Vector3 t_pos = _start.position;
             t_pos = new Vector3(t_pos.x, UtilsFunctions.GetGround(t_pos), t_pos.z);
             GameObject t_go = GameObject.Instantiate(shockwavePrefab, t_pos, Quaternion.identity);
             ShockWave t_sw = t_go.GetComponent<ShockWave>();
             t_sw.SetUp(this);
+            SendDamage(damage);
         }
     }
 }

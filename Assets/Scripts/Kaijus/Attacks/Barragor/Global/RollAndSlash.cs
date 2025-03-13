@@ -50,9 +50,9 @@ namespace Mekaiju.AI.Attack
             Slash();
         }
 
-        public override void onAction()
+        public override void OnAction()
         {
-            base.onAction();
+            base.OnAction();
             SendDamage(damage);
         }
     }
