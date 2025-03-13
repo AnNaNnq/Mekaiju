@@ -30,8 +30,8 @@ namespace Mekaiju.AI.Attack
             KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
             if (t_kaiju.TargetInRange(range) && !t_kaiju.TargetInRange(attackRange))
             {
-                Debug.Log("sprint");
-                t_kaiju.motor.MoveTo(t_kaiju.target.transform.position, sprintSpeed, attackRange);
+                t_kaiju.motor.SetSpeed(sprintSpeed);
+                t_kaiju.motor.MoveTo(t_kaiju.target.transform.position, attackRange);
                 t_kaiju.StartCoroutine(SprintDuration(t_kaiju));
             }
             else

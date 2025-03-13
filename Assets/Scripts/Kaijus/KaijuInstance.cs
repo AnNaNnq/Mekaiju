@@ -192,8 +192,16 @@ namespace Mekaiju.AI
             return stats.dmg * (t_damage/100);
         }
 
+        public float GetRealSpeed(float p_amonunt)
+        {
+            var t_amount = modifiers[Statistics.Speed].ComputeValue(p_amonunt);
+            return stats.speed * (t_amount / 100);
+
+        }
+
         public void Combat()
         {
+            motor.SetSpeed(100);
             _isInFight = true;
         }
 

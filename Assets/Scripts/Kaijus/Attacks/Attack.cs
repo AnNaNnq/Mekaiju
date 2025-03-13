@@ -116,6 +116,10 @@ namespace Mekaiju.AI.Attack {
 
         public virtual void onAction() { }
 
-        public virtual void onEnd() { }
+        public virtual void onEnd() 
+        {
+            _kaiju.motor.StartKaiju();
+            _kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
+        }
     }
 }
