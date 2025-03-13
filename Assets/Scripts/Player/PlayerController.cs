@@ -180,20 +180,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnLeftArm(InputAction.CallbackContext p_context)
     {
-        BodyPartObject t_target = PickRandomTargetPart();
-        if (t_target)
-        {
-            StartCoroutine(_instance[MechaPart.LeftArm].TriggerAbility(PickRandomTargetPart(), null));
-        }
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.LeftArm].TriggerAbility(t_target, null));
     }
     
     private void OnRightArm(InputAction.CallbackContext p_context)
     {
-        BodyPartObject t_target = PickRandomTargetPart();
-        if (t_target)
-        {
-            StartCoroutine(_instance[MechaPart.RightArm].TriggerAbility(PickRandomTargetPart(), null));
-        }
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.RightArm].TriggerAbility(t_target, null));
     }
 
     private void OnHead(InputAction.CallbackContext p_context)
@@ -220,13 +214,14 @@ public class PlayerController : MonoBehaviour
     {
         isLockedOn = !isLockedOn;
         _lockOnTargetSystem.ToggleLockOn(isLockedOn);
-        if (isLockedOn)
+        if (isLockedOn && _lockOnTargetSystem.GetTargetBodyPartObject() != null)
         {
             _lookAction.Disable();
         }
         else
         {
             _lookAction.Enable();
+            isLockedOn = false;
         }
     }
 

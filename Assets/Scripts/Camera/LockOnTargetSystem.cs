@@ -129,7 +129,7 @@ namespace Mekaiju.LockOnTargetSystem
 
         public BodyPartObject GetTargetBodyPartObject()
         {
-            return _lockedTarget.gameObject.GetComponent<BodyPartObject>();
+            return _lockedTarget == null ? null : _lockedTarget.gameObject.GetComponent<BodyPartObject>();
         }
     }
 }
