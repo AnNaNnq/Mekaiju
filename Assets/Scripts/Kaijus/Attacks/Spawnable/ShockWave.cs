@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack.Instance
@@ -14,6 +15,8 @@ namespace Mekaiju.AI.Attack.Instance
         Vector3[] _positions = new Vector3[30];
         Collider[] _cols;
         Rigidbody _rb;
+
+        HashSet<Collider> _hitObjects = new HashSet<Collider>();
 
         public void SetUp(GroundStrike p_stats)
         {
@@ -42,7 +45,7 @@ namespace Mekaiju.AI.Attack.Instance
             if(_radius <= _stats.maxRadius)
             {
                 SetPosition();
-                ApplyForce();
+                TriggerColision();
                 _radius += Time.deltaTime * _stats.shockwaveSpeed;
                 _lr.widthMultiplier = (_stats.maxRadius - _radius) / _stats.maxRadius;
             }
@@ -52,20 +55,27 @@ namespace Mekaiju.AI.Attack.Instance
             }
         }
 
-        void ApplyForce()
+        void TriggerColision()
         {
-            _cols = Physics.OverlapSphere(transform.position, _radius);
+            _cols = Physics.OverlapSphere(transform.position, _radius + 0.5f); // Légèrement plus large
+
             foreach (var col in _cols)
             {
-                if (col.CompareTag("Player"))
+                if (col.CompareTag("Player") && !_hitObjects.Contains(col)) // Vérifie si pas déjà touché
                 {
-                    Rigidbody rb = col.GetComponent<Rigidbody>();
-                    if (rb != null)
-                    {
-                        Vector3 direction = (col.transform.position - transform.position).normalized;
-                        Vector3 force = direction * _stats.repulsionForce + Vector3.up * _stats.verticalForce;
+                    Vector3 t_toPlayer = col.transform.position - transform.position;
+                    float t_distanceToWave = Mathf.Abs(t_toPlayer.magnitude - _radius); // Distance exacte
 
-                        rb.AddForce(force, ForceMode.Impulse);
+                    if (t_distanceToWave < _lineWith) // Vérifie si le joueur est bien sur la ligne de l'onde
+                    {
+                        _hitObjects.Add(col); // Ajoute l'objet pour éviter de le toucher plusieurs fois
+                        Rigidbody t_rb = col.GetComponent<Rigidbody>();
+                        MechaInstance t_instance = col.GetComponent<MechaInstance>();
+                        if (t_rb != null && t_instance.states[Entity.State.Grounded])
+                        {
+                            t_instance.AddEffect(_stats.effect, _stats.effectDuration);
+                            _stats.SendDamage(_stats.damage, _stats.effect, _stats.effectDuration);
+                        }
                     }
                 }
             }

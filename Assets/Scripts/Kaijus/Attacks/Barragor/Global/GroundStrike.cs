@@ -1,5 +1,7 @@
 using Mekaiju.AI.Attack.Instance;
+using Mekaiju.Attribute;
 using Mekaiju.Entity;
+using Mekaiju.Entity.Effect;
 using Mekaiju.Utils;
 using MyBox;
 using UnityEngine;
@@ -9,17 +11,14 @@ namespace Mekaiju.AI.Attack
     public class GroundStrike : Attack
     {
         [Separator]
-        public float timeBeforeFirstAttack = .2f;
-        public float timeBeforeSecondAttack = .2f;
         public GameObject shockwavePrefab;
         public float shockwaveSpeed = 10f;
         public float maxRadius = 30f;
-        public float repulsionForce = 1f;
-        public float verticalForce = 10f;
+        [SOSelector]
+        public Effect effect;
+        public float effectDuration = 0.2f;
 
         Transform _start;
-
-        KaijuInstance _kaiju;
 
         public override void Active(EntityInstance p_kaiju)
         {

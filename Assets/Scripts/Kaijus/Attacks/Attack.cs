@@ -13,6 +13,7 @@ namespace Mekaiju.AI.Attack {
         public float cooldown;
         public float range;
         protected bool canUse;
+        protected KaijuInstance _kaiju;
 
         public bool canMakeDamage = true;
 
@@ -79,7 +80,12 @@ namespace Mekaiju.AI.Attack {
             return null;
         }
 
-        public void SendDamage(float p_damage, EntityInstance p_kaiju, Effect p_effet = null, float p_effetDuration = -1)
+        public void SendDamage(float p_damage, Effect p_effet = null, float p_effetDuration = -1)
+        {
+            SendDamage(p_damage, _kaiju, p_effet, p_effetDuration);
+        }
+
+        protected void SendDamage(float p_damage, EntityInstance p_kaiju, Effect p_effet = null, float p_effetDuration = -1)
         {
             MechaInstance mecha = GetPlayerInstance(p_kaiju);
 
