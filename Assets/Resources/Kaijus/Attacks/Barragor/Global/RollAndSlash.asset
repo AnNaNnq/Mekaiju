@@ -20,13 +20,15 @@ MonoBehaviour:
     - rid: 7914790776543903814
       type: {class: RollAndSlash, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
-        cooldown: 0
+        cooldown: 5
         range: 60
         canMakeDamage: 1
-        damage: 50
+        damage: 100
         blockable: 0
         sphereRadius: 4
         forwardOffset: 7
         layerMask:
           serializedVersion: 2
-          m_Bits: 0
+          m_Bits: 256
+        attackRange: 10
+        rollSpeed: 300

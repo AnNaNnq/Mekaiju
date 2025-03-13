@@ -42,12 +42,5 @@ namespace Mekaiju.AI.Attack
             ShockWave t_sw = t_go.GetComponent<ShockWave>();
             t_sw.SetUp(this);
         }
-
-        public override void onEnd()
-        {
-            base.onEnd();
-            _kaiju.motor.StartKaiju();
-            _kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
-        }
     }
 }
