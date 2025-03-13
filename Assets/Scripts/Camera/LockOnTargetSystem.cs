@@ -19,7 +19,6 @@ namespace Mekaiju.LockOnTargetSystem
         public float verticalAngle = 0f; // Angle vertical fixe
 
         [Header("Paramètres de Debug")]
-        [SerializeField] private Transform _currentTarget; // Cible actuelle
         [SerializeField] private Transform _lockedTarget; // Cible verrouillée
 
         private List<Transform> _potentialTargets = new List<Transform>(); // Liste des cibles
@@ -34,11 +33,12 @@ namespace Mekaiju.LockOnTargetSystem
 
         private void Update()
         {
-            DetectTargets();
+            _DetectTargets();
+            Debug.Log(GetTargetBodyPartObject());
         }
 
         // Détecte les cibles proches dans la portée du Lock-On
-        private void DetectTargets()
+        private void _DetectTargets()
         {
             Collider[] hits = Physics.OverlapSphere(transform.position, lockOnRange, _targetLayerMask);
             _potentialTargets.Clear();
@@ -63,7 +63,7 @@ namespace Mekaiju.LockOnTargetSystem
                 _targetIndex = 0;
                 _lockedTarget = _potentialTargets[_targetIndex];
                 Debug.Log("Lock-On activé sur : " + _lockedTarget.name);
-                StartCoroutine(SmoothFollowTarget());
+                StartCoroutine(_SmoothFollowTarget());
             }
             else
             {
@@ -88,7 +88,7 @@ namespace Mekaiju.LockOnTargetSystem
         }
 
         // Suit la cible verrouillée de manière fluide
-        private IEnumerator SmoothFollowTarget()
+        private IEnumerator _SmoothFollowTarget()
         {
             while (_isLockedOn && _lockedTarget != null)
             {
@@ -129,7 +129,7 @@ namespace Mekaiju.LockOnTargetSystem
 
         public BodyPartObject GetTargetBodyPartObject()
         {
-            return _currentTarget.gameObject.GetComponent<BodyPartObject>();
+            return _lockedTarget.gameObject.GetComponent<BodyPartObject>();
         }
     }
 }
