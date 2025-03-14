@@ -19,6 +19,7 @@ namespace Mekaiju.AI.Attack
                 Vector3 t_pos = UtilsFunctions.GetRandomPointInCircle(range, p_kaiju.transform);
                 t_pos = new Vector3(t_pos.x, UtilsFunctions.GetGround(t_pos), t_pos.z);
                 GameObject t_parasite = GameObject.Instantiate(parasitePrefab, t_pos, Quaternion.identity);
+                OnEnd();
             }
         }
 

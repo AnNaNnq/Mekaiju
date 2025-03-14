@@ -27,6 +27,7 @@ namespace Mekaiju.AI
             DoomsdayRaySpawnable t_dr = t_doomsday.GetComponent<DoomsdayRaySpawnable>();
             t_dr.SetUp(start, this, t_kaiju);
             GameObject.Destroy(t_doomsday, duration);
+            OnEnd();
         }
     }
 }

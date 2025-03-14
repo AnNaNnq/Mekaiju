@@ -7,7 +7,6 @@ using Mekaiju.Attribute;
 using System;
 using System.Collections;
 using Mekaiju.Entity;
-using Mekaiju.Entity.Effect;
 using Mekaiju.AI.Objet;
 using Mekaiju.AI.Body;
 using Mekaiju.AI.Behavior;
@@ -60,7 +59,6 @@ namespace Mekaiju.AI
         public KaijuAttackContainer attackGraphPhaseTow;
 
         [Separator]
-        [SOSelector]
         public KaijuPhaseAttack changePhaseAction;
 
         [Separator]
@@ -111,6 +109,7 @@ namespace Mekaiju.AI
                         t_obj.AddComponent<BodyPartObject>();
                     }
                 }
+                t_part.currentHealth = t_part.maxHealth;
             }
 
             foreach(var passive in passives)
@@ -139,12 +138,6 @@ namespace Mekaiju.AI
             {
                 UseBehavior();
             }
-
-
-            if(Input.GetKeyDown(KeyCode.N))
-            {
-                ChangePhase();
-            }
         }
 
         public override void FixedUpdate()
@@ -163,8 +156,11 @@ namespace Mekaiju.AI
 
         public void ChangePhase()
         {
-            motor.StopKaiju();
-            changePhaseAction.attack.Action();
+            if(changePhaseAction != null)
+            {
+                motor.StopKaiju();
+                changePhaseAction.attack.Action();
+            }
         }
 
         public void SetPhase(int p_phase)
@@ -305,7 +301,6 @@ namespace Mekaiju.AI
         public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
         {
             var t_defense = modifiers[Statistics.Defense].ComputeValue(stats.def);
-            Debug.Log(t_defense);
 
             var t_realDamage = p_amonunt * (1- (t_defense/100));
 

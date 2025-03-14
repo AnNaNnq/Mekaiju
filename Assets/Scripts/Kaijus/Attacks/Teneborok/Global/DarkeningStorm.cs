@@ -17,6 +17,7 @@ namespace Mekaiju.AI.Attack
             base.Active(p_kaiju);
             GameObject t_darkeningStorm = GameObject.Instantiate(prefab, p_kaiju.transform.position, Quaternion.identity);
             GameObject.Destroy(t_darkeningStorm, duration);
+            OnEnd();
         }
 
         public override IEnumerator AttackEnumerator(EntityInstance p_kaiju)

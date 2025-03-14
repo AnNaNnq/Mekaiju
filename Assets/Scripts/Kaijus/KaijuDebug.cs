@@ -30,7 +30,7 @@ public class KaijuDebug : MonoBehaviour
         foreach(var part in _kaiju.bodyParts)
         {
             var health = Instantiate(kaijuHealthPrefab, kaijuHealtParent.transform);
-            health.GetComponent<TextMeshProUGUI>().text = $"{part.nom} : {part.maxHealth}";
+            health.GetComponent<TextMeshProUGUI>().text = $"{part.nom} : {part.currentHealth}";
             _kaijuHealthInstances.Add(health);
         }
 
