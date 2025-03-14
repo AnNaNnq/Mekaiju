@@ -1,3 +1,4 @@
+using Mekaiju.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -85,7 +86,15 @@ namespace Mekaiju.AI.Attack.Instance
         {
             for (int i = 0; i < _pointCount; i++)
             {
-                _lr.SetPosition(i, _positions[i] * _radius);
+                Vector3 worldPoint = transform.position + (_positions[i] * _radius); // Convertir en coordonnées mondiales
+                RaycastHit hit;
+
+                if (Physics.Raycast(worldPoint + Vector3.up * 5f, Vector3.down, out hit, 10f)) // Raycast vers le bas
+                {
+                    worldPoint.y = hit.point.y; // Ajuster la hauteur selon le sol
+                }
+
+                _lr.SetPosition(i, worldPoint);
             }
         }
     }
