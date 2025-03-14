@@ -49,10 +49,16 @@ namespace Mekaiju
         private InputActionReference _input;
 
         private float _elapedTime;
+        private float _endTriggerTimout = 1f;
+        private float _actionTriggerTimout = 1f;
 
         private Vector3      _direction;
         private MeshTrailTut _ghost;
         private GameObject   _camera;
+
+        private AnimationState _animationState;
+        private MechaAnimatorProxy _animationProxy;
+
         private Rigidbody    _rigidbody;
 
         public override void Initialize(EntityInstance p_self)
@@ -66,6 +72,14 @@ namespace Mekaiju
 
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
 
+
+            _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
+
+            if (!_animationProxy)
+            {
+                Debug.LogWarning("Unable to find animator proxy on mecha!");
+            }
+
             if (p_self.parent.TryGetComponent<Rigidbody>(out var t_rb))
             {
                 _rigidbody = t_rb;
@@ -74,13 +88,16 @@ namespace Mekaiju
             {
                 Debug.LogWarning("Unable to find rigidbody on mecha!");
             }
+
+            _animationProxy.onDash.AddListener(_OnDashAnimationEvent);
         }
 
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return (
                 base.IsAvailable(p_self, p_opt) &&
-                !p_self.states[State.Protected] && 
+                !p_self.states[State.Protected] &&
+                p_self.states[State.Grounded]   &&
                 p_self.stamina - _consumption >= 0f &&
                 Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0    
             );
@@ -104,12 +121,21 @@ namespace Mekaiju
                     t_go.transform.Translate(new(0, 0, 2f));
 
                     state = AbilityState.Active;
+                    _animationState = AnimationState.Idle;
+
+                    _animationProxy.animator.SetTrigger("Dash");
+
+                    // Wait for animation action
+                    float t_timout = _actionTriggerTimout;
+                    yield return new WaitUntil(() => _animationState == AnimationState.Trigger || (t_timout -= Time.deltaTime) <= 0);
+
                     _elapedTime = 0;
-                    yield return new WaitUntil(() => 
+                    yield return new WaitUntil(() =>
                     {
                         _elapedTime += Time.deltaTime;
-                        return _elapedTime >= _duration; 
+                        return _elapedTime >= _duration;
                     });
+
                     state = AbilityState.Ready;
 
                     GameObject.Destroy(t_go);
@@ -127,6 +153,11 @@ namespace Mekaiju
                 Vector3 t_vel = _force * (1 - _elapedTime / _duration) * _direction;
                 _rigidbody.linearVelocity = new(t_vel.x, _rigidbody.linearVelocity.y, t_vel.z);
             }   
+        }
+        private void _OnDashAnimationEvent(AnimationEvent p_event)
+        {
+            Debug.Log(p_event.state);
+            _animationState = p_event.state;
         }
     }
 }

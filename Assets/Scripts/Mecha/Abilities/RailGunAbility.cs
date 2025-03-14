@@ -68,11 +68,9 @@ namespace Mekaiju
         {
             base.Initialize(p_self);
 
-            if (p_self.parent.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
-            {
-                _animationProxy = t_proxy;
-            }
-            else
+            _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
+
+            if (!_animationProxy)
             {
                 Debug.LogWarning("Unable to find animator proxy on mecha!");
             }
