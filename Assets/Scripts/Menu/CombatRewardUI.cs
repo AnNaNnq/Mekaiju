@@ -27,7 +27,6 @@ namespace Mekaiju.UI
                 {
                     t_rcu.Setup(t_ability);
                     t_rcu.onClick.AddListener(() => {
-                        Debug.Log(t_ability.name);
                         t_ability.granter.Grant(GameManager.instance.playerData.mechaDesc, t_ability);
                         SceneManager.LoadScene("MainScene");
                     });
