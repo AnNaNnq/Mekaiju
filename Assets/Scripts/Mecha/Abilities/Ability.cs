@@ -23,12 +23,6 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [field: SerializeField]
-        public MechaPart target { get; private set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
         [field: SerializeReference, SubclassPicker]
         public IAbilityBehaviour behaviour { get; private set; }
 

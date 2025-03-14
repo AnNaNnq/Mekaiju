@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2c90c8f421734c05b8e3589afd75ced, type: 3}
-  m_Name: EmptyAbility
+  m_Name: StandaloneTest
   m_EditorClassIdentifier: 
-  <description>k__BackingField: Default chest without behaviour.
-  <objectName>k__BackingField: Chest
+  <description>k__BackingField: Standalone ability test
+  <objectName>k__BackingField: 
   <behaviour>k__BackingField:
-    rid: 8176259984244604993
+    rid: 8176260172734005316
   <granter>k__BackingField:
-    rid: 8176260172734005318
+    rid: 8176260172734005315
   references:
     version: 2
     RefIds:
-    - rid: 8176259984244604993
+    - rid: 8176260172734005315
+      type: {class: StandaloneGranter, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        _target: 1
+    - rid: 8176260172734005316
       type: {class: EmptyAbility, ns: , asm: Assembly-CSharp}
       data: 
-    - rid: 8176260172734005318
-      type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}
-      data:
-        _part: 1

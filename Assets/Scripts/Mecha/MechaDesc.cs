@@ -36,6 +36,12 @@ namespace Mekaiju
         /// </summary>
         [field: SerializeField]
         public EnumArray<MechaPart, MechaPartDesc> parts { get; private set; }
+
+        /// <summary>
+        /// The description of standalone abilities
+        /// </summary>
+        [field: SerializeField]
+        public EnumArray<StandaloneAbility, Ability> standalones { get; private set; }
     }
     
 }
