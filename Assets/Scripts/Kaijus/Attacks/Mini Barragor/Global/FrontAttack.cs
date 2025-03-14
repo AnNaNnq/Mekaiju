@@ -42,8 +42,7 @@ namespace Mekaiju.AI.Attack
 
         public void AttackFront(KaijuInstance p_kaiju)
         {
-            SendDamage(damage, p_kaiju);
-            p_kaiju.brain.MakeAction();
+            _kaiju.animator.AttackAnimation("Sharp");
         }
 
         IEnumerator SprintDuration(KaijuInstance p_kaiju)
@@ -53,6 +52,13 @@ namespace Mekaiju.AI.Attack
                 yield return new WaitForSeconds(0.1f);
             }
             AttackFront(p_kaiju);
+        }
+
+        public override void OnAction()
+        {
+            base.OnAction();
+
+            SendDamage(damage);
         }
     }
 }
