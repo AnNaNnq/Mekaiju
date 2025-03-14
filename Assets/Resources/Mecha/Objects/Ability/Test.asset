@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <description>k__BackingField: A test ability
   <objectName>k__BackingField: Chest
-  <target>k__BackingField: 1
   <behaviour>k__BackingField:
     rid: 8176260172137103428
   <granter>k__BackingField:
@@ -25,6 +24,7 @@ MonoBehaviour:
     - rid: 8176260172137103427
       type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}
       data:
+        <targetName>k__BackingField: Torse
         _part: 1
     - rid: 8176260172137103428
       type: {class: EmptyAbility, ns: , asm: Assembly-CSharp}

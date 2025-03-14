@@ -12,6 +12,8 @@ namespace Mekaiju.UI
         private TextMeshProUGUI _name;
         [SerializeField]
         private TextMeshProUGUI _description;
+        [SerializeField]
+        private TextMeshProUGUI _target;
 
         [SerializeField]
         private Image _icon;
@@ -27,6 +29,7 @@ namespace Mekaiju.UI
         {
             _name.text        = t_ability.name;
             _description.text = t_ability.description;
+            _target.text      = t_ability.granter.targetName;
         }
 
         public void OnClick()
