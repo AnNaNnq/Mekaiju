@@ -6,6 +6,9 @@ namespace Mekaiju
 {
     public class CombatManager : MonoBehaviour
     {
+        [field: SerializeField]
+        public CombatReward reward { get; private set; }
+
         public MechaInstance mechaInstance { get; private set; }
         public KaijuInstance kaijuInstance { get; private set; }
 
