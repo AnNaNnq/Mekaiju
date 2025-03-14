@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
     /// <summary>
     /// 
@@ -13,7 +13,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         [SerializeField]
-        private int _heal;
+        private float _heal;
 
         /// <summary>
         /// 
@@ -25,7 +25,7 @@ namespace Mekaiju
         /// 
         /// </summary>
         /// <param name="self"></param>
-        public override void Tick(IEntityInstance self)
+        public override void Tick(EntityInstance self)
         {
             if (Time.time - self.timePoints[TimePoint.LastDamage] > _timeBeforeHeal)
             {

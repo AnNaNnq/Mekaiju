@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultSword
   m_EditorClassIdentifier: 
   <description>k__BackingField: Sword
-  <objectName>k__BackingField: default
+  <objectName>k__BackingField: Arm_L
   <target>k__BackingField: 2
   <behaviour>k__BackingField:
     rid: 2512019433379594307
@@ -23,7 +23,6 @@ MonoBehaviour:
     - rid: 2512019433379594307
       type: {class: SwordAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
-        _damage: 75
-        _rateOfFire: 100
+        _damageFactor: 1
         _reachDistance: 20
         _consumption: 5

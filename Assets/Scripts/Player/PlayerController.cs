@@ -1,11 +1,13 @@
 using System.Linq;
 using Mekaiju;
 using Mekaiju.AI;
+using Mekaiju.AI.Body;
 using Mekaiju.LockOnTargetSystem;
 using MyBox;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mekaiju.Entity;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -27,9 +29,12 @@ public class PlayerController : MonoBehaviour
 
     
     [Foldout("Movement Attributes")]
-    [SerializeField] private float _groundCheckRadius = 0.5f;
-    [SerializeField] private float _baseSpeed = 5f;
-    [SerializeField] private float _speed;
+    [SerializeField] 
+    private float _groundCheckRadius = 0.5f;
+    [SerializeField] 
+    private float _speedFactor = 5f;
+    [SerializeField, ReadOnly] 
+    private float _speed;
 
 
     [Foldout("Camera Attributes")]
@@ -56,9 +61,7 @@ public class PlayerController : MonoBehaviour
     {
         _playerActions = new MechaPlayerActions();
         _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
-
-        _speed = _baseSpeed;
+        _animator = GetComponentInChildren<Animator>();
 
         _groundLayerMask = LayerMask.GetMask("Walkable");
 
@@ -83,8 +86,6 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Heal.performed += OnHeal;
         _playerActions.Player.Torse.performed += OnTorse;
         _playerActions.Player.Pause.performed += OnPause;
-
-        _instance.context.moveAction = _moveAction;
 
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
         Cursor.visible = false; // Make the cursor invisible during gameplay
@@ -179,20 +180,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnLeftArm(InputAction.CallbackContext p_context)
     {
-        BodyPartObject t_target = PickRandomTargetPart();
-        if (t_target)
-        {
-            StartCoroutine(_instance[MechaPart.LeftArm].TriggerAbility(PickRandomTargetPart(), null));
-        }
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.LeftArm].TriggerAbility(t_target, null));
     }
     
     private void OnRightArm(InputAction.CallbackContext p_context)
     {
-        BodyPartObject t_target = PickRandomTargetPart();
-        if (t_target)
-        {
-            StartCoroutine(_instance[MechaPart.RightArm].TriggerAbility(PickRandomTargetPart(), null));
-        }
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.RightArm].TriggerAbility(t_target, null));
     }
 
     private void OnHead(InputAction.CallbackContext p_context)
@@ -202,12 +197,12 @@ public class PlayerController : MonoBehaviour
     
     private void OnShield(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.Chest].TriggerAbility(null, null));
+        StartCoroutine(_instance.shieldAbility.behaviour.Trigger(_instance, null, null));
     }
     
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
-        _instance[MechaPart.Chest].ReleaseAbility();
+        _instance.shieldAbility.behaviour.Release();
     }
     
     private void OnJump(InputAction.CallbackContext p_context)
@@ -219,13 +214,14 @@ public class PlayerController : MonoBehaviour
     {
         isLockedOn = !isLockedOn;
         _lockOnTargetSystem.ToggleLockOn(isLockedOn);
-        if (isLockedOn)
+        if (isLockedOn && _lockOnTargetSystem.GetTargetBodyPartObject() != null)
         {
             _lookAction.Disable();
         }
         else
         {
             _lookAction.Enable();
+            isLockedOn = false;
         }
     }
 
@@ -257,7 +253,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _instance.context.isGrounded = _isGrounded;
+        _instance.states[State.Grounded] = _isGrounded;
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
@@ -284,10 +280,9 @@ public class PlayerController : MonoBehaviour
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
-        if (!_instance.context.isMovementOverrided)
+        if (!_instance.states[State.MovementOverrided] && !_instance.states[State.MovementLocked])
         {
-            _speed = _instance.context.modifiers[ModifierTarget.Speed]?.ComputeValue(_baseSpeed) ?? _baseSpeed;
-            // _speed = _baseSpeed * _instance.Context.SpeedModifier;
+            _speed = _instance.ComputedStatistics(Statistics.Speed) * _speedFactor;
 
             if (_isGrounded)
             {

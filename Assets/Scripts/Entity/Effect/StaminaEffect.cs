@@ -1,18 +1,20 @@
 using System;
-using Mekaiju;
 using UnityEngine;
 
-[Serializable]
-public class StaminaEffect : IEffectBehaviour
+namespace Mekaiju.Entity.Effect
 {
-    [SerializeField, Range(0f, 1f)]
-    private float _percentPerSec;
-
-    public override void Tick(IEntityInstance self)
+    [Serializable]
+    public class StaminaEffect : IEffectBehaviour
     {
-        if (Time.time - self.timePoints[TimePoint.LastAbilityTriggered] > 2f)
+        [SerializeField, Range(0f, 1f)]
+        private float _percentPerSec;
+
+        public override void Tick(EntityInstance self)
         {
-            self.RestoreStamina(_percentPerSec * self.baseStamina * Time.deltaTime);
+            if (Time.time - self.timePoints[TimePoint.LastAbilityTriggered] > 2f)
+            {
+                self.RestoreStamina(_percentPerSec * self.baseStamina * Time.deltaTime);
+            }
         }
     }
 }
