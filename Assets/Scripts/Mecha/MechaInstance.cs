@@ -64,19 +64,17 @@ namespace Mekaiju
             shieldAbility = Resources.Load<Ability>("Mecha/Objects/Ability/ShieldAbility");
             shieldAbility.behaviour.Initialize(this);
 
-            var t_main = Instantiate(desc.prefab, transform);
+            var t_main = GameObject.Find("Aegis");
             _parts = desc.parts.Select((key, part) => 
                 {
                     Transform  t_tr;
                     GameObject t_go;
                     MechaPartInstance t_inst;
 
-                    t_tr = t_main.transform.FindNested(Enum.GetName(typeof(MechaPart), key) + "Anchor");
-                    Debug.Assert(t_tr, $"Unable to find an anchor for {Enum.GetName(typeof(MechaPart), key)}!");
+                    t_tr = t_main.transform;
                     t_tr.gameObject.SetActive(false);
 
-                    t_go = t_tr.Find(part.ability.objectName).gameObject;
-                    Debug.Assert(t_go, $"Unable to find the GameObject associated to the ability {part.ability.name}!");
+                    t_go = t_tr.FindNested(part.ability.objectName).gameObject;
 
                     t_inst = t_go.AddComponent<MechaPartInstance>();
                     t_inst.Initialize(this, part);
