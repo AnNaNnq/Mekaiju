@@ -74,7 +74,7 @@ namespace Mekaiju.QTE
                  yield return new WaitForSeconds(.1f);
                 t_time += .1f;
 
-                _currentInput -= .2f;
+                _currentInput -= .1f;
                 if(_currentInput < 0)
                 {
                     _currentInput = 0;
