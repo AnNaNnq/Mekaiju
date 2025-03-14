@@ -149,6 +149,7 @@ namespace Mekaiju.AI.Attack {
         public virtual void OnEnd() 
         {
             _kaiju.motor.StartKaiju();
+            _kaiju.brain.MakeAction();
             _kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
 
             _kaiju.detector.OnMechaEnter -= OnMechEnter;

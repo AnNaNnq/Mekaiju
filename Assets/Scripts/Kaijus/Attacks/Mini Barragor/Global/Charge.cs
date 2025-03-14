@@ -10,7 +10,7 @@ namespace Mekaiju.AI.Attack
         [Separator]
         [OverrideLabel("Charge Speed (Force Pulse)")]
         [Tooltip("Not % of speed")]
-        [Range(200000, 300000)]
+        [Range(100000, 300000)]
         public float chargeSpeed = 10;
         [OverrideLabel("Time Prep Before Charge (sec)")]
         public float chargePrepTime = 1;
@@ -49,11 +49,17 @@ namespace Mekaiju.AI.Attack
             Vector3 t_direction = (t_targetPosition - t_startPos).normalized;
 
             _rb.AddForce(t_direction * chargeSpeed, ForceMode.Impulse);
-            SendDamage(damage, _kaiju);
         }
 
         void HandleCollision(Collision p_collision)
         {
+            if (!p_collision.collider.CompareTag("Ground") && !p_collision.collider.CompareTag("Kaiju"))
+            {
+                _rb.angularVelocity = Vector3.zero;
+                _rb.linearVelocity = Vector3.zero;
+                _kaiju.motor.StartKaiju();
+                OnEnd();
+            }
             if (p_collision.collider.CompareTag("Player"))
             {
                 SendDamage(damage, _kaiju);
