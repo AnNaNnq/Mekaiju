@@ -36,7 +36,7 @@ namespace Mekaiju.AI.Attack
             base.OnAction();
 
             Vector3 t_pos = _start.position;
-            t_pos = new Vector3(t_pos.x, UtilsFunctions.GetGround(t_pos), t_pos.z);
+            //t_pos = new Vector3(t_pos.x, UtilsFunctions.GetGround(t_pos), t_pos.z);
             GameObject t_go = GameObject.Instantiate(shockwavePrefab, t_pos, Quaternion.identity);
             ShockWave t_sw = t_go.GetComponent<ShockWave>();
             t_sw.SetUp(this);

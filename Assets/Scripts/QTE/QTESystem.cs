@@ -36,7 +36,6 @@ namespace Mekaiju.QTE
             _qteAction.Enable();
             _qteAction.QTE.Q.performed += (context) => QTEPressed(context, 0);
             _qteAction.QTE.E.performed += (context) => QTEPressed(context, 1);
-            _qteAction.QTE.R.performed += (context) => QTEPressed(context, 3);
             _qteAction.QTE.Space.performed += (context) => QTEPressed(context, 2);
 
             _showQTE = ShowQTE.instance;
