@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Mekaiju
@@ -6,6 +7,7 @@ namespace Mekaiju
     /// <summary>
     /// 
     /// </summary>
+    [Serializable]
     public class PlayerData
     {
         /// <summary>
@@ -13,10 +15,10 @@ namespace Mekaiju
         /// </summary>
         public MechaDesc mechaDesc;
 
-        public PlayerData()
+        public void OnAwake()
         {
             mechaDesc = ScriptableObject.Instantiate(Resources.LoadAll<MechaDesc>("")[0]);
-        }   
+        }
     }
 
 }
