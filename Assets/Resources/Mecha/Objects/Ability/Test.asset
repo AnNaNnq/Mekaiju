@@ -10,25 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2c90c8f421734c05b8e3589afd75ced, type: 3}
-  m_Name: DefaultSword
+  m_Name: Test
   m_EditorClassIdentifier: 
-  <description>k__BackingField: Sword
-  <objectName>k__BackingField: Arm_L
-  <target>k__BackingField: 2
+  <description>k__BackingField: A test ability
+  <objectName>k__BackingField: Chest
+  <target>k__BackingField: 1
   <behaviour>k__BackingField:
-    rid: 2512019433379594307
+    rid: 8176260172137103428
   <granter>k__BackingField:
-    rid: 8176260169380397126
+    rid: 8176260172137103427
   references:
     version: 2
     RefIds:
-    - rid: 2512019433379594307
-      type: {class: SwordAbility, ns: Mekaiju, asm: Assembly-CSharp}
-      data:
-        _damageFactor: 1
-        _reachDistance: 20
-        _consumption: 5
-    - rid: 8176260169380397126
+    - rid: 8176260172137103427
       type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}
       data:
-        _part: 2
+        _part: 1
+    - rid: 8176260172137103428
+      type: {class: EmptyAbility, ns: , asm: Assembly-CSharp}
+      data: 

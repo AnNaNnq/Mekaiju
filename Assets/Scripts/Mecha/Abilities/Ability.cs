@@ -32,6 +32,12 @@ namespace Mekaiju
         [field: SerializeReference, SubclassPicker]
         public IAbilityBehaviour behaviour { get; private set; }
 
+        /// <summary>
+        /// Used to grand ability on reward
+        /// </summary>
+        [field: SerializeReference, SubclassPicker]
+        public AbilityGranter granter { get; private set; }
+
         public void OnValidate()
         {
             if (behaviour == null)
