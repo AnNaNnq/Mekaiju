@@ -38,14 +38,12 @@ namespace Mekaiju
 
         private float _endTriggerTimout = 1;
 
-        private bool _isActive;
-
         private AnimationState     _animationState;
         private MechaAnimatorProxy _animationProxy;
 
         public override void Initialize(EntityInstance p_self)
         {
-            _isActive = false;
+            base.Initialize(p_self);
 
             if (p_self.parent.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
             {
@@ -61,14 +59,14 @@ namespace Mekaiju
 
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return base.IsAvailable(p_self, p_opt) && !_isActive && p_self.stamina - _consumption >= 0f;
+            return base.IsAvailable(p_self, p_opt) && p_self.stamina - _consumption >= 0f;
         }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
-                _isActive       = true;
+                state = AbilityState.Active;
                 _animationState = AnimationState.Idle;
 
                 _animationProxy.animator.SetTrigger("LArm");
@@ -94,9 +92,8 @@ namespace Mekaiju
                 var t_timout = _endTriggerTimout;
                 yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
 
-                _isActive = false;
+                state = AbilityState.Ready;
             }
-            yield return null;
         }
 
         private void _OnAnimationEvent(AnimationEvent p_event)

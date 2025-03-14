@@ -5,6 +5,14 @@ using Mekaiju.Entity;
 
 namespace Mekaiju
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum AbilityState
+    {
+        Ready, InCooldown, Active
+    }
+
 
     /// <summary>
     /// An interface that defines all behaviour about ability.
@@ -12,12 +20,22 @@ namespace Mekaiju
     public abstract class IAbilityBehaviour
     {
         /// <summary>
+        /// Return the ability state.
+        /// </summary>
+        public AbilityState state { get; protected set; }
+
+        /// <summary>
+        /// Return the remaining cooldown time
+        /// </summary>
+        public virtual float cooldown { get => 0f; }
+
+        /// <summary>
         /// Called when capacity is loaded on a <see cref="EntityInstance"/>.
         /// </summary>
         /// <param name="p_self">The instance where the ability is loaded.</param>
         public virtual void Initialize(EntityInstance p_self) 
         {
-            
+            state = AbilityState.Ready;
         }
 
         /// <summary>
@@ -28,7 +46,7 @@ namespace Mekaiju
         /// <returns>true if capacity is able to be triggered, else false.</returns>
         public virtual bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return !p_self.states[State.AbilityLocked];
+            return state == AbilityState.Ready && !p_self.states[State.AbilityLocked];
         }
 
         /// <summary>
