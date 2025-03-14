@@ -38,6 +38,16 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="t_key"></param>
+        /// <returns></returns>
+        public Ability this[E t_key]
+        {
+            get => _abilities[t_key];
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="parent"></param>
         public override void CheckAbilityLoop(Ability parent)
         {

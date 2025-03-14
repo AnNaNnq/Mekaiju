@@ -25,7 +25,13 @@ namespace Mekaiju
         /// </summary>
         [field: SerializeField]
         public MechaPart target { get; private set; }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [field: SerializeField]
+        public Sprite icon { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>

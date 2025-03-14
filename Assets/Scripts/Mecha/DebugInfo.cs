@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mekaiju.Entity.Effect;
 using System.Linq;
+using Mekaiju.Utils;
 
 public class DebugInfo : MonoBehaviour
 {
@@ -40,6 +41,9 @@ public class DebugInfo : MonoBehaviour
     public Transform effectTimeList;
     private Dictionary<StatefullEffect, Image> _effectsMapping;
 
+    public GameObject capacityPrefab;
+    public Transform capacitiesList;
+
     private void Awake()
     {
         _inst = GameObject.Find("Player").GetComponent<MechaInstance>();
@@ -60,6 +64,7 @@ public class DebugInfo : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
         _maxHealth = _inst.health;
+        _Capacities();
     }
 
     // Update is called once per frame
@@ -111,6 +116,35 @@ public class DebugInfo : MonoBehaviour
     {
         StartCoroutine(_SetTempValue(_dps, $"{p_damage:0.00}", 0.5f));
     }
+
+    private void _CooldownCapacities(Ability p_ability)
+    {
+        float t_cooldown = p_ability.behaviour.cooldown;
+        if (!p_ability.name.Equals("EmptyAbility"))
+        {
+            Debug.Log(p_ability.name);
+            GameObject instance = Instantiate(capacityPrefab, capacitiesList);
+            Image abilityImage = instance.GetComponent<Image>();
+            abilityImage.sprite = p_ability.icon;
+        }
+    }
+
+    private void _Capacities()
+    {
+        _inst.desc.parts.ForEach((t_part, t_desc) =>
+        {
+            if (t_part == MechaPart.Legs)
+            {
+                _CooldownCapacities(((LegsCompoundAbility)t_desc.ability.behaviour)[LegsSelector.Jump]);
+                _CooldownCapacities(((LegsCompoundAbility)t_desc.ability.behaviour)[LegsSelector.Dash]);
+            }
+            else
+            {
+                _CooldownCapacities(t_desc.ability);
+            }
+        });
+    }
+
 
     private void _SetHealthBar()
     {
