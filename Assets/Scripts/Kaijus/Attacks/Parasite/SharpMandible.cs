@@ -1,7 +1,5 @@
 using MyBox;
 using Mekaiju.Entity;
-using UnityEngine;
-using System.Collections;
 
 namespace Mekaiju.AI.Attack
 {

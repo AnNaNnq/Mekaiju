@@ -305,6 +305,7 @@ namespace Mekaiju.AI
             var t_realDamage = p_amonunt * (1- (t_defense/100));
 
             p_bodyPart.currentHealth -= p_amonunt;
+            p_bodyPart.currentHealth = MathF.Max(0, p_bodyPart.currentHealth);
 
             if (!p_bodyPart.isDestroyed && p_bodyPart.currentHealth <= 0)
             {
