@@ -31,19 +31,9 @@ namespace Mekaiju
         [SerializeField]
         private float _consumption;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool _isActive;
-
-        public override void Initialize(EntityInstance p_self)
-        {
-            _isActive   = false;
-        }
-
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return base.IsAvailable(p_self, p_opt) && !_isActive && p_self.stamina - _consumption >= 0f;
+            return base.IsAvailable(p_self, p_opt) && p_self.stamina - _consumption >= 0f;
         }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
@@ -52,10 +42,10 @@ namespace Mekaiju
             {
                 p_self.ConsumeStamina(_consumption);
 
-                _isActive = true;
+                state = AbilityState.Active;
                 p_self.AddEffect(_boostEffect, _duration);
                 yield return new WaitForSeconds(_duration);
-                _isActive = false;
+                state = AbilityState.Ready;
             }
         }
     }

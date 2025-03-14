@@ -11,7 +11,6 @@ namespace Mekaiju.Entity.Effect
         public override void OnAdd(EntityInstance p_self)
         {
             _defenseMod = p_self.modifiers[Statistics.Defense].Add(_defensePercentage, ModifierKind.Flat);
-            Debug.Log("ProtectionEffect: OnAdd");
         }
 
         public override void OnRemove(EntityInstance p_self)

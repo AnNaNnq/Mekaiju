@@ -20,11 +20,15 @@ namespace Mekaiju.AI.Attack
         {
             base.Active(p_kaiju);
 
-            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
-            t_kaiju.motor.StopKaiju(1f);
-            GameObject t_rim = GameObject.Instantiate(gameObjectRimVoid, p_kaiju.transform.position, Quaternion.identity);
+            _kaiju.animator.AttackAnimation("Rim");
+        }
+
+        public override void OnAction()
+        {
+            base.OnAction();
+            GameObject t_rim = GameObject.Instantiate(gameObjectRimVoid, _kaiju.transform.position, Quaternion.identity);
             RimVoidInstance t_rv = t_rim.GetComponent<RimVoidInstance>();
-            t_rv.SetUp(t_kaiju, this);
+            t_rv.SetUp(_kaiju, this);
         }
     }
 }

@@ -71,7 +71,6 @@ namespace Mekaiju
 
         private float _energy;
 
-        private bool _isActive;
         private bool _isBroke;
         private bool _isStopRequested;
 
@@ -79,6 +78,8 @@ namespace Mekaiju
 
         public override void Initialize(EntityInstance p_self)
         {
+            base.Initialize(p_self);
+
             GameObject t_go;
 
             t_go = GameObject.Instantiate(_vfxDefaultPrefab, p_self.transform.Find("ChestPivot"));
@@ -91,15 +92,12 @@ namespace Mekaiju
 
             _energy = _baseEnergy;
 
-            _isActive = false;
             _isBroke  = false;
             _isStopRequested = false;
 
-            if (p_self.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
-            {
-                _animationProxy = t_proxy;
-            }
-            else
+            _animationProxy = p_self.GetComponentInChildren<MechaAnimatorProxy>();
+
+            if (!_animationProxy)
             {
                 Debug.LogWarning("Unable to find animator proxy on mecha!");
             }
@@ -107,14 +105,14 @@ namespace Mekaiju
 
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return base.IsAvailable(p_self, p_opt) && !_isActive && !_isBroke;
+            return base.IsAvailable(p_self, p_opt) && !_isBroke;
         }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
-                _isActive = true;
+                state = AbilityState.Active;
                 
                 var t_sMod = p_self.modifiers[Statistics.Speed].Add(_speedModifier / 100f, ModifierKind.Percent);
                 p_self.states[State.Protected] = true;
@@ -140,14 +138,14 @@ namespace Mekaiju
                 yield return new WaitForSeconds(_vfxBreakActiveTime);
                 _SetVFXState(_vfxBreak, false);
 
-                _isActive = false;
                 _isStopRequested = false;
+                state = AbilityState.Ready;
             }
         }
 
         public override void Release()
         {
-            if (_isActive)
+            if (state == AbilityState.Active)
             {
                 _isStopRequested = true;
             }
@@ -155,7 +153,7 @@ namespace Mekaiju
 
         public override void Tick(EntityInstance p_self)
         {
-            if (!_isActive)
+            if (state != AbilityState.Active)
             {
                 _energy = Mathf.Min(_energy + _fillRate * Time.deltaTime, _baseEnergy);
                 if (_isBroke && _energy >= _baseEnergy)

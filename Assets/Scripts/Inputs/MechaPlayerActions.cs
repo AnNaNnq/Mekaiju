@@ -1057,15 +1057,6 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""R"",
-                    ""type"": ""Button"",
-                    ""id"": ""843ffeb7-390b-40f5-a84e-018788cae35a"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1132,28 +1123,6 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Space"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1a6e4ff7-7922-4bd1-8404-1452fd94c95c"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""R"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""255d29cc-2f80-4fcc-8692-5495eba7523b"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""R"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1255,7 +1224,6 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         m_QTE_Q = m_QTE.FindAction("Q", throwIfNotFound: true);
         m_QTE_E = m_QTE.FindAction("E", throwIfNotFound: true);
         m_QTE_Space = m_QTE.FindAction("Space", throwIfNotFound: true);
-        m_QTE_R = m_QTE.FindAction("R", throwIfNotFound: true);
     }
 
     ~@MechaPlayerActions()
@@ -1587,7 +1555,6 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_QTE_Q;
     private readonly InputAction m_QTE_E;
     private readonly InputAction m_QTE_Space;
-    private readonly InputAction m_QTE_R;
     public struct QTEActions
     {
         private @MechaPlayerActions m_Wrapper;
@@ -1595,7 +1562,6 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         public InputAction @Q => m_Wrapper.m_QTE_Q;
         public InputAction @E => m_Wrapper.m_QTE_E;
         public InputAction @Space => m_Wrapper.m_QTE_Space;
-        public InputAction @R => m_Wrapper.m_QTE_R;
         public InputActionMap Get() { return m_Wrapper.m_QTE; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1614,9 +1580,6 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Space.started += instance.OnSpace;
             @Space.performed += instance.OnSpace;
             @Space.canceled += instance.OnSpace;
-            @R.started += instance.OnR;
-            @R.performed += instance.OnR;
-            @R.canceled += instance.OnR;
         }
 
         private void UnregisterCallbacks(IQTEActions instance)
@@ -1630,9 +1593,6 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
             @Space.started -= instance.OnSpace;
             @Space.performed -= instance.OnSpace;
             @Space.canceled -= instance.OnSpace;
-            @R.started -= instance.OnR;
-            @R.performed -= instance.OnR;
-            @R.canceled -= instance.OnR;
         }
 
         public void RemoveCallbacks(IQTEActions instance)
@@ -1729,6 +1689,5 @@ public partial class @MechaPlayerActions: IInputActionCollection2, IDisposable
         void OnQ(InputAction.CallbackContext context);
         void OnE(InputAction.CallbackContext context);
         void OnSpace(InputAction.CallbackContext context);
-        void OnR(InputAction.CallbackContext context);
     }
 }

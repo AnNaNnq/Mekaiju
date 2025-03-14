@@ -17,8 +17,14 @@ namespace Mekaiju.AI.Attack
         public override void Active(EntityInstance p_kaiju)
         {
             base.Active(p_kaiju);
+            _kaiju.animator.AttackAnimation("Fang");
+        }
 
-            SendDamage(damage, p_kaiju, effect, effectDuration);
+        public override void OnAction()
+        {
+            base.OnAction();
+
+            SendDamage(damage, effect, effectDuration);
         }
     }
 }

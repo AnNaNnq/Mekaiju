@@ -36,7 +36,6 @@ namespace Mekaiju.QTE
             _qteAction.Enable();
             _qteAction.QTE.Q.performed += (context) => QTEPressed(context, 0);
             _qteAction.QTE.E.performed += (context) => QTEPressed(context, 1);
-            _qteAction.QTE.R.performed += (context) => QTEPressed(context, 3);
             _qteAction.QTE.Space.performed += (context) => QTEPressed(context, 2);
 
             _showQTE = ShowQTE.instance;
@@ -75,7 +74,7 @@ namespace Mekaiju.QTE
                  yield return new WaitForSeconds(.1f);
                 t_time += .1f;
 
-                _currentInput -= .2f;
+                _currentInput -= .1f;
                 if(_currentInput < 0)
                 {
                     _currentInput = 0;

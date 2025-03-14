@@ -1,8 +1,6 @@
 using Mekaiju.Entity;
-using Mekaiju.Utils;
 using MyBox;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack

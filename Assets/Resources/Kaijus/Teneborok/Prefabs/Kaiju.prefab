@@ -495,6 +495,7 @@ Transform:
   - {fileID: 6360700265074753129}
   - {fileID: 2719732141665621828}
   - {fileID: 8256200262542259368}
+  - {fileID: 6473905638306462633}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &309942910244388346
@@ -511,39 +512,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   stats:
-    health: 100
     dmg: 100
-    def: 10
-    speed: 3.4
+    def: 20
+    speed: 7
   bodyParts:
   - nom: "T\xEAte"
     part:
     - {fileID: 5197896978300794659}
-    health: 100
+    maxHealth: 250
+    currentHealth: 0
     isDestroyed: 0
   - nom: Bras
     part:
     - {fileID: 8445334262680586365}
     - {fileID: 2395312711759002177}
-    health: 100
+    maxHealth: 500
+    currentHealth: 0
     isDestroyed: 0
   - nom: Patte
     part:
     - {fileID: 3489572259349122008}
     - {fileID: 4353400018563308469}
-    health: 100
+    maxHealth: 250
+    currentHealth: 0
     isDestroyed: 0
   - nom: Corps
     part:
     - {fileID: 6904326128312965468}
-    health: 100
+    maxHealth: 0
+    currentHealth: 0
     isDestroyed: 0
   behaviors:
   - rid: 7914790548137836689
   - rid: 7914790548137836690
   - rid: 7914790548137836691
   timeBetweenTowAction: 2
-  <effects>k__BackingField: []
+  <context>k__BackingField:
+    animationProxy: {fileID: 0}
+    rigidbody: {fileID: 0}
   passives: []
   currentPhase: 1
   attackGraphPhaseOne: {fileID: 11400000, guid: 74ecf6242186e604eb76c0e683c0b8ac, type: 2}
@@ -552,6 +558,7 @@ MonoBehaviour:
   checkRange: 1
   debugRange: 40
   dps: 0
+  detector: {fileID: 2073927283925129432}
   references:
     version: 2
     RefIds:
@@ -603,6 +610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lastAttack: DarkeningStorm
+  _currentAttack: {fileID: 0}
   _canAttack: 1
 --- !u!114 &8610327776798930001
 MonoBehaviour:
@@ -1099,6 +1107,72 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &6794238834595538517
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6473905638306462633}
+  - component: {fileID: 7193167236933123487}
+  - component: {fileID: 2073927283925129432}
+  m_Layer: 0
+  m_Name: CollisionDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6473905638306462633
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6794238834595538517}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9125232104238680391}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7193167236933123487
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6794238834595538517}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2073927283925129432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6794238834595538517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adbf23f82dc660e4bbde446ca717c5e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6904326128312965468
 GameObject:
   m_ObjectHideFlags: 0
