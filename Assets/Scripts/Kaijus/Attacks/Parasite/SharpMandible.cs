@@ -14,20 +14,13 @@ namespace Mekaiju.AI.Attack
         {
             base.Active(p_kaiju);
 
-            p_kaiju.StartCoroutine(AttackEnumerator(p_kaiju));
+            _kaiju.animator.AttackAnimation(nameof(SharpMandible));
         }
 
-        public override IEnumerator AttackEnumerator(EntityInstance p_kaiju)
+        public override void OnAction()
         {
-            base.AttackEnumerator(p_kaiju);
-
-            KaijuInstance t_instance = (KaijuInstance)p_kaiju;
-
-            t_instance.animator.AttackAnimation(nameof(SharpMandible));
-
-            yield return new WaitForSeconds(timeBeforeAttack);
-
-            SendDamage(damage, p_kaiju);
+            base.OnAction();
+            SendDamage(damage);
         }
     }
 }

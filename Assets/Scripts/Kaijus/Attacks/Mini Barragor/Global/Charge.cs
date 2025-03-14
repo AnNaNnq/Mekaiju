@@ -62,7 +62,7 @@ namespace Mekaiju.AI.Attack
             }
             if (p_collision.collider.CompareTag("Player"))
             {
-                SendDamage(damage, _kaiju);
+                SendDamage(damage);
             }
         }
     }

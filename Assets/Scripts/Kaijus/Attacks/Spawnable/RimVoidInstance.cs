@@ -125,6 +125,8 @@ namespace Mekaiju.AI.Attack.Instance
             yield return new WaitForSeconds(_stat.rimVoidDuration);
             lineCollider.enabled = false;
 
+            _instance.motor.StartKaiju();
+
             yield return new WaitForSeconds(1f);
             Destroy(gameObject);
         }

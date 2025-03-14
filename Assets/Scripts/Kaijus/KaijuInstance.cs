@@ -7,7 +7,6 @@ using Mekaiju.Attribute;
 using System;
 using System.Collections;
 using Mekaiju.Entity;
-using Mekaiju.Entity.Effect;
 using Mekaiju.AI.Objet;
 using Mekaiju.AI.Body;
 using Mekaiju.AI.Behavior;
@@ -110,6 +109,7 @@ namespace Mekaiju.AI
                         t_obj.AddComponent<BodyPartObject>();
                     }
                 }
+                t_part.currentHealth = t_part.maxHealth;
             }
 
             foreach(var passive in passives)
