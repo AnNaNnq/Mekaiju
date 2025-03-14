@@ -11,8 +11,11 @@ namespace Mekaiju.UI
         private GameObject _pauseMenu; 
         [SerializeField] 
         private GameObject _settingsMenu;
+
         [SerializeField] 
-        private GameObject _endMenu;
+        private GameObject _looseMenu;
+        [SerializeField] 
+        private GameObject _winMenu;
 
         [SerializeField] 
         private Button _resumeButton;
@@ -24,7 +27,8 @@ namespace Mekaiju.UI
         {
             _pauseMenu.SetActive(false); 
             _settingsMenu.SetActive(false);
-            _endMenu.SetActive(false);
+            _winMenu.SetActive(false);
+            _looseMenu.SetActive(false);
 
             _manager  = GameObject.Find("CombatManager").GetComponent<CombatManager>();
             _isPaused = false;   
@@ -54,8 +58,15 @@ namespace Mekaiju.UI
         {
             if (p_state == CombatState.Ended)
             {
-                _endMenu.SetActive(true);
                 _UnlockCursor();
+                if (_manager.result == CombatResult.Win)
+                {
+                    _winMenu.SetActive(true);
+                }
+                else
+                {
+                    _looseMenu.SetActive(true);
+                }
             }
         }
 
