@@ -35,7 +35,8 @@ namespace Mekaiju
             {
                 _instance = this;
                 playerData = new();
-                playerData.OnAwake();
+                
+                playerData.LoadMechaConfig();
             }
             else if (_instance != this)
             {

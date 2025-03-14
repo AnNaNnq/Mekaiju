@@ -15,7 +15,7 @@ namespace Mekaiju
         /// </summary>
         public MechaDesc mechaDesc;
 
-        public void OnAwake()
+        public void LoadMechaConfig()
         {
             mechaDesc = ScriptableObject.Instantiate(Resources.LoadAll<MechaDesc>("")[0]);
         }
