@@ -197,12 +197,12 @@ public class PlayerController : MonoBehaviour
     
     private void OnShield(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance.shieldAbility.behaviour.Trigger(_instance, null, null));
+        StartCoroutine(_instance.desc.standalones[StandaloneAbility.Shield].behaviour.Trigger(_instance, null, null));
     }
     
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
-        _instance.shieldAbility.behaviour.Release();
+        _instance.desc.standalones[StandaloneAbility.Shield].behaviour.Release();
     }
     
     private void OnJump(InputAction.CallbackContext p_context)

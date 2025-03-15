@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <description>k__BackingField: Boost statistics for a given time.
   <objectName>k__BackingField: Head
-  <target>k__BackingField: 0
   <behaviour>k__BackingField:
     rid: 2512019433379594302
+  <granter>k__BackingField:
+    rid: 8176260169380397123
   references:
     version: 2
     RefIds:
@@ -26,3 +27,8 @@ MonoBehaviour:
         _boostEffect: {fileID: 11400000, guid: 5c14d33a57b3a4978bc3c9d73692a15b, type: 2}
         _duration: 10
         _consumption: 30
+    - rid: 8176260169380397123
+      type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        <targetName>k__BackingField: "T\xEAte"
+        _part: 0

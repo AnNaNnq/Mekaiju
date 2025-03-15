@@ -39,8 +39,6 @@ namespace Mekaiju
         [SerializeField] 
         private EnumArray<MechaPart, MechaPartInstance> _parts;
 
-        public Ability shieldAbility;
-
         /// <summary>
         /// 
         /// </summary>
@@ -61,8 +59,7 @@ namespace Mekaiju
 
             _stamina = desc.stamina;
 
-            shieldAbility = Resources.Load<Ability>("Mecha/Objects/Ability/ShieldAbility");
-            shieldAbility.behaviour.Initialize(this);
+            desc.standalones.ForEach((_, t_ability) => t_ability.behaviour.Initialize(this));
 
             var t_main = GameObject.Find("Aegis");
             _parts = desc.parts.Select((key, part) => 
@@ -89,13 +86,13 @@ namespace Mekaiju
         public override void Update()
         {
             base.Update();
-            shieldAbility.behaviour.Tick(this);
+            desc.standalones.ForEach((_, t_ability) => t_ability.behaviour.Tick(this));
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            shieldAbility.behaviour.FixedTick(this);
+            desc.standalones.ForEach((_, t_ability) => t_ability.behaviour.FixedTick(this));
         }
         #endregion
 

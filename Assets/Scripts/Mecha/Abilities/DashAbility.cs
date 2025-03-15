@@ -156,7 +156,6 @@ namespace Mekaiju
         }
         private void _OnDashAnimationEvent(AnimationEvent p_event)
         {
-            Debug.Log(p_event.state);
             _animationState = p_event.state;
         }
     }
