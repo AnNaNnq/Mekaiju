@@ -27,6 +27,12 @@ namespace Mekaiju
         public IAbilityBehaviour behaviour { get; private set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        [field: SerializeField]
+        public Sprite icon { get; private set; }
+
+        /// <summary>
         /// Used to grand ability on reward
         /// </summary>
         [field: SerializeReference, SubclassPicker]
