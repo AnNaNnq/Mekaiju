@@ -11,10 +11,10 @@ namespace Mekaiju
     public class MechaPartDesc
     {
         /// <summary>
-        /// The base health
+        /// The percent of total mecha health
         /// </summary>
-        [field: SerializeField]
-        public float health { get; private set; }
+        [field: SerializeField, Range(0f, 1f)]
+        public float healthPercent { get; private set; }
 
         /// <summary>
         /// Specify if ability can be replaced

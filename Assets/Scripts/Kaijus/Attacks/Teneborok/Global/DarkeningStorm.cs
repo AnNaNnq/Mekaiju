@@ -1,31 +1,28 @@
 using Mekaiju.Attribute;
+using Mekaiju.Entity;
 using MyBox;
 using System.Collections;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class DarkeningStorm : IAttack
+    public class DarkeningStorm : Attack
     {
         [Separator]
         [OpenPrefabButton] public GameObject prefab;
         [OverrideLabel("Duration (sec)")] public float duration = 5f;
 
-        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public override void Active(EntityInstance p_kaiju)
         {
-            return base.CanUse(kaiju, otherRange);
-        }
-
-        public override void Active(KaijuInstance kaiju)
-        {
-            base.Active(kaiju);
-            GameObject t_darkeningStorm = GameObject.Instantiate(prefab, kaiju.transform.position, Quaternion.identity);
+            base.Active(p_kaiju);
+            GameObject t_darkeningStorm = GameObject.Instantiate(prefab, p_kaiju.transform.position, Quaternion.identity);
             GameObject.Destroy(t_darkeningStorm, duration);
+            OnEnd();
         }
 
-        public override IEnumerator Attack(KaijuInstance kaiju)
+        public override IEnumerator AttackEnumerator(EntityInstance p_kaiju)
         {
-            base.Attack(kaiju);
+            base.AttackEnumerator(p_kaiju);
             yield return new WaitForSeconds(duration);
         }
     }

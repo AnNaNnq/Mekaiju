@@ -1,35 +1,23 @@
+using Mekaiju.Entity;
 using MyBox;
 using System.Collections;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class SharpBlowUpgrade : IAttack
+    public class SharpBlowUpgrade : Attack
     {
-        [Separator]
-        [OverrideLabel("Damage (% of DMG)")]
-        public float damage = 50;
-        public float timeBeforeAttack = 1;
 
-        public override bool CanUse(KaijuInstance kaiju, float otherRange = 0)
+        public override void Active(EntityInstance p_kaiju)
         {
-            return base.CanUse(kaiju, otherRange);
+            base.Active(p_kaiju);
+            _kaiju.animator.AttackAnimation(nameof(SharpBlowUpgrade));
         }
 
-        public override void Active(KaijuInstance kaiju)
+        public override void OnAction()
         {
-            base.Active(kaiju);
-            kaiju.StartCoroutine(Attack(kaiju));
-        }
-
-        public override IEnumerator Attack(KaijuInstance kaiju)
-        {
-            base.Attack(kaiju);
-            kaiju.animator.AttackAnimation(nameof(SharpBlowUpgrade));
-            yield return new WaitForSeconds(timeBeforeAttack);
-            Debug.Log($"Sharp Blow + fait {damage} degats");
-            kaiju.brain.MakeAction();
-            SendDamage(damage, kaiju);
+            base.OnAction();
+            SendDamage(damage);
         }
 
     }

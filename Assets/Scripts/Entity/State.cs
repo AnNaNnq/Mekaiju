@@ -10,8 +10,11 @@ namespace Mekaiju.Entity
         // Define if entity is controlled by third party
         MovementOverrided,
 
-        // Prevent entity from moving
-        Stun,
+        // Prevent any movement
+        MovementLocked,
+
+        // Prevent the usage of any ability
+        AbilityLocked,
 
         // Define if entity is protected (ie shield...)
         Protected,

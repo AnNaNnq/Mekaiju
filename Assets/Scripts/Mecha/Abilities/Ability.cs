@@ -23,14 +23,14 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [field: SerializeField]
-        public MechaPart target { get; private set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
         [field: SerializeReference, SubclassPicker]
         public IAbilityBehaviour behaviour { get; private set; }
+
+        /// <summary>
+        /// Used to grand ability on reward
+        /// </summary>
+        [field: SerializeReference, SubclassPicker]
+        public AbilityGranter granter { get; private set; }
 
         public void OnValidate()
         {
