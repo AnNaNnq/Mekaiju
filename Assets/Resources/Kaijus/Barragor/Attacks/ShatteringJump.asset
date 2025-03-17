@@ -20,7 +20,7 @@ MonoBehaviour:
     - rid: 7914790865167974481
       type: {class: ShatteringJump, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
-        cooldown: 0
+        cooldown: 1
         range: 90
         canMakeDamage: 1
         damage: 50
@@ -31,7 +31,7 @@ MonoBehaviour:
         maxRadius: 100
         effect: {fileID: 11400000, guid: 558e38446bba040239195dfc8926312e, type: 2}
         effectDuration: 1
-        jumpForce: 50000
+        jumpForce: 25000
         electricZonePrefab: {fileID: 829531332958177211, guid: 41f46073f6a73a84a97221b58a268f0c, type: 3}
         electricZone:
           damage: 100
