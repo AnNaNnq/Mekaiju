@@ -21,8 +21,9 @@ namespace Mekaiju.AI.Attack.Instance
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                other.gameObject.GetComponent<MechaInstance>().TakeDamage(_dmg);
-                _instance.AddDPS(_dmg);
+                var t_dmg = _instance.GetRealDamage(_dmg);
+                other.gameObject.GetComponent<MechaInstance>().TakeDamage(t_dmg);
+                _instance.AddDPS(t_dmg);
                 _instance.UpdateUI();
             }
             else

@@ -125,6 +125,8 @@ namespace Mekaiju.AI.Attack.Instance
             yield return new WaitForSeconds(_stat.rimVoidDuration);
             lineCollider.enabled = false;
 
+            _instance.motor.StartKaiju();
+
             yield return new WaitForSeconds(1f);
             Destroy(gameObject);
         }
@@ -154,7 +156,7 @@ namespace Mekaiju.AI.Attack.Instance
         {
             while (_damagable)
             {
-                float t_damage = _instance.stats.dmg * (1 + (_stat.damage / 100)); ;
+                float t_damage = _instance.GetRealDamage(_stat.damage);
                 p_mecha.TakeDamage(t_damage);
                 _instance.AddDPS(t_damage);
                 _instance.UpdateUI();

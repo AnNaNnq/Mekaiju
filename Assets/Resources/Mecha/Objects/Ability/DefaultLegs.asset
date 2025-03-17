@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: DefaultLegs
   m_EditorClassIdentifier: 
   <description>k__BackingField: Jump & dash.
-  <objectName>k__BackingField: default
+  <objectName>k__BackingField: Leg
   <target>k__BackingField: 4
   <behaviour>k__BackingField:
     rid: 2512019433379594306
+  <granter>k__BackingField:
+    rid: -2
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2512019433379594306
       type: {class: LegsCompoundAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:

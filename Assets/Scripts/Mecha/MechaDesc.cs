@@ -1,6 +1,7 @@
 using UnityEngine;
 using Mekaiju.Utils;
 using MyBox;
+using Mekaiju.Entity;
 
 namespace Mekaiju
 {  
@@ -19,22 +20,9 @@ namespace Mekaiju
         public float stamina { get; private set; }
 
         /// <summary>
-        /// The damage stat (ability must use this one to compute their damage)
+        /// The default stats of the mecha
         /// </summary>
-        [field: SerializeField]
-        public float damage { get; private set; }
-
-        /// <summary>
-        /// The defense stat (all damage taken must take care of this stat)
-        /// </summary>
-        [field: SerializeField]
-        public float defense { get; private set; }
-
-        /// <summary>
-        /// The speed stat (all movement behaviour must use this one to compute their speed)
-        /// </summary>
-        [field: SerializeField]
-        public float speed { get; private set; }
+        public EnumArray<Statistics, float> statistics;
 
         /// <summary>
         /// The mecha prefab/mesh
@@ -48,6 +36,12 @@ namespace Mekaiju
         /// </summary>
         [field: SerializeField]
         public EnumArray<MechaPart, MechaPartDesc> parts { get; private set; }
+
+        /// <summary>
+        /// The description of standalone abilities
+        /// </summary>
+        [field: SerializeField]
+        public EnumArray<StandaloneAbility, Ability> standalones { get; private set; }
     }
     
 }

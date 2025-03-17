@@ -8,13 +8,11 @@ public class WeaponBullet : MonoBehaviour
 
     private Rigidbody _rb;
     private Vector3   _velocity;
-    private bool      _canBeDestroyed;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         _velocity = Vector3.zero;
-        _canBeDestroyed = false;
     }
 
     private void OnCollisionEnter(Collision p_collision)

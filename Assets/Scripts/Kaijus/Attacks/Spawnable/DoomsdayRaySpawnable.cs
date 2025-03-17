@@ -12,7 +12,6 @@ namespace Mekaiju.AI.Attack
         private Transform _start;
         private bool _damagable = true;
 
-
         public void SetUp(Transform p_start, DoomsdayRay p_stat, KaijuInstance p_instnace)
         {
             _stat = p_stat;
@@ -43,7 +42,7 @@ namespace Mekaiju.AI.Attack
                     _damagable = false;
                     if (hit.collider.TryGetComponent(out MechaInstance _mecha))
                     {
-                        float p_damage = _instnace.stats.dmg * (1 + (_stat.damage / 100));
+                        float p_damage = _instnace.GetRealDamage(_stat.damage);
                         _mecha.TakeDamage(p_damage);
                         _instnace.AddDPS(p_damage);
                         StartCoroutine(DamagableCooldown());
