@@ -9,7 +9,7 @@ namespace Mekaiju.AI.Attack
 {
     public abstract class ChockWave : Attack
 {
-        [Separator]
+        [Separator("ShockWave")]
         public GameObject shockwavePrefab;
         public float shockwaveSpeed = 10f;
         public float shockwaveDamage = 50f;
