@@ -7085,6 +7085,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce2b7f4eb84bf402d9278d4378a8eae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <playerData>k__BackingField:
+    mechaDesc: {fileID: 0}
 --- !u!4 &406910370
 Transform:
   m_ObjectHideFlags: 0
@@ -19890,6 +19892,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1075139972}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1081551517 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4484294020769071842, guid: 8c6d1035bca61754283ae2552d923881, type: 3}
+  m_PrefabInstance: {fileID: 1472706873}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1086676735
 GameObject:
   m_ObjectHideFlags: 0
@@ -22052,6 +22065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58327e0bb594e4f6bac4b5c21e610463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <reward>k__BackingField: {fileID: 0}
   onStateChange:
     m_PersistentCalls:
       m_Calls: []
@@ -22067,6 +22081,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce2b7f4eb84bf402d9278d4378a8eae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <playerData>k__BackingField:
+    mechaDesc: {fileID: 0}
 --- !u!1 &1258254632
 GameObject:
   m_ObjectHideFlags: 0
@@ -25357,6 +25373,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 7425341139336172446, guid: 8c6d1035bca61754283ae2552d923881, type: 3}
+      propertyPath: _effectField
+      value: 
+      objectReference: {fileID: 1081551517}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -37991,6 +38011,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -717336190707785361, guid: 91ff26446335cc74b9615b1e40a7eb58, type: 3}
+      propertyPath: attackGraphPhaseOne
+      value: 
+      objectReference: {fileID: 11400000, guid: 9b902ed3aca8e874c807bd3518b25c32, type: 2}
+    - target: {fileID: -717336190707785361, guid: 91ff26446335cc74b9615b1e40a7eb58, type: 3}
       propertyPath: managedReferences[7914790751780995222].nest
       value: 
       objectReference: {fileID: 1615825249}
@@ -38000,7 +38024,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3064306495170760727, guid: 91ff26446335cc74b9615b1e40a7eb58, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 54.45
+      value: 53.99
       objectReference: {fileID: 0}
     - target: {fileID: 3064306495170760727, guid: 91ff26446335cc74b9615b1e40a7eb58, type: 3}
       propertyPath: m_LocalPosition.z
@@ -38037,6 +38061,14 @@ PrefabInstance:
     - target: {fileID: 3471881529136778539, guid: 91ff26446335cc74b9615b1e40a7eb58, type: 3}
       propertyPath: m_Name
       value: Kaiju
+      objectReference: {fileID: 0}
+    - target: {fileID: 7087904384803985255, guid: 91ff26446335cc74b9615b1e40a7eb58, type: 3}
+      propertyPath: m_AnimatePhysics
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7087904384803985255, guid: 91ff26446335cc74b9615b1e40a7eb58, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

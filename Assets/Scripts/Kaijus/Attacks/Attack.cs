@@ -27,7 +27,7 @@ namespace Mekaiju.AI.Attack {
 
         MechaInstance _mecha;
 
-        public void Init()
+        public virtual void Init()
         {
             canUse = true;
             _mecha = null;
@@ -59,7 +59,8 @@ namespace Mekaiju.AI.Attack {
             canUse = false;
             _kaiju = (KaijuInstance) p_kaiju;
             _kaiju.detector.OnMechaEnter += OnMechEnter;
-            _kaiju.detector.OnMechaExit += OnMechExit;  
+            _kaiju.detector.OnMechaExit += OnMechExit;
+            _kaiju.detector.OnGround += OnGround;
         }
 
         public virtual IEnumerator AttackEnumerator(EntityInstance p_kaiju)
@@ -105,6 +106,7 @@ namespace Mekaiju.AI.Attack {
 
             _kaiju.detector.OnMechaEnter -= OnMechEnter;
             _kaiju.detector.OnMechaExit -= OnMechExit;
+            _kaiju.detector.OnGround -= OnGround;
         }
 
         public virtual void OnMechEnter(MechaInstance p_mecha)
@@ -116,6 +118,8 @@ namespace Mekaiju.AI.Attack {
         {
             if (p_mecha == _mecha) _mecha = null;
         }
+
+        public virtual void OnGround() { }
 
         public virtual void StartAttackCoroutine()
         {
