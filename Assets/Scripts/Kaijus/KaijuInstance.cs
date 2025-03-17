@@ -7,7 +7,6 @@ using Mekaiju.Attribute;
 using System;
 using System.Collections;
 using Mekaiju.Entity;
-using Mekaiju.Entity.Effect;
 using Mekaiju.AI.Objet;
 using Mekaiju.AI.Body;
 using Mekaiju.AI.Behavior;
@@ -60,7 +59,6 @@ namespace Mekaiju.AI
         public KaijuAttackContainer attackGraphPhaseTow;
 
         [Separator]
-        [SOSelector]
         public KaijuPhaseAttack changePhaseAction;
 
         [Separator]
@@ -74,6 +72,9 @@ namespace Mekaiju.AI
         bool _isInFight;
 
         public event Action<Collision> OnCollision;
+
+        [Header("Pas touche")]
+        public KaijuCollsionDetector detector;
 
         public KaijuAttackContainer GetGraph()
         {
@@ -108,6 +109,7 @@ namespace Mekaiju.AI
                         t_obj.AddComponent<BodyPartObject>();
                     }
                 }
+                t_part.currentHealth = t_part.maxHealth;
             }
 
             foreach(var passive in passives)
@@ -136,12 +138,6 @@ namespace Mekaiju.AI
             {
                 UseBehavior();
             }
-
-
-            if(Input.GetKeyDown(KeyCode.N))
-            {
-                ChangePhase();
-            }
         }
 
         public override void FixedUpdate()
@@ -160,8 +156,11 @@ namespace Mekaiju.AI
 
         public void ChangePhase()
         {
-            motor.StopKaiju();
-            changePhaseAction.attack.Action();
+            if(changePhaseAction != null)
+            {
+                motor.StopKaiju();
+                changePhaseAction.attack.Action();
+            }
         }
 
         public void SetPhase(int p_phase)
@@ -192,8 +191,16 @@ namespace Mekaiju.AI
             return stats.dmg * (t_damage/100);
         }
 
+        public float GetRealSpeed(float p_amonunt)
+        {
+            var t_amount = modifiers[Statistics.Speed].ComputeValue(p_amonunt);
+            return stats.speed * (t_amount / 100);
+
+        }
+
         public void Combat()
         {
+            motor.SetSpeed(100);
             _isInFight = true;
         }
 
@@ -255,9 +262,9 @@ namespace Mekaiju.AI
         #endregion
 
         #region implemation of IEntityInstance
-        public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.maxHealth);
+        public override float baseHealth => bodyParts.Sum(p => p.maxHealth);
 
-        public override float health => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.currentHealth);
+        public override float health => bodyParts.Sum(p => p.currentHealth);
 
         public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
 
@@ -298,6 +305,7 @@ namespace Mekaiju.AI
             var t_realDamage = p_amonunt * (1- (t_defense/100));
 
             p_bodyPart.currentHealth -= p_amonunt;
+            p_bodyPart.currentHealth = MathF.Max(0, p_bodyPart.currentHealth);
 
             if (!p_bodyPart.isDestroyed && p_bodyPart.currentHealth <= 0)
             {

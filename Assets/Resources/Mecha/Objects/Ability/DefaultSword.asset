@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: DefaultSword
   m_EditorClassIdentifier: 
   <description>k__BackingField: Sword
-  <objectName>k__BackingField: default
-  <target>k__BackingField: 2
-  <icon>k__BackingField: {fileID: 21300000, guid: e6f690ae36cf03d4894a8854dade102b, type: 3}
+  <objectName>k__BackingField: Arm_L
   <behaviour>k__BackingField:
     rid: 2512019433379594307
+  <granter>k__BackingField:
+    rid: 8176260169380397126
   references:
     version: 2
     RefIds:
@@ -27,3 +27,8 @@ MonoBehaviour:
         _damageFactor: 1
         _reachDistance: 20
         _consumption: 5
+    - rid: 8176260169380397126
+      type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        <targetName>k__BackingField: Bras gauche
+        _part: 2

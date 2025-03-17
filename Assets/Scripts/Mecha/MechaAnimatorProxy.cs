@@ -31,15 +31,17 @@ namespace Mekaiju
         public Animator animator;
 
         public UnityEvent<AnimationEvent> onJump;
+        public UnityEvent<AnimationEvent> onDash;
         public UnityEvent<AnimationEvent> onLArm;
         public UnityEvent<AnimationEvent> onRArm;
 
         void Awake()
         {
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             onJump   = new();
             onLArm   = new();
             onRArm   = new();
+            onDash   = new();
         }
 
 #region Jump
@@ -55,7 +57,7 @@ namespace Mekaiju
 
         private void _OnJumpEnd()
         {
-            onJump.Invoke(new(AnimationState.Trigger));
+            onJump.Invoke(new(AnimationState.End));
         }
 #endregion
 
@@ -91,6 +93,23 @@ namespace Mekaiju
         {
             onRArm.Invoke(new(AnimationState.End));
         }
-#endregion
+        #endregion
+
+#region Dash
+        private void _OnDashStart()
+        {
+            onDash.Invoke(new(AnimationState.Start));
+        }
+
+        private void _OnDashTrigger(int p_number)
+        {
+            onDash.Invoke(new(AnimationState.Trigger, p_number));
+        }
+
+        private void _OnDashEnd()
+        {
+            onDash.Invoke(new(AnimationState.End));
+        }
+        #endregion
     }
 }

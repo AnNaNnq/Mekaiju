@@ -30,6 +30,7 @@ namespace Mekaiju.AI.Attack
             DoomsdayRayUpgradeObject t_druo = t_doomsday.GetComponent<DoomsdayRayUpgradeObject>();
 
             t_druo.Init(this, t_kaiju);
+            OnEnd();
         }
     }
 }

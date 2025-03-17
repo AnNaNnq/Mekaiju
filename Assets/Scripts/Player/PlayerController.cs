@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
     {
         _playerActions = new MechaPlayerActions();
         _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
+        _animator = GetComponentInChildren<Animator>();
 
         _groundLayerMask = LayerMask.GetMask("Walkable");
 
@@ -180,20 +180,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnLeftArm(InputAction.CallbackContext p_context)
     {
-        BodyPartObject t_target = PickRandomTargetPart();
-        if (t_target)
-        {
-            StartCoroutine(_instance[MechaPart.LeftArm].TriggerAbility(PickRandomTargetPart(), null));
-        }
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.LeftArm].TriggerAbility(t_target, null));
     }
     
     private void OnRightArm(InputAction.CallbackContext p_context)
     {
-        BodyPartObject t_target = PickRandomTargetPart();
-        if (t_target)
-        {
-            StartCoroutine(_instance[MechaPart.RightArm].TriggerAbility(PickRandomTargetPart(), null));
-        }
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.RightArm].TriggerAbility(t_target, null));
     }
 
     private void OnHead(InputAction.CallbackContext p_context)
@@ -203,12 +197,12 @@ public class PlayerController : MonoBehaviour
     
     private void OnShield(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance.shieldAbility.behaviour.Trigger(_instance, null, null));
+        StartCoroutine(_instance.desc.standalones[StandaloneAbility.Shield].behaviour.Trigger(_instance, null, null));
     }
     
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
-        _instance.shieldAbility.behaviour.Release();
+        _instance.desc.standalones[StandaloneAbility.Shield].behaviour.Release();
     }
     
     private void OnJump(InputAction.CallbackContext p_context)
@@ -220,13 +214,14 @@ public class PlayerController : MonoBehaviour
     {
         isLockedOn = !isLockedOn;
         _lockOnTargetSystem.ToggleLockOn(isLockedOn);
-        if (isLockedOn)
+        if (isLockedOn && _lockOnTargetSystem.GetTargetBodyPartObject() != null)
         {
             _lookAction.Disable();
         }
         else
         {
             _lookAction.Enable();
+            isLockedOn = false;
         }
     }
 

@@ -6,6 +6,9 @@ namespace Mekaiju
 {
     public class CombatManager : MonoBehaviour
     {
+        [field: SerializeField]
+        public CombatReward reward { get; private set; }
+
         public MechaInstance mechaInstance { get; private set; }
         public KaijuInstance kaijuInstance { get; private set; }
 
@@ -69,7 +72,7 @@ namespace Mekaiju
 
         private void _OnEntityTakeDamage(float p_damage)
         {
-            if (!(mechaInstance.isAlive && kaijuInstance.isAlive))
+            if (!(mechaInstance.isAlive && kaijuInstance.isAlive) && state != CombatState.Ended)
             {
                 state  = CombatState.Ended;
                 result = mechaInstance.isAlive ? CombatResult.Win : CombatResult.Loose;

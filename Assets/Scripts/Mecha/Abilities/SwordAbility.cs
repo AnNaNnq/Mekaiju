@@ -36,7 +36,7 @@ namespace Mekaiju
         private int _consumption;
 #endregion
 
-        private float _endTriggerTimout = 10;
+        private float _endTriggerTimout = 1;
 
         private AnimationState     _animationState;
         private MechaAnimatorProxy _animationProxy;
@@ -45,11 +45,9 @@ namespace Mekaiju
         {
             base.Initialize(p_self);
 
-            if (p_self.parent.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
-            {
-                _animationProxy = t_proxy;
-            }
-            else
+            _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
+
+            if (!_animationProxy)
             {
                 Debug.LogWarning("Unable to find animator proxy on mecha!");
             }
@@ -72,17 +70,21 @@ namespace Mekaiju
                 _animationProxy.animator.SetTrigger("LArm");
                 p_self.ConsumeStamina(_consumption);
 
-                // TODO: use physics to handle contact
-                // Compute distance
-                var t_tpos = p_target.transform.position;
-                var t_dist = Vector3.Distance(p_self.transform.position, t_tpos);
-                if (t_dist < _reachDistance)
-                {
-                    // Make damage
-                    var t_damage = _damageFactor * p_self.ComputedStatistics(Statistics.Damage);
-                    p_target.TakeDamage(t_damage);
-                    p_self.onDealDamage.Invoke(t_damage);
-                }
+                p_self.onCollide.AddListener(
+                     (t_collision) =>
+                     {
+                         if (t_collision.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
+                         {
+                             if (t_bpo != p_target && p_target != null)
+                             {
+                                 t_bpo = p_target;
+                             }
+                             var t_damage = _damageFactor * p_self.ComputedStatistics(Statistics.Damage);
+                             t_bpo.TakeDamage(t_damage);
+                             p_self.onDealDamage.Invoke(t_damage);
+                         }
+                     }
+                 );
 
                 // Wait for animation end
                 var t_timout = _endTriggerTimout;

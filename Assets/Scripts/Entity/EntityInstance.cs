@@ -57,6 +57,8 @@ namespace Mekaiju.Entity
 
         public virtual UnityEvent<float> onTakeDamage { get; } = new();
         public virtual UnityEvent<float> onDealDamage { get; } = new();
+
+        public UnityEvent<Collider> onCollide = new();
         
         public abstract bool isAlive    { get; }
         public abstract float health     { get; }
@@ -122,6 +124,11 @@ namespace Mekaiju.Entity
         public virtual void FixedUpdate()
         {
             effects.ForEach(effect => effect.FixedTick());
+        }
+
+        private void OnTriggerEnter(Collider p_collider)
+        {
+            onCollide.Invoke(p_collider);
         }
     }   
 }

@@ -27,7 +27,8 @@ public class KaijuMotor : MonoBehaviour
     /// <param name="p_stopping"></param>
     public void BackOff(Vector3 p_pos, float p_speed, float p_stopping = 10f)
     {
-        MoveTo(p_pos, p_speed, p_stopping);
+        SetSpeed(p_speed);
+        MoveTo(p_pos, p_stopping);
         LookTarget();
     }
 
@@ -37,18 +38,20 @@ public class KaijuMotor : MonoBehaviour
     /// </summary>
     /// <param name="p_pos"></param>
     /// <param name="p_stopping"></param>
-    public void MoveTo(Vector3 p_pos, float p_speed, float p_stopping = 10f)
+    public void MoveTo(Vector3 p_pos, float p_stopping = 10f)
     {
         if (_agent.enabled == false) return;
         p_stopping = Mathf.Max(p_stopping, 10f);
 
-        float t_speed = _instance.stats.speed * (1 + (p_speed / 100));
-
-        _agent.speed = t_speed;
+        
         _agent.destination = p_pos;
         _agent.stoppingDistance = p_stopping;
     }
 
+    public void SetSpeed(float p_speed)
+    {
+        _agent.speed = _instance.GetRealSpeed(p_speed);
+    }
 
     /// <summary>
     /// Forces the Kaiju to look at the player
@@ -93,7 +96,6 @@ public class KaijuMotor : MonoBehaviour
 
     public void StartKaiju()
     {
-        if (_agent.enabled) return;
         _agent.enabled = true;
     }
 
@@ -105,8 +107,8 @@ public class KaijuMotor : MonoBehaviour
         _agent.enabled = true;
     }
 
-    public void StopAI()
+    public bool IsInMovement()
     {
-        _agent.enabled = false;
+        return agent.velocity.magnitude > 0.1f && !agent.isStopped;
     }
 }

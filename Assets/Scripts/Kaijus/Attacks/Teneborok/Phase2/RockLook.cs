@@ -59,6 +59,7 @@ namespace Mekaiju.AI.Attack
                 MechaInstance t_player = t_kaiju.target.GetComponent<MechaInstance>();
                 t_player.AddEffect(successEffect, effectDuration);
             }
+            OnEnd();
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Mekaiju.AI.Attack {
         public float cooldown;
         public float range;
         protected bool canUse;
+        protected KaijuInstance _kaiju;
 
         public bool canMakeDamage = true;
 
@@ -21,15 +22,16 @@ namespace Mekaiju.AI.Attack {
         [ConditionalField(nameof(canMakeDamage))] [Indent]
         public bool blockable;
         [ConditionalField(nameof(canMakeDamage))] [Indent]
-        public float sphereRadius = 4f;
-        [ConditionalField(nameof(canMakeDamage))] [Indent]
-        public float forwardOffset = 7f;
-        [ConditionalField(nameof(canMakeDamage))] [Indent]
-        public LayerMask layerMask;
+
+        Coroutine _atkCoroutine;
+
+        MechaInstance _mecha;
 
         public void Init()
         {
             canUse = true;
+            _mecha = null;
+            StopAttackCoroutine();
         }
 
         public virtual bool CanUse(KaijuInstance p_kaiju, float p_otherRange = 0)
@@ -53,57 +55,89 @@ namespace Mekaiju.AI.Attack {
             return t_return;
         }
 
-        public virtual void Active(EntityInstance p_kaiju) { canUse = false; }
+        public virtual void Active(EntityInstance p_kaiju) { 
+            canUse = false;
+            _kaiju = (KaijuInstance) p_kaiju;
+            _kaiju.detector.OnMechaEnter += OnMechEnter;
+            _kaiju.detector.OnMechaExit += OnMechExit;  
+        }
 
         public virtual IEnumerator AttackEnumerator(EntityInstance p_kaiju)
         {
             yield return null;
         }
 
-        public MechaInstance GetPlayerInstance(EntityInstance p_kaiju)
+        public void SendDamage(float p_damage, MechaInstance p_mecha, Effect p_effet = null, float p_effetDuration = -1)
         {
-            // Calculer la position devant l'objet en tenant compte de sa rotation
-            Vector3 spherePosition = p_kaiju.transform.position + p_kaiju.transform.forward * forwardOffset;
-
-            // D�tection des objets dans la sph�re
-            Collider[] hitColliders = Physics.OverlapSphere(spherePosition, sphereRadius, layerMask);
-
-            foreach (Collider hitCollider in hitColliders)
+            if (p_mecha != null)
             {
-                return hitCollider.GetComponent<MechaInstance>();
-            }
-            
+                float t_damage = _kaiju.GetRealDamage(p_damage);
+                p_mecha.TakeDamage(t_damage);
+                _kaiju.AddDPS(t_damage);
+                _kaiju.UpdateUI();
 
-            return null;
+                if (p_effet != null)
+                {
+                    p_mecha.AddEffect(p_effet, p_effetDuration);
+                }
+            }
+
+            _kaiju.StartCoroutine(Cooldown(_kaiju));
         }
 
-        public void SendDamage(float p_damage, EntityInstance p_kaiju, Effect p_effet = null, float p_effetDuration = -1)
+        protected void SendDamage(float p_damage, Effect p_effet = null, float p_effetDuration = -1)
         {
-            MechaInstance mecha = GetPlayerInstance(p_kaiju);
-
-            if (mecha != null)
-            {
-                if(p_kaiju as KaijuInstance)
-                {
-                    KaijuInstance t_kaiju = p_kaiju as KaijuInstance;
-                    float t_damage = t_kaiju.GetRealDamage(p_damage);
-                    mecha.TakeDamage(t_damage);
-                    t_kaiju.AddDPS(t_damage);
-                    t_kaiju.UpdateUI();
-                }
-                
-                if(p_effet != null)
-                {
-                    mecha.AddEffect(p_effet, p_effetDuration);
-                }
-            }
-
-            p_kaiju.StartCoroutine(Cooldown(p_kaiju));
+            SendDamage(p_damage, _mecha, p_effet, p_effetDuration);
         }
 
         public IEnumerator Cooldown(EntityInstance p_kaiju)
         {
            yield return p_kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
+        }
+
+        public virtual void OnAction() { }
+
+        public virtual void OnEnd() 
+        {
+            _kaiju.motor.StartKaiju();
+            _kaiju.brain.MakeAction();
+            _kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
+
+            _kaiju.detector.OnMechaEnter -= OnMechEnter;
+            _kaiju.detector.OnMechaExit -= OnMechExit;
+        }
+
+        public virtual void OnMechEnter(MechaInstance p_mecha)
+        {
+            _mecha = p_mecha;
+        }
+
+        public virtual void OnMechExit(MechaInstance p_mecha)
+        {
+            if (p_mecha == _mecha) _mecha = null;
+        }
+
+        public virtual void StartAttackCoroutine()
+        {
+            _atkCoroutine = _kaiju.StartCoroutine(AttackCoroutine());
+        }
+
+        public virtual void StopAttackCoroutine()
+        {
+            if(_atkCoroutine != null)
+            {
+                _kaiju.StopCoroutine(_atkCoroutine);
+                _atkCoroutine = null;
+            }
+        }
+
+        private IEnumerator AttackCoroutine()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(.1f);
+                SendDamage(damage);
+            }
         }
     }
 }

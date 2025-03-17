@@ -95,11 +95,9 @@ namespace Mekaiju
             _isBroke  = false;
             _isStopRequested = false;
 
-            if (p_self.TryGetComponent<MechaAnimatorProxy>(out var t_proxy))
-            {
-                _animationProxy = t_proxy;
-            }
-            else
+            _animationProxy = p_self.GetComponentInChildren<MechaAnimatorProxy>();
+
+            if (!_animationProxy)
             {
                 Debug.LogWarning("Unable to find animator proxy on mecha!");
             }

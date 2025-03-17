@@ -16,7 +16,7 @@ namespace Mekaiju.Entity.Effect
         public override void OnRemove(EntityInstance p_self)
         {
             p_self.states[State.AbilityLocked]  = false;
-            p_self.states[State.MovementLocked] = true;
+            p_self.states[State.MovementLocked] = false;
         }
     }
 }

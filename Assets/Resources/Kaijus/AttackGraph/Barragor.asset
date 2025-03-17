@@ -13,44 +13,59 @@ MonoBehaviour:
   m_Name: Barragor
   m_EditorClassIdentifier: 
   NodeLinks:
-  - BaseNodeGUID: 391d1ba5-a8e5-43af-ba01-60dd65fc0d6a
+  - BaseNodeGUID: 42016d44-421e-4331-a171-8fa428edae14
     PortName: Next
-    TargetNodeGUID: 6ed4b5a5-5e59-43f8-8c74-2a25d41ce045
-  - BaseNodeGUID: 6ca15147-f60e-45f9-97d5-086a5b34faee
+    TargetNodeGUID: 8531489e-2511-4c64-92ac-84fcdfa7df1d
+  - BaseNodeGUID: e9f6ee89-c33e-4925-993a-6dadd4eb43d7
     PortName: Attack 1
-    TargetNodeGUID: 2efdd68a-833e-44bd-8a07-df80ca09ede1
-  - BaseNodeGUID: 6ca15147-f60e-45f9-97d5-086a5b34faee
+    TargetNodeGUID: 8f2e0700-98a6-4de6-989b-b9bc95c1288a
+  - BaseNodeGUID: e9f6ee89-c33e-4925-993a-6dadd4eb43d7
     PortName: Attack 2
-    TargetNodeGUID: 282221a7-f86f-4ad5-8b1f-158db7be7877
-  - BaseNodeGUID: 2f3fa980-b031-46fb-a082-d9609e80bc40
+    TargetNodeGUID: 4db4ffb9-0d3f-46b2-b7f1-65d23bdaa67a
+  - BaseNodeGUID: 86231dee-d8a6-48d4-aa7d-c124383a5cbf
     PortName: Attack 1
-    TargetNodeGUID: 5f28619c-f1a0-4fe4-8785-a22362fe7e0c
-  - BaseNodeGUID: 2f3fa980-b031-46fb-a082-d9609e80bc40
+    TargetNodeGUID: db4e3ae4-ba36-462b-8768-b5835ccc74ec
+  - BaseNodeGUID: 86231dee-d8a6-48d4-aa7d-c124383a5cbf
     PortName: Attack 2
-    TargetNodeGUID: b0dc80f0-c493-465c-a5bd-b5876ec7aa8f
+    TargetNodeGUID: d24dc368-a192-4de4-a263-493bd65f6d51
+  - BaseNodeGUID: fbe2f35d-4110-423f-942c-5f528606e8cf
+    PortName: Attack 1
+    TargetNodeGUID: ad023117-6b1b-4ee0-b4f8-6776c677b27b
+  - BaseNodeGUID: fbe2f35d-4110-423f-942c-5f528606e8cf
+    PortName: Attack 2
+    TargetNodeGUID: f0658359-4707-4313-96c1-73bc3f58eee5
   NodeData:
-  - guid: 6ed4b5a5-5e59-43f8-8c74-2a25d41ce045
-    name: FrontAttack
-    position: {x: 169, y: 0}
-  - guid: 2efdd68a-833e-44bd-8a07-df80ca09ede1
-    name: Charge
-    position: {x: 340, y: 186}
-  - guid: 282221a7-f86f-4ad5-8b1f-158db7be7877
-    name: FrontAttack
-    position: {x: 340, y: 287}
-  - guid: 5f28619c-f1a0-4fe4-8785-a22362fe7e0c
-    name: Charge
-    position: {x: 319, y: 403}
-  - guid: b0dc80f0-c493-465c-a5bd-b5876ec7aa8f
-    name: FrontAttack
-    position: {x: 307, y: 519}
+  - guid: 8531489e-2511-4c64-92ac-84fcdfa7df1d
+    name: GroundStrike
+    position: {x: 194, y: 0}
+  - guid: 8f2e0700-98a6-4de6-989b-b9bc95c1288a
+    name: RollAndSlash
+    position: {x: 194, y: 143}
+  - guid: 4db4ffb9-0d3f-46b2-b7f1-65d23bdaa67a
+    name: Spin
+    position: {x: 194, y: 282}
+  - guid: db4e3ae4-ba36-462b-8768-b5835ccc74ec
+    name: GroundStrike
+    position: {x: 234, y: 405}
+  - guid: d24dc368-a192-4de4-a263-493bd65f6d51
+    name: Spin
+    position: {x: 234, y: 508}
+  - guid: ad023117-6b1b-4ee0-b4f8-6776c677b27b
+    name: RollAndSlash
+    position: {x: 174, y: 642}
+  - guid: f0658359-4707-4313-96c1-73bc3f58eee5
+    name: GroundStrike
+    position: {x: 174, y: 752}
   StartNodeData:
-  - guid: 391d1ba5-a8e5-43af-ba01-60dd65fc0d6a
+  - guid: 42016d44-421e-4331-a171-8fa428edae14
     name: Start
     position: {x: 0, y: 0}
-  - guid: 6ca15147-f60e-45f9-97d5-086a5b34faee
-    name: FrontAttack
-    position: {x: 0, y: 186}
-  - guid: 2f3fa980-b031-46fb-a082-d9609e80bc40
-    name: Charge
-    position: {x: 0, y: 429}
+  - guid: e9f6ee89-c33e-4925-993a-6dadd4eb43d7
+    name: GroundStrike
+    position: {x: -155, y: 181}
+  - guid: 86231dee-d8a6-48d4-aa7d-c124383a5cbf
+    name: RollAndSlash
+    position: {x: -127, y: 407}
+  - guid: fbe2f35d-4110-423f-942c-5f528606e8cf
+    name: Spin
+    position: {x: -131, y: 618}

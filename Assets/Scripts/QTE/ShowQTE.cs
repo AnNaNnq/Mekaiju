@@ -25,6 +25,11 @@ namespace Mekaiju.QTE
             instance = this;
         }
 
+        private void Start()
+        {
+            qteUI.SetActive(false);
+        }
+
         public void SetForeground(float p_value)
         {
             foreground.fillAmount = p_value;
