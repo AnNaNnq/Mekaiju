@@ -6,6 +6,8 @@ using Mekaiju.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using Mekaiju.Entity;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Mekaiju
 {
@@ -30,6 +32,30 @@ namespace Mekaiju
         /// 
         /// </summary>
         private float _health;
+
+        private void Awake()
+        {
+            var t_smr   = GetComponent<SkinnedMeshRenderer>();
+            var t_mesh  = t_smr.sharedMesh;
+            var t_bones = t_smr.bones;
+
+            HashSet<int> t_usedBonesIndex = new();
+            t_mesh.boneWeights.ToList().ForEach(t_bw => {
+                t_usedBonesIndex.Add(t_bw.boneIndex0);
+                t_usedBonesIndex.Add(t_bw.boneIndex1);
+                t_usedBonesIndex.Add(t_bw.boneIndex2);
+                t_usedBonesIndex.Add(t_bw.boneIndex3);
+            });
+            var t_influentBones = t_usedBonesIndex.Where(t_ubi => t_ubi < t_bones.Length).Select(t_ubi => t_bones[t_ubi]);
+
+            t_influentBones.ToList().ForEach(t_bone => {
+                if (t_bone.gameObject.TryGetComponent<Collider>(out var _))
+                {
+                    var t_mcp = t_bone.gameObject.AddComponent<MechaCollisionProxy>();
+                    t_mcp.onCollide.AddListener(t_collision => onCollide.Invoke(t_collision));
+                }
+            });
+        }
 
         /// <summary>
         /// 
