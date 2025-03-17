@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Mekaiju.Attributes;
+using MyBox;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -16,9 +18,25 @@ namespace Mekaiju.Utils
     [Serializable]
     public class EnumArray<TKey, TValue> : EnumArray, IEnumerable<TValue> where TKey : Enum
     {
-        [SerializeField]
-        private List<TValue> _array = new(Enumerable.Repeat<TValue>(default, Enum.GetValues(typeof(TKey)).Length));
+        private static bool _isTValueConcrete = typeof(TValue).IsAbstract || typeof(TValue).IsInterface;
 
+        [SerializeField]
+        private List<TValue> _valArray = _isTValueConcrete ? null : new(Enumerable.Repeat<TValue>(default, Enum.GetValues(typeof(TKey)).Length));
+
+        [SerializeReference, SubclassPicker]
+        private List<TValue> _refArray = _isTValueConcrete ? new(Enumerable.Repeat<TValue>(default, Enum.GetValues(typeof(TKey)).Length)) : null;
+
+        private List<TValue> _array 
+        {
+            get => _isTValueConcrete ? _refArray : _valArray;
+            set
+            {
+                if (_isTValueConcrete)
+                    _refArray = value;
+                else
+                    _valArray = value;
+            }
+        }
 
         public EnumArray()
         {

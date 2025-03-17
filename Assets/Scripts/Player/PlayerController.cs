@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour
 
         if (!_instance.states[State.MovementOverrided] && !_instance.states[State.MovementLocked])
         {
-            _speed = _instance.ComputedStatistics(Statistics.Speed) * _speedFactor;
+            _speed = _instance.statistics[StatisticKind.Speed].Apply<float>(_instance.modifiers[StatisticKind.Speed]) * _speedFactor;
 
             if (_isGrounded)
             {
