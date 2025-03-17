@@ -1,6 +1,5 @@
 using Mekaiju;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class KaijuCollsionDetector : MonoBehaviour

@@ -22,15 +22,14 @@ MonoBehaviour:
       data:
         cooldown: 12.5
         range: 40
-        blockable: 0
-        sphereRadius: 4
-        forwardOffset: 7
-        layerMask:
-          serializedVersion: 2
-          m_Bits: 256
+        canMakeDamage: 1
         damage: 10
+        blockable: 0
+        fireZone:
+          damage: 100
+          tickRate: 0.2
         doomsdayObject: {fileID: 3009096104523879044, guid: 5fbdef867ce21e247a0678745d0dd082, type: 3}
-        fireZone: {fileID: 8984246175089052199, guid: 743d27ac34a9c6b48b6933108e31da4c, type: 3}
+        fireZonePrefab: {fileID: 8984246175089052199, guid: 743d27ac34a9c6b48b6933108e31da4c, type: 3}
         start: {fileID: 0}
         maxBounce: 30
         speed: 1000
