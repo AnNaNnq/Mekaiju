@@ -5,7 +5,7 @@ namespace Mekaiju.AI.Attack.Instance
 {
     public class ShockWave : MonoBehaviour
     {
-        GroundStrike _stats;
+        ChockWave _stats;
 
         LineRenderer _lr;
         float _radius = 0;
@@ -18,7 +18,7 @@ namespace Mekaiju.AI.Attack.Instance
 
         HashSet<Collider> _hitObjects = new HashSet<Collider>();
 
-        public void SetUp(GroundStrike p_stats)
+        public void SetUp(ChockWave p_stats)
         {
             _stats = p_stats;
             _lr = GetComponent<LineRenderer>();

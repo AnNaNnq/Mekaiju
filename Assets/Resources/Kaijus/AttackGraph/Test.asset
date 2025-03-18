@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb21259124df937458b8e9a96bee5aaf, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  NodeLinks:
+  - BaseNodeGUID: 59039555-fad2-425d-ad9e-b168a76780e6
+    PortName: Next
+    TargetNodeGUID: 59f7cc2a-d5ca-4ade-ab86-fb78d2a88a6e
+  NodeData:
+  - guid: 59f7cc2a-d5ca-4ade-ab86-fb78d2a88a6e
+    name: ShatteringJump
+    position: {x: 264, y: 12}
+  StartNodeData:
+  - guid: 59039555-fad2-425d-ad9e-b168a76780e6
+    name: Start
+    position: {x: 0, y: 0}

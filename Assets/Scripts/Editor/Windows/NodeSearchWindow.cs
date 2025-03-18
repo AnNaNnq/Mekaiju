@@ -6,6 +6,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.IO;
+using Mekaiju.AI.Objet;
 
 public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
 {
@@ -23,31 +24,49 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
         _indentationIcon.Apply();
     }
 
-    private string GetAttackCategory(Type type)
+    private string GetAttackCategory(Type attackType)
     {
-        string path = AssetDatabase.FindAssets($"t:MonoScript {type.Name}")
-            .Select(AssetDatabase.GUIDToAssetPath)
-            .FirstOrDefault(p => Path.GetFileNameWithoutExtension(p) == type.Name);
-
-        if (string.IsNullOrEmpty(path))
-            return "Uncategorized";
-
-        // Obtenir le chemin relatif (sans "Assets/")
-        string relativePath = Path.GetDirectoryName(path).Replace("\\", "/");
-        if (relativePath.StartsWith("Assets/"))
-            relativePath = relativePath.Substring(7);
-
-        // Découper le chemin en dossiers
-        string[] folders = relativePath.Split('/');
-
-        // Vérifier qu'on a au moins deux dossiers (Kaiju / Phase)
-        if (folders.Length >= 2)
+        if (attackType == null)
         {
-            return $"{folders[^2]}/{folders[^1]}"; // Retourne "Kaiju/Phase"
+            Debug.LogError("Type reçu est NULL !");
+            return "Uncategorized";
         }
 
-        return folders.Length > 0 ? folders[^1] : "Uncategorized";
+        // Trouver tous les ScriptableObjects de type KaijuAttack
+        string[] guids = AssetDatabase.FindAssets("t:KaijuAttack", new[] { "Assets/Resources/Kaijus" });
+
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            KaijuAttack kaijuAttack = AssetDatabase.LoadAssetAtPath<KaijuAttack>(path);
+
+            if (kaijuAttack == null)
+                continue;
+
+            // Vérifier si le KaijuAttack contient un `attack` du type recherché
+            if (kaijuAttack.attack != null && kaijuAttack.attack.GetType() == attackType)
+            {
+                // Obtenir le chemin relatif après "Resources/"
+                string relativePath = Path.GetDirectoryName(path).Replace("\\", "/");
+                int index = relativePath.IndexOf("Resources/");
+                if (index >= 0)
+                    relativePath = relativePath.Substring(index + 10); // Supprime "Resources/"
+
+                string[] folders = relativePath.Split('/');
+
+                if (folders.Length >= 2)
+                {
+                    return $"{folders[^2]}/"; // Retourne "Kaijus"
+                }
+
+                return folders.Length > 0 ? folders[^1] : "Uncategorized";
+            }
+        }
+
+        Debug.LogWarning($"Aucun KaijuAttack trouvé pour {attackType.FullName}");
+        return "Uncategorized";
     }
+
 
     public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
     {
@@ -73,7 +92,6 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
             if (levels.Length < 2) continue; // On s'assure qu'on a bien "Kaiju/Phase"
 
             string kaijuName = levels[0];
-            string phaseName = levels[1];
 
             // Ajout du Kaiju (niveau 1)
             if (!kaijuGroups.ContainsKey(kaijuName))
@@ -83,17 +101,13 @@ public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
                 kaijuGroups[kaijuName] = kaijuEntry;
             }
 
-            // Ajout de la phase sous le Kaiju (niveau 2)
-            var phaseEntry = new SearchTreeGroupEntry(new GUIContent(phaseName), 2);
-            tree.Add(phaseEntry);
-
             // Ajouter les attaques sous la phase (niveau 3)
             foreach (var attackType in group)
             {
                 tree.Add(new SearchTreeEntry(new GUIContent(attackType.Name, _indentationIcon))
                 {
                     userData = attackType.Name,
-                    level = 3
+                    level = 2
                 });
             }
         }

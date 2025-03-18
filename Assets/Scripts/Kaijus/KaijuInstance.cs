@@ -41,6 +41,10 @@ namespace Mekaiju.AI
 
         protected KaijuMotor _motor;
 
+        public Rigidbody rb {  get { return _rb; } }
+
+        private Rigidbody _rb;
+
         public KaijuBrain brain { get { return _brain; } }
 
         private KaijuBrain _brain;
@@ -87,6 +91,7 @@ namespace Mekaiju.AI
             _motor = GetComponent<KaijuMotor>();
             _brain = GetComponent<KaijuBrain>();
             _animation = GetComponent<KaijuAnimatorController>();
+            _rb = GetComponent<Rigidbody>();
             target = GameObject.FindGameObjectWithTag(targetTag);
             foreach (var behavior in behaviors)
             {
