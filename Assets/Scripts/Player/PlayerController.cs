@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Jump.performed += OnJump;
         _playerActions.Player.Dash.performed += OnDash;
         _playerActions.Player.Heal.performed += OnHeal;
-        _playerActions.Player.Torse.performed += OnTorse;
+        _playerActions.Player.Torse.performed += OnChest;
         _playerActions.Player.Pause.performed += OnPause;
 
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
@@ -234,10 +234,12 @@ public class PlayerController : MonoBehaviour
     {
         //a faire
     }
-    private void OnTorse(InputAction.CallbackContext p_context)
+    private void OnChest(InputAction.CallbackContext p_context)
     {
-        // a faire
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.Chest].TriggerAbility(t_target, null));
     }
+
     private void OnPause(InputAction.CallbackContext p_context)
     {
         // a faire
