@@ -1,5 +1,59 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5216559852623385046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4105715957189929557}
+  - component: {fileID: 8193032405747098571}
+  m_Layer: 0
+  m_Name: MeshCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4105715957189929557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5216559852623385046}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.00009942055, y: -2.4849539, z: 0.025234222}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4991195156304236561}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &8193032405747098571
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5216559852623385046}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2500624111325206269, guid: 029b38404453ec44eb1bafe88bb00889, type: 3}
 --- !u!1001 &4814049972378367994
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54,10 +108,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 3404a966ddae09b4cacb5f5bf81a7802, type: 2}
     - target: {fileID: 919132149155446097, guid: 029b38404453ec44eb1bafe88bb00889, type: 3}
       propertyPath: m_Name
-      value: SM_Stalactite_Low_01
+      value: Pref_Stalactite_Low_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 029b38404453ec44eb1bafe88bb00889, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4105715957189929557}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 029b38404453ec44eb1bafe88bb00889, type: 3}
+--- !u!4 &4991195156304236561 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 029b38404453ec44eb1bafe88bb00889, type: 3}
+  m_PrefabInstance: {fileID: 4814049972378367994}
+  m_PrefabAsset: {fileID: 0}
