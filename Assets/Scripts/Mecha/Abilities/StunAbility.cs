@@ -5,7 +5,6 @@ using Mekaiju.AI.Body;
 using Mekaiju.Entity;
 using Mekaiju.Entity.Effect;
 using MyBox;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Mekaiju
@@ -29,8 +28,6 @@ namespace Mekaiju
         [SerializeField]
         private Effect _stunEffect;
 
-        private Vector3 _center = new(0, 0, 0);
-
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return base.IsAvailable(p_self, p_opt) && p_self.stamina - _consumption >= 0f;
@@ -40,8 +37,6 @@ namespace Mekaiju
         {
             if (IsAvailable(p_self, p_opt))
             {
-                _center = p_self.parent.transform.position;
-
                 state = AbilityState.Active;
                 p_self.ConsumeStamina(_consumption);
 
