@@ -10,6 +10,7 @@ namespace Mekaiju.AI.Attack {
     [System.Serializable]
     public abstract class Attack
     {
+        public float timeBeforeAttack = 1;
         public float cooldown;
         public float range;
         protected bool canUse;
@@ -53,6 +54,12 @@ namespace Mekaiju.AI.Attack {
                 t_return &= !(p_otherRange <= range);
             }
             return t_return;
+        }
+
+        public IEnumerator Lunch(EntityInstance p_kaiju)
+        {
+            yield return new WaitForSeconds(timeBeforeAttack);
+            Active(p_kaiju);
         }
 
         public virtual void Active(EntityInstance p_kaiju) { 
