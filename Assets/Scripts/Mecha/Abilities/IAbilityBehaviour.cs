@@ -46,7 +46,7 @@ namespace Mekaiju
         /// <returns>true if capacity is able to be triggered, else false.</returns>
         public virtual bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return state == AbilityState.Ready && !p_self.states[State.AbilityLocked];
+            return state == AbilityState.Ready && !p_self.states[StateKind.AbilityLocked];
         }
 
         /// <summary>

@@ -255,7 +255,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _instance.states[State.Grounded] = _isGrounded;
+        _instance.states[StateKind.Grounded].Set(_isGrounded);
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
-        if (!_instance.states[State.MovementOverrided] && !_instance.states[State.MovementLocked])
+        if (!_instance.states[StateKind.MovementOverrided] && !_instance.states[StateKind.MovementLocked])
         {
             _speed = _instance.statistics[StatisticKind.Speed].Apply<float>(_instance.modifiers[StatisticKind.Speed]) * _speedFactor;
 
