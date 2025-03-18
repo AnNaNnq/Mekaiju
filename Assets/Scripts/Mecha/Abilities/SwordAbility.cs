@@ -4,6 +4,7 @@ using Mekaiju.AI;
 using Mekaiju.AI.Body;
 using Mekaiju.Entity;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Mekaiju
 {
@@ -70,25 +71,27 @@ namespace Mekaiju
                 _animationProxy.animator.SetTrigger("LArm");
                 p_self.ConsumeStamina(_consumption);
 
-                p_self.onCollide.AddListener(
-                     (t_collision) =>
-                     {
-                         if (t_collision.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
-                         {
-                             if (t_bpo != p_target && p_target != null)
-                             {
-                                 t_bpo = p_target;
-                             }
-                             var t_damage = _damageFactor * p_self.statistics[StatisticKind.Damage].Apply<float>(p_self.modifiers[StatisticKind.Damage]);
-                             t_bpo.TakeDamage(p_self.parent, t_damage, DamageKind.Direct);
-                             p_self.onDealDamage.Invoke(t_damage);
-                         }
-                     }
-                 );
+                UnityAction<Collider> t_cb = (t_collision) =>
+                {
+                    if (t_collision.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
+                    {
+                        if (t_bpo != p_target && p_target != null)
+                        {
+                            t_bpo = p_target;
+                        }
+                        var t_damage = _damageFactor * p_self.statistics[StatisticKind.Damage].Apply<float>(p_self.modifiers[StatisticKind.Damage]);
+                        t_bpo.TakeDamage(p_self.parent, t_damage, DamageKind.Direct);
+                        p_self.onDealDamage.Invoke(t_damage);
+                    }
+                };
+
+                p_self.onCollide.AddListener(t_cb);
 
                 // Wait for animation end
                 var t_timout = _endTriggerTimout;
                 yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
+
+                p_self.onCollide.RemoveListener(t_cb);
 
                 state = AbilityState.Ready;
             }
