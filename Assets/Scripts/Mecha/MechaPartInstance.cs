@@ -9,6 +9,8 @@ using Mekaiju.Entity;
 
 namespace Mekaiju
 {
+    using HealthStatisticValue = Mekaiju.Utils.EnumArray<Mekaiju.MechaPart, float>;
+
 
     /// <summary>
     /// 
@@ -81,12 +83,8 @@ namespace Mekaiju
         }
 
         #region IEntityInstance implementation
-        public override float ComputedStatistics(Statistics p_kind)
-        {
-            return parent.ComputedStatistics(p_kind);
-        }
-
-        public override EnumArray<Statistics, ModifierCollection> modifiers => parent.modifiers;
+        public override EnumArray<StatisticKind, ModifierCollection> modifiers   => parent.modifiers;
+        public override EnumArray<StatisticKind, IStatistic>        statistics => parent.statistics;
 
         public override EnumArray<TimePoint, float> timePoints => parent.timePoints;
         public override EnumArray<State,     bool> states     => parent.states;
@@ -96,7 +94,7 @@ namespace Mekaiju
 
         public override bool isAlive => health > 0f;
 
-        public override float baseHealth => _desc.healthPercent * parent.baseHealth;
+        public override float baseHealth => statistics[StatisticKind.Health].Apply<HealthStatisticValue>(modifiers[StatisticKind.Health])[_desc.part];
         public override float health     => _health;
 
         public override void Heal(float p_heal)
@@ -106,7 +104,7 @@ namespace Mekaiju
 
         public override void TakeDamage(float p_damage)
         {
-            var t_damage = p_damage - p_damage * ComputedStatistics(Statistics.Defense);
+            var t_damage = p_damage - p_damage * statistics[StatisticKind.Defense].Apply<float>(modifiers[StatisticKind.Defense]);
             timePoints[TimePoint.LastDamage] = Time.time;
             _health = Mathf.Max(0f, _health - t_damage);
             onTakeDamage.Invoke(t_damage);

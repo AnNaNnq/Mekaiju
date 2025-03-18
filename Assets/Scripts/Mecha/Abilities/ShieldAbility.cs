@@ -114,7 +114,7 @@ namespace Mekaiju
             {
                 state = AbilityState.Active;
                 
-                var t_sMod = p_self.modifiers[Statistics.Speed].Add(_speedModifier / 100f, ModifierKind.Percent);
+                var t_sMod = p_self.modifiers[StatisticKind.Speed].Add(_speedModifier / 100f, ModifierKind.Percent);
                 p_self.states[State.Protected] = true;
 
                 _SetVFXState(_vfxDefault, true);
@@ -131,7 +131,7 @@ namespace Mekaiju
                 _SetVFXState(_vfxDefault, false);
                 _animationProxy.animator.SetBool("IsShielding", false);
 
-                p_self.modifiers[Statistics.Speed].Remove(t_sMod);
+                p_self.modifiers[StatisticKind.Speed].Remove(t_sMod);
                 p_self.states[State.Protected] = false;
                 
                 _SetVFXState(_vfxBreak, true);

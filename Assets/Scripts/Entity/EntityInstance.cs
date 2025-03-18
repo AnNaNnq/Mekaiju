@@ -38,22 +38,18 @@ namespace Mekaiju.Entity
         /// Bind base entity stats.
         /// Must be overrided to use computedStats.
         /// </summary>
-        protected virtual EnumArray<Statistics, float> statistics { get; }
+        public virtual EnumArray<StatisticKind, IStatistic> statistics { get; protected set; }
 
         /// <summary>
         /// Used to apply modifer on statistics.
         /// </summary>
-        public virtual EnumArray<Statistics, ModifierCollection> modifiers { get; } = new(() => new());
+        public virtual EnumArray<StatisticKind, ModifierCollection> modifiers { get; } = new(() => new());
 
         /// <summary>
         /// Compute stats with modifiers.
         /// </summary>
         /// <param name="p_kind">The targeted statistics.</param>
         /// <returns>The computed statistic.</returns>
-        public virtual float ComputedStatistics(Statistics p_kind)
-        {
-            return modifiers[p_kind].ComputeValue(statistics[p_kind]);
-        }
 
         public virtual UnityEvent<float> onTakeDamage { get; } = new();
         public virtual UnityEvent<float> onDealDamage { get; } = new();

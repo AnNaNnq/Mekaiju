@@ -10,12 +10,12 @@ namespace Mekaiju.Entity.Effect
 
         public override void OnAdd(EntityInstance p_self)
         {
-            _defenseMod = p_self.modifiers[Statistics.Defense].Add(_defensePercentage, ModifierKind.Flat);
+            _defenseMod = p_self.modifiers[StatisticKind.Defense].Add(_defensePercentage, ModifierKind.Flat);
         }
 
         public override void OnRemove(EntityInstance p_self)
         {
-            p_self.modifiers[Statistics.Defense].Remove(_defenseMod);
+            p_self.modifiers[StatisticKind.Defense].Remove(_defenseMod);
         }
     }
 }
