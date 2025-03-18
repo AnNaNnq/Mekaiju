@@ -20,8 +20,11 @@ MonoBehaviour:
     - rid: 7914790865167974648
       type: {class: RollDash, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
+        timeBeforeAttack: 1
         cooldown: 1
         range: 60
         canMakeDamage: 1
         damage: 50
         blockable: 0
+        attackRange: 10
+        rollSpeed: 400
