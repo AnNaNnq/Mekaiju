@@ -10,10 +10,10 @@ namespace Mekaiju.AI.Attack
         [Separator]
         [OverrideLabel("Charge Speed (Force Pulse)")]
         [Tooltip("Not % of speed")]
-        [Range(100000, 300000)]
-        public float chargeSpeed = 10;
+        public float chargeSpeed = 10000;
         [OverrideLabel("Time Prep Before Charge (sec)")]
         public float chargePrepTime = 1;
+        public float chargeDuration = 1.0f; // Temps de charge
 
         Rigidbody _rb;
 
@@ -26,7 +26,6 @@ namespace Mekaiju.AI.Attack
 
             _kaiju.motor.StopKaiju();
 
-
             _kaiju.StartCoroutine(AttackEnumerator(_kaiju));
 
         }
@@ -38,17 +37,25 @@ namespace Mekaiju.AI.Attack
 
             while (t_time < chargePrepTime)
             {
+                _kaiju.motor.StopKaiju();
                 _kaiju.motor.LookTarget();
                 t_targetPosition = _kaiju.GetTargetPos();
                 yield return new WaitForSeconds(0.01f);
                 t_time += 0.01f;
             }
 
-            //_kaiju.motor.enabled = false;
             Vector3 t_startPos = _kaiju.transform.position;
             Vector3 t_direction = (t_targetPosition - t_startPos).normalized;
 
-            _rb.AddForce(t_direction * chargeSpeed, ForceMode.Impulse);
+
+            float t_elapsed = 0f;
+            while (t_elapsed < chargeDuration)
+            {
+                _rb.AddForce(t_direction * (chargeSpeed / chargeDuration), ForceMode.Acceleration);
+                t_elapsed += Time.deltaTime;
+                yield return null;
+            }
+            OnEnd();
         }
 
         void HandleCollision(Collision p_collision)
@@ -58,7 +65,6 @@ namespace Mekaiju.AI.Attack
                 _rb.angularVelocity = Vector3.zero;
                 _rb.linearVelocity = Vector3.zero;
                 _kaiju.motor.StartKaiju();
-                OnEnd();
             }
             if (p_collision.collider.CompareTag("Player"))
             {
