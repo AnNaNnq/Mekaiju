@@ -19,10 +19,11 @@ namespace Mekaiju.AI.Attack
                 _kaiju.motor.StartKaiju();
                 _kaiju.motor.SetSpeed(rollSpeed);
                 _kaiju.motor.MoveTo(_kaiju.target.transform.position, attackRange);
+                _kaiju.StartCoroutine(RoolDuration());
             }
             else
             {
-                //Slash();
+                Slash();
             }
         }
 
@@ -32,7 +33,18 @@ namespace Mekaiju.AI.Attack
             {
                 yield return new WaitForSeconds(0.1f);
             }
-            //Slash();
+            Slash();
+        }
+        public void Slash()
+        {
+            _kaiju.motor.SetSpeed(100);
+            _kaiju.animator.AttackAnimation("RollAndDash");
+            _kaiju.motor.StopKaiju();
+        }
+        public override void OnAction()
+        {
+            base.OnAction();
+            SendDamage(damage);
         }
     }
 }
