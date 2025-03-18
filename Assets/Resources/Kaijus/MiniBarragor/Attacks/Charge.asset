@@ -20,15 +20,12 @@ MonoBehaviour:
     - rid: 3772134765917896948
       type: {class: Charge, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
+        timeBeforeAttack: 0
         cooldown: 1
         range: 100
         canMakeDamage: 1
         damage: 500
         blockable: 0
-        sphereRadius: 4
-        forwardOffset: 7
-        layerMask:
-          serializedVersion: 2
-          m_Bits: 256
-        chargeSpeed: 100000
-        chargePrepTime: 3
+        chargeSpeed: 2000
+        chargePrepTime: 1
+        chargeDuration: 0.5
