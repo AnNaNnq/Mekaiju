@@ -11,16 +11,16 @@ namespace Mekaiju
     public class MechaPartDesc
     {
         /// <summary>
-        /// The percent of total mecha health
-        /// </summary>
-        [field: SerializeField, Range(0f, 1f)]
-        public float healthPercent { get; private set; }
-
-        /// <summary>
         /// Specify if ability can be replaced
         /// </summary>
         [field: SerializeField, Tooltip("Specify whether the ability can be replaced by a recoverable one")]
         public bool isAbilityReplaceable { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [field: SerializeField]
+        public MechaPart part { get; private set; }
 
         /// <summary>
         /// The default ability

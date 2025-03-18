@@ -106,7 +106,7 @@ namespace Mekaiju
                     {
                         if (t_collision.collider.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
                         {
-                            var t_damage = _damageFactor * p_self.ComputedStatistics(Statistics.Damage);
+                            var t_damage = _damageFactor * p_self.statistics[StatisticKind.Damage].Apply<float>(p_self.modifiers[StatisticKind.Damage]);
                             t_bpo.TakeDamage(t_damage);
                             p_self.onDealDamage.Invoke(t_damage);
                         }

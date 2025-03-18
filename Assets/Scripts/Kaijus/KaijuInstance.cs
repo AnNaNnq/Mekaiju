@@ -192,13 +192,13 @@ namespace Mekaiju.AI
 
         public float GetRealDamage(float p_amonunt)
         {
-            var t_damage = modifiers[Statistics.Damage].ComputeValue(p_amonunt);
+            var t_damage = modifiers[StatisticKind.Damage].ComputeValue(p_amonunt);
             return stats.dmg * (t_damage/100);
         }
 
         public float GetRealSpeed(float p_amonunt)
         {
-            var t_amount = modifiers[Statistics.Speed].ComputeValue(p_amonunt);
+            var t_amount = modifiers[StatisticKind.Speed].ComputeValue(p_amonunt);
             return stats.speed * (t_amount / 100);
 
         }
@@ -305,7 +305,7 @@ namespace Mekaiju.AI
 
         public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
         {
-            var t_defense = modifiers[Statistics.Defense].ComputeValue(stats.def);
+            var t_defense = modifiers[StatisticKind.Defense].ComputeValue(stats.def);
 
             var t_realDamage = p_amonunt * (1- (t_defense/100));
 
