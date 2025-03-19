@@ -66,7 +66,10 @@ namespace Mekaiju
         /// <param name="p_self">The instance where the ability is loaded.</param>
         /// <param name="p_target">The enemy part that is locked (or null).</param>
         /// <param name="p_opt">An optional parameter (should be null if not needed).</param>
-        public abstract IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt);
+        public virtual IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
+        {
+            yield return null;
+        }
 
         /// <summary>
         /// Use to release an ability if nessacary.<br/>

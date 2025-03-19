@@ -1,17 +1,17 @@
-﻿using Mekaiju.AI.Attack.Instance;
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class FireZone : MonoBehaviour
+    public class DamageZone : MonoBehaviour
     {
-        private DoomsdayRayUpgrade _stats;
+        private DamageZoneStats _stats;
         private KaijuInstance _kaiju;
         private bool _playerInside = false;
 
-        public void Init(DoomsdayRayUpgrade p_stats, KaijuInstance p_kaiju)
+        IDisposable _effect;
+        public void Init(DamageZoneStats p_stats, KaijuInstance p_kaiju)
         {
             _stats = p_stats;
             _kaiju = p_kaiju;
@@ -25,6 +25,11 @@ namespace Mekaiju.AI.Attack
                 _playerInside = true;
                 MechaInstance t_mecha = other.GetComponent<MechaInstance>();
                 StartCoroutine(DealDamage(t_mecha));
+                if (_stats.addEffect)
+                {
+                    float t_duration = _stats.asDuration ? _stats.effectDuration : -1;
+                    _effect = t_mecha.AddEffect(_stats.effect, t_duration);
+                }
             }
 
             //Pour �viter que les zones de feu ne se superposent
@@ -41,9 +46,9 @@ namespace Mekaiju.AI.Attack
         {
             while (_playerInside)
             {
-                yield return new WaitForSeconds(_stats.fireTickRate);
-                float t_dmg = _kaiju.GetRealDamage(_stats.fireDamage);
-                p_mech.TakeDamage(t_dmg);
+                yield return new WaitForSeconds(_stats.tickRate);
+                float t_dmg = _kaiju.GetRealDamage(_stats.damage);
+                p_mech.TakeDamage(_kaiju, t_dmg, Entity.DamageKind.Direct);
 
                 //Debug
                 _kaiju.AddDPS(t_dmg);
@@ -55,6 +60,11 @@ namespace Mekaiju.AI.Attack
             if (_playerInside && other.CompareTag("Player"))
             {
                 _playerInside = false;
+                if (!_stats.asDuration)
+                {
+                    MechaInstance t_mecha = other.GetComponent<MechaInstance>();
+                    t_mecha.RemoveEffect(_effect);
+                }
             }
         }
     }

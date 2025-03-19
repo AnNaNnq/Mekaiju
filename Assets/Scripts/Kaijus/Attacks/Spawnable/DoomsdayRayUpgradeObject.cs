@@ -102,11 +102,13 @@ namespace Mekaiju.AI.Attack.Instance
             if (other.CompareTag("Player"))
             {
                 MechaInstance mechaInstance = other.GetComponent<MechaInstance>();
-                mechaInstance.TakeDamage(_instance.GetRealDamage(_stat.damage));
+                mechaInstance.TakeDamage(_instance, _instance.GetRealDamage(_stat.damage), Entity.DamageKind.Direct);
             }
             else if (other.CompareTag("Ground"))
             {
-                Instantiate(_stat.fireZone, other.ClosestPoint(transform.position), Quaternion.identity);
+                GameObject t_obj = Instantiate(_stat.fireZonePrefab, other.ClosestPoint(transform.position), Quaternion.identity);
+                DamageZone t_zone = t_obj.GetComponent<DamageZone>();
+                t_zone.Init(_stat.fireZone, _instance);
             }
         }
     }

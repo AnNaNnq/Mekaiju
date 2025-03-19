@@ -9,11 +9,9 @@ namespace Mekaiju.AI.Attack
     public class DoomsdayRayUpgrade : Attack
     {
         [Separator]
-        [OverrideLabel("Fire tick damage (% of DMG)")]
-        public float fireDamage;
-        public float fireTickRate = 0.2f;
+        public DamageZoneStats fireZone;
         [OverrideLabel("Prefab")][OpenPrefabButton] public GameObject doomsdayObject;
-        [OpenPrefabButton] public GameObject fireZone;
+        [OpenPrefabButton] public GameObject fireZonePrefab;
         [HideInInspector] public Transform start;
         public int maxBounce = 5;
         public float speed = 10;

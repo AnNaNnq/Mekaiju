@@ -38,24 +38,21 @@ namespace Mekaiju.Entity
         /// Bind base entity stats.
         /// Must be overrided to use computedStats.
         /// </summary>
-        protected virtual EnumArray<Statistics, float> statistics { get; }
+        public virtual EnumArray<StatisticKind, IStatistic> statistics { get; protected set; }
 
         /// <summary>
         /// Used to apply modifer on statistics.
         /// </summary>
-        public virtual EnumArray<Statistics, ModifierCollection> modifiers { get; } = new(() => new());
+        public virtual EnumArray<StatisticKind, ModifierCollection> modifiers { get; } = new(() => new());
 
         /// <summary>
         /// Compute stats with modifiers.
         /// </summary>
         /// <param name="p_kind">The targeted statistics.</param>
         /// <returns>The computed statistic.</returns>
-        public virtual float ComputedStatistics(Statistics p_kind)
-        {
-            return modifiers[p_kind].ComputeValue(statistics[p_kind]);
-        }
 
-        public virtual UnityEvent<float> onTakeDamage { get; } = new();
+        public virtual UnityEvent<IDamageable, float, DamageKind> onBeforeTakeDamage { get; } = new();
+        public virtual UnityEvent<IDamageable, float, DamageKind> onAfterTakeDamage  { get; } = new();
         public virtual UnityEvent<float> onDealDamage { get; } = new();
 
         public UnityEvent<Collider> onCollide = new();
@@ -65,7 +62,7 @@ namespace Mekaiju.Entity
         public abstract float baseHealth { get; }
 
         public abstract void Heal      (float p_amount);
-        public abstract void TakeDamage(float p_damage);
+        public abstract void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind);
 
         public virtual float baseStamina => 0f;
         public virtual float stamina     => 0f;

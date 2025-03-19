@@ -15,9 +15,6 @@ namespace Mekaiju.AI.Attack
         {
             base.Active(p_kaiju);
 
-            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
-            _kaiju = t_kaiju;
-
             if (_kaiju.TargetInRange(range) && !_kaiju.TargetInRange(attackRange))
             {
                 _kaiju.animator.AttackAnimation("Roll");

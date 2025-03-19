@@ -22,18 +22,13 @@ namespace Mekaiju
         /// <summary>
         /// The default stats of the mecha
         /// </summary>
-        public EnumArray<Statistics, float> statistics;
-
-        /// <summary>
-        /// The mecha prefab/mesh
-        /// </summary>
-        [field: Foldout("General")]
         [field: SerializeField]
-        public GameObject prefab { get; private set; }
+        public EnumArray<StatisticKind, IStatistic> statistics { get; private set; }
 
         /// <summary>
         /// The description for each parts
         /// </summary>
+        [field: Foldout("General")]
         [field: SerializeField]
         public EnumArray<MechaPart, MechaPartDesc> parts { get; private set; }
 

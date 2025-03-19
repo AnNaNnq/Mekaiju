@@ -10,25 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c81f28bfa57eadc47904e311de7feb8c, type: 3}
-  m_Name: RollAndSlash
+  m_Name: Spin
   m_EditorClassIdentifier: 
   <attack>k__BackingField:
-    rid: 7914790776543903814
+    rid: 7914790776543903866
   references:
     version: 2
     RefIds:
-    - rid: 7914790776543903814
-      type: {class: RollAndSlash, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
+    - rid: 7914790776543903866
+      type: {class: Spin, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
         cooldown: 5
-        range: 60
+        range: 10
         canMakeDamage: 1
         damage: 100
-        blockable: 0
-        sphereRadius: 4
-        forwardOffset: 7
-        layerMask:
-          serializedVersion: 2
-          m_Bits: 256
-        attackRange: 10
-        rollSpeed: 300
+        blockable: 1

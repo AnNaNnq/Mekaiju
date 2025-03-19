@@ -7,6 +7,8 @@ using Mekaiju.Entity.Effect;
 
 namespace Mekaiju
 {
+    using HealthStatisticValue = Mekaiju.Utils.EnumArray<Mekaiju.MechaPart, float>;
+
     /// <summary>
     /// 
     /// </summary>
@@ -97,12 +99,12 @@ namespace Mekaiju
         #endregion
 
         #region IEntityInstance implementation
-        protected override EnumArray<Statistics, float> statistics => desc.statistics;
+        public override EnumArray<StatisticKind, IStatistic> statistics => desc.statistics;
 
         public override bool isAlive => health > 0;
 
         public override float health     => _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.health; });
-        public override float baseHealth => desc.statistics[Statistics.Health];
+        public override float baseHealth => statistics[StatisticKind.Health].Apply<HealthStatisticValue>(modifiers[StatisticKind.Health]).Sum();
 
         public override void Heal(float p_amount)
         {
@@ -112,11 +114,20 @@ namespace Mekaiju
             }
         }
 
-        public override void TakeDamage(float p_damage)
+        public override void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
-            foreach (var t_part in _parts)
+            onBeforeTakeDamage.Invoke(p_from, p_damage, p_kind);
+            if (!states[State.Invulnerable])
             {
-                t_part.TakeDamage(p_damage / _parts.Count());    
+                var t_defense = statistics[StatisticKind.Defense].Apply<float>(modifiers[StatisticKind.Defense]);
+                var t_damage  = p_damage - p_damage * t_defense;
+                timePoints[TimePoint.LastDamage] = Time.time;
+                foreach (var t_part in _parts)
+                {
+                    t_part.TakeDamage(p_damage / _parts.Count());    
+                }
+
+                onAfterTakeDamage.Invoke(p_from, t_damage, p_kind);
             }
         }
 

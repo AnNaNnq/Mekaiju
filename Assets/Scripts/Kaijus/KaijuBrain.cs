@@ -160,7 +160,9 @@ namespace Mekaiju.AI
                 {
                     _motor.StopKaiju();
                     _motor.LookTarget();
-                    t_kaijuAttacks[i].attack.Active(_instance);
+                    Debug.Log($"Le kaiju lance l'attaque {t_kaijuAttacks[i].name}");
+                    StartCoroutine(t_kaijuAttacks[i].attack.Lunch(_instance));
+                    //t_kaijuAttacks[i].attack.Active(_instance);
                     _lastAttack = t_kaijuAttacks[i].name;
                     _canAttack = false;
                     return;
