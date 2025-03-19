@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7978186912109261413
 Transform:
@@ -102,9 +102,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3005020447119003155, guid: 8874e4c53d2122b4c868d2c26358d3e4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8874e4c53d2122b4c868d2c26358d3e4, type: 3}
       propertyPath: m_Name
       value: Pref_Rock_Low_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8874e4c53d2122b4c868d2c26358d3e4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4750264068887712632, guid: 8874e4c53d2122b4c868d2c26358d3e4, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
