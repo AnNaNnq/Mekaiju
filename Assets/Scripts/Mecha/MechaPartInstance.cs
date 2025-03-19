@@ -116,7 +116,7 @@ namespace Mekaiju
         public override void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
             onBeforeTakeDamage.Invoke(p_from, p_damage, p_kind);
-            if (!states[State.Invulnerable])
+            if (!states[StateKind.Invulnerable])
             {
                 var t_defense = statistics[StatisticKind.Defense].Apply<float>(modifiers[StatisticKind.Defense]);
                 var t_damage  = p_damage - p_damage * t_defense;

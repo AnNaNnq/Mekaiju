@@ -29,7 +29,7 @@ namespace Mekaiju
                     if (t_kind == DamageKind.Direct)
                     {
                         t_from.TakeDamage(p_self.parent, t_damage, DamageKind.Direct);
-                        p_self.states[State.Invulnerable] = true;
+                        p_self.states[StateKind.Invulnerable].Set(true);
                         t_done = true;
                     }
                 };
@@ -42,7 +42,7 @@ namespace Mekaiju
 
                 yield return new WaitForEndOfFrame();
 
-                p_self.states[State.Invulnerable] = false;
+                p_self.states[StateKind.Invulnerable].Set(false);
 
                 state = AbilityState.Ready;
             }
