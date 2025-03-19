@@ -48,7 +48,7 @@ namespace Mekaiju.AI.Attack
             {
                 yield return new WaitForSeconds(_stats.tickRate);
                 float t_dmg = _kaiju.GetRealDamage(_stats.damage);
-                p_mech.TakeDamage(t_dmg);
+                p_mech.TakeDamage(_kaiju, t_dmg, Entity.DamageKind.Direct);
 
                 //Debug
                 _kaiju.AddDPS(t_dmg);
