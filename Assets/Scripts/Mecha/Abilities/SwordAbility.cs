@@ -68,8 +68,6 @@ namespace Mekaiju
                 state = AbilityState.Active;
                 _animationState = AnimationState.Idle;
 
-                p_self.states[StateKind.MovementLocked].Set(true);
-
                 _animationProxy.animator.SetTrigger("LArm");
                 p_self.ConsumeStamina(_consumption);
 
@@ -93,7 +91,6 @@ namespace Mekaiju
                 var t_timout = _endTriggerTimout;
                 yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
 
-                p_self.states[StateKind.MovementLocked].Set(false);
                 p_self.onCollide.RemoveListener(t_cb);
 
                 state = AbilityState.Ready;
