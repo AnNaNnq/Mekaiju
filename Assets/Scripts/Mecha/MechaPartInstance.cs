@@ -72,6 +72,16 @@ namespace Mekaiju
             _desc.ability.behaviour.Release();
         }
 
+        /// <summary>
+        /// Should be used only by MechaInstance or Self.<br/>
+        /// This function is used in case of compound damages.
+        /// </summary>
+        /// <param name="p_damage">The amount of damage to deal.</param>
+        public void TakeDamage(float p_damage)
+        {
+            _health = Mathf.Max(0f, _health - p_damage);
+        }
+
         public override void Update()
         {
             _desc.ability.behaviour?.Tick(this);
@@ -89,7 +99,8 @@ namespace Mekaiju
         public override EnumArray<TimePoint, float>  timePoints => parent.timePoints;
         public override EnumArray<StateKind, State> states     => parent.states;
 
-        public override UnityEvent<float> onTakeDamage => parent.onTakeDamage;
+        public override UnityEvent<IDamageable, float, DamageKind> onBeforeTakeDamage => parent.onBeforeTakeDamage;
+        public override UnityEvent<IDamageable, float, DamageKind> onAfterTakeDamage  => parent.onAfterTakeDamage;
         public override UnityEvent<float> onDealDamage => parent.onDealDamage;
 
         public override bool isAlive => health > 0f;
@@ -102,12 +113,18 @@ namespace Mekaiju
             _health = Mathf.Min(baseHealth, _health + p_heal);
         }
 
-        public override void TakeDamage(float p_damage)
+        public override void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
-            var t_damage = p_damage - p_damage * statistics[StatisticKind.Defense].Apply<float>(modifiers[StatisticKind.Defense]);
-            timePoints[TimePoint.LastDamage] = Time.time;
-            _health = Mathf.Max(0f, _health - t_damage);
-            onTakeDamage.Invoke(t_damage);
+            onBeforeTakeDamage.Invoke(p_from, p_damage, p_kind);
+            if (!states[State.Invulnerable])
+            {
+                var t_defense = statistics[StatisticKind.Defense].Apply<float>(modifiers[StatisticKind.Defense]);
+                var t_damage  = p_damage - p_damage * t_defense;
+                timePoints[TimePoint.LastDamage] = Time.time;
+                TakeDamage(t_damage);
+
+                onAfterTakeDamage.Invoke(p_from, t_damage, p_kind);
+            }
         }
 
         public override float baseStamina => parent.baseStamina;

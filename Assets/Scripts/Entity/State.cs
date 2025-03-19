@@ -18,6 +18,9 @@ namespace Mekaiju.Entity
         // Prevent the usage of any ability
         AbilityLocked,
 
+        // Define if an entity can take damage or not
+        Invulnerable,
+
         // Define if entity is protected (ie shield...)
         Protected,
 
