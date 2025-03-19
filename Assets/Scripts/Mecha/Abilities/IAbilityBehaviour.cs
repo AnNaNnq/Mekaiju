@@ -39,6 +39,12 @@ namespace Mekaiju
         }
 
         /// <summary>
+        /// Used handle alter payload.
+        /// </summary>
+        /// <param name="p_payload">The data used to alter ability.</param>
+        public virtual void Alter(object p_payload) {}
+
+        /// <summary>
         /// Indicates whether the capacity can be triggered.
         /// </summary>
         /// <param name="p_self">The instance where the ability is loaded.</param>
