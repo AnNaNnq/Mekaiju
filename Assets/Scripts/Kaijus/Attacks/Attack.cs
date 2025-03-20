@@ -70,7 +70,7 @@ namespace Mekaiju.AI.Attack {
             _kaiju.detector.OnGround += OnGround;
         }
 
-        public virtual IEnumerator AttackEnumerator(EntityInstance p_kaiju)
+        public virtual IEnumerator AttackEnumerator()
         {
             yield return null;
         }

@@ -25,20 +25,16 @@ namespace Mekaiju.AI.Attack
         {
             base.Active(p_kaiju);
 
-            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
-
             _start = GameObject.FindGameObjectWithTag("DoomsdayRaySpawn").transform;
-            t_kaiju.motor.StopKaiju();
+            _kaiju.motor.StopKaiju();
 
             _rend = _start.GetComponent<MeshRenderer>();
-            p_kaiju.StartCoroutine(AttackEnumerator(p_kaiju));
+            p_kaiju.StartCoroutine(AttackEnumerator());
         }
 
-        public override IEnumerator AttackEnumerator(EntityInstance p_kaiju)
+        public override IEnumerator AttackEnumerator()
         {
-            base.AttackEnumerator(p_kaiju);
-
-            KaijuInstance t_kaiju = (KaijuInstance)p_kaiju;
+            base.AttackEnumerator();
 
             bool t_stop = false;
             float t_time = 0;
@@ -52,11 +48,11 @@ namespace Mekaiju.AI.Attack
                     t_stop = true;
                 }
             }
-            t_kaiju.motor.StartKaiju();
+            _kaiju.motor.StartKaiju();
             Debug.Log(_rend.isVisible);
             if(_rend.isVisible)
             {
-                MechaInstance t_player = t_kaiju.target.GetComponent<MechaInstance>();
+                MechaInstance t_player = _kaiju.target.GetComponent<MechaInstance>();
                 t_player.AddEffect(successEffect, effectDuration);
             }
             OnEnd();

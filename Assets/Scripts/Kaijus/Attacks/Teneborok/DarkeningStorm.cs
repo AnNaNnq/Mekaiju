@@ -20,9 +20,9 @@ namespace Mekaiju.AI.Attack
             OnEnd();
         }
 
-        public override IEnumerator AttackEnumerator(EntityInstance p_kaiju)
+        public override IEnumerator AttackEnumerator()
         {
-            base.AttackEnumerator(p_kaiju);
+            base.AttackEnumerator();
             yield return new WaitForSeconds(duration);
         }
     }

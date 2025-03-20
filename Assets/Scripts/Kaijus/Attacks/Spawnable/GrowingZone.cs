@@ -76,7 +76,7 @@ namespace Mekaiju.AI.Attack.Instance
             {
                 float t_damage = kaiju.GetRealDamage(stat.zoneDamage);
                 kaiju.AddDPS(t_damage);
-                p_mecha.TakeDamage(t_damage);
+                p_mecha.TakeDamage(kaiju, t_damage, Entity.DamageKind.Direct);
 
                 yield return new WaitForSeconds(stat.damageTick);
             }

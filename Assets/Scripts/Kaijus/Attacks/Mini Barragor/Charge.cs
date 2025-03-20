@@ -26,11 +26,11 @@ namespace Mekaiju.AI.Attack
 
             _kaiju.motor.StopKaiju();
 
-            _kaiju.StartCoroutine(AttackEnumerator(_kaiju));
+            _kaiju.StartCoroutine(AttackEnumerator());
 
         }
 
-        public override IEnumerator AttackEnumerator(EntityInstance p_kaiju)
+        public override IEnumerator AttackEnumerator()
         {
             float t_time = 0;
             Vector3 t_targetPosition = _kaiju.GetTargetPos();

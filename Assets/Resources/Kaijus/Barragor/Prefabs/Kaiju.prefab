@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7782003631024324959}
   m_Layer: 0
   m_Name: Queue
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 398995357785406673}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 1.6347694, z: -1.776108}
+  m_LocalPosition: {x: 0, y: 1.634769, z: -1.776108}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 4074904112451966408}
   m_Layer: 0
   m_Name: Pic (3)
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 7026794300820594882}
   m_Layer: 0
   m_Name: Visual
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 794258646426111420}
   m_Layer: 9
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -407,7 +407,7 @@ GameObject:
   - component: {fileID: 6462998797820925690}
   m_Layer: 0
   m_Name: Part1
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -442,7 +442,7 @@ GameObject:
   - component: {fileID: 7726359388513912141}
   m_Layer: 0
   m_Name: CollisionDetector
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 7591125037617807129}
   m_Layer: 0
   m_Name: Pic (2)
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -815,11 +815,11 @@ MonoBehaviour:
     rigidbody: {fileID: 0}
   passives: []
   currentPhase: 2
-  attackGraphPhaseOne: {fileID: 11400000, guid: bdc1ac2d043c5fa4aba87e2ec2918eb4, type: 2}
+  attackGraphPhaseOne: {fileID: 11400000, guid: 9b902ed3aca8e874c807bd3518b25c32, type: 2}
   attackGraphPhaseTow: {fileID: 11400000, guid: cd0b871fee59b4a4990f43c4c114b170, type: 2}
   changePhaseAction: {fileID: 0}
   checkRange: 1
-  debugRange: 5
+  debugRange: 15
   dps: 0
   detector: {fileID: 7726359388513912141}
   references:
@@ -874,7 +874,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 1.59
   m_Speed: 3.5
-  m_Acceleration: 1000
+  m_Acceleration: 10000
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -939,7 +939,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3471881529136778539}
   serializedVersion: 4
-  m_Mass: 1000
+  m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -972,7 +972,7 @@ GameObject:
   - component: {fileID: 2379418564986939018}
   m_Layer: 9
   m_Name: Bras
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -986,7 +986,7 @@ Transform:
   m_GameObject: {fileID: 3848013067640018504}
   serializedVersion: 2
   m_LocalRotation: {x: -0.23138608, y: -0, z: -0, w: 0.97286206}
-  m_LocalPosition: {x: 0.4506594, y: 0.118733525, z: -1.8370576}
+  m_LocalPosition: {x: 0.4506594, y: 0.1187335, z: -1.837058}
   m_LocalScale: {x: 0.39449, y: 1.4531, z: 0.59401}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1077,7 +1077,7 @@ GameObject:
   - component: {fileID: 1560630316649459269}
   m_Layer: 0
   m_Name: Left
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1112,7 +1112,7 @@ GameObject:
   - component: {fileID: 1149353370999979953}
   m_Layer: 0
   m_Name: Pic
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1220,7 +1220,7 @@ GameObject:
   - component: {fileID: 5554261515989124574}
   m_Layer: 9
   m_Name: LegR
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1326,7 +1326,7 @@ GameObject:
   - component: {fileID: 8996802234042401200}
   m_Layer: 0
   m_Name: Bras
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1359,7 +1359,7 @@ GameObject:
   - component: {fileID: 8727473017175108554}
   m_Layer: 0
   m_Name: Part2
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1395,7 +1395,7 @@ GameObject:
   - component: {fileID: 3244415631458434493}
   m_Layer: 0
   m_Name: Pic (1)
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1503,7 +1503,7 @@ GameObject:
   - component: {fileID: 6653104933917135021}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1611,7 +1611,7 @@ GameObject:
   - component: {fileID: 6451990070065226390}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1719,7 +1719,7 @@ GameObject:
   - component: {fileID: 2474570869500496434}
   m_Layer: 9
   m_Name: CorpsVisual
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1827,7 +1827,7 @@ GameObject:
   - component: {fileID: 8136508025135783064}
   m_Layer: 9
   m_Name: Haut
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1932,7 +1932,7 @@ GameObject:
   - component: {fileID: 8464099776720528694}
   m_Layer: 0
   m_Name: "T\xEAte"
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1968,7 +1968,7 @@ GameObject:
   - component: {fileID: 4014381494108488158}
   m_Layer: 0
   m_Name: Boule
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2000,7 +2000,7 @@ GameObject:
   - component: {fileID: 8753647516707307638}
   m_Layer: 0
   m_Name: Corps
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2038,7 +2038,7 @@ GameObject:
   - component: {fileID: 9219296311953950337}
   m_Layer: 9
   m_Name: Bras
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2052,7 +2052,7 @@ Transform:
   m_GameObject: {fileID: 8008554230037943217}
   serializedVersion: 2
   m_LocalRotation: {x: -0.23138608, y: -0, z: -0, w: 0.97286206}
-  m_LocalPosition: {x: 0.4506594, y: 0.118733525, z: -1.8370576}
+  m_LocalPosition: {x: 0.4506594, y: 0.1187335, z: -1.837058}
   m_LocalScale: {x: 0.39449, y: 1.4531, z: 0.59401}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2143,7 +2143,7 @@ GameObject:
   - component: {fileID: 1619902781998477631}
   m_Layer: 0
   m_Name: Right
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2178,7 +2178,7 @@ GameObject:
   - component: {fileID: 5225792241706323956}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2286,7 +2286,7 @@ GameObject:
   - component: {fileID: 4843372916871499621}
   m_Layer: 9
   m_Name: LegL
-  m_TagString: Untagged
+  m_TagString: KaijuPart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
