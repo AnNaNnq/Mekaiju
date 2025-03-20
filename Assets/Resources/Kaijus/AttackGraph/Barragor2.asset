@@ -1,0 +1,188 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb21259124df937458b8e9a96bee5aaf, type: 3}
+  m_Name: Barragor2
+  m_EditorClassIdentifier: 
+  NodeLinks:
+  - BaseNodeGUID: c9e3f38b-8b62-485e-85d0-372f2d13abcb
+    PortName: Next
+    TargetNodeGUID: 4d25b938-ebf6-4e52-8f02-5da58e520b2e
+  - BaseNodeGUID: 8402fe57-9011-43b5-a1e1-cb144ac16ed4
+    PortName: Attack 2
+    TargetNodeGUID: ffceff16-c2c2-4be3-ab3b-c68608e48cf3
+  - BaseNodeGUID: 8402fe57-9011-43b5-a1e1-cb144ac16ed4
+    PortName: Attack 4
+    TargetNodeGUID: ed245df3-2b2e-4102-861c-cf47cbe590a1
+  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
+    PortName: Attack 1
+    TargetNodeGUID: 57a9ba80-14d8-45e1-a4bf-2fafa4493e75
+  - BaseNodeGUID: 8402fe57-9011-43b5-a1e1-cb144ac16ed4
+    PortName: Attack 1
+    TargetNodeGUID: 583e1f10-51b5-401c-977e-232246c2134c
+  - BaseNodeGUID: 8402fe57-9011-43b5-a1e1-cb144ac16ed4
+    PortName: Attack 3
+    TargetNodeGUID: a37b10bc-f72a-4dc9-a5dc-8825af03d1af
+  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
+    PortName: Attack 2
+    TargetNodeGUID: 492c459e-d5e6-43c9-8432-5eb7fd4bd29a
+  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
+    PortName: Attack 3
+    TargetNodeGUID: 7021dd7e-5fe6-447f-8509-6fc82671c4af
+  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
+    PortName: Attack 4
+    TargetNodeGUID: bfd6ab7d-3b72-4f8d-8fcb-820909f06f89
+  - BaseNodeGUID: d858b185-24a5-4bfa-b5a6-2afac314f849
+    PortName: Attack 1
+    TargetNodeGUID: c1f5804b-da05-4ed8-a6b9-71506b9a5475
+  - BaseNodeGUID: d858b185-24a5-4bfa-b5a6-2afac314f849
+    PortName: Attack 2
+    TargetNodeGUID: 5ebbdb24-f223-4230-9a3a-70a8efdb0dbd
+  - BaseNodeGUID: d858b185-24a5-4bfa-b5a6-2afac314f849
+    PortName: Attack 3
+    TargetNodeGUID: 60b14c7f-0499-40bc-a3d8-c650236d3de2
+  - BaseNodeGUID: d858b185-24a5-4bfa-b5a6-2afac314f849
+    PortName: Attack 4
+    TargetNodeGUID: 95ca29f5-15c4-48a8-a782-ef35ec200ea6
+  - BaseNodeGUID: 428b5bef-1c99-4215-a128-7740f6cbb219
+    PortName: Attack 1
+    TargetNodeGUID: a755c805-a233-4eba-b8e4-514f649bfd5c
+  - BaseNodeGUID: 428b5bef-1c99-4215-a128-7740f6cbb219
+    PortName: Attack 2
+    TargetNodeGUID: c2074294-f9a4-46c1-bf5c-d76c00b32133
+  - BaseNodeGUID: 428b5bef-1c99-4215-a128-7740f6cbb219
+    PortName: Attack 3
+    TargetNodeGUID: 8326fabc-30b6-43f7-ac49-8cb80de6877c
+  - BaseNodeGUID: 428b5bef-1c99-4215-a128-7740f6cbb219
+    PortName: Attack 4
+    TargetNodeGUID: 7eb4afdb-e9ae-4d31-be92-4aea6c688023
+  - BaseNodeGUID: 585ff166-3039-43e5-b8bb-7c2322190769
+    PortName: Attack 1
+    TargetNodeGUID: d959f3d0-fe15-4fb4-9853-ac7608892fa8
+  - BaseNodeGUID: 585ff166-3039-43e5-b8bb-7c2322190769
+    PortName: Attack 2
+    TargetNodeGUID: 61451657-c3bf-4686-bca4-33875b36bf85
+  - BaseNodeGUID: 585ff166-3039-43e5-b8bb-7c2322190769
+    PortName: Attack 3
+    TargetNodeGUID: d2923d61-7dae-4471-80ac-60f2e731d6d5
+  - BaseNodeGUID: 585ff166-3039-43e5-b8bb-7c2322190769
+    PortName: Attack 4
+    TargetNodeGUID: 4bc678e9-fd51-452a-96cc-d0cc06b73ec8
+  - BaseNodeGUID: 0f9b1cfb-09cd-4af2-a331-64cba1ae93fb
+    PortName: Attack 1
+    TargetNodeGUID: 5f70b78b-67f0-43e5-972b-3634b4c3e575
+  - BaseNodeGUID: 0f9b1cfb-09cd-4af2-a331-64cba1ae93fb
+    PortName: Attack 2
+    TargetNodeGUID: 3b3566a7-f810-4255-b5df-6ac45be23595
+  - BaseNodeGUID: 0f9b1cfb-09cd-4af2-a331-64cba1ae93fb
+    PortName: Attack 3
+    TargetNodeGUID: 1375865f-3773-498b-a6f5-79cf509bd7ca
+  - BaseNodeGUID: 0f9b1cfb-09cd-4af2-a331-64cba1ae93fb
+    PortName: Attack 4
+    TargetNodeGUID: 741bf24f-188f-459a-92b9-1371a62c1715
+  NodeData:
+  - guid: 4d25b938-ebf6-4e52-8f02-5da58e520b2e
+    name: ShatteringJump
+    position: {x: 110, y: 0}
+  - guid: ffceff16-c2c2-4be3-ab3b-c68608e48cf3
+    name: RollDash
+    position: {x: 110, y: 217}
+  - guid: ed245df3-2b2e-4102-861c-cf47cbe590a1
+    name: Spin
+    position: {x: 110, y: 422}
+  - guid: 57a9ba80-14d8-45e1-a4bf-2fafa4493e75
+    name: ShatteringJump
+    position: {x: 127, y: 600}
+  - guid: 583e1f10-51b5-401c-977e-232246c2134c
+    name: ShatteringJump
+    position: {x: 110, y: 127}
+  - guid: a37b10bc-f72a-4dc9-a5dc-8825af03d1af
+    name: RollAndSlash
+    position: {x: 127, y: 330}
+  - guid: 492c459e-d5e6-43c9-8432-5eb7fd4bd29a
+    name: RollDash
+    position: {x: 151, y: 690}
+  - guid: 7021dd7e-5fe6-447f-8509-6fc82671c4af
+    name: ElectrifiedSparks
+    position: {x: 151, y: 804}
+  - guid: bfd6ab7d-3b72-4f8d-8fcb-820909f06f89
+    name: GroundStrike
+    position: {x: 202, y: 917}
+  - guid: c1f5804b-da05-4ed8-a6b9-71506b9a5475
+    name: ShatteringJump
+    position: {x: 1092, y: 179}
+  - guid: 5ebbdb24-f223-4230-9a3a-70a8efdb0dbd
+    name: RollAndSlash
+    position: {x: 1109, y: 292}
+  - guid: 60b14c7f-0499-40bc-a3d8-c650236d3de2
+    name: RollDash
+    position: {x: 1123, y: 396}
+  - guid: 95ca29f5-15c4-48a8-a782-ef35ec200ea6
+    name: GroundStrike
+    position: {x: 1123, y: 510}
+  - guid: a755c805-a233-4eba-b8e4-514f649bfd5c
+    name: ShatteringJump
+    position: {x: 1123, y: 729}
+  - guid: c2074294-f9a4-46c1-bf5c-d76c00b32133
+    name: RollDash
+    position: {x: 1133, y: 840}
+  - guid: 8326fabc-30b6-43f7-ac49-8cb80de6877c
+    name: ElectrifiedSparks
+    position: {x: 1133, y: 941}
+  - guid: 7eb4afdb-e9ae-4d31-be92-4aea6c688023
+    name: Spin
+    position: {x: 1158, y: 1036}
+  - guid: d959f3d0-fe15-4fb4-9853-ac7608892fa8
+    name: RollAndSlash
+    position: {x: 1058, y: -363}
+  - guid: 61451657-c3bf-4686-bca4-33875b36bf85
+    name: RollDash
+    position: {x: 1082, y: -275}
+  - guid: d2923d61-7dae-4471-80ac-60f2e731d6d5
+    name: ElectrifiedSparks
+    position: {x: 1102, y: -166}
+  - guid: 4bc678e9-fd51-452a-96cc-d0cc06b73ec8
+    name: GroundStrike
+    position: {x: 1051, y: 25}
+  - guid: 5f70b78b-67f0-43e5-972b-3634b4c3e575
+    name: ShatteringJump
+    position: {x: 1943, y: -236}
+  - guid: 3b3566a7-f810-4255-b5df-6ac45be23595
+    name: RollAndSlash
+    position: {x: 1974, y: -109}
+  - guid: 1375865f-3773-498b-a6f5-79cf509bd7ca
+    name: RollDash
+    position: {x: 1984, y: -32}
+  - guid: 741bf24f-188f-459a-92b9-1371a62c1715
+    name: GroundStrike
+    position: {x: 2057, y: 153}
+  StartNodeData:
+  - guid: c9e3f38b-8b62-485e-85d0-372f2d13abcb
+    name: Start
+    position: {x: 0, y: 0}
+  - guid: 563de0f9-5456-4f00-96cb-cdf5971a0103
+    name: RollAndSlash
+    position: {x: -234, y: 638}
+  - guid: 8402fe57-9011-43b5-a1e1-cb144ac16ed4
+    name: GroundStrike
+    position: {x: -275, y: 258}
+  - guid: d858b185-24a5-4bfa-b5a6-2afac314f849
+    name: Spin
+    position: {x: 787, y: 247}
+  - guid: 428b5bef-1c99-4215-a128-7740f6cbb219
+    name: RollDash
+    position: {x: 762, y: 780}
+  - guid: 585ff166-3039-43e5-b8bb-7c2322190769
+    name: ShatteringJump
+    position: {x: 678, y: -254}
+  - guid: 0f9b1cfb-09cd-4af2-a331-64cba1ae93fb
+    name: ElectrifiedSparks
+    position: {x: 1621, y: -143}
