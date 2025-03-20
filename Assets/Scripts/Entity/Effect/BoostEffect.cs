@@ -24,7 +24,7 @@ namespace Mekaiju.Entity.Effect
         {
             _modifierRefs = new();
             _modifiers.ForEach((t_key, t_value) => {
-                _modifierRefs[t_key] = p_self.modifiers[t_key].Add(t_value.value, t_value.kind);
+                _modifierRefs[t_key] = p_self.modifiers[t_key].Add(t_value.value / 100f, t_value.kind);
             });
         }
 
