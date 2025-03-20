@@ -1,3 +1,4 @@
+using Mekaiju.Utils;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,40 +22,12 @@ namespace Mekaiju.AI.Attack.Instance
             _instance = p_kaiju;
 
             _firePos.Clear();
-            CastLaser(transform.position, transform.forward + (-transform.up));
+            UtilsFunctions.CastLaser(transform.position, transform.forward + (-transform.up), _firePos, _startPoint, _stat.maxBounce, layerMask);
 
             StartCoroutine(FollowPath());
         }
 
-        void CastLaser(Vector3 p_position, Vector3 p_direction)
-        {
-            _firePos.Add(_startPoint.position);
-            bool hitDetected = false;
-
-            for (int i = 0; i < _stat.maxBounce; i++)
-            {
-                Ray ray = new Ray(p_position, p_direction);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, float.MaxValue, layerMask))
-                {
-                    p_position = hit.point;
-                    p_direction = Vector3.Reflect(p_direction, hit.normal);
-                    _firePos.Add(hit.point);
-                    hitDetected = true;
-                }
-                else
-                {
-                    Debug.LogError("Warning: Raycast did not hit anything!");
-                    break;
-                }
-            }
-
-            if (!hitDetected)
-            {
-                Debug.LogError("Error: No valid hits detected for laser path.");
-            }
-        }
+        
 
 
         IEnumerator FollowPath()
