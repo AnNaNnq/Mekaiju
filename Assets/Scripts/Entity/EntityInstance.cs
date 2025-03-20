@@ -14,14 +14,15 @@ namespace Mekaiju.Entity
     public abstract class EntityInstance : MonoBehaviour, IDamageable, IStaminable, IEffectable
     {
         /// <summary>
-        /// Store effect to apply to the current entity.
-        /// </summary>
-        private List<StatefullEffect> effects = new();
-
-        /// <summary>
         /// Store a reference to the parent.
         /// </summary>
         public EntityInstance parent { get; protected set; } = null;
+
+        /// <summary>
+        /// Store effect to apply to the current entity.
+        /// </summary>
+        [field: SerializeField]
+        public virtual List<StatefullEffect> effects { get; } = new();
 
         /// <summary>
         /// Allow time point tracking
@@ -70,8 +71,8 @@ namespace Mekaiju.Entity
         public virtual void ConsumeStamina(float p_amount) {}
         public virtual void RestoreStamina(float p_amount) {}
 
-        public UnityEvent<StatefullEffect> onAddEffect    { get; } = new();
-        public UnityEvent<StatefullEffect> onRemoveEffect { get; } = new();
+        public virtual UnityEvent<StatefullEffect> onAddEffect    { get; } = new();
+        public virtual UnityEvent<StatefullEffect> onRemoveEffect { get; } = new();
 
         public IDisposable AddEffect(Effect.Effect p_effect)
         {
