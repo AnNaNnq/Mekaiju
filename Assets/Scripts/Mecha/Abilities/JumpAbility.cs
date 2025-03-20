@@ -10,7 +10,7 @@ namespace Mekaiju
     /// <summary>
     /// 
     /// </summary>
-    public class JumpAbility : IAbilityBehaviour
+    public class JumpAbility : IStaminableAbility
     {
         /// <summary>
         /// The phisycs force applied
@@ -18,13 +18,6 @@ namespace Mekaiju
         [SerializeField]
         private float _force;
 
-        /// <summary>
-        /// Time to wait to be able to jump again
-        /// </summary>
-        [SerializeField]
-        private float _cooldown;
-
-        private float _currentCooldown;
         private float _endTriggerTimout    = 5f;
         private float _actionTriggerTimout = 5f;
 
@@ -34,15 +27,11 @@ namespace Mekaiju
         private MechaAnimatorProxy _animationProxy;
         private Rigidbody          _rigidbody;
 
-        public override float cooldown => _currentCooldown;
-
         public override void Initialize(EntityInstance p_self)
         {
             base.Initialize(p_self);
-
-            _currentCooldown = 0;
+            
             _requested  = false;
-
 
             _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
 
@@ -92,11 +81,7 @@ namespace Mekaiju
                 t_timout = _endTriggerTimout;
                 yield return new WaitUntil(() => p_self.states[StateKind.Grounded] && (_animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0));
 
-                state = AbilityState.InCooldown;
-
-                // Wait for cooldown
-                _currentCooldown = _cooldown;
-                yield return new WaitUntil(() => (_currentCooldown -= Time.deltaTime) <= 0);
+                yield return WaitForCooldown();
 
                 state = AbilityState.Ready;
             }

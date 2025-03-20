@@ -6,6 +6,8 @@ using Mekaiju.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using Mekaiju.Entity;
+using System.Collections.Generic;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju
 {
@@ -93,6 +95,11 @@ namespace Mekaiju
         }
 
         #region IEntityInstance implementation
+        public override List<StatefullEffect> effects => parent.effects;
+
+        public override UnityEvent<StatefullEffect> onAddEffect    => parent.onAddEffect;
+        public override UnityEvent<StatefullEffect> onRemoveEffect => parent.onRemoveEffect;
+
         public override EnumArray<StatisticKind, ModifierCollection> modifiers   => parent.modifiers;
         public override EnumArray<StatisticKind, IStatistic>        statistics => parent.statistics;
 

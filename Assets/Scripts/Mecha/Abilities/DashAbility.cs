@@ -15,12 +15,11 @@ namespace Mekaiju
         public float durationFactor;
     }
 
-    public class DashAbility : IAbilityBehaviour
+    public class DashAbility : IStaminableAbility
     {
         /// <summary>
         /// 
         /// </summary>
-        [Header("General")]
         [SerializeField]
         private float _force;
 
@@ -29,12 +28,6 @@ namespace Mekaiju
         /// </summary>
         [SerializeField]
         private float _duration;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [SerializeField]
-        private float _consumption;
 
         /// <summary>
         /// 
@@ -112,7 +105,6 @@ namespace Mekaiju
                 base.IsAvailable(p_self, p_opt) &&
                 !p_self.states[StateKind.Protected] &&
                  p_self.states[StateKind.Grounded]  &&
-                p_self.stamina - _consumption >= 0f &&
                 Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0    
             );
         }
@@ -136,15 +128,16 @@ namespace Mekaiju
 
                 if (Mathf.Abs(_direction.sqrMagnitude) > 0)
                 {
-                    p_self.ConsumeStamina(_consumption);
+                    state = AbilityState.Active;
+                    _animationState = AnimationState.Idle;
+
+                    ConsumeStamina(p_self);
+
                     p_self.states[StateKind.MovementOverrided].Set(true);
 
                     _ghost.Trigger(_runtimeDuration);
                     var t_go = GameObject.Instantiate(_speedVfx, _camera.transform);
                     t_go.transform.Translate(new(0, 0, 2f));
-
-                    state = AbilityState.Active;
-                    _animationState = AnimationState.Idle;
 
                     _animationProxy.animator.SetTrigger("Dash");
 
@@ -159,10 +152,12 @@ namespace Mekaiju
                         return _elapedTime >= _runtimeDuration;
                     });
 
-                    state = AbilityState.Ready;
-
                     GameObject.Destroy(t_go);
                     p_self.states[StateKind.MovementOverrided].Set(false);
+
+                    yield return WaitForCooldown();
+
+                    state = AbilityState.Ready;
                 }
             }
 
