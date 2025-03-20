@@ -4,6 +4,7 @@ using Mekaiju.Entity;
 using Mekaiju.AI.Body;
 using MyBox;
 using UnityEngine;
+using Unity.Cinemachine;
 
 namespace Mekaiju
 {
@@ -55,12 +56,18 @@ namespace Mekaiju
         [Tooltip("The impact decal prefab")]
         [SerializeField]
         private GameObject _impactDecal;
+
+        [SerializeField]
+        private string _launchPosition;
+
 #endregion
 
         private float _endTriggerTimout    = 5f;
         private float _actionTriggerTimout = 5f;
         private float _projectileDestructionTimout = 10f;
 
+        private Transform          _launchTransform;
+        private CinemachineCamera  _camera;
         private AnimationState     _animationState;
         private MechaAnimatorProxy _animationProxy;
 
@@ -74,6 +81,9 @@ namespace Mekaiju
             {
                 Debug.LogWarning("Unable to find animator proxy on mecha!");
             }
+
+            _launchTransform = p_self.parent.transform.FindNested(_launchPosition);
+            _camera          = GameObject.FindWithTag("MainCamera").GetComponent<CinemachineCamera>();
 
             _animationProxy.onRArm.AddListener(_OnAnimationEvent);
         }
@@ -101,8 +111,12 @@ namespace Mekaiju
                 p_self.ConsumeStamina(_consumption);
 
                 // Setup projectile and launch
-                var t_wb = GameObject.Instantiate(_projectile).GetComponent<WeaponBullet>();
-                t_wb.transform.position = p_self.transform.position + new Vector3(0, 2.5f, 0) + (10f * p_self.parent.transform.forward);
+                Vector3 t_direction = _camera.transform.forward.normalized;
+
+                Vector3    t_position = _launchTransform.position + (2f * _camera.transform.forward);
+                Quaternion t_rotation = Quaternion.LookRotation(t_direction) * Quaternion.Euler(Vector3.up * 90f);
+                var t_wb = GameObject.Instantiate(_projectile, t_position, t_rotation).GetComponent<WeaponBullet>();
+
                 t_wb.OnCollide.AddListener(
                     (t_go, t_collision) => 
                     {
@@ -129,7 +143,7 @@ namespace Mekaiju
                         GameObject.Destroy(t_go);
                     }
                 );
-                t_wb.Launch(p_self.parent.transform.forward.normalized * _projectileSpeed, p_self.parent.transform.forward);
+                t_wb.Launch(t_direction * _projectileSpeed);
                 t_wb.Timout(_projectileDestructionTimout);
 
                 // Wait for animation end
