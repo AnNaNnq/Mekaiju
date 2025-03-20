@@ -102,7 +102,7 @@ namespace Mekaiju.AI.Attack.Instance
             if (other.CompareTag("Player"))
             {
                 MechaInstance mechaInstance = other.GetComponent<MechaInstance>();
-                mechaInstance.TakeDamage(_instance.GetRealDamage(_stat.damage));
+                mechaInstance.TakeDamage(_instance, _instance.GetRealDamage(_stat.damage), Entity.DamageKind.Direct);
             }
             else if (other.CompareTag("Ground"))
             {

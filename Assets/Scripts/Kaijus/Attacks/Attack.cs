@@ -80,7 +80,7 @@ namespace Mekaiju.AI.Attack {
             if (p_mecha != null)
             {
                 float t_damage = _kaiju.GetRealDamage(p_damage);
-                p_mecha.TakeDamage(t_damage);
+                p_mecha.TakeDamage(_kaiju, t_damage, DamageKind.Direct);
                 _kaiju.AddDPS(t_damage);
                 _kaiju.UpdateUI();
 

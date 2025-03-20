@@ -51,7 +51,8 @@ namespace Mekaiju.Entity
         /// <param name="p_kind">The targeted statistics.</param>
         /// <returns>The computed statistic.</returns>
 
-        public virtual UnityEvent<float> onTakeDamage { get; } = new();
+        public virtual UnityEvent<IDamageable, float, DamageKind> onBeforeTakeDamage { get; } = new();
+        public virtual UnityEvent<IDamageable, float, DamageKind> onAfterTakeDamage  { get; } = new();
         public virtual UnityEvent<float> onDealDamage { get; } = new();
 
         public UnityEvent<Collider> onCollide = new();
@@ -61,7 +62,7 @@ namespace Mekaiju.Entity
         public abstract float baseHealth { get; }
 
         public abstract void Heal      (float p_amount);
-        public abstract void TakeDamage(float p_damage);
+        public abstract void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind);
 
         public virtual float baseStamina => 0f;
         public virtual float stamina     => 0f;
