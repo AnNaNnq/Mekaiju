@@ -5353,6 +5353,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce2b7f4eb84bf402d9278d4378a8eae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <playerData>k__BackingField:
+    mechaDesc: {fileID: 0}
 --- !u!4 &406910370
 Transform:
   m_ObjectHideFlags: 0
@@ -13960,6 +13962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58327e0bb594e4f6bac4b5c21e610463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <reward>k__BackingField: {fileID: 0}
   onStateChange:
     m_PersistentCalls:
       m_Calls: []
@@ -23344,6 +23347,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 309942910244388346, guid: f2f022c6a0931ab479e7f7f70bce7049, type: 3}
+      propertyPath: attackGraphPhaseOne
+      value: 
+      objectReference: {fileID: 11400000, guid: 9b902ed3aca8e874c807bd3518b25c32, type: 2}
     - target: {fileID: 309942910244388346, guid: f2f022c6a0931ab479e7f7f70bce7049, type: 3}
       propertyPath: managedReferences[7914790548137836689].nest
       value: 
