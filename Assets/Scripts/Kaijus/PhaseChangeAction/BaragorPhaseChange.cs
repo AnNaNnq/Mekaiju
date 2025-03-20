@@ -1,14 +1,14 @@
+using Mekaiju.AI.Attack;
+using Mekaiju.AI.Attacl;
 using Mekaiju.Entity.Effect;
 using Mekaiju.Utils;
+using MyBox;
 using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Mekaiju.AI.PhaseAttack
 {
-    public class BaragorPhaseChange : PhaseAttack
+    public class BaragorPhaseChange : PhaseAttack, IShockWave
     {
         private Transform _target;
         private Rigidbody _rb;
@@ -19,6 +19,9 @@ namespace Mekaiju.AI.PhaseAttack
         public int nbJump = 5;
 
         int _currentJump = 0;
+
+        [Separator("ShockWave")]
+        public ShockWaveStat wave;
 
         public override void Action()
         {
