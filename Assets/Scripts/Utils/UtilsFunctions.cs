@@ -48,10 +48,13 @@ namespace Mekaiju.Utils
             return new Vector3(x, y, z);
         }
 
-        public static void CastLaser(Vector3 p_position, Vector3 p_direction, List<Vector3> p_posList, Transform p_startPoint, int p_maxBounce, LayerMask p_mask)
+        public static void CastLaser(Vector3 p_position, Vector3 p_direction, List<Vector3> p_posList, Transform p_startPoint, int p_maxBounce, LayerMask p_mask, LineRenderer p_renderer = null)
         {
             p_posList.Add(p_startPoint.position);
             bool hitDetected = false;
+
+            p_renderer.SetPosition(0, p_startPoint.position);
+            p_renderer.positionCount = p_maxBounce + 1;
 
             for (int i = 0; i < p_maxBounce; i++)
             {
@@ -64,6 +67,8 @@ namespace Mekaiju.Utils
                     p_direction = Vector3.Reflect(p_direction, hit.normal);
                     p_posList.Add(hit.point);
                     hitDetected = true;
+
+                    p_renderer.SetPosition(i + 1, hit.point);
                 }
                 else
                 {
