@@ -20,8 +20,15 @@ MonoBehaviour:
     - rid: 7914790865167974648
       type: {class: RollDash, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
+        timeBeforeAttack: 1
         cooldown: 1
         range: 60
         canMakeDamage: 1
-        damage: 50
+        damage: 100
         blockable: 0
+        attackRange: 10
+        rollSpeed: 400
+        growingZonePrefab: {fileID: 75760364275592244, guid: 758b1e444fefd534397052de2e23b34d, type: 3}
+        effect: {fileID: 11400000, guid: 75bc609f0c750b743bb40896e9e5c995, type: 2}
+        zoneDamage: 5
+        damageTick: 0.5

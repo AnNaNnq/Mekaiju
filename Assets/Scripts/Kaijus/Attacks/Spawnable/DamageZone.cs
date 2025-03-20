@@ -60,7 +60,7 @@ namespace Mekaiju.AI.Attack
             if (_playerInside && other.CompareTag("Player"))
             {
                 _playerInside = false;
-                if (!_stats.asDuration)
+                if (!_stats.asDuration && _effect != null)
                 {
                     MechaInstance t_mecha = other.GetComponent<MechaInstance>();
                     t_mecha.RemoveEffect(_effect);
