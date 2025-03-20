@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6523342006985685149
 Transform:
@@ -102,9 +102,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4674466870167071358, guid: e98a9d4378c1e3e4d91d56adddc92deb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e98a9d4378c1e3e4d91d56adddc92deb, type: 3}
       propertyPath: m_Name
       value: Pref_PitonRocheux_Low_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e98a9d4378c1e3e4d91d56adddc92deb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5951476284299470010, guid: e98a9d4378c1e3e4d91d56adddc92deb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
