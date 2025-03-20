@@ -66,7 +66,7 @@ namespace Mekaiju
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return (
-                base.IsAvailable(p_self, p_opt) && p_self.states[State.Grounded] && !_requested
+                base.IsAvailable(p_self, p_opt) && p_self.states[StateKind.Grounded] && !_requested
             );
         }
 
@@ -86,11 +86,11 @@ namespace Mekaiju
                 _requested = true;
 
                 // Wait for physic jump performed
-                yield return new WaitUntil(() => !_requested && !p_self.states[State.Grounded]);
+                yield return new WaitUntil(() => !_requested && !p_self.states[StateKind.Grounded]);
 
                 // Wait for jump animation end
                 t_timout = _endTriggerTimout;
-                yield return new WaitUntil(() => p_self.states[State.Grounded] && (_animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0));
+                yield return new WaitUntil(() => p_self.states[StateKind.Grounded] && (_animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0));
 
                 state = AbilityState.InCooldown;
 

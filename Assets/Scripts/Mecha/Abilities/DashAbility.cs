@@ -96,8 +96,8 @@ namespace Mekaiju
         {
             return (
                 base.IsAvailable(p_self, p_opt) &&
-                !p_self.states[State.Protected] &&
-                p_self.states[State.Grounded]   &&
+                !p_self.states[StateKind.Protected] &&
+                 p_self.states[StateKind.Grounded]  &&
                 p_self.stamina - _consumption >= 0f &&
                 Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0    
             );
@@ -114,7 +114,7 @@ namespace Mekaiju
                 if (Mathf.Abs(_direction.sqrMagnitude) > 0)
                 {
                     p_self.ConsumeStamina(_consumption);
-                    p_self.states[State.MovementOverrided] = true;
+                    p_self.states[StateKind.MovementOverrided].Set(true);
 
                     _ghost.Trigger(_duration);
                     var t_go = GameObject.Instantiate(_speedVfx, _camera.transform);
@@ -139,7 +139,7 @@ namespace Mekaiju
                     state = AbilityState.Ready;
 
                     GameObject.Destroy(t_go);
-                    p_self.states[State.MovementOverrided] = false;
+                    p_self.states[StateKind.MovementOverrided].Set(false);
                 }
             }
 
