@@ -92,6 +92,8 @@ namespace Mekaiju
 
                 _animationProxy.animator.SetTrigger("RArm");
 
+                p_self.parent.GetComponent<PlayerController>().SetArmTargeting(true);
+
                 // Wait for animation action
                 float t_timout = _actionTriggerTimout;
                 yield return new WaitUntil(() => _animationState == AnimationState.Trigger || (t_timout -= Time.deltaTime) <= 0);
@@ -133,6 +135,8 @@ namespace Mekaiju
                 // Wait for animation end
                 t_timout = _endTriggerTimout;
                 yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
+
+                p_self.parent.GetComponent<PlayerController>().SetArmTargeting(false);
 
                 state = AbilityState.Ready;
             }

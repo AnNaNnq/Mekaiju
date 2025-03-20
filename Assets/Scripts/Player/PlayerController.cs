@@ -8,6 +8,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mekaiju.Entity;
+using UnityEngine.Animations.Rigging;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -40,11 +41,11 @@ public class PlayerController : MonoBehaviour
     [Foldout("Camera Attributes")]
     [SerializeField] [Range(1f,100f)] private float _mouseSensitivity; 
     [SerializeField] private float _minVerticalAngle = -30f; 
-    [SerializeField] private float _maxVerticalAngle = 80f; 
+    [SerializeField] private float _maxVerticalAngle = 80f;
+    private GameObject _aimConstraint;
 
     [Foldout("Movement Boolean")]
     [SerializeField] bool _isGrounded;
-
 
     private MechaInstance _instance;
     private KaijuInstance _target;
@@ -65,9 +66,10 @@ public class PlayerController : MonoBehaviour
 
         _groundLayerMask = LayerMask.GetMask("Walkable");
 
+        _aimConstraint = transform.FindNested("Aimconstraint").gameObject;
+
         _instance = GetComponent<MechaInstance>();
 
-        _cameraPivot = transform.Find("CameraPivot");
     }
 
     private void Start()
@@ -217,10 +219,12 @@ public class PlayerController : MonoBehaviour
         if (isLockedOn && _lockOnTargetSystem.GetTargetBodyPartObject() != null)
         {
             _lookAction.Disable();
+            SetConstraintTarget(_lockOnTargetSystem.GetTargetBodyPartObject().transform);
         }
         else
         {
             _lookAction.Enable();
+            SetConstraintTarget(_cameraPivot.GetChild(0));
             isLockedOn = false;
         }
     }
@@ -251,20 +255,57 @@ public class PlayerController : MonoBehaviour
         return Mathf.Min(p_angle, p_to);
     }
 
+    private void SetConstraintTarget(Transform p_newConstraintPos)
+    {
+        //Head
+        _aimConstraint.transform.GetChild(0).GetComponent<MultiAimConstraint>().data.sourceObjects.SetTransform(0, p_newConstraintPos);
+        //Chest
+        _aimConstraint.transform.GetChild(1).GetComponent<MultiAimConstraint>().data.sourceObjects.SetTransform(0, p_newConstraintPos);
+        //RightArm
+        _aimConstraint.transform.GetChild(2).GetComponent<MultiAimConstraint>().data.sourceObjects.SetTransform(0, p_newConstraintPos);
+        //Elbow
+        _aimConstraint.transform.GetChild(2).GetChild(0).GetComponent<MultiAimConstraint>().data.sourceObjects.SetTransform(0, p_newConstraintPos);
+
+    }
+    public void SetArmTargeting(bool p_targeting)
+    {
+        if (p_targeting)
+        {
+            //RightArm
+            _aimConstraint.transform.GetChild(2).GetComponent<MultiAimConstraint>().weight = 0.5f;
+            _aimConstraint.transform.GetChild(2).GetChild(0).GetComponent<MultiAimConstraint>().weight = 1;
+        }
+        else
+        {
+            //RightArm
+            _aimConstraint.transform.GetChild(2).GetComponent<MultiAimConstraint>().weight = 0;
+            _aimConstraint.transform.GetChild(2).GetChild(0).GetComponent<MultiAimConstraint>().weight = 0;
+        }
+    }
+
     private void Update()
     {
         _instance.states[State.Grounded] = _isGrounded;
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
-        // Tourner le joueur avec la cam�ra horizontalement
-        transform.Rotate(Vector3.up * t_lookDir.x);
+        // Tourner le container du cameraPivot sur l'axe X
+        _cameraPivot.parent.Rotate(Vector3.up * t_lookDir.x);
 
-        // G�rer la rotation verticale de la cam�ra
+        // tourner le camera pivot sur l'axe Y
         var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x - t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
         var t_delta = t_clamp - _cameraPivot.eulerAngles.x;
         _cameraPivot.Rotate(Vector3.right * t_delta);
 
+        //tourner le gameobject lorsque l'angle de la camera depasse un certain angle
+        float cameraYaw = _cameraPivot.eulerAngles.y;
+        float playerYaw = transform.eulerAngles.y;
+        float deltaYaw = Mathf.DeltaAngle(playerYaw, cameraYaw);
+
+        if (Mathf.Abs(deltaYaw) > 45f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, cameraYaw, 0), Time.deltaTime * 1f);
+        }
 
         int t_scrollValue = (int)_scrollAction.ReadValue<float>();
 
@@ -272,6 +313,7 @@ public class PlayerController : MonoBehaviour
         {
             _timeSinceLastScroll = Time.time;
             _lockOnTargetSystem.ChangeTarget(t_scrollValue);
+            SetConstraintTarget(_lockOnTargetSystem.GetTargetBodyPartObject().transform);
         }
     }
     
