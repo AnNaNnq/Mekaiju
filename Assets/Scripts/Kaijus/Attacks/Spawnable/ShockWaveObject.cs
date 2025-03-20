@@ -1,12 +1,13 @@
 using System.Collections.Generic;
+using Mekaiju.AI.Attacl;
 using Mekaiju.Entity;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack.Instance
 {
-    public class ShockWave : MonoBehaviour
+    public class ShockWaveObject : MonoBehaviour
     {
-        ChockWave _stats;
+        ShockWaveStat _stats;
 
         LineRenderer _lr;
         float _radius = 0;
@@ -19,7 +20,7 @@ namespace Mekaiju.AI.Attack.Instance
 
         HashSet<Collider> _hitObjects = new HashSet<Collider>();
 
-        public void SetUp(ChockWave p_stats)
+        public void SetUp(ShockWaveStat p_stats)
         {
             _stats = p_stats;
             _lr = GetComponent<LineRenderer>();
@@ -74,7 +75,9 @@ namespace Mekaiju.AI.Attack.Instance
                         MechaInstance t_instance = col.GetComponent<MechaInstance>();
                         if (t_rb != null && t_instance.states[StateKind.Grounded])
                         {
-                            _stats.SendDamage(_stats.shockwaveDamage, t_instance, _stats.effect, _stats.effectDuration);
+                            float t_damage = _stats.kaiju.GetRealDamage(_stats.shockwaveDamage);
+                            t_instance.TakeDamage(_stats.kaiju, t_damage, DamageKind.Direct);
+                            t_instance.AddEffect(_stats.effect, _stats.effectDuration);
                         }
                     }
                 }
