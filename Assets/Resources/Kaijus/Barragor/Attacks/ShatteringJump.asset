@@ -20,18 +20,19 @@ MonoBehaviour:
     - rid: 7914790865167974639
       type: {class: ShatteringJump, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
       data:
+        timeBeforeAttack: 1
         cooldown: 0
-        range: 0
+        range: 90
         canMakeDamage: 1
         damage: 50
         blockable: 0
-        shockwavePrefab: {fileID: 0}
+        shockwavePrefab: {fileID: 4463112248481850273, guid: 23ef9ca6fd70e204cbe381450a3c848f, type: 3}
         shockwaveSpeed: 10
         shockwaveDamage: 50
         maxRadius: 30
         effect: {fileID: 11400000, guid: 75bc609f0c750b743bb40896e9e5c995, type: 2}
         effectDuration: 0.2
-        jumpForce: 100
+        jumpForce: 3000
         electricZonePrefab: {fileID: 829531332958177211, guid: 41f46073f6a73a84a97221b58a268f0c, type: 3}
         electricZone:
           damage: 0

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50f73902365ec56439f796b092527bca, type: 3}
+  m_Name: Barragor
+  m_EditorClassIdentifier: 
+  <attack>k__BackingField:
+    rid: 7914790932822622416
+  references:
+    version: 2
+    RefIds:
+    - rid: 7914790932822622416
+      type: {class: BaragorPhaseChange, ns: Mekaiju.AI.PhaseAttack, asm: Assembly-CSharp}
+      data:
+        canMakeDamage: 0
+        damage: 50
+        blockable: 0
+        time: 0
+        quantity: 0
+        mask:
+          serializedVersion: 2
+          m_Bits: 8
+        maxBounce: 5

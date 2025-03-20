@@ -12,7 +12,7 @@ namespace Mekaiju
     /// <summary>
     /// The sword ability behaviour
     /// </summary>
-    class SwordAbility : IAbilityBehaviour
+    class SwordAbility : IStaminableAbility
     {
 #region Parameters
         /// <summary>
@@ -21,20 +21,6 @@ namespace Mekaiju
         [Tooltip("The damage factor (multiply the mecha damage stat).")]
         [SerializeField, Range(0f, 5f)]
         private float _damageFactor;
-
-        /// <summary>
-        /// The distance in m
-        /// </summary>
-        [Tooltip("The distance in m.")]
-        [SerializeField]
-        private int _reachDistance;
-
-        /// <summary>
-        /// Stamina consumption
-        /// </summary>
-        [Tooltip("Stamina consumption")]
-        [SerializeField]
-        private int _consumption;
 #endregion
 
         private float _endTriggerTimout = 1;
@@ -56,11 +42,6 @@ namespace Mekaiju
             _animationProxy.onLArm.AddListener(_OnAnimationEvent);
         }
 
-        public override bool IsAvailable(EntityInstance p_self, object p_opt)
-        {
-            return base.IsAvailable(p_self, p_opt) && p_self.stamina - _consumption >= 0f;
-        }
-
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
@@ -68,8 +49,9 @@ namespace Mekaiju
                 state = AbilityState.Active;
                 _animationState = AnimationState.Idle;
 
+                ConsumeStamina(p_self);
+
                 _animationProxy.animator.SetTrigger("LArm");
-                p_self.ConsumeStamina(_consumption);
 
                 UnityAction<Collider> t_cb = (t_collision) =>
                 {
@@ -92,6 +74,8 @@ namespace Mekaiju
                 yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
 
                 p_self.onCollide.RemoveListener(t_cb);
+
+                yield return WaitForCooldown();
 
                 state = AbilityState.Ready;
             }

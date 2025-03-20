@@ -25,9 +25,10 @@ MonoBehaviour:
     - rid: 2512019433379594302
       type: {class: BoostAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
+        _cooldown: 5
+        _consumption: 0
         _boostEffect: {fileID: 11400000, guid: 5c14d33a57b3a4978bc3c9d73692a15b, type: 2}
         _duration: 10
-        _consumption: 30
     - rid: 8176260169380397123
       type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}
       data:

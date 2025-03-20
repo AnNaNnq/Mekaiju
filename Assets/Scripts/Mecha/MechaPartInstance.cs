@@ -6,6 +6,8 @@ using Mekaiju.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using Mekaiju.Entity;
+using System.Collections.Generic;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju
 {
@@ -93,11 +95,16 @@ namespace Mekaiju
         }
 
         #region IEntityInstance implementation
+        public override List<StatefullEffect> effects => parent.effects;
+
+        public override UnityEvent<StatefullEffect> onAddEffect    => parent.onAddEffect;
+        public override UnityEvent<StatefullEffect> onRemoveEffect => parent.onRemoveEffect;
+
         public override EnumArray<StatisticKind, ModifierCollection> modifiers   => parent.modifiers;
         public override EnumArray<StatisticKind, IStatistic>        statistics => parent.statistics;
 
-        public override EnumArray<TimePoint, float> timePoints => parent.timePoints;
-        public override EnumArray<State,     bool> states     => parent.states;
+        public override EnumArray<TimePoint, float>  timePoints => parent.timePoints;
+        public override EnumArray<StateKind, State> states     => parent.states;
 
         public override UnityEvent<IDamageable, float, DamageKind> onBeforeTakeDamage => parent.onBeforeTakeDamage;
         public override UnityEvent<IDamageable, float, DamageKind> onAfterTakeDamage  => parent.onAfterTakeDamage;
@@ -116,7 +123,7 @@ namespace Mekaiju
         public override void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
             onBeforeTakeDamage.Invoke(p_from, p_damage, p_kind);
-            if (!states[State.Invulnerable])
+            if (!states[StateKind.Invulnerable])
             {
                 var t_defense = statistics[StatisticKind.Defense].Apply<float>(modifiers[StatisticKind.Defense]);
                 var t_damage  = p_damage - p_damage * t_defense;
