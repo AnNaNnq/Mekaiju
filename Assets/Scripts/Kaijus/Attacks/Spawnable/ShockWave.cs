@@ -74,7 +74,6 @@ namespace Mekaiju.AI.Attack.Instance
                         MechaInstance t_instance = col.GetComponent<MechaInstance>();
                         if (t_rb != null && t_instance.states[StateKind.Grounded])
                         {
-                            t_instance.AddEffect(_stats.effect, _stats.effectDuration);
                             _stats.SendDamage(_stats.shockwaveDamage, t_instance, _stats.effect, _stats.effectDuration);
                         }
                     }
