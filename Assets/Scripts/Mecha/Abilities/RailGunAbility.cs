@@ -11,7 +11,7 @@ namespace Mekaiju
     /// <summary>
     /// 
     /// </summary>
-    public class RailGunAbility : IAbilityBehaviour
+    public class RailGunAbility : IStaminableAbility
     {
 #region Parameters
         /// <summary>
@@ -22,6 +22,14 @@ namespace Mekaiju
         private float _damageFactor;
 
         /// <summary>
+        /// The projectil prefab to be thrown (must contain WeaponBullet comp)
+        /// </summary>
+        [Header("Projectile")]
+        [Tooltip("The projectil prefab to be thrown")]
+        [SerializeField]
+        private GameObject _projectile;
+
+        /// <summary>
         /// The projectil speed in m/s
         /// </summary>
         [Tooltip("The projectil speed in m/s")]
@@ -29,22 +37,9 @@ namespace Mekaiju
         private float _projectileSpeed;
 
         /// <summary>
-        /// The stamina consumption
-        /// </summary>
-        [Tooltip("The stamina consumption")]
-        [SerializeField, PositiveValueOnly]
-        private int _consumption;
-
-        /// <summary>
-        /// The projectil prefab to be thrown (must contain WeaponBullet comp)
-        /// </summary>
-        [Tooltip("The projectil prefab to be thrown")]
-        [SerializeField]
-        private GameObject _projectile;
-
-        /// <summary>
         /// The impact vfx prefab
         /// </summary>
+        [Header("Impact")]
         [Tooltip("The impact vfx")]
         [SerializeField]
         private GameObject _impactVfx;
@@ -78,17 +73,14 @@ namespace Mekaiju
             _animationProxy.onRArm.AddListener(_OnAnimationEvent);
         }
 
-        public override bool IsAvailable(EntityInstance p_self, object p_opt)
-        {
-            return base.IsAvailable(p_self, p_opt) && p_self.stamina - _consumption >= 0f;
-        }
-
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
                 state = AbilityState.Active;
                 _animationState = AnimationState.Idle;
+
+                ConsumeStamina(p_self);
 
                 p_self.states[StateKind.MovementLocked].Set(true);
 
@@ -97,8 +89,6 @@ namespace Mekaiju
                 // Wait for animation action
                 float t_timout = _actionTriggerTimout;
                 yield return new WaitUntil(() => _animationState == AnimationState.Trigger || (t_timout -= Time.deltaTime) <= 0);
-
-                p_self.ConsumeStamina(_consumption);
 
                 // Setup projectile and launch
                 var t_wb = GameObject.Instantiate(_projectile).GetComponent<WeaponBullet>();
@@ -137,6 +127,8 @@ namespace Mekaiju
                 yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
 
                 p_self.states[StateKind.MovementLocked].Set(false);
+
+                yield return WaitForCooldown();
 
                 state = AbilityState.Ready;
             }

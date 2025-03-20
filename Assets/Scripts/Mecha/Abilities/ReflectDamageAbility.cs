@@ -7,21 +7,15 @@ using UnityEngine.Events;
 
 namespace Mekaiju
 {
-    public class ReflectDamageAbility : IAbilityBehaviour
+    public class ReflectDamageAbility : IStaminableAbility
     {
-        [SerializeField]
-        private float _consumption;
-
-        public override bool IsAvailable(EntityInstance p_self, object p_opt)
-        {
-            return base.IsAvailable(p_self, p_opt) && p_self.stamina - _consumption >= 0f;
-        }
-
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
                 state = AbilityState.Active;
+
+                ConsumeStamina(p_self);
 
                 bool t_done = false;
 
@@ -43,6 +37,8 @@ namespace Mekaiju
                 yield return new WaitForEndOfFrame();
 
                 p_self.states[StateKind.Invulnerable].Set(false);
+
+                yield return WaitForCooldown();
 
                 state = AbilityState.Ready;
             }

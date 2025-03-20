@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Mekaiju
 {
-    public class StunAbility : IAbilityBehaviour
+    public class StunAbility : IStaminableAbility
     {
         [Header("General")]
         [SerializeField]
@@ -21,24 +21,17 @@ namespace Mekaiju
         [Tooltip("Used to compute stun effect time (eg. dst = 10, fct = .5 => t = 10 * .5 = 5s)")]
         private float _distanceFactor;
 
-        [SerializeField]
-        private float _consumption;
-
         [Header("Other")]
         [SerializeField]
         private Effect _stunEffect;
-
-        public override bool IsAvailable(EntityInstance p_self, object p_opt)
-        {
-            return base.IsAvailable(p_self, p_opt) && p_self.stamina - _consumption >= 0f;
-        }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
                 state = AbilityState.Active;
-                p_self.ConsumeStamina(_consumption);
+
+                ConsumeStamina(p_self);
 
                 List<KaijuInstance> t_stunned = new();
 
@@ -58,9 +51,10 @@ namespace Mekaiju
                     }
                 }
 
+                yield return WaitForCooldown();
+
                 state = AbilityState.Ready;
             }
-            yield return null;
         }
     }
 }
