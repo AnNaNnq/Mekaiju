@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Mekaiju.Entity;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack.Instance
 {
     public class ShockWave : MonoBehaviour
     {
-        GroundStrike _stats;
+        ChockWave _stats;
 
         LineRenderer _lr;
         float _radius = 0;
@@ -18,7 +19,7 @@ namespace Mekaiju.AI.Attack.Instance
 
         HashSet<Collider> _hitObjects = new HashSet<Collider>();
 
-        public void SetUp(GroundStrike p_stats)
+        public void SetUp(ChockWave p_stats)
         {
             _stats = p_stats;
             _lr = GetComponent<LineRenderer>();
@@ -57,21 +58,21 @@ namespace Mekaiju.AI.Attack.Instance
 
         void TriggerColision()
         {
-            _cols = Physics.OverlapSphere(transform.position, _radius + 0.5f); // Légèrement plus large
+            _cols = Physics.OverlapSphere(transform.position, _radius + 0.5f); // Lï¿½gï¿½rement plus large
 
             foreach (var col in _cols)
             {
-                if (col.CompareTag("Player") && !_hitObjects.Contains(col)) // Vérifie si pas déjà touché
+                if (col.CompareTag("Player") && !_hitObjects.Contains(col)) // Vï¿½rifie si pas dï¿½jï¿½ touchï¿½
                 {
                     Vector3 t_toPlayer = col.transform.position - transform.position;
                     float t_distanceToWave = Mathf.Abs(t_toPlayer.magnitude - _radius); // Distance exacte
 
-                    if (t_distanceToWave < _lineWith) // Vérifie si le joueur est bien sur la ligne de l'onde
+                    if (t_distanceToWave < _lineWith) // Vï¿½rifie si le joueur est bien sur la ligne de l'onde
                     {
-                        _hitObjects.Add(col); // Ajoute l'objet pour éviter de le toucher plusieurs fois
+                        _hitObjects.Add(col); // Ajoute l'objet pour ï¿½viter de le toucher plusieurs fois
                         Rigidbody t_rb = col.GetComponent<Rigidbody>();
                         MechaInstance t_instance = col.GetComponent<MechaInstance>();
-                        if (t_rb != null && t_instance.states[Entity.State.Grounded])
+                        if (t_rb != null && t_instance.states[StateKind.Grounded])
                         {
                             t_instance.AddEffect(_stats.effect, _stats.effectDuration);
                             _stats.SendDamage(_stats.shockwaveDamage, t_instance, _stats.effect, _stats.effectDuration);
@@ -85,7 +86,7 @@ namespace Mekaiju.AI.Attack.Instance
         {
             for (int i = 0; i < _pointCount; i++)
             {
-                Vector3 worldPoint = transform.position + (_positions[i] * _radius); // Convertir en coordonnées mondiales
+                Vector3 worldPoint = transform.position + (_positions[i] * _radius); // Convertir en coordonnï¿½es mondiales
                 RaycastHit hit;
 
                 if (Physics.Raycast(worldPoint + Vector3.up * 5f, Vector3.down, out hit, 10f)) // Raycast vers le bas

@@ -77,7 +77,6 @@ namespace Mekaiju.Entity.Effect
                 if (time > 0 && _elapsed > time)
                 {
                     state = EffectState.Expired;
-                    effect.behaviour?.OnRemove(_target);
                 }
                 else
                 {

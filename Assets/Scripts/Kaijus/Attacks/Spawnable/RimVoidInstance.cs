@@ -157,7 +157,7 @@ namespace Mekaiju.AI.Attack.Instance
             while (_damagable)
             {
                 float t_damage = _instance.GetRealDamage(_stat.damage);
-                p_mecha.TakeDamage(t_damage);
+                p_mecha.TakeDamage(_instance, t_damage, Entity.DamageKind.Direct);
                 _instance.AddDPS(t_damage);
                 _instance.UpdateUI();
                 yield return new WaitForSeconds(_stat.rimVoidHitCooldown);

@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Jump.performed += OnJump;
         _playerActions.Player.Dash.performed += OnDash;
         _playerActions.Player.Heal.performed += OnHeal;
-        _playerActions.Player.Torse.performed += OnTorse;
+        _playerActions.Player.Torse.performed += OnChest;
         _playerActions.Player.Pause.performed += OnPause;
 
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
@@ -238,10 +238,12 @@ public class PlayerController : MonoBehaviour
     {
         //a faire
     }
-    private void OnTorse(InputAction.CallbackContext p_context)
+    private void OnChest(InputAction.CallbackContext p_context)
     {
-        // a faire
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.Chest].TriggerAbility(t_target, null));
     }
+
     private void OnPause(InputAction.CallbackContext p_context)
     {
         // a faire
@@ -285,7 +287,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _instance.states[State.Grounded] = _isGrounded;
+        _instance.states[StateKind.Grounded].Set(_isGrounded);
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
@@ -322,9 +324,9 @@ public class PlayerController : MonoBehaviour
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
-        if (!_instance.states[State.MovementOverrided] && !_instance.states[State.MovementLocked])
+        if (!_instance.states[StateKind.MovementOverrided] && !_instance.states[StateKind.MovementLocked])
         {
-            _speed = _instance.ComputedStatistics(Statistics.Speed) * _speedFactor;
+            _speed = _instance.statistics[StatisticKind.Speed].Apply<float>(_instance.modifiers[StatisticKind.Speed]) * _speedFactor;
 
             if (_isGrounded)
             {

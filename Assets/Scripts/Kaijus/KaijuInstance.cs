@@ -41,6 +41,10 @@ namespace Mekaiju.AI
 
         protected KaijuMotor _motor;
 
+        public Rigidbody rb {  get { return _rb; } }
+
+        private Rigidbody _rb;
+
         public KaijuBrain brain { get { return _brain; } }
 
         private KaijuBrain _brain;
@@ -87,6 +91,7 @@ namespace Mekaiju.AI
             _motor = GetComponent<KaijuMotor>();
             _brain = GetComponent<KaijuBrain>();
             _animation = GetComponent<KaijuAnimatorController>();
+            _rb = GetComponent<Rigidbody>();
             target = GameObject.FindGameObjectWithTag(targetTag);
             foreach (var behavior in behaviors)
             {
@@ -138,6 +143,11 @@ namespace Mekaiju.AI
             {
                 UseBehavior();
             }
+
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                ChangePhase();
+            }
         }
 
         public override void FixedUpdate()
@@ -161,6 +171,7 @@ namespace Mekaiju.AI
                 motor.StopKaiju();
                 changePhaseAction.attack.Action();
             }
+            SetPhase(2);
         }
 
         public void SetPhase(int p_phase)
@@ -187,13 +198,13 @@ namespace Mekaiju.AI
 
         public float GetRealDamage(float p_amonunt)
         {
-            var t_damage = modifiers[Statistics.Damage].ComputeValue(p_amonunt);
+            var t_damage = modifiers[StatisticKind.Damage].ComputeValue(p_amonunt);
             return stats.dmg * (t_damage/100);
         }
 
         public float GetRealSpeed(float p_amonunt)
         {
-            var t_amount = modifiers[Statistics.Speed].ComputeValue(p_amonunt);
+            var t_amount = modifiers[StatisticKind.Speed].ComputeValue(p_amonunt);
             return stats.speed * (t_amount / 100);
 
         }
@@ -292,15 +303,17 @@ namespace Mekaiju.AI
             }
         }
 
-        public void TakeDamage(GameObject p_bodyPart, float p_amonunt)
+        public void TakeDamage(GameObject p_bodyPart, IDamageable p_from, float p_amonunt, DamageKind p_kind)
         {
             BodyPart t_part = GetBodyPartWithGameObject(p_bodyPart);
-            TakeDamage(t_part, p_amonunt);
+            TakeDamage(t_part, p_from, p_amonunt, p_kind);
         }
 
-        public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
+        public void TakeDamage(BodyPart p_bodyPart, IDamageable p_from, float p_amonunt, DamageKind p_kind)
         {
-            var t_defense = modifiers[Statistics.Defense].ComputeValue(stats.def);
+            onBeforeTakeDamage.Invoke(p_from, p_amonunt, p_kind);
+
+            var t_defense = modifiers[StatisticKind.Defense].ComputeValue(stats.def);
 
             var t_realDamage = p_amonunt * (1- (t_defense/100));
 
@@ -319,7 +332,7 @@ namespace Mekaiju.AI
                 passive.passive.OnDamage();
             }
 
-            onTakeDamage.Invoke(p_amonunt);
+            onAfterTakeDamage.Invoke(p_from, t_realDamage, p_kind);
 
             if (IsDeath())
             {
@@ -332,12 +345,12 @@ namespace Mekaiju.AI
             }
         }
 
-        public override void TakeDamage(float p_damage)
+        public override void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
             float t_amountForPart = p_damage / bodyParts.Count();
             foreach (var part in bodyParts)
             {
-                TakeDamage(part, t_amountForPart);
+                TakeDamage(part, p_from, t_amountForPart, p_kind);
             }
         }
 

@@ -39,6 +39,12 @@ namespace Mekaiju
         }
 
         /// <summary>
+        /// Used handle alter payload.
+        /// </summary>
+        /// <param name="p_payload">The data used to alter ability.</param>
+        public virtual void Alter(object p_payload) {}
+
+        /// <summary>
         /// Indicates whether the capacity can be triggered.
         /// </summary>
         /// <param name="p_self">The instance where the ability is loaded.</param>
@@ -46,7 +52,7 @@ namespace Mekaiju
         /// <returns>true if capacity is able to be triggered, else false.</returns>
         public virtual bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return state == AbilityState.Ready && !p_self.states[State.AbilityLocked];
+            return state == AbilityState.Ready && !p_self.states[StateKind.AbilityLocked];
         }
 
         /// <summary>
@@ -66,7 +72,10 @@ namespace Mekaiju
         /// <param name="p_self">The instance where the ability is loaded.</param>
         /// <param name="p_target">The enemy part that is locked (or null).</param>
         /// <param name="p_opt">An optional parameter (should be null if not needed).</param>
-        public abstract IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt);
+        public virtual IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
+        {
+            yield return null;
+        }
 
         /// <summary>
         /// Use to release an ability if nessacary.<br/>

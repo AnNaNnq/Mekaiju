@@ -14,14 +14,15 @@ namespace Mekaiju.Entity
     public abstract class EntityInstance : MonoBehaviour, IDamageable, IStaminable, IEffectable
     {
         /// <summary>
-        /// Store effect to apply to the current entity.
-        /// </summary>
-        private List<StatefullEffect> effects = new();
-
-        /// <summary>
         /// Store a reference to the parent.
         /// </summary>
         public EntityInstance parent { get; protected set; } = null;
+
+        /// <summary>
+        /// Store effect to apply to the current entity.
+        /// </summary>
+        [field: SerializeField]
+        public virtual List<StatefullEffect> effects { get; } = new();
 
         /// <summary>
         /// Allow time point tracking
@@ -32,30 +33,27 @@ namespace Mekaiju.Entity
         /// <summary>
         /// Define usefull states on an entity
         /// </summary>
-        public virtual EnumArray<State, bool> states { get; } = new(() => false);
+        public virtual EnumArray<StateKind, State> states { get; } = new(() => new());
 
         /// <summary>
         /// Bind base entity stats.
         /// Must be overrided to use computedStats.
         /// </summary>
-        protected virtual EnumArray<Statistics, float> statistics { get; }
+        public virtual EnumArray<StatisticKind, IStatistic> statistics { get; protected set; }
 
         /// <summary>
         /// Used to apply modifer on statistics.
         /// </summary>
-        public virtual EnumArray<Statistics, ModifierCollection> modifiers { get; } = new(() => new());
+        public virtual EnumArray<StatisticKind, ModifierCollection> modifiers { get; } = new(() => new());
 
         /// <summary>
         /// Compute stats with modifiers.
         /// </summary>
         /// <param name="p_kind">The targeted statistics.</param>
         /// <returns>The computed statistic.</returns>
-        public virtual float ComputedStatistics(Statistics p_kind)
-        {
-            return modifiers[p_kind].ComputeValue(statistics[p_kind]);
-        }
 
-        public virtual UnityEvent<float> onTakeDamage { get; } = new();
+        public virtual UnityEvent<IDamageable, float, DamageKind> onBeforeTakeDamage { get; } = new();
+        public virtual UnityEvent<IDamageable, float, DamageKind> onAfterTakeDamage  { get; } = new();
         public virtual UnityEvent<float> onDealDamage { get; } = new();
 
         public UnityEvent<Collider> onCollide = new();
@@ -65,7 +63,7 @@ namespace Mekaiju.Entity
         public abstract float baseHealth { get; }
 
         public abstract void Heal      (float p_amount);
-        public abstract void TakeDamage(float p_damage);
+        public abstract void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind);
 
         public virtual float baseStamina => 0f;
         public virtual float stamina     => 0f;
@@ -73,8 +71,8 @@ namespace Mekaiju.Entity
         public virtual void ConsumeStamina(float p_amount) {}
         public virtual void RestoreStamina(float p_amount) {}
 
-        public UnityEvent<StatefullEffect> onAddEffect    { get; } = new();
-        public UnityEvent<StatefullEffect> onRemoveEffect { get; } = new();
+        public virtual UnityEvent<StatefullEffect> onAddEffect    { get; } = new();
+        public virtual UnityEvent<StatefullEffect> onRemoveEffect { get; } = new();
 
         public IDisposable AddEffect(Effect.Effect p_effect)
         {
