@@ -31,9 +31,6 @@ public class DebugInfo : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _dps;
 
-    [SerializeField]
-    private TextMeshProUGUI _effectField;
-
     private float _maxHealth;
     public Image healthBarUI;
 
@@ -135,8 +132,8 @@ public class DebugInfo : MonoBehaviour
         {
             if (t_part == MechaPart.Legs)
             {
-                _CooldownCapacities(((LegsCompoundAbility)t_desc.ability.behaviour)[LegsSelector.Jump]);
                 _CooldownCapacities(((LegsCompoundAbility)t_desc.ability.behaviour)[LegsSelector.Dash]);
+                _CooldownCapacities(((LegsCompoundAbility)t_desc.ability.behaviour)[LegsSelector.Jump]);
             }
             else
             {
