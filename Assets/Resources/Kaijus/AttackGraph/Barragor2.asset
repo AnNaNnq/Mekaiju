@@ -16,30 +16,27 @@ MonoBehaviour:
   - BaseNodeGUID: c9e3f38b-8b62-485e-85d0-372f2d13abcb
     PortName: Next
     TargetNodeGUID: 4d25b938-ebf6-4e52-8f02-5da58e520b2e
-  - BaseNodeGUID: 8402fe57-9011-43b5-a1e1-cb144ac16ed4
+  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
+    PortName: Attack 1
+    TargetNodeGUID: 57a9ba80-14d8-45e1-a4bf-2fafa4493e75
+  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
     PortName: Attack 2
+    TargetNodeGUID: 492c459e-d5e6-43c9-8432-5eb7fd4bd29a
+  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
+    PortName: Attack 4
+    TargetNodeGUID: bfd6ab7d-3b72-4f8d-8fcb-820909f06f89
+  - BaseNodeGUID: 8402fe57-9011-43b5-a1e1-cb144ac16ed4
+    PortName: Attack 1
     TargetNodeGUID: ffceff16-c2c2-4be3-ab3b-c68608e48cf3
   - BaseNodeGUID: 8402fe57-9011-43b5-a1e1-cb144ac16ed4
     PortName: Attack 4
     TargetNodeGUID: ed245df3-2b2e-4102-861c-cf47cbe590a1
-  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
-    PortName: Attack 1
-    TargetNodeGUID: 57a9ba80-14d8-45e1-a4bf-2fafa4493e75
   - BaseNodeGUID: 8402fe57-9011-43b5-a1e1-cb144ac16ed4
     PortName: Attack 1
     TargetNodeGUID: 583e1f10-51b5-401c-977e-232246c2134c
   - BaseNodeGUID: 8402fe57-9011-43b5-a1e1-cb144ac16ed4
     PortName: Attack 3
     TargetNodeGUID: a37b10bc-f72a-4dc9-a5dc-8825af03d1af
-  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
-    PortName: Attack 2
-    TargetNodeGUID: 492c459e-d5e6-43c9-8432-5eb7fd4bd29a
-  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
-    PortName: Attack 3
-    TargetNodeGUID: 7021dd7e-5fe6-447f-8509-6fc82671c4af
-  - BaseNodeGUID: 563de0f9-5456-4f00-96cb-cdf5971a0103
-    PortName: Attack 4
-    TargetNodeGUID: bfd6ab7d-3b72-4f8d-8fcb-820909f06f89
   - BaseNodeGUID: d858b185-24a5-4bfa-b5a6-2afac314f849
     PortName: Attack 1
     TargetNodeGUID: c1f5804b-da05-4ed8-a6b9-71506b9a5475
@@ -58,9 +55,6 @@ MonoBehaviour:
   - BaseNodeGUID: 428b5bef-1c99-4215-a128-7740f6cbb219
     PortName: Attack 2
     TargetNodeGUID: c2074294-f9a4-46c1-bf5c-d76c00b32133
-  - BaseNodeGUID: 428b5bef-1c99-4215-a128-7740f6cbb219
-    PortName: Attack 3
-    TargetNodeGUID: 8326fabc-30b6-43f7-ac49-8cb80de6877c
   - BaseNodeGUID: 428b5bef-1c99-4215-a128-7740f6cbb219
     PortName: Attack 4
     TargetNodeGUID: 7eb4afdb-e9ae-4d31-be92-4aea6c688023
@@ -82,9 +76,6 @@ MonoBehaviour:
   - BaseNodeGUID: 0f9b1cfb-09cd-4af2-a331-64cba1ae93fb
     PortName: Attack 2
     TargetNodeGUID: 3b3566a7-f810-4255-b5df-6ac45be23595
-  - BaseNodeGUID: 0f9b1cfb-09cd-4af2-a331-64cba1ae93fb
-    PortName: Attack 3
-    TargetNodeGUID: 1375865f-3773-498b-a6f5-79cf509bd7ca
   - BaseNodeGUID: 0f9b1cfb-09cd-4af2-a331-64cba1ae93fb
     PortName: Attack 4
     TargetNodeGUID: 741bf24f-188f-459a-92b9-1371a62c1715
@@ -110,9 +101,6 @@ MonoBehaviour:
   - guid: 492c459e-d5e6-43c9-8432-5eb7fd4bd29a
     name: RollDash
     position: {x: 151, y: 690}
-  - guid: 7021dd7e-5fe6-447f-8509-6fc82671c4af
-    name: ElectrifiedSparks
-    position: {x: 151, y: 804}
   - guid: bfd6ab7d-3b72-4f8d-8fcb-820909f06f89
     name: GroundStrike
     position: {x: 202, y: 917}
@@ -134,9 +122,6 @@ MonoBehaviour:
   - guid: c2074294-f9a4-46c1-bf5c-d76c00b32133
     name: RollDash
     position: {x: 1133, y: 840}
-  - guid: 8326fabc-30b6-43f7-ac49-8cb80de6877c
-    name: ElectrifiedSparks
-    position: {x: 1133, y: 941}
   - guid: 7eb4afdb-e9ae-4d31-be92-4aea6c688023
     name: Spin
     position: {x: 1158, y: 1036}
@@ -158,12 +143,9 @@ MonoBehaviour:
   - guid: 3b3566a7-f810-4255-b5df-6ac45be23595
     name: RollAndSlash
     position: {x: 1974, y: -109}
-  - guid: 1375865f-3773-498b-a6f5-79cf509bd7ca
-    name: RollDash
-    position: {x: 1984, y: -32}
   - guid: 741bf24f-188f-459a-92b9-1371a62c1715
     name: GroundStrike
-    position: {x: 2057, y: 153}
+    position: {x: 1984, y: 92}
   StartNodeData:
   - guid: c9e3f38b-8b62-485e-85d0-372f2d13abcb
     name: Start

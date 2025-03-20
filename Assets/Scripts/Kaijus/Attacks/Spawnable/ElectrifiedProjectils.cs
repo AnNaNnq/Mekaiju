@@ -29,7 +29,7 @@ namespace Mekaiju.AI.Attack.Instance
                 t_mecha.TakeDamage(t_kaiju, _dmg, Entity.DamageKind.Direct);
                 t_mecha.AddEffect(_stat.effect, _stat.effectDuration);
             }
-            if(!other.CompareTag("KaijuPart") && !other.CompareTag("DoomsdayRaySpawn") && !other.CompareTag("Spawnable"))
+            if(!other.CompareTag("KaijuPart") && !other.CompareTag("DoomsdayRaySpawn") && !other.CompareTag("Spawnable") && !other.CompareTag("Ground"))
             {
                 Destroy(gameObject);
             }

@@ -143,6 +143,11 @@ namespace Mekaiju.AI
             {
                 UseBehavior();
             }
+
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                ChangePhase();
+            }
         }
 
         public override void FixedUpdate()
@@ -166,6 +171,7 @@ namespace Mekaiju.AI
                 motor.StopKaiju();
                 changePhaseAction.attack.Action();
             }
+            SetPhase(2);
         }
 
         public void SetPhase(int p_phase)
