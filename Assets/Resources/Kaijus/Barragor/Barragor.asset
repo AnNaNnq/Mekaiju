@@ -25,7 +25,7 @@ MonoBehaviour:
         blockable: 0
         time: 0
         quantity: 0
-        mask:
-          serializedVersion: 2
-          m_Bits: 8
-        maxBounce: 5
+        force: 5000
+        upwardModifier: 2
+        diveForce: 1000
+        heightThreshold: 35

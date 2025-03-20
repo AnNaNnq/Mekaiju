@@ -23,6 +23,8 @@ namespace Mekaiju.AI
         [SerializeField]
         private bool _canAttack = true;
 
+        public bool isStopped = false;
+
         public KaijuAttack[] allAttacks { get { return _allAttacks; } }
         private KaijuAttack[] _allAttacks;
 
@@ -121,6 +123,8 @@ namespace Mekaiju.AI
 
         public void Attack(List<string> p_attackGUID)
         {
+            if (isStopped) return;
+
             List<KaijuPassive> t_activePassives = _instance.GetPassivesActive();
             if (t_activePassives.Count > 0)
             {
