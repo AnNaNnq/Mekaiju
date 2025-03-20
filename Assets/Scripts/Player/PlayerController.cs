@@ -43,6 +43,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _minVerticalAngle = -30f; 
     [SerializeField] private float _maxVerticalAngle = 80f;
     private GameObject _aimConstraint;
+    // Accumulated horizontal and vertical rotation
+    private float _yaw;
+    private float _pitch;
+
 
     [Foldout("Movement Boolean")]
     [SerializeField] bool _isGrounded;
@@ -224,7 +228,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             _lookAction.Enable();
-            SetConstraintTarget(_cameraPivot.GetChild(0));
+            SetConstraintTarget(_cameraPivot.GetChild(0).transform);
             isLockedOn = false;
         }
     }
@@ -291,27 +295,33 @@ public class PlayerController : MonoBehaviour
 
         Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
 
-        // Tourner le container du cameraPivot sur l'axe X
-        _cameraPivot.parent.Rotate(Vector3.up * t_lookDir.x);
+        _yaw += t_lookDir.x;
+        _pitch -= t_lookDir.y;
 
-        // tourner le camera pivot sur l'axe Y
-        var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x - t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
-        var t_delta = t_clamp - _cameraPivot.eulerAngles.x;
-        _cameraPivot.Rotate(Vector3.right * t_delta);
+        //Clamp vertical angle to avoid over-rotating the camera
+        _pitch = Mathf.Clamp(_pitch, _minVerticalAngle, _maxVerticalAngle);
 
-        //tourner le gameobject lorsque l'angle de la camera depasse un certain angle
-        float cameraYaw = _cameraPivot.eulerAngles.y;
-        float playerYaw = transform.eulerAngles.y;
-        float deltaYaw = Mathf.DeltaAngle(playerYaw, cameraYaw);
+        // Apply the rotation to the camera pivot
+        Quaternion targetRotation = Quaternion.Euler(_pitch, _yaw, 0);
+        _cameraPivot.rotation = Quaternion.Slerp(_cameraPivot.rotation, targetRotation, Time.deltaTime * 10f);
 
-        if (Mathf.Abs(deltaYaw) > 45f)
+        // Allign the player with the camera if he goes over a critical angle
+        float t_cameraYaw = _cameraPivot.eulerAngles.y;
+        float t_playerYaw = transform.eulerAngles.y;
+        float t_deltaYaw = Mathf.DeltaAngle(t_playerYaw, t_cameraYaw);
+
+        if (Mathf.Abs(t_deltaYaw) > 45f)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, cameraYaw, 0), Time.deltaTime * 1f);
+            // rotation speed factor (the bigger the delta, the faster the rotation)
+            float t_speedFactor = Mathf.Clamp((Mathf.Abs(t_deltaYaw) - 45f) / 45f, 0.1f, 0.5f) * 3f;
+
+            //smooth rotation of the player towards the camera
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, t_cameraYaw, 0), Time.deltaTime * t_speedFactor);
         }
 
+        // Lock-On System
         int t_scrollValue = (int)_scrollAction.ReadValue<float>();
-
-        if (t_scrollValue != 0 && isLockedOn && Time.time - _timeSinceLastScroll >= 0.2f) 
+        if (t_scrollValue != 0 && isLockedOn && Time.time - _timeSinceLastScroll >= 0.2f)
         {
             _timeSinceLastScroll = Time.time;
             _lockOnTargetSystem.ChangeTarget(t_scrollValue);
