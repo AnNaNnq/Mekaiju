@@ -55,6 +55,9 @@ namespace Mekaiju.AI.PhaseAttack
 
             _currentJump++;
 
+            IShockWave t_shockWave = this;
+            t_shockWave.LunchWave(wave, _kaiju.transform);
+
             yield return new WaitForSeconds(1);
 
             if (_currentJump < nbJump)

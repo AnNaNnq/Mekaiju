@@ -1,9 +1,5 @@
 using Mekaiju.AI.Attack.Instance;
 using Mekaiju.AI.Attacl;
-using Mekaiju.Attribute;
-using Mekaiju.Entity;
-using Mekaiju.Entity.Effect;
-using MyBox;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack
