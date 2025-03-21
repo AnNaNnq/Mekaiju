@@ -91,6 +91,7 @@ namespace Mekaiju.LockOnTargetSystem
             _lockedTarget = _potentialTargets[_targetIndex];
             Debug.Log("Nouvelle cible verrouillée : " + _lockedTarget.name);
 
+            _crosshairController?.FollowTarget(_lockedTarget);
             _crosshairController?.SwayCrosshairOnTargetChange();
         }
 

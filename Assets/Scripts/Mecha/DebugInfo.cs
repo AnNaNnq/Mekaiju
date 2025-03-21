@@ -119,7 +119,6 @@ public class DebugInfo : MonoBehaviour
         float t_cooldown = p_ability.behaviour.cooldown;
         if (!p_ability.name.Equals("EmptyAbility"))
         {
-            Debug.Log(p_ability.name);
             GameObject instance = Instantiate(capacityPrefab, capacitiesList);
             Image abilityImage = instance.GetComponent<Image>();
             abilityImage.sprite = p_ability.icon;

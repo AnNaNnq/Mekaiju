@@ -988,6 +988,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e15f3b14c2cba6498e2a6f4d86a474d, type: 3}
+--- !u!20 &212158716 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1848661010026459219, guid: 7e15f3b14c2cba6498e2a6f4d86a474d, type: 3}
+  m_PrefabInstance: {fileID: 212158715}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &219368002
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3814,10 +3819,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1991535201637106125, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 15515172087615071, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 212158716}
     - target: {fileID: 2210248317071661439, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -3902,46 +3907,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CombatCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 5081272310321274981, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081272310321274981, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 7238432924398669489, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7425341139336172446, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: healthBarUI
-      value: 
-      objectReference: {fileID: 774561956}
-    - target: {fileID: 7888433478674827102, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888433478674827102, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888433478674827102, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9076113303201374858, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9076113303201374858, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9076113303201374858, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3956,17 +3921,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56f03713910ce6149b24235236a4fee7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &774561956 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7850165892825906334, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-  m_PrefabInstance: {fileID: 774561954}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &782495917
