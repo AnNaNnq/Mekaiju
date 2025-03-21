@@ -317,7 +317,7 @@ public class PlayerController : MonoBehaviour
             float t_speedFactor = Mathf.Clamp((Mathf.Abs(t_deltaYaw) - 45f) / 45f, 0.1f, 0.5f) * 3f;
 
             //smooth rotation of the player towards the camera
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, t_cameraYaw, 0), Time.deltaTime * t_speedFactor);
+            _rigidbody.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, t_cameraYaw, 0), Time.deltaTime * t_speedFactor);
         }
 
         // Lock-On System
