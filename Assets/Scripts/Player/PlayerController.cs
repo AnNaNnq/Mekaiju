@@ -292,12 +292,13 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         _instance.states[StateKind.Grounded].Set(_isGrounded);
-
-        Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
-
-        _yaw += t_lookDir.x;
-        _pitch -= t_lookDir.y;
-
+        
+        _yaw += _lookAction.ReadValue<Vector2>().x * Time.deltaTime * _mouseSensitivity;
+        _pitch -= _lookAction.ReadValue<Vector2>().y * Time.deltaTime * _mouseSensitivity;
+    }
+    
+    private void FixedUpdate()
+    {
         //Clamp vertical angle to avoid over-rotating the camera
         _pitch = Mathf.Clamp(_pitch, _minVerticalAngle, _maxVerticalAngle);
 
@@ -327,10 +328,7 @@ public class PlayerController : MonoBehaviour
             _lockOnTargetSystem.ChangeTarget(t_scrollValue);
             SetConstraintTarget(_lockOnTargetSystem.GetTargetBodyPartObject().transform);
         }
-    }
-    
-    private void FixedUpdate()
-    {
+
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
