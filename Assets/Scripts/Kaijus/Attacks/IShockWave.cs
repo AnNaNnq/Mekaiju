@@ -6,8 +6,7 @@ namespace Mekaiju.AI.Attack
 {
     public interface IShockWave
     {
-
-        public void LunchWave(ShockWaveStat p_stat, Transform p_start)
+        public void LaunchWave(ShockWaveStat p_stat, Transform p_start)
         {
             Vector3 t_pos = p_start.position;
             GameObject t_go = GameObject.Instantiate(p_stat.shockwavePrefab, t_pos, Quaternion.identity);

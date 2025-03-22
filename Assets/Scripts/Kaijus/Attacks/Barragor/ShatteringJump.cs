@@ -33,7 +33,7 @@ namespace Mekaiju.AI.Attack
             {
                 _kaiju.animator.AttackAnimation("Grounded");
                 IShockWave t_wave = this;
-                t_wave.LunchWave(wave, _kaiju.transform);
+                t_wave.LaunchWave(wave, _kaiju.transform);
                 stat = 2;
             }
         }

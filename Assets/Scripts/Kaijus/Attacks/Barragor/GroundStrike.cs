@@ -23,7 +23,7 @@ namespace Mekaiju.AI.Attack
         {
             base.OnAction();
             IShockWave t_shock = this;
-            t_shock.LunchWave(wave, _pos);
+            t_shock.LaunchWave(wave, _pos);
         }
     }
 }

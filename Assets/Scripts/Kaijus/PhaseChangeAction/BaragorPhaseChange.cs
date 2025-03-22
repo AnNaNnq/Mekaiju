@@ -62,7 +62,7 @@ namespace Mekaiju.AI.PhaseAttack
             yield return new WaitForSeconds(1);
 
             IShockWave t_shockWave = this;
-            t_shockWave.LunchWave(wave, _kaiju.transform);
+            t_shockWave.LaunchWave(wave, _kaiju.transform);
 
             if (_currentJump < nbJump)
             {
@@ -70,11 +70,11 @@ namespace Mekaiju.AI.PhaseAttack
             }
             else
             {
-                LunchQTE();
+                LaunchQTE();
             }
         }
 
-        void LunchQTE()
+        void LaunchQTE()
         {
             input = UnityEngine.Random.Range(0, _qte.qteInputActions.Count);
 
