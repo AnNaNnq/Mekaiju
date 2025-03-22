@@ -28,7 +28,7 @@ namespace Mekaiju.LockOnTargetSystem
         private Transform _cameraPivot;
         private void Start()
         {
-            _cameraPivot = transform.Find("CameraPivot");
+            _cameraPivot = transform.FindNested("CameraPivot");
         }
 
         private void Update()
