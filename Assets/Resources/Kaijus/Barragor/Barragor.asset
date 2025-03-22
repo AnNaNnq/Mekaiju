@@ -23,12 +23,13 @@ MonoBehaviour:
         canMakeDamage: 0
         damage: 50
         blockable: 0
-        time: 0
-        quantity: 0
+        time: 30
+        quantity: 2
         chargeDuration: 0.5
         chargeSpeed: 1000
         verticalBoost: 3000
-        nbJump: 5
+        nbJump: 2
+        healAmountWhenFail: 50
         wave:
           shockwavePrefab: {fileID: 4463112248481850273, guid: 23ef9ca6fd70e204cbe381450a3c848f, type: 3}
           shockwaveSpeed: 10
