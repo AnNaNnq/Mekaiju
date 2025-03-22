@@ -3,7 +3,7 @@ using Mekaiju.Entity.Effect;
 using MyBox;
 using UnityEngine;
 
-namespace Mekaiju.AI.Attacl
+namespace Mekaiju.AI.Attack
 {
     [System.Serializable]
     public class ShockWaveStat

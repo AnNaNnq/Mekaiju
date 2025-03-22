@@ -1,5 +1,4 @@
 using Mekaiju.AI.Attack.Instance;
-using Mekaiju.AI.Attacl;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack
