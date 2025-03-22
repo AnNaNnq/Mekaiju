@@ -47,10 +47,10 @@ namespace Mekaiju
                     config.material.SetFloat("_Progress", (t_totalTime - time) / t_totalTime);
                     Mesh mesh = new Mesh();
                     _skinnedMeshRenderers[i].BakeMesh(mesh);
-
+                    
                     t_mf.mesh     = mesh;
                     t_mr.material = config.material;
-
+                    config.material.SetFloat("_Opacity",(t_totalTime - time) / t_totalTime);
                     Destroy(t_go, config.destroyDelay);
                 }
                 yield return new WaitForSeconds(config.refreshRate);
