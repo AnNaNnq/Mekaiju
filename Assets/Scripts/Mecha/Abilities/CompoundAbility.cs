@@ -22,6 +22,8 @@ namespace Mekaiju
         public abstract void CheckAbilityLoop(Ability parent);
     }
 
+    public class CompoundAlteration<E> : EnumArray<E, IAlteration>, IAlteration where E : Enum {}
+
     /// <summary>
     /// 
     /// </summary>
@@ -59,6 +61,31 @@ namespace Mekaiju
                     t_ability.behaviour?.Initialize(p_self);
                 }
             };
+        }
+
+        public override IAlteration Alter<T>(T p_payload)
+        {
+            CompoundAlteration<E> t_alterations = new();
+            _abilities.ForEach((t_key, t_ability) => 
+            {
+                if (t_ability)
+                {
+                    t_alterations[t_key] = t_ability.behaviour.Alter(t_ability.healthTuneAlteration);
+                }
+            });
+
+            return t_alterations;
+        }
+
+        public override void Revert(IAlteration p_alteration)
+        {
+            if (p_alteration is CompoundAlteration<E> t_casted)
+            {
+                t_casted.ForEach((t_key, t_alteration) => 
+                {
+                    _abilities[t_key].behaviour.Revert(t_alteration);
+                });
+            }
         }
 
         public override bool IsAvailable(EntityInstance p_self, object p_opt)

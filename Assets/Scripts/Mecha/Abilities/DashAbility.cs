@@ -5,14 +5,15 @@ using Mekaiju.AI.Body;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using MyBox;
 
 namespace Mekaiju
 {
     [Serializable]
-    public class DashAlterPayload
+    public class DashPayload : IPayload
     {
-        public float forceFactor;
-        public float durationFactor;
+        public float force;
+        public float duration;
     }
 
     public class DashAbility : IStaminableAbility
@@ -109,12 +110,26 @@ namespace Mekaiju
             );
         }
 
-        public override void Alter(object p_payload)
+        public override IAlteration Alter<T>(T p_payload)
         {
-            if (p_payload is DashAlterPayload t_casted)
+            if (p_payload is DashPayload t_casted)
             {
-                _runtimeForce    = _force    * t_casted.forceFactor;
-                _runtimeDuration = _duration * t_casted.durationFactor;
+                DashPayload t_diff = new();
+
+                _runtimeForce    += (t_diff.force    = _force    * t_casted.force);
+                _runtimeDuration += (t_diff.duration = _duration * t_casted.duration);
+
+                return new Alteration<DashPayload>(t_casted, t_diff);
+            }
+            return null;
+        }
+
+        public override void Revert(IAlteration p_payload)
+        {
+            if (p_payload is Alteration<DashPayload> t_casted)
+            {
+                _runtimeForce    -= t_casted.diff.force;
+                _runtimeDuration -= t_casted.diff.duration;
             }
         }
 
@@ -128,6 +143,7 @@ namespace Mekaiju
 
                 if (Mathf.Abs(_direction.sqrMagnitude) > 0)
                 {
+                    Debug.Log(_runtimeForce);
                     state = AbilityState.Active;
                     _animationState = AnimationState.Idle;
 
