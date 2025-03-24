@@ -7,16 +7,18 @@ using UnityEngine;
 
 namespace Mekaiju.AI.PhaseAttack
 {
-    public class BaragorPhaseChange : PhaseAttack, IShockWave
+    public class BaragorPhaseChange : PhaseAttack, IShockWave, ICharge
     {
         private Transform _target;
         private Rigidbody _rb;
 
+        [Separator("Charge")]
         public float chargeDuration = 1.0f;
         public float chargeSpeed = 10000;
         public float verticalBoost = 1000f;
         public int nbJump = 5;
 
+        [Separator("Loose QTE")]
         public float healAmountWhenFail = 50;
 
         int _currentJump = 0;
@@ -45,16 +47,9 @@ namespace Mekaiju.AI.PhaseAttack
             Vector3 t_startPos = _kaiju.transform.position;
             Vector3 t_direction = (t_targetPosition - t_startPos).normalized;
 
-            // Appliquer une poussée verticale instantanée
-            _rb.AddForce(Vector3.up * verticalBoost, ForceMode.Impulse);
+            ICharge t_charge = this;
 
-            float t_elapsed = 0f;
-            while (t_elapsed < chargeDuration)
-            {
-                _rb.AddForce(t_direction * (chargeSpeed / chargeDuration), ForceMode.Acceleration);
-                t_elapsed += Time.deltaTime;
-                yield return null;
-            }
+            yield return t_charge.Charge(_kaiju, chargeSpeed, chargeDuration, verticalBoost, 0);
 
             _currentJump++;
 
@@ -100,18 +95,8 @@ namespace Mekaiju.AI.PhaseAttack
 
         IEnumerator charge()
         {
-            Vector3 t_targetPosition = _kaiju.GetTargetPos();
-            Vector3 t_startPos = _kaiju.transform.position;
-            Vector3 t_direction = (t_targetPosition - t_startPos).normalized;
-
-            float t_elapsed = 0f;
-            while (t_elapsed < chargeDuration)
-            {
-                _rb.AddForce(t_direction * (chargeSpeed / chargeDuration), ForceMode.Acceleration);
-                t_elapsed += Time.deltaTime;
-                yield return null;
-            }
-
+            ICharge t_charge = this;
+            yield return t_charge.Charge(_kaiju, chargeSpeed, chargeDuration);
             _kaiju.brain.isStopped = false;
         }
 

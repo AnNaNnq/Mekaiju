@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class Charge : Attack
+    public class Charge : Attack, ICharge
     {
         [Separator]
         [OverrideLabel("Charge Speed (Force Pulse)")]
@@ -32,29 +32,8 @@ namespace Mekaiju.AI.Attack
 
         public override IEnumerator AttackEnumerator()
         {
-            float t_time = 0;
-            Vector3 t_targetPosition = _kaiju.GetTargetPos();
-
-            while (t_time < chargePrepTime)
-            {
-                _kaiju.motor.StopKaiju();
-                _kaiju.motor.LookTarget();
-                t_targetPosition = _kaiju.GetTargetPos();
-                yield return new WaitForSeconds(0.01f);
-                t_time += 0.01f;
-            }
-
-            Vector3 t_startPos = _kaiju.transform.position;
-            Vector3 t_direction = (t_targetPosition - t_startPos).normalized;
-
-
-            float t_elapsed = 0f;
-            while (t_elapsed < chargeDuration)
-            {
-                _rb.AddForce(t_direction * (chargeSpeed / chargeDuration), ForceMode.Acceleration);
-                t_elapsed += Time.deltaTime;
-                yield return null;
-            }
+            ICharge t_charge = this;
+            yield return t_charge.Charge(_kaiju, chargeSpeed, chargeDuration, chargePrepTime);
             OnEnd();
         }
 
