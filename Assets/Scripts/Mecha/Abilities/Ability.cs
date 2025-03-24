@@ -38,6 +38,9 @@ namespace Mekaiju
         [field: SerializeReference, SubclassPicker]
         public AbilityGranter granter { get; private set; }
 
+        [field: SerializeField]
+        public bool showInHUD { get; private set; } = true;
+
         public void OnValidate()
         {
             if (behaviour == null)
