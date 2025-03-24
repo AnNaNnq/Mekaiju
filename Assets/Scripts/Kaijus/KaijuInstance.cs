@@ -294,13 +294,15 @@ namespace Mekaiju.AI
             }
         }
 
-        public override void Heal(float p_amount)
+        public override float Heal(float p_amount)
         {
             float t_amountForPart = p_amount / bodyParts.Count();
             foreach(var part in bodyParts)
             {
                 Heal(part, t_amountForPart);
             }
+
+            return 0f;
         }
 
         public void TakeDamage(GameObject p_bodyPart, IDamageable p_from, float p_amonunt, DamageKind p_kind)
@@ -309,7 +311,7 @@ namespace Mekaiju.AI
             TakeDamage(t_part, p_from, p_amonunt, p_kind);
         }
 
-        public void TakeDamage(BodyPart p_bodyPart, IDamageable p_from, float p_amonunt, DamageKind p_kind)
+        public float TakeDamage(BodyPart p_bodyPart, IDamageable p_from, float p_amonunt, DamageKind p_kind)
         {
             onBeforeTakeDamage.Invoke(p_from, p_amonunt, p_kind);
 
@@ -343,15 +345,19 @@ namespace Mekaiju.AI
             {
                 ChangePhase();
             }
+
+            return 0f;
         }
 
-        public override void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
+        public override float TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
             float t_amountForPart = p_damage / bodyParts.Count();
             foreach (var part in bodyParts)
             {
                 TakeDamage(part, p_from, t_amountForPart, p_kind);
             }
+
+            return 0f;
         }
 
         public bool IsDeath()
