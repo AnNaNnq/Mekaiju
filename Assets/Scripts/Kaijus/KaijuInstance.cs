@@ -20,20 +20,54 @@ namespace Mekaiju.AI
     public class KaijuInstance : EntityInstance
     {
         #region variable
-        [Header("General")]
+        [Separator("General")]
         [Tag] public string targetTag;
         public KaijuStats stats;
         public BodyPart[] bodyParts;
 
-        [Separator]
+        [Separator("Behavior")]
         [field: SerializeReference, SubclassPicker]
         public List<KaijuBehavior> behaviors = new List<KaijuBehavior>();
-        public float timeBetweenTowAction = 1f;
-
-        [field: SerializeField]
-        public InstanceContext context { get; private set; }
 
         public List<KaijuPassive> passives;
+       
+        [SOSelector]
+        [OverrideLabel("Attack Graph (Phase 1)")]
+        public KaijuAttackContainer attackGraphPhaseOne;
+        [SOSelector]
+        [OverrideLabel("Attack Graph (Phase 2)")]
+        public KaijuAttackContainer attackGraphPhaseTow;
+        public float timeBetweenTowAction;
+
+        [Separator("Phases")]
+        public int currentPhase = 2;
+        [Separator]
+        public KaijuPhaseAttack changePhaseAction;
+
+        [Separator("Health")]
+        [ReadOnly, SerializeField] private float currentHealth = 0;
+        public float reduceDamageWhenDestroy = 2;
+
+        [Separator("Debug")]
+        public bool checkRange;
+        [ConditionalField(nameof(checkRange))] public float debugRange;
+        [ReadOnly] public float dps;
+
+        private KaijuDebug _debug;
+
+        [Separator("Pas touche")]
+        public KaijuCollsionDetector detector;
+
+        [Separator("Instance")]
+        bool _isInFight;
+
+        #endregion
+
+        #region variable composant
+        public event Action<Collision> OnCollision;
+        
+        [field: SerializeField]
+        public InstanceContext context { get; private set; }
 
         public GameObject target { get; private set; }
 
@@ -42,7 +76,7 @@ namespace Mekaiju.AI
 
         protected KaijuMotor _motor;
 
-        public Rigidbody rb {  get { return _rb; } }
+        public Rigidbody rb { get { return _rb; } }
 
         private Rigidbody _rb;
 
@@ -53,36 +87,6 @@ namespace Mekaiju.AI
         public KaijuAnimatorController animator { get { return _animation; } }
 
         private KaijuAnimatorController _animation;
-
-        public int currentPhase = 2;
-
-        private float currentHealth = 0;
-
-        [SOSelector]
-        [OverrideLabel("Attack Graph (Phase 1)")]
-        public KaijuAttackContainer attackGraphPhaseOne;
-        [SOSelector]
-        [OverrideLabel("Attack Graph (Phase 2)")]
-        public KaijuAttackContainer attackGraphPhaseTow;
-
-        [Separator]
-        public KaijuPhaseAttack changePhaseAction;
-
-        [Separator]
-        [Header("Debug")]
-        public bool checkRange;
-        [ConditionalField(nameof(checkRange))] public float debugRange;
-        public float dps;
-
-        private KaijuDebug _debug;
-
-        bool _isInFight;
-
-        public event Action<Collision> OnCollision;
-
-        [Header("Pas touche")]
-        public KaijuCollsionDetector detector;
-
         #endregion
 
         #region Kaiju Function
@@ -336,14 +340,14 @@ namespace Mekaiju.AI
             p_bodyPart.currentHealth -= t_realDamage;
             p_bodyPart.currentHealth = MathF.Max(0, p_bodyPart.currentHealth);
 
+            currentHealth -= p_bodyPart.isDestroyed ? t_realDamage / reduceDamageWhenDestroy : t_realDamage;
+
             if (!p_bodyPart.isDestroyed && p_bodyPart.currentHealth <= 0)
             {
                 p_bodyPart.isDestroyed = true;
             }
 
             UpdateUI();
-
-            currentHealth -= t_realDamage;
 
             foreach (var passive in passives)
             {
