@@ -20,12 +20,22 @@ MonoBehaviour:
     - rid: 7914790932822622416
       type: {class: BaragorPhaseChange, ns: Mekaiju.AI.PhaseAttack, asm: Assembly-CSharp}
       data:
-        canMakeDamage: 0
-        damage: 50
+        canMakeDamage: 1
+        damage: 1000
         blockable: 0
-        time: 0
-        quantity: 0
-        mask:
-          serializedVersion: 2
-          m_Bits: 8
-        maxBounce: 5
+        time: 10
+        quantity: 5
+        chargeDuration: 0.5
+        chargeSpeed: 2000
+        verticalBoost: 2500
+        jumpHorizontalBoost: 1000
+        nbJump: 5
+        healAmountWhenFail: 50
+        wave:
+          shockwavePrefab: {fileID: 4463112248481850273, guid: 23ef9ca6fd70e204cbe381450a3c848f, type: 3}
+          shockwaveSpeed: 10
+          shockwaveDamage: 100
+          maxRadius: 110
+          effect: {fileID: 11400000, guid: 558e38446bba040239195dfc8926312e, type: 2}
+          effectDuration: 2
+          kaiju: {fileID: 0}

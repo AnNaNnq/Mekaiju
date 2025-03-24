@@ -817,7 +817,7 @@ MonoBehaviour:
   currentPhase: 2
   attackGraphPhaseOne: {fileID: 11400000, guid: bdc1ac2d043c5fa4aba87e2ec2918eb4, type: 2}
   attackGraphPhaseTow: {fileID: 11400000, guid: 934af19063d466740862dfc0b280d0ed, type: 2}
-  changePhaseAction: {fileID: 0}
+  changePhaseAction: {fileID: 11400000, guid: 85feb9497db355942befff687f452143, type: 2}
   checkRange: 1
   debugRange: 15
   dps: 0
@@ -863,6 +863,7 @@ MonoBehaviour:
   _lastAttack: 
   _currentAttack: {fileID: 0}
   _canAttack: 1
+  isStopped: 0
 --- !u!195 &-1230045570309523629
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -939,7 +940,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3471881529136778539}
   serializedVersion: 4
-  m_Mass: 100
+  m_Mass: 50
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
