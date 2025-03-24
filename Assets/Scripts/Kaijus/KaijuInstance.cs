@@ -48,6 +48,9 @@ namespace Mekaiju.AI
         [ReadOnly, SerializeField] private float currentHealth = 0;
         public float reduceDamageWhenDestroy = 2;
 
+        [Separator("Movement")]
+        public float stoppingDistanceMin = 10;
+
         [Separator("Debug")]
         public bool checkRange;
         [ConditionalField(nameof(checkRange))] public float debugRange;
@@ -389,9 +392,6 @@ namespace Mekaiju.AI
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(transform.position, debugRange);
             }
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position + transform.forward * 7f, 4f);
         }
 
         public IEnumerator resetDps()

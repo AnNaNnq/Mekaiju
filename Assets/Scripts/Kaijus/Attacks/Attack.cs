@@ -5,6 +5,7 @@ using Mekaiju.Entity.Effect;
 using MyBox;
 using Mekaiju.Entity;
 using Mekaiju.Attribute;
+using System.Collections.Generic;
 
 namespace Mekaiju.AI.Attack {
     [System.Serializable]
@@ -18,20 +19,26 @@ namespace Mekaiju.AI.Attack {
 
         public bool canMakeDamage = true;
 
-        [ConditionalField(nameof(canMakeDamage))] [Indent]
+        [ConditionalField(nameof(canMakeDamage))][Indent]
         public float damage = 50;
-        [ConditionalField(nameof(canMakeDamage))] [Indent]
+        [ConditionalField(nameof(canMakeDamage))][Indent]
         public bool blockable;
-        [ConditionalField(nameof(canMakeDamage))] [Indent]
+        [ConditionalField(nameof(canMakeDamage))][Indent]
 
         Coroutine _atkCoroutine;
 
         MechaInstance _mecha;
 
+        List<MechaPartInstance> _mechaParts;
+
+        bool blocked = false;
+
         public virtual void Init()
         {
             canUse = true;
             _mecha = null;
+            _mechaParts = new List<MechaPartInstance>();
+            blocked = false;
             StopAttackCoroutine();
         }
 
@@ -62,12 +69,16 @@ namespace Mekaiju.AI.Attack {
             Active(p_kaiju);
         }
 
-        public virtual void Active(EntityInstance p_kaiju) { 
+        public virtual void Active(EntityInstance p_kaiju) {
             canUse = false;
-            _kaiju = (KaijuInstance) p_kaiju;
+            blocked = false;
+
+            _kaiju = (KaijuInstance)p_kaiju;
             _kaiju.detector.OnMechaEnter += OnMechEnter;
             _kaiju.detector.OnMechaExit += OnMechExit;
             _kaiju.detector.OnGround += OnGround;
+            _kaiju.detector.OnShieldEnter += OnShieldEnter;
+            _kaiju.detector.OnShieldExit += OnShiedExit;
         }
 
         public virtual IEnumerator AttackEnumerator()
@@ -75,18 +86,20 @@ namespace Mekaiju.AI.Attack {
             yield return null;
         }
 
-        public void SendDamage(float p_damage, MechaInstance p_mecha, Effect p_effet = null, float p_effetDuration = -1)
+        public void SendDamage(float p_damage, MechaPartInstance p_part, Effect p_effet = null, float p_effetDuration = -1)
         {
-            if (p_mecha != null)
+            if (p_part != null)
             {
+                if (blocked && blockable) return;
+
                 float t_damage = _kaiju.GetRealDamage(p_damage);
-                p_mecha.TakeDamage(_kaiju, t_damage, DamageKind.Direct);
+                p_part.TakeDamage(_kaiju, t_damage, DamageKind.Direct);
                 _kaiju.AddDPS(t_damage);
                 _kaiju.UpdateUI();
 
                 if (p_effet != null)
                 {
-                    p_mecha.AddEffect(p_effet, p_effetDuration);
+                    p_part.AddEffect(p_effet, p_effetDuration);
                 }
             }
 
@@ -95,17 +108,17 @@ namespace Mekaiju.AI.Attack {
 
         protected void SendDamage(float p_damage, Effect p_effet = null, float p_effetDuration = -1)
         {
-            SendDamage(p_damage, _mecha, p_effet, p_effetDuration);
+            _mechaParts.ForEach(_part => SendDamage(p_damage, _part, p_effet, p_effetDuration));
         }
 
         public IEnumerator Cooldown(EntityInstance p_kaiju)
         {
-           yield return p_kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
+            yield return p_kaiju.StartCoroutine(UtilsFunctions.CooldownRoutine(cooldown, () => canUse = true));
         }
 
         public virtual void OnAction() { }
 
-        public virtual void OnEnd() 
+        public virtual void OnEnd()
         {
             _kaiju.motor.StartKaiju();
             _kaiju.brain.MakeAction();
@@ -114,20 +127,34 @@ namespace Mekaiju.AI.Attack {
             _kaiju.detector.OnMechaEnter -= OnMechEnter;
             _kaiju.detector.OnMechaExit -= OnMechExit;
             _kaiju.detector.OnGround -= OnGround;
+            _kaiju.detector.OnShieldExit -= OnShiedExit;
+            _kaiju.detector.OnShieldEnter -= OnShieldEnter;
         }
 
-        public virtual void OnMechEnter(MechaInstance p_mecha)
+        #region Event
+        public virtual void OnMechEnter(MechaPartInstance p_mecha)
         {
-            _mecha = p_mecha;
+            _mechaParts.Add(p_mecha);
         }
 
-        public virtual void OnMechExit(MechaInstance p_mecha)
+        public virtual void OnMechExit(MechaPartInstance p_mecha)
         {
-            if (p_mecha == _mecha) _mecha = null;
+            if (_mechaParts.Contains(p_mecha)) _mechaParts.Remove(p_mecha);
         }
 
         public virtual void OnGround() { }
 
+        public virtual void OnShieldEnter()
+        {
+            blocked = true;
+        }
+
+        public virtual void OnShiedExit()
+        {
+            blocked = false;
+        }
+
+        #endregion
         public virtual void StartAttackCoroutine()
         {
             _atkCoroutine = _kaiju.StartCoroutine(AttackCoroutine());

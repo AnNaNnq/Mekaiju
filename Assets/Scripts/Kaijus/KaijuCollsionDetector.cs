@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class KaijuCollsionDetector : MonoBehaviour
 {
-    public event Action<MechaInstance> OnMechaEnter;
-    public event Action<MechaInstance> OnMechaExit;
+    public event Action<MechaPartInstance> OnMechaEnter;
+    public event Action<MechaPartInstance> OnMechaExit;
 
     public event Action OnGround;
 
+    public event Action OnShieldEnter;
+    public event Action OnShieldExit;
+
     private void OnTriggerEnter(Collider other)
     {
-        MechaInstance mecha = other.GetComponent<MechaInstance>();
+        MechaPartInstance mecha = other.GetComponent<MechaPartInstance>();
         if (mecha != null)
         {
             OnMechaEnter?.Invoke(mecha);
@@ -21,14 +24,24 @@ public class KaijuCollsionDetector : MonoBehaviour
         {
             OnGround?.Invoke();
         }
+
+        if (other.CompareTag("Shield"))
+        {
+            OnShieldEnter?.Invoke();
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        MechaInstance mecha = other.GetComponent<MechaInstance>();
+        MechaPartInstance mecha = other.GetComponent<MechaPartInstance>();
         if (mecha != null)
         {
             OnMechaExit?.Invoke(mecha);
+        }
+
+        if (other.CompareTag("Shield"))
+        {
+            OnShieldExit?.Invoke();
         }
     }
 }
