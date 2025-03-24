@@ -1402,8 +1402,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -630, y: -477.8}
-  m_SizeDelta: {x: -1361.3394, y: -1031.6099}
+  m_AnchoredPosition: {x: 161.14, y: -330.09253}
+  m_SizeDelta: {x: -963.06, y: -919.4248}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4063167506037753474
 CanvasRenderer:
@@ -1534,7 +1534,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &515631359841714364
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1579,6 +1579,7 @@ GameObject:
   - component: {fileID: 8144278535650351251}
   - component: {fileID: 6647700877561327072}
   - component: {fileID: 7425341139336172446}
+  - component: {fileID: 1473049909002282382}
   - component: {fileID: 7579709231802975342}
   - component: {fileID: 8477588907306868650}
   - component: {fileID: 4177794940174465364}
@@ -1690,7 +1691,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4445705561929065140}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 377558a6bf93d4ecabfb3fb1eb9646d7, type: 3}
   m_Name: 
@@ -1706,6 +1707,23 @@ MonoBehaviour:
   healthBarUI: {fileID: 7850165892825906334}
   effectTimeRing: {fileID: 6057416687059006310, guid: ad9ff04be0a656e4eae5e87024371992, type: 3}
   effectTimeList: {fileID: 0}
+  capacityPrefab: {fileID: 9051996878209285898, guid: ffa0752a1b712c344ba3847bb34fcd58, type: 3}
+  capacitiesList: {fileID: 4392403916865384035}
+--- !u!114 &1473049909002282382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4445705561929065140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c90b443e9f346f45b75621a243a700c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarUI: {fileID: 7850165892825906334}
+  effect: {fileID: 5882815357681125857, guid: ad9ff04be0a656e4eae5e87024371992, type: 3}
+  effectsList: {fileID: 9077810304970783289}
   capacityPrefab: {fileID: 9051996878209285898, guid: ffa0752a1b712c344ba3847bb34fcd58, type: 3}
   capacitiesList: {fileID: 4392403916865384035}
 --- !u!114 &7579709231802975342

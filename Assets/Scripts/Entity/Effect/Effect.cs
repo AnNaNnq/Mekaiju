@@ -1,5 +1,7 @@
 using Mekaiju.Attributes;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 namespace Mekaiju.Entity.Effect
 {
@@ -11,7 +13,14 @@ namespace Mekaiju.Entity.Effect
         /// </summary>
         [field: SerializeField]
         public string description { get; private set; }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [field: SerializeField]
+        public Sprite[] effectImages = new Sprite[4];
+
+
         /// <summary>
         /// 
         /// </summary>
