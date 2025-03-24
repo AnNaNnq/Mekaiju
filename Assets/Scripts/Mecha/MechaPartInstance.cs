@@ -36,6 +36,11 @@ namespace Mekaiju
         private float _health;
 
         /// <summary>
+        /// Store the alteration applies to ability (in case we have to revert it).
+        /// </summary>
+        private IAlteration _alteration;
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="p_inst"></param>
@@ -47,6 +52,8 @@ namespace Mekaiju
 
             _desc   = p_desc;
             _health = baseHealth;
+
+            _alteration = null;
 
             _desc.ability.behaviour?.Initialize(this);
         }
@@ -86,6 +93,12 @@ namespace Mekaiju
             {
                 var t_taken = Mathf.Min(p_damage, _health);
                 _health = Math.Max(0f, _health - p_damage);
+
+                if (_alteration == null && _health < (mecha.desc.partTreshold / 100f) * baseHealth)
+                {
+                    _alteration = _desc.ability.behaviour.Alter(_desc.ability.healthTuneAlteration);
+                }
+
                 return Mathf.Max(t_taken, t_recover);
             }
 
@@ -103,6 +116,13 @@ namespace Mekaiju
             {
                 var t_health = _health;
                 _health = Mathf.Min(baseHealth, _health + p_amount);
+
+                if (_alteration != null && _health > (mecha.desc.partTreshold / 100f) * baseHealth)
+                {
+                    _desc.ability.behaviour.Revert(_alteration);
+                    _alteration = null;
+                }
+
                 return _health - t_health;
             }
 

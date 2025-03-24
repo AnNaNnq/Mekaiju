@@ -143,7 +143,6 @@ namespace Mekaiju
 
                 if (Mathf.Abs(_direction.sqrMagnitude) > 0)
                 {
-                    Debug.Log(_runtimeForce);
                     state = AbilityState.Active;
                     _animationState = AnimationState.Idle;
 
