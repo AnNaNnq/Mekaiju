@@ -15,7 +15,9 @@ namespace Mekaiju.AI.PhaseAttack
         [Separator("Charge")]
         public float chargeDuration = 1.0f;
         public float chargeSpeed = 10000;
+        [Separator("Jump")]
         public float verticalBoost = 1000f;
+        public float jumpHorizontalBoost = 100f;
         public int nbJump = 5;
 
         [Separator("Loose QTE")]
@@ -38,10 +40,10 @@ namespace Mekaiju.AI.PhaseAttack
 
             _target = _kaiju.target.transform;
             _currentJump = 0;
-            _kaiju.StartCoroutine(RecursiceJump());
+            _kaiju.StartCoroutine(RecursiveJump());
         }
 
-        IEnumerator RecursiceJump()
+        IEnumerator RecursiveJump()
         {
             Vector3 t_targetPosition = _kaiju.GetTargetPos();
             Vector3 t_startPos = _kaiju.transform.position;
@@ -49,7 +51,7 @@ namespace Mekaiju.AI.PhaseAttack
 
             ICharge t_charge = this;
 
-            yield return t_charge.Charge(_kaiju, chargeSpeed, chargeDuration, verticalBoost, 0);
+            yield return t_charge.Charge(_kaiju, chargeSpeed, chargeDuration, jumpHorizontalBoost, 0);
 
             _currentJump++;
 
@@ -60,7 +62,7 @@ namespace Mekaiju.AI.PhaseAttack
 
             if (_currentJump < nbJump)
             {
-                _kaiju.StartCoroutine(RecursiceJump());
+                _kaiju.StartCoroutine(RecursiveJump());
             }
             else
             {
@@ -98,6 +100,22 @@ namespace Mekaiju.AI.PhaseAttack
             ICharge t_charge = this;
             yield return t_charge.Charge(_kaiju, chargeSpeed, chargeDuration);
             _kaiju.brain.isStopped = false;
+        }
+
+        void HandleCollision(Collision p_collision)
+        {
+            if (!p_collision.collider.CompareTag("Ground") && !p_collision.collider.CompareTag("Kaiju"))
+            {
+                _rb.angularVelocity = Vector3.zero;
+                _rb.linearVelocity = Vector3.zero;
+                _kaiju.motor.StartKaiju();
+            }
+            if (p_collision.collider.CompareTag("Player"))
+            {
+                float t_damage = _kaiju.GetRealDamage(damage);
+                MechaInstance t_mecha = p_collision.collider.GetComponent<MechaInstance>();
+                t_mecha.TakeDamage(_kaiju, t_damage, Entity.DamageKind.Direct);
+            }
         }
 
     }

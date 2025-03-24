@@ -20,14 +20,15 @@ MonoBehaviour:
     - rid: 7914790932822622416
       type: {class: BaragorPhaseChange, ns: Mekaiju.AI.PhaseAttack, asm: Assembly-CSharp}
       data:
-        canMakeDamage: 0
-        damage: 50
+        canMakeDamage: 1
+        damage: 1000
         blockable: 0
         time: 10
         quantity: 5
         chargeDuration: 0.5
-        chargeSpeed: 1000
-        verticalBoost: 3000
+        chargeSpeed: 2000
+        verticalBoost: 2500
+        jumpHorizontalBoost: 1000
         nbJump: 5
         healAmountWhenFail: 50
         wave:
