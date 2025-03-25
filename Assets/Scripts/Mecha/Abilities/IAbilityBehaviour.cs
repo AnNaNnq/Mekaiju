@@ -37,7 +37,7 @@ namespace Mekaiju
         /// <summary>
         /// Return the ability state.
         /// </summary>
-        public AbilityState state { get; protected set; }
+        public State<AbilityState> state { get; protected set; } = new(AbilityState.Ready);
 
         /// <summary>
         /// Return the remaining cooldown time
@@ -50,7 +50,7 @@ namespace Mekaiju
         /// <param name="p_self">The instance where the ability is loaded.</param>
         public virtual void Initialize(EntityInstance p_self) 
         {
-            state = AbilityState.Ready;
+            state.Set(AbilityState.Ready);
         }
 
         /// <summary>

@@ -148,8 +148,8 @@ namespace Mekaiju
         public override EnumArray<StatisticKind, ModifierCollection> modifiers   => parent.modifiers;
         public override EnumArray<StatisticKind, IStatistic>        statistics => parent.statistics;
 
-        public override EnumArray<TimePoint, float>  timePoints => parent.timePoints;
-        public override EnumArray<StateKind, State> states     => parent.states;
+        public override EnumArray<TimePoint, float>        timePoints => parent.timePoints;
+        public override EnumArray<StateKind, State<bool>> states     => parent.states;
 
         public override UnityEvent<IDamageable, float, DamageKind> onBeforeTakeDamage => parent.onBeforeTakeDamage;
         public override UnityEvent<IDamageable, float, DamageKind> onAfterTakeDamage  => parent.onAfterTakeDamage;

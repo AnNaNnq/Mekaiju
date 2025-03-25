@@ -112,7 +112,7 @@ namespace Mekaiju
         {
             if (IsAvailable(p_self, p_opt))
             {
-                state = AbilityState.Active;
+                state.Set(AbilityState.Active);
                 
                 var t_sMod = p_self.modifiers[StatisticKind.Speed].Add(_speedModifier / 100f, ModifierKind.Percent);
                 p_self.states[StateKind.Protected].Set(true);
@@ -139,7 +139,7 @@ namespace Mekaiju
                 _SetVFXState(_vfxBreak, false);
 
                 _isStopRequested = false;
-                state = AbilityState.Ready;
+                state.Set(AbilityState.Ready);
             }
         }
 

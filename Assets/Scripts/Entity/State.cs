@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,20 +30,20 @@ namespace Mekaiju.Entity
         Grounded,
     }
 
-    public class State
+    public class State<T>
     {
-        public UnityEvent<bool> onChange;
+        public UnityEvent<T, T> onChange;
 
-        private bool _state;
+        private T    _state;
         private bool _locked;
         private Guid _guid;
 
-        public State()
+        public State(T p_init)
         {
             onChange = new();
 
             _locked = false;
-            _state  = false;
+            _state  = p_init;
             _guid   = Guid.Empty;
         }
 
@@ -49,7 +51,7 @@ namespace Mekaiju.Entity
         /// Return the state (see bool operator).
         /// </summary>
         /// <returns>The state.</returns>
-        public bool Get()
+        public T Get()
         {
             return _state;
         }
@@ -58,12 +60,13 @@ namespace Mekaiju.Entity
         /// Try to set the current state if not locked.
         /// </summary>
         /// <param name="p_state">The new state.</param>
-        public void Set(bool p_state)
+        public void Set(T p_state)
         {
-            if (!_locked && _state != p_state)
+            if (!_locked && !EqualityComparer<T>.Default.Equals(_state, p_state))
             {
+                var prev_state = _state;
                 _state = p_state;
-                onChange.Invoke(_state);
+                onChange.Invoke(prev_state, _state);
             }
         }
 
@@ -130,7 +133,7 @@ namespace Mekaiju.Entity
             return p_guid == _guid;
         }
 
-        public static implicit operator bool(State p_state)
+        public static implicit operator T (State<T> p_state)
         {
             return p_state._state;
         }
