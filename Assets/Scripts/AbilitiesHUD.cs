@@ -1,11 +1,10 @@
-using Mekaiju;
-using MyBox;
 using System.Collections;
-using System.Collections.Generic;
+using Mekaiju;
 using UnityEngine;
 using UnityEngine.UI;
+using Mekaiju.Utils;
 
-public class TempAbilitiesHUD : MonoBehaviour
+public class AbilitiesHUD : MonoBehaviour
 {
     private MechaInstance _inst;
 
@@ -37,15 +36,15 @@ public class TempAbilitiesHUD : MonoBehaviour
     {
         _inst.desc.parts.ForEach((t_part, t_desc) =>
         {
-            if (t_part.ability != null && t_part.ability.showInHUD)
+            if (t_desc.ability != null && t_part != MechaPart.Legs)
             {
                 GameObject t_obj = Instantiate(CapacityPrefab, CapacityContainerObj.transform);
                 Image t_img = t_obj.GetComponent<Image>();
                 CapacityImage t_capImg = t_obj.GetComponent<CapacityImage>();
 
-                t_img.sprite = t_part.ability.icon;
-                t_obj.name = t_part.ability.name + "_img";
-                t_capImg.Init(t_part.ability.behaviour);
+                t_img.sprite = t_desc.ability.icon;
+                t_obj.name = t_desc.ability.name + "_img";
+                t_capImg.Init(t_desc.ability.behaviour);
             }
         });
     }

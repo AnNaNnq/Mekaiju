@@ -21,6 +21,12 @@ public class CapacityImage : MonoBehaviour
 
     void UpdateImage()
     {
-        if(_ability.state == AbilityState.InCooldown) cooldownImage.fillAmount = _ability.cooldown;
+        switch (_ability.state)
+        {
+            case AbilityState.InCooldown: cooldownImage.fillAmount = _ability.cooldown; break;
+            case AbilityState.Active: cooldownImage.fillAmount = 1; break;
+            case AbilityState.Ready: cooldownImage.fillAmount = 0; break;
+        }
+
     }
 }
