@@ -13,16 +13,16 @@ namespace Mekaiju.AI
 
         private KaijuAttackContainer _attackGraph;
         private KaijuMotor _motor;
-        [Header("Pas touche c'est juste du debug")]
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private string _lastAttack;
 
         [SerializeField, ReadOnly]
         KaijuAttack _currentAttack;
 
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private bool _canAttack = true;
 
+        [ReadOnly]
         public bool isStopped = false;
 
         public KaijuAttack[] allAttacks { get { return _allAttacks; } }
