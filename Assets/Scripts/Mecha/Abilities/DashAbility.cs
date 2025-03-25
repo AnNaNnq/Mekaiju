@@ -128,7 +128,7 @@ namespace Mekaiju
 
                 if (Mathf.Abs(_direction.sqrMagnitude) > 0)
                 {
-                    state = AbilityState.Active;
+                    state.Set(AbilityState.Active);
                     _animationState = AnimationState.Idle;
 
                     ConsumeStamina(p_self);
@@ -157,7 +157,7 @@ namespace Mekaiju
 
                     yield return WaitForCooldown();
 
-                    state = AbilityState.Ready;
+                    state.Set(AbilityState.Ready);
                 }
             }
 

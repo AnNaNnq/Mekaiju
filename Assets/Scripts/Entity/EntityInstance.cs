@@ -33,7 +33,7 @@ namespace Mekaiju.Entity
         /// <summary>
         /// Define usefull states on an entity
         /// </summary>
-        public virtual EnumArray<StateKind, State> states { get; } = new(() => new());
+        public virtual EnumArray<StateKind, State<bool>> states { get; } = new(() => new(false));
 
         /// <summary>
         /// Bind base entity stats.
