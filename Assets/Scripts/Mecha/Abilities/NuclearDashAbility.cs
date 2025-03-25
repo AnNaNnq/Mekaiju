@@ -52,7 +52,7 @@ namespace Mekaiju
         {
             if (IsAvailable(p_self, p_opt))
             {
-                state = AbilityState.Active;
+                state.Set(AbilityState.Active);
 
                 p_self.ConsumeStamina(_consumption);
 
@@ -60,12 +60,12 @@ namespace Mekaiju
                 yield return new WaitForSeconds(_duration);
                 _dashAbility.behaviour.Alter(_reset);
 
-                state = AbilityState.InCooldown;
+                state.Set(AbilityState.InCooldown);
 
                 _currentCooldown = _cooldown;
                 yield return new WaitUntil(() => (_currentCooldown -= Time.deltaTime) <= 0);
 
-                state = AbilityState.Ready;
+                state.Set(AbilityState.Ready);
             }
         }
     }
