@@ -4,10 +4,13 @@ using UnityEngine;
 
 namespace Mekaiju.AI.Attack
 {
-    public class ShatteringJump : ChockWave
+    public class ShatteringJump : Attack, IShockWave
     {
         [Separator("Jump")]
         public float jumpForce = 100f;
+
+        [Separator("ShockWave")]
+        public ShockWaveStat wave;
 
         [Separator("Electric Zone")]
         public GameObject electricZonePrefab;
@@ -28,7 +31,8 @@ namespace Mekaiju.AI.Attack
             if(stat == 1)
             {
                 _kaiju.animator.AttackAnimation("Grounded");
-                LunchWave();
+                IShockWave t_wave = this;
+                t_wave.LaunchWave(wave, _kaiju.transform);
                 stat = 2;
             }
         }
@@ -38,6 +42,7 @@ namespace Mekaiju.AI.Attack
             base.Active(p_kaiju);
 
             _kaiju.animator.AttackAnimation("Jump");
+            wave.kaiju = _kaiju;
         }
 
         public override void OnAction()

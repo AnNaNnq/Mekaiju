@@ -54,7 +54,8 @@ namespace Mekaiju.Entity
         /// Heals the entity by restoring a specified amount of health points.
         /// </summary>
         /// <param name="p_amount">The amount of health to restore.</param>
-        public void Heal(float p_amount);
+        /// <returns>The real amount of health restored.</returns>
+        public float Heal(float p_amount);
 
         /// <summary>
         /// Inflicts damage on the entity, reducing its health points.
@@ -62,6 +63,7 @@ namespace Mekaiju.Entity
         /// <param name="p_from">The source of damage. Should be null if p_kind is Indirect</param>
         /// <param name="p_damage">The amount of damage to deal.</param>
         /// <param name="p_kind">The type of damage being dealt.</param>
-        public void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind);
+        /// <returns>The real damage taken.</returns>
+        public float TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind);
     }
 }
