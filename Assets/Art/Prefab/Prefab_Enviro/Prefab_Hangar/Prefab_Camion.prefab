@@ -11,9 +11,7 @@ GameObject:
   - component: {fileID: 7142495966458627892}
   - component: {fileID: 6102630006622668945}
   - component: {fileID: 8310287972238015579}
-  - component: {fileID: 5586610726927405551}
-  - component: {fileID: 7481240110105839315}
-  - component: {fileID: 6535490759327789800}
+  - component: {fileID: 9162803609603508628}
   m_Layer: 3
   m_Name: Prefab_Camion
   m_TagString: Untagged
@@ -89,8 +87,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5586610726927405551
-BoxCollider:
+--- !u!64 &9162803609603508628
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -107,48 +105,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.021535892, y: 0.047942035, z: 0.021068387}
-  m_Center: {x: 0.00000000187589, y: 0.00015271468, z: 0.010569874}
---- !u!65 &7481240110105839315
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7517895987493150094}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.021535892, y: 0.013045902, z: 0.017305166}
-  m_Center: {x: 0.0000000020089412, y: 0.031557817, z: 0.00868825}
---- !u!65 &6535490759327789800
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7517895987493150094}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.014619061, y: 0.0145832915, z: 0.010112922}
-  m_Center: {x: 0.00016042279, y: 0.04339575, z: 0.005092144}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1917348887596186450, guid: a87781bec04a838459aefbe181bce39e, type: 3}
