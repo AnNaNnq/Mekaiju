@@ -87,7 +87,7 @@ namespace Mekaiju
         {
             if (IsAvailable(p_self, p_opt))
             {
-                state = AbilityState.Active;
+                state.Set(AbilityState.Active);
                 _animationState = AnimationState.Idle;
 
                 ConsumeStamina(p_self);
@@ -148,7 +148,7 @@ namespace Mekaiju
 
                 yield return WaitForCooldown();
 
-                state = AbilityState.Ready;
+                state.Set(AbilityState.Ready);
             }
         }
 
