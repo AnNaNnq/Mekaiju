@@ -1,144 +1,191 @@
-using System;
 using System.Collections;
 using Mekaiju.AI;
+using Mekaiju.Entity;
+using Mekaiju.AI.Body;
+using MyBox;
 using UnityEngine;
+using Unity.Cinemachine;
+using System;
 
 namespace Mekaiju
 {
+    [Serializable]
+    public class RailGunPayload : IPayload
+    {
+        public float damage;
+    }
 
     /// <summary>
     /// 
     /// </summary>
-    public class RailGunAbility : IAbilityBehaviour
+    public class RailGunAbility : IStaminableAbility
     {
+#region Parameters
         /// <summary>
-        /// 
+        /// The damage factor (multiply the mecha damage stat)
         /// </summary>
-        [SerializeField]
-        private float _damage;
+        [Tooltip("The damage factor (multiply the mecha damage stat).")]
+        [SerializeField, Range(0f, 5f)]
+        private float _damageFactor;
 
         /// <summary>
-        /// Max bullet throw per minute
+        /// The projectil prefab to be thrown (must contain WeaponBullet comp)
         /// </summary>
-        [SerializeField]
-        private int _rateOfFire;
-
-        /// <summary>
-        /// Projectile speed in m/s
-        /// </summary>
-        [SerializeField]
-        private float _projectileSpeed;
-
-        /// <summary>
-        /// Projectile prefab (must contain WeaponBullet comp)
-        /// </summary>
+        [Header("Projectile")]
+        [Tooltip("The projectil prefab to be thrown")]
         [SerializeField]
         private GameObject _projectile;
 
         /// <summary>
-        /// Stamina consumption for a shot
+        /// The projectil speed in m/s
         /// </summary>
-        [SerializeField]
-        private int _consumption;
+        [Tooltip("The projectil speed in m/s")]
+        [SerializeField, PositiveValueOnly]
+        private float _projectileSpeed;
 
-        private float _lastTriggerTime;
-        private float _minTimeBetweenFire => 1f / (_rateOfFire / 60f);
+        /// <summary>
+        /// The impact vfx prefab
+        /// </summary>
+        [Header("Impact")]
+        [Tooltip("The impact vfx")]
+        [SerializeField]
+        private GameObject _impactVfx;
+
+        /// <summary>
+        /// The impact decal prefab (used to project the impact decal)
+        /// </summary>
+        [Tooltip("The impact decal prefab")]
+        [SerializeField]
+        private GameObject _impactDecal;
+
+        [SerializeField]
+        private string _launchPosition;
+
+#endregion
+
         private float _endTriggerTimout    = 5f;
         private float _actionTriggerTimout = 5f;
+        private float _projectileDestructionTimout = 10f;
 
-        private bool _isActive;
-        private bool _isAnimationAction;
-        private bool _isAnimationEnd;
+        private float _runtimeDamageFactor;
 
-        public override void Initialize(MechaPartInstance p_self)
+        private Transform          _launchTransform;
+        private CinemachineCamera  _camera;
+        private AnimationState     _animationState;
+        private MechaAnimatorProxy _animationProxy;
+
+        public override void Initialize(EntityInstance p_self)
         {
-            _lastTriggerTime = 0f;
-            _isActive = false;
-            _isAnimationAction = false;
-            _isAnimationEnd    = false;
-            p_self.mecha.context.animationProxy.onRArm.AddListener(_OnAnimationEvent);
-        }
+            base.Initialize(p_self);
 
-        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
-        {
-            return !_isActive && Time.time - _lastTriggerTime >= _minTimeBetweenFire && p_self.mecha.stamina - _consumption >= 0f;
-        }
+            _runtimeDamageFactor = _damageFactor;
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
-        {
-            var t_now     = Time.time;
-            var t_elapsed = t_now - _lastTriggerTime;
-            if (t_elapsed >= _minTimeBetweenFire)
+            _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
+
+            if (!_animationProxy)
             {
-                _isActive = true;
-                _lastTriggerTime = t_now;
+                Debug.LogWarning("Unable to find animator proxy on mecha!");
+            }
 
-                p_self.mecha.context.animationProxy.animator.SetTrigger("RArm");
+            _launchTransform = p_self.parent.transform.FindNested(_launchPosition);
+            _camera          = GameObject.FindWithTag("MainCamera").GetComponent<CinemachineCamera>();
+
+            _animationProxy.onRArm.AddListener(_OnAnimationEvent);
+        }
+
+        public override IAlteration Alter<T>(T p_payload)
+        {
+            if (p_payload is RailGunPayload t_casted)
+            {
+                RailGunPayload t_diff = new();
+
+                _runtimeDamageFactor += (t_diff.damage = _damageFactor * t_casted.damage);
+
+                return new Alteration<RailGunPayload>(t_casted, t_diff);
+            }
+            return null;
+        }
+
+        public override void Revert(IAlteration p_payload)
+        {
+            if (p_payload is Alteration<RailGunPayload> t_casted)
+            {
+                _runtimeDamageFactor -= t_casted.diff.damage;
+            }
+        }
+
+        public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
+        {
+            if (IsAvailable(p_self, p_opt))
+            {
+                state.Set(AbilityState.Active);
+                _animationState = AnimationState.Idle;
+
+                ConsumeStamina(p_self);
+
+                p_self.states[StateKind.MovementLocked].Set(true);
+
+                _animationProxy.animator.SetTrigger("RArm");
+
+                p_self.parent.GetComponent<PlayerController>().SetArmTargeting(true);
 
                 // Wait for animation action
                 float t_timout = _actionTriggerTimout;
-                yield return new WaitUntil(() => _isAnimationAction || (t_timout -= Time.deltaTime) <= 0);
-                _isAnimationAction = false;
-
-                p_self.mecha.ConsumeStamina(_consumption);
-
-                // Compute travel time
-                var t_dist = Vector3.Distance(p_self.transform.position, p_target.transform.position);
-                var t_time = t_dist / _projectileSpeed;
-
-                bool t_hasCollide = false;
+                yield return new WaitUntil(() => _animationState == AnimationState.Trigger || (t_timout -= Time.deltaTime) <= 0);
 
                 // Setup projectile and launch
-                var t_go = GameObject.Instantiate(_projectile);
-                var t_wb = t_go.GetComponent<WeaponBullet>();
-                t_wb.transform.position = p_self.transform.position + new Vector3(0, 2.5f, 0) + (2 * p_self.mecha.transform.forward);
+                Vector3 t_direction = _camera.transform.forward.normalized;
+
+                Vector3    t_position = _launchTransform.position + (2f * _camera.transform.forward);
+                Quaternion t_rotation = Quaternion.LookRotation(t_direction) * Quaternion.Euler(Vector3.up * 90f);
+                var t_wb = GameObject.Instantiate(_projectile, t_position, t_rotation).GetComponent<WeaponBullet>();
+
                 t_wb.OnCollide.AddListener(
-                    collision => {
-                        if (collision.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
+                    (t_go, t_collision) => 
+                    {
+                        if (t_collision.collider.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
                         {
-                            t_hasCollide = true;
+                            var t_damage = _runtimeDamageFactor * p_self.statistics[StatisticKind.Damage].Apply<float>(p_self.modifiers[StatisticKind.Damage]);
+                            t_bpo.TakeDamage(p_self.parent, t_damage, DamageKind.Direct);
+                            p_self.onDealDamage.Invoke(t_damage);
                         }
+
+                        // Compute tranform for both vfx and decal
+                        var t_contact = t_collision.GetContact(0);
+                        var t_contactPosition = t_contact.point + t_contact.normal * 0.5f;
+                        var t_contactRotation = Quaternion.FromToRotation(Vector3.back, t_contact.normal);
+
+                        // Instanciate vfx
+                        var t_vfx = GameObject.Instantiate(_impactVfx, t_contactPosition, t_contactRotation);
+                        GameObject.Destroy(t_vfx, 1);
+
+                        // Instanciate decal
+                        var t_decal = GameObject.Instantiate(_impactDecal, t_contactPosition, t_contactRotation);
+                        GameObject.Destroy(t_decal, 10f);
+
+                        GameObject.Destroy(t_go);
                     }
                 );
-                t_wb.Launch(p_self.transform.forward.normalized * _projectileSpeed, p_self.mecha.transform.forward);
-                
-
-                // Wait for bullet travel
-                t_timout = t_time;
-                yield return new WaitUntil(() => t_hasCollide || (t_timout -= Time.deltaTime) <= 0);
-
-                // Make damage if projectile has collide
-                if (t_hasCollide)
-                {
-                    var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue(_damage);
-                    // @TODO: wait for parameter to be float
-                    p_target.TakeDamage((int)t_damage);
-                    p_self.onDealDamage.Invoke(t_damage);
-                }
-                GameObject.Destroy(t_go);
+                t_wb.Launch(t_direction * _projectileSpeed);
+                t_wb.Timout(_projectileDestructionTimout);
 
                 // Wait for animation end
                 t_timout = _endTriggerTimout;
-                yield return new WaitUntil(() => _isAnimationEnd || (t_timout -= Time.deltaTime) <= 0);
+                yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
 
-                _isAnimationEnd = false;
-                _isActive       = false;
+                p_self.parent.GetComponent<PlayerController>().SetArmTargeting(false);
+                
+                p_self.states[StateKind.MovementLocked].Set(false);
+
+                yield return WaitForCooldown();
+
+                state.Set(AbilityState.Ready);
             }
         }
 
-        private void _OnAnimationEvent(AnimationEventType p_eType)
+        private void _OnAnimationEvent(AnimationEvent p_event)
         {
-            switch (p_eType)
-            {
-                case AnimationEventType.Action:
-                    _isAnimationAction = true;
-                    break;
-                case AnimationEventType.End:
-                    _isAnimationEnd = true;
-                    break;
-                default:
-                    break;
-            }
+            _animationState = p_event.state;
         }
     }
 

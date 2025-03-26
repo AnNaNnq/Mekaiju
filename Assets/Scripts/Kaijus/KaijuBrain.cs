@@ -1,25 +1,29 @@
+using Mekaiju.AI.Objet;
 using Mekaiju.Utils;
-using System.Collections;
+using MyBox;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Mekaiju.AI
 {
-    [RequireComponent(typeof(KaijuInstance))]
-    [RequireComponent(typeof(KaijuMotor))]
     public class KaijuBrain : MonoBehaviour
     {
         KaijuInstance _instance;
 
         private KaijuAttackContainer _attackGraph;
         private KaijuMotor _motor;
-        [Header("Pas touche c'est juste du debug")]
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private string _lastAttack;
 
-        [SerializeField]
+        [SerializeField, ReadOnly]
+        KaijuAttack _currentAttack;
+
+        [SerializeField, ReadOnly]
         private bool _canAttack = true;
+
+        [ReadOnly]
+        public bool isStopped = false;
 
         public KaijuAttack[] allAttacks { get { return _allAttacks; } }
         private KaijuAttack[] _allAttacks;
@@ -31,7 +35,10 @@ namespace Mekaiju.AI
             _attackGraph = _instance.GetGraph();
             _allAttacks = LoadAllAttacks();
             _lastAttack = "Start";
-            StartCoroutine(CheckAttack());
+            foreach(KaijuAttack attack in _allAttacks)
+            {
+                attack.attack.Init();
+            }
         }
 
         public void StarFight()
@@ -42,6 +49,11 @@ namespace Mekaiju.AI
             List<string> t_startAttack = GetNextNodes(t_GUID);
             
             Attack(t_startAttack);
+        }
+
+        public void ResetAttack()
+        {
+            _lastAttack = "Start";
         }
 
         public string GetGUIDStartWithName(string p_name)
@@ -90,11 +102,11 @@ namespace Mekaiju.AI
         public KaijuAttack[] LoadAllAttacks()
         {
             // Charger tous les ScriptableObjects de type Attack dans Resources/Kaijus/Attacks
-            KaijuAttack[] t_attacks = Resources.LoadAll<KaijuAttack>("Kaijus/Attacks");
+            KaijuAttack[] t_attacks = Resources.LoadAll<KaijuAttack>("Kaijus");
 
             if (t_attacks == null || t_attacks.Length == 0)
             {
-                Debug.LogWarning("Aucun attack ScriptableObject trouvé dans Resources/Kaijus/Attacks");
+                Debug.LogWarning("Aucun attack ScriptableObject trouvé dans Resources/Kaijus");
             }
 
             return t_attacks;
@@ -111,12 +123,26 @@ namespace Mekaiju.AI
 
         public void Attack(List<string> p_attackGUID)
         {
+            if (isStopped) return;
+
+            List<KaijuPassive> t_activePassives = _instance.GetPassivesActive();
+            if (t_activePassives.Count > 0)
+            {
+                foreach (KaijuPassive passive in t_activePassives)
+                {
+                    passive.passive.Run(_instance);
+                }
+                _canAttack = false;
+                return;
+            }
+
             if (!_canAttack)
             {
                 if (_motor.agent.enabled == false && !_motor.agent.isOnNavMesh) return;
-                _motor.MoveTo(_instance.target.transform.position, 100);
+                _motor.MoveTo(_instance.target.transform.position);
                 return;
             }
+
 
             List<KaijuAttack> t_kaijuAttacks = PotentialAttacks(p_attackGUID);
 
@@ -126,17 +152,21 @@ namespace Mekaiju.AI
                 if (i < t_kaijuAttacks.Count - 1)
                 {
                     t_canAttack = t_kaijuAttacks[i].attack.CanUse(_instance, t_kaijuAttacks[i+1].attack.range);
+                    _currentAttack = t_kaijuAttacks[i];
                 }
                 else
                 {
                     t_canAttack = t_kaijuAttacks[i].attack.CanUse(_instance);
+                    _currentAttack = t_kaijuAttacks[i];
                 }
 
                 if (t_canAttack)
                 {
-                    _motor.Stop();
+                    _motor.StopKaiju();
                     _motor.LookTarget();
-                    t_kaijuAttacks[i].attack.Active(_instance);
+                    Debug.Log($"Le kaiju lance l'attaque {t_kaijuAttacks[i].name}");
+                    StartCoroutine(t_kaijuAttacks[i].attack.Lunch(_instance));
+                    //t_kaijuAttacks[i].attack.Active(_instance);
                     _lastAttack = t_kaijuAttacks[i].name;
                     _canAttack = false;
                     return;
@@ -153,13 +183,25 @@ namespace Mekaiju.AI
             StartCoroutine(UtilsFunctions.CooldownRoutine(_instance.timeBetweenTowAction, () => { _canAttack = true; }));
         }
 
-        IEnumerator CheckAttack()
+        public void AttackTrigger()
         {
-            while (true)
-            {
-                yield return new WaitForSeconds(_instance.timeBetweenTowAction + 1);
-                _canAttack = true;
-            }
+            _currentAttack.attack.OnAction();
+        }
+
+        public void EndTrigger()
+        {
+            _currentAttack.attack.OnEnd();
+            MakeAction();
+        }
+
+        public void StartAttackCoroutineTrigger()
+        {
+            _currentAttack.attack.StartAttackCoroutine();
+        }
+
+        public void StopAttackCoroutineTrigger()
+        {
+            _currentAttack.attack.StopAttackCoroutine();
         }
     }
 }

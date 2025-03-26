@@ -4,33 +4,73 @@ using System.Collections.Generic;
 using MyBox;
 using System.Linq;
 using Mekaiju.Attribute;
-using Mekaiju.Utils;
 using System;
 using System.Collections;
+using Mekaiju.Entity;
+using Mekaiju.AI.Objet;
+using Mekaiju.AI.Body;
+using Mekaiju.AI.Behavior;
 
 namespace Mekaiju.AI
 {
     [RequireComponent(typeof(KaijuBrain))]
     [RequireComponent(typeof(KaijuMotor))]
     [RequireComponent(typeof(KaijuAnimatorController))]
-    public class KaijuInstance : IEntityInstance
+    [RequireComponent(typeof(Rigidbody))]
+    public class KaijuInstance : EntityInstance
     {
-        [Header("General")]
+        #region variable
+        [Separator("General")]
         [Tag] public string targetTag;
         public KaijuStats stats;
         public BodyPart[] bodyParts;
 
-        [Separator]
+        [Separator("Behavior")]
         [field: SerializeReference, SubclassPicker]
         public List<KaijuBehavior> behaviors = new List<KaijuBehavior>();
-        public float timeBetweenTowAction = 1f;
+
+        public List<KaijuPassive> passives;
+       
+        [SOSelector]
+        [OverrideLabel("Attack Graph (Phase 1)")]
+        public KaijuAttackContainer attackGraphPhaseOne;
+        [SOSelector]
+        [OverrideLabel("Attack Graph (Phase 2)")]
+        public KaijuAttackContainer attackGraphPhaseTow;
+        public float timeBetweenTowAction;
+
+        [Separator("Phases")]
+        public int currentPhase = 2;
+        [Separator]
+        public KaijuPhaseAttack changePhaseAction;
+
+        [Separator("Health")]
+        [ReadOnly, SerializeField] private float currentHealth = 0;
+        public float reduceDamageWhenDestroy = 2;
+
+        [Separator("Movement")]
+        public float stoppingDistanceMin = 10;
+
+        [Separator("Debug")]
+        public bool checkRange;
+        [ConditionalField(nameof(checkRange))] public float debugRange;
+        [ReadOnly] public float dps;
+
+        private KaijuDebug _debug;
+
+        [Separator("Pas touche")]
+        public KaijuCollsionDetector detector;
+
+        [Separator("Instance")]
+        bool _isInFight;
+
+        #endregion
+
+        #region variable composant
+        public event Action<Collision> OnCollision;
         
         [field: SerializeField]
-        public List<StatefullEffect> effects { get; private set; }
         public InstanceContext context { get; private set; }
-
-        [SerializeField]
-        private bool _canBehaviorSwitch = true;
 
         public GameObject target { get; private set; }
 
@@ -39,6 +79,10 @@ namespace Mekaiju.AI
 
         protected KaijuMotor _motor;
 
+        public Rigidbody rb { get { return _rb; } }
+
+        private Rigidbody _rb;
+
         public KaijuBrain brain { get { return _brain; } }
 
         private KaijuBrain _brain;
@@ -46,30 +90,12 @@ namespace Mekaiju.AI
         public KaijuAnimatorController animator { get { return _animation; } }
 
         private KaijuAnimatorController _animation;
+        #endregion
 
-        [SerializeField]
-        private int _currentPhase = 2;
-
-        [SOSelector]
-        [OverrideLabel("Attack Graph (Phase 1)")]
-        public KaijuAttackContainer attackGraphPhaseOne;
-        [SOSelector]
-        [OverrideLabel("Attack Graph (Phase 2)")]
-        public KaijuAttackContainer attackGraphPhaseTow;
-
-        [Separator]
-        [Header("Debug")]
-        public bool checkRange;
-        [ConditionalField(nameof(checkRange))] public float debugRange;
-        public float dps;
-
-        private KaijuDebug _debug;
-
-        bool _isInFight;
-
+        #region Kaiju Function
         public KaijuAttackContainer GetGraph()
         {
-            if (_currentPhase == 1) return attackGraphPhaseOne;
+            if (currentPhase == 1) return attackGraphPhaseOne;
             else return attackGraphPhaseTow;
         }
 
@@ -78,6 +104,7 @@ namespace Mekaiju.AI
             _motor = GetComponent<KaijuMotor>();
             _brain = GetComponent<KaijuBrain>();
             _animation = GetComponent<KaijuAnimatorController>();
+            _rb = GetComponent<Rigidbody>();
             target = GameObject.FindGameObjectWithTag(targetTag);
             foreach (var behavior in behaviors)
             {
@@ -88,7 +115,9 @@ namespace Mekaiju.AI
 
             dps = 0;
 
-            _currentPhase = 1;
+            currentPhase = 1;
+
+            currentHealth = baseHealth;
 
             // We add the BodyPartObject script to bodyParts objects if they don't already have it
             foreach (BodyPart t_part in bodyParts)
@@ -100,14 +129,27 @@ namespace Mekaiju.AI
                         t_obj.AddComponent<BodyPartObject>();
                     }
                 }
+                t_part.currentHealth = t_part.maxHealth;
+            }
+
+            foreach(var passive in passives)
+            {
+                passive.passive.OnStart();
+            }
+
+            context = new();
+            if(changePhaseAction != null)
+            {
+                changePhaseAction.attack.Init(this);
             }
 
             CheckAllBehaviorsDisabeled();
             StartCoroutine(resetDps());
         }
 
-        private void Update()
+        public override void Update()
         {
+            base.Update();
             if (_isInFight)
             {
                 _brain.StarFight();
@@ -116,22 +158,16 @@ namespace Mekaiju.AI
             {
                 UseBehavior();
             }
-            effects.ForEach(effect => effect.Tick());
-            effects.RemoveAll(effect =>
-            {
-                if (effect.state == EffectState.Expired)
-                {
-                    effect.Dispose();
-                    return true;
-                }
-                return false;
-            });
 
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                ChangePhase();
+            }
         }
 
-        private void FixedUpdate()
+        public override void FixedUpdate()
         {
-            effects.ForEach(effect => effect.FixedTick());
+            base.FixedUpdate();
         }
 
         public void UseBehavior()
@@ -141,6 +177,22 @@ namespace Mekaiju.AI
                 behavior.Trigger();
                 if (behavior.active) behavior.Run();
             }
+        }
+
+        public void ChangePhase()
+        {
+            if(changePhaseAction != null)
+            {
+                motor.StopKaiju();
+                changePhaseAction.attack.Action();
+            }
+            SetPhase(2);
+        }
+
+        public void SetPhase(int p_phase)
+        {
+            currentPhase = p_phase;
+            _brain.ResetAttack();
         }
 
         public bool canSwitch()
@@ -159,55 +211,46 @@ namespace Mekaiju.AI
             }
         }
 
+        public float GetRealDamage(float p_amonunt)
+        {
+            var t_damage = modifiers[StatisticKind.Damage].ComputeValue(p_amonunt);
+            return stats.dmg * (t_damage/100);
+        }
+
+        public float GetRealSpeed(float p_amonunt)
+        {
+            var t_amount = modifiers[StatisticKind.Speed].ComputeValue(p_amonunt);
+            return stats.speed * (t_amount / 100);
+
+        }
+
         public void Combat()
         {
+            motor.SetSpeed(100);
             _isInFight = true;
+        }
+
+        public float TargetInRange()
+        {
+            return Vector3.Distance(target.transform.position, transform.position);
         }
 
         public bool TargetInRange(float p_range)
         {
             return Vector3.Distance(target.transform.position, transform.position) <= p_range;
         }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            OnCollision?.Invoke(collision);  // Passe la collision � l'�v�nement
+        }
+        #endregion
+
         #region setters & getters
 
         public Vector3 GetTargetPos()
         {
             return target.transform.position;
-        }
-
-        /// <summary>
-        /// Adds a new effect to the list of active effects without a timeout. 
-        /// The effect will remain active indefinitely until it is manually removed.
-        /// </summary>
-        /// <param name="p_effect">The effect to be added.</param>
-        public IDisposable AddEffect(Effect p_effect)
-        {
-            effects.Add(new(this, p_effect));
-            return effects[^1];
-        }
-
-        /// <summary>
-        /// Adds a new effect to the list of active effects, with a specified duration.
-        /// </summary>
-        /// <param name="p_effect">The effect to be added.</param>
-        /// <param name="p_time">The duration of the effect in seconds.</param>
-        public IDisposable AddEffect(Effect p_effect, float p_time)
-        {
-            effects.Add(new(this, p_effect, p_time));
-            return effects[^1];
-        }
-
-        /// <summary>
-        /// Remove an effect.
-        /// </summary>
-        /// <param name="p_effect">The effect to remove.</param>
-        public void RemoveEffect(IDisposable p_effect)
-        {
-            if (typeof(StatefullEffect).IsAssignableFrom(p_effect.GetType()))
-            {
-                effects.Remove((StatefullEffect)p_effect);
-                p_effect.Dispose();
-            }
         }
 
         /// <summary>
@@ -230,14 +273,29 @@ namespace Mekaiju.AI
             return null;
         }
 
+        public List<KaijuPassive> GetPassivesActive()
+        {
+            List<KaijuPassive> t_passives = new List<KaijuPassive>();
+            foreach (var passive in passives)
+            {
+                if (passive.passive.isUsed)
+                {
+                    t_passives.Add(passive);
+                }
+            }
+            return t_passives;
+        }
+
         #endregion
 
         #region implemation of IEntityInstance
-        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => context.modifiers;
+        public override float baseHealth => bodyParts.Sum(p => p.maxHealth);
 
-        public override float baseHealth => bodyParts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.health);
+        public override float health => currentHealth;
 
-        public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
+        public float partsHealth => bodyParts.Sum(p => p.currentHealth);
+
+        public override bool isAlive => !(bodyParts.All(t_part => t_part.isDestroyed) || currentHealth <= 0);
 
         public void Heal(GameObject p_bodyPart, float p_amonunt)
         {
@@ -247,68 +305,93 @@ namespace Mekaiju.AI
 
         public void Heal(BodyPart p_bodyPart, float p_amonunt)
         {
-            p_bodyPart.health += p_amonunt;
-            if (p_bodyPart.isDestroyed && p_bodyPart.health > 0)
+            p_bodyPart.currentHealth += p_amonunt;
+            if (p_bodyPart.isDestroyed && p_bodyPart.currentHealth > 0)
             {
                 p_bodyPart.isDestroyed = false;
             }
+
+            currentHealth += p_amonunt;
+            if (currentHealth > baseHealth) currentHealth = baseHealth;
         }
 
-        public override void Heal(float p_amount)
+        public override float Heal(float p_amount)
         {
             float t_amountForPart = p_amount / bodyParts.Count();
             foreach(var part in bodyParts)
             {
                 Heal(part, t_amountForPart);
             }
+
+            return 0f;
         }
 
-        public void TakeDamage(GameObject p_bodyPart, float p_amonunt)
+        public void TakeDamage(GameObject p_bodyPart, IDamageable p_from, float p_amonunt, DamageKind p_kind)
         {
             BodyPart t_part = GetBodyPartWithGameObject(p_bodyPart);
-            TakeDamage(t_part, p_amonunt);
+            TakeDamage(t_part, p_from, p_amonunt, p_kind);
         }
 
-        public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
+        public float TakeDamage(BodyPart p_bodyPart, IDamageable p_from, float p_amonunt, DamageKind p_kind)
         {
-            p_bodyPart.health -= p_amonunt;
-            if(!p_bodyPart.isDestroyed && p_bodyPart.health <= 0)
+            onBeforeTakeDamage.Invoke(p_from, p_amonunt, p_kind);
+
+            var t_defense = modifiers[StatisticKind.Defense].ComputeValue(stats.def);
+
+            var t_realDamage = p_amonunt * (1- (t_defense/100));
+
+            p_bodyPart.currentHealth -= t_realDamage;
+            p_bodyPart.currentHealth = MathF.Max(0, p_bodyPart.currentHealth);
+
+            currentHealth -= p_bodyPart.isDestroyed ? t_realDamage / reduceDamageWhenDestroy : t_realDamage;
+
+            if (!p_bodyPart.isDestroyed && p_bodyPart.currentHealth <= 0)
             {
                 p_bodyPart.isDestroyed = true;
             }
 
             UpdateUI();
 
-            onTakeDamage.Invoke(p_amonunt);
+            foreach (var passive in passives)
+            {
+                passive.passive.OnDamage();
+            }
+
+            onAfterTakeDamage.Invoke(p_from, t_realDamage, p_kind);
+
+            if (!isAlive)
+            {
+                Destroy(gameObject);
+            }
+
+            if(currentPhase == 1 && (health <= (baseHealth / 50)))
+            {
+                ChangePhase();
+            }
+
+            return 0f;
         }
 
-        public override void TakeDamage(float p_damage)
+        public override float TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
             float t_amountForPart = p_damage / bodyParts.Count();
             foreach (var part in bodyParts)
             {
-                TakeDamage(part, t_amountForPart);
+                TakeDamage(part, p_from, t_amountForPart, p_kind);
             }
+
+            return 0f;
         }
         #endregion
 
         #region debug
         private void OnDrawGizmos()
         {
-            foreach (var behavior in behaviors.Where(b => b.showGizmo))
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(transform.position, behavior.triggerArea);
-            }
-
             if (checkRange)
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(transform.position, debugRange);
             }
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position + transform.forward * 7f, 4f);
         }
 
         public IEnumerator resetDps()

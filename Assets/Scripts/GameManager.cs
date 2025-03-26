@@ -25,6 +25,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
+        [field: SerializeField]
         public PlayerData playerData { get; private set; }
 
         private void Awake()
@@ -34,6 +35,8 @@ namespace Mekaiju
             {
                 _instance = this;
                 playerData = new();
+                
+                playerData.LoadMechaConfig();
             }
             else if (_instance != this)
             {

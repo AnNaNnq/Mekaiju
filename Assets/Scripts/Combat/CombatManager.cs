@@ -1,11 +1,15 @@
 using UnityEngine;
 using Mekaiju.AI;
 using UnityEngine.Events;
+using Mekaiju.Entity;
 
 namespace Mekaiju
 {
     public class CombatManager : MonoBehaviour
     {
+        [field: SerializeField]
+        public CombatReward reward { get; private set; }
+
         public MechaInstance mechaInstance { get; private set; }
         public KaijuInstance kaijuInstance { get; private set; }
 
@@ -57,19 +61,19 @@ namespace Mekaiju
             state  = CombatState.Started;
             result = CombatResult.None;
 
-            mechaInstance?.onTakeDamage.AddListener(_OnEntityTakeDamage);
-            kaijuInstance?.onTakeDamage.AddListener(_OnEntityTakeDamage);
+            mechaInstance?.onAfterTakeDamage.AddListener(_OnEntityTakeDamage);
+            kaijuInstance?.onAfterTakeDamage.AddListener(_OnEntityTakeDamage);
         }
 
         private void OnDestroy()
         {
-            mechaInstance?.onTakeDamage?.RemoveListener(_OnEntityTakeDamage);
-            kaijuInstance?.onTakeDamage?.RemoveListener(_OnEntityTakeDamage);           
+            mechaInstance?.onAfterTakeDamage?.RemoveListener(_OnEntityTakeDamage);
+            kaijuInstance?.onAfterTakeDamage?.RemoveListener(_OnEntityTakeDamage);           
         }
 
-        private void _OnEntityTakeDamage(float p_damage)
+        private void _OnEntityTakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
-            if (!(mechaInstance.isAlive && kaijuInstance.isAlive))
+            if (!(mechaInstance.isAlive && kaijuInstance.isAlive) && state != CombatState.Ended)
             {
                 state  = CombatState.Ended;
                 result = mechaInstance.isAlive ? CombatResult.Win : CombatResult.Loose;

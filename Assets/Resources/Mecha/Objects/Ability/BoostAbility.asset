@@ -13,16 +13,45 @@ MonoBehaviour:
   m_Name: BoostAbility
   m_EditorClassIdentifier: 
   <description>k__BackingField: Boost statistics for a given time.
-  <objectName>k__BackingField: default
-  <target>k__BackingField: 0
+  <objectName>k__BackingField: Head
   <behaviour>k__BackingField:
     rid: 2512019433379594302
+  <healthTuneAlteration>k__BackingField:
+    rid: 8176260393426223170
+  <granter>k__BackingField:
+    rid: 8176260169380397123
   references:
     version: 2
     RefIds:
     - rid: 2512019433379594302
       type: {class: BoostAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
-        _boostEffect: {fileID: 11400000, guid: 8b0b97b7368b343ae825d20aa9c3364f, type: 2}
+        _cooldown: 5
+        _consumption: 0
+        _modifiers:
+          _valArray:
+          - value: 50
+            kind: 1
+          - value: 50
+            kind: 1
+          - value: 50
+            kind: 1
+          - value: 0
+            kind: 0
+          _refArray: []
         _duration: 10
-        _consumption: 30
+    - rid: 8176260169380397123
+      type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        <targetName>k__BackingField: "T\xEAte"
+        _part: 0
+    - rid: 8176260393426223170
+      type: {class: BoostPayload, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        values:
+          _valArray:
+          - -0.5
+          - -0.5
+          - -0.5
+          - 0
+          _refArray: []

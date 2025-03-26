@@ -1,11 +1,14 @@
 using System.Linq;
 using Mekaiju;
 using Mekaiju.AI;
+using Mekaiju.AI.Body;
 using Mekaiju.LockOnTargetSystem;
 using MyBox;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mekaiju.Entity;
+using UnityEngine.Animations.Rigging;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -27,19 +30,26 @@ public class PlayerController : MonoBehaviour
 
     
     [Foldout("Movement Attributes")]
-    [SerializeField] private float _groundCheckRadius = 0.5f;
-    [SerializeField] private float _baseSpeed = 5f;
-    [SerializeField] private float _speed;
+    [SerializeField] 
+    private float _groundCheckRadius = 0.5f;
+    [SerializeField] 
+    private float _speedFactor = 5f;
+    [SerializeField, ReadOnly] 
+    private float _speed;
 
 
     [Foldout("Camera Attributes")]
     [SerializeField] [Range(1f,100f)] private float _mouseSensitivity; 
     [SerializeField] private float _minVerticalAngle = -30f; 
-    [SerializeField] private float _maxVerticalAngle = 80f; 
+    [SerializeField] private float _maxVerticalAngle = 80f;
+    private GameObject _aimConstraint;
+    // Accumulated horizontal and vertical rotation
+    private float _yaw;
+    private float _pitch;
+
 
     [Foldout("Movement Boolean")]
     [SerializeField] bool _isGrounded;
-
 
     private MechaInstance _instance;
     private KaijuInstance _target;
@@ -56,15 +66,14 @@ public class PlayerController : MonoBehaviour
     {
         _playerActions = new MechaPlayerActions();
         _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
-
-        _speed = _baseSpeed;
+        _animator = GetComponentInChildren<Animator>();
 
         _groundLayerMask = LayerMask.GetMask("Walkable");
 
+        _aimConstraint = transform.FindNested("Aimconstraint").gameObject;
+
         _instance = GetComponent<MechaInstance>();
 
-        _cameraPivot = transform.Find("CameraPivot");
     }
 
     private void Start()
@@ -81,10 +90,8 @@ public class PlayerController : MonoBehaviour
         _playerActions.Player.Jump.performed += OnJump;
         _playerActions.Player.Dash.performed += OnDash;
         _playerActions.Player.Heal.performed += OnHeal;
-        _playerActions.Player.Torse.performed += OnTorse;
+        _playerActions.Player.Torse.performed += OnChest;
         _playerActions.Player.Pause.performed += OnPause;
-
-        _instance.context.moveAction = _moveAction;
 
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor at the center of the screen
         Cursor.visible = false; // Make the cursor invisible during gameplay
@@ -179,20 +186,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnLeftArm(InputAction.CallbackContext p_context)
     {
-        BodyPartObject t_target = PickRandomTargetPart();
-        if (t_target)
-        {
-            StartCoroutine(_instance[MechaPart.LeftArm].TriggerAbility(PickRandomTargetPart(), null));
-        }
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.LeftArm].TriggerAbility(t_target, null));
     }
     
     private void OnRightArm(InputAction.CallbackContext p_context)
     {
-        BodyPartObject t_target = PickRandomTargetPart();
-        if (t_target)
-        {
-            StartCoroutine(_instance[MechaPart.RightArm].TriggerAbility(PickRandomTargetPart(), null));
-        }
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.RightArm].TriggerAbility(t_target, null));
     }
 
     private void OnHead(InputAction.CallbackContext p_context)
@@ -202,12 +203,12 @@ public class PlayerController : MonoBehaviour
     
     private void OnShield(InputAction.CallbackContext p_context)
     {
-        StartCoroutine(_instance[MechaPart.Chest].TriggerAbility(null, null));
+        StartCoroutine(_instance.desc.standalones[StandaloneAbility.Shield].behaviour.Trigger(_instance, null, null));
     }
     
     private void OnUnshield(InputAction.CallbackContext p_context)
     {
-        _instance[MechaPart.Chest].ReleaseAbility();
+        _instance.desc.standalones[StandaloneAbility.Shield].behaviour.Release();
     }
     
     private void OnJump(InputAction.CallbackContext p_context)
@@ -219,13 +220,16 @@ public class PlayerController : MonoBehaviour
     {
         isLockedOn = !isLockedOn;
         _lockOnTargetSystem.ToggleLockOn(isLockedOn);
-        if (isLockedOn)
+        if (isLockedOn && _lockOnTargetSystem.GetTargetBodyPartObject() != null)
         {
             _lookAction.Disable();
+            SetConstraintTarget(_lockOnTargetSystem.GetTargetBodyPartObject().transform);
         }
         else
         {
             _lookAction.Enable();
+            SetConstraintTarget(_cameraPivot.GetChild(0).transform);
+            isLockedOn = false;
         }
     }
 
@@ -238,10 +242,12 @@ public class PlayerController : MonoBehaviour
     {
         //a faire
     }
-    private void OnTorse(InputAction.CallbackContext p_context)
+    private void OnChest(InputAction.CallbackContext p_context)
     {
-        // a faire
+        BodyPartObject t_target = _lockOnTargetSystem.GetTargetBodyPartObject();
+        StartCoroutine(_instance[MechaPart.Chest].TriggerAbility(t_target, null));
     }
+
     private void OnPause(InputAction.CallbackContext p_context)
     {
         // a faire
@@ -255,39 +261,80 @@ public class PlayerController : MonoBehaviour
         return Mathf.Min(p_angle, p_to);
     }
 
+    private void SetConstraintTarget(Transform p_newConstraintPos)
+    {
+        //Head
+        _aimConstraint.transform.GetChild(0).GetComponent<MultiAimConstraint>().data.sourceObjects.SetTransform(0, p_newConstraintPos);
+        //Chest
+        _aimConstraint.transform.GetChild(1).GetComponent<MultiAimConstraint>().data.sourceObjects.SetTransform(0, p_newConstraintPos);
+        //RightArm
+        _aimConstraint.transform.GetChild(2).GetComponent<MultiAimConstraint>().data.sourceObjects.SetTransform(0, p_newConstraintPos);
+        //Elbow
+        _aimConstraint.transform.GetChild(2).GetChild(0).GetComponent<MultiAimConstraint>().data.sourceObjects.SetTransform(0, p_newConstraintPos);
+
+    }
+    public void SetArmTargeting(bool p_targeting)
+    {
+        if (p_targeting)
+        {
+            //RightArm
+            _aimConstraint.transform.GetChild(2).GetComponent<MultiAimConstraint>().weight = 0.5f;
+            _aimConstraint.transform.GetChild(2).GetChild(0).GetComponent<MultiAimConstraint>().weight = 1;
+        }
+        else
+        {
+            //RightArm
+            _aimConstraint.transform.GetChild(2).GetComponent<MultiAimConstraint>().weight = 0;
+            _aimConstraint.transform.GetChild(2).GetChild(0).GetComponent<MultiAimConstraint>().weight = 0;
+        }
+    }
+
     private void Update()
     {
-        _instance.context.isGrounded = _isGrounded;
-
-        Vector2 t_lookDir = _lookAction.ReadValue<Vector2>() * Time.deltaTime * _mouseSensitivity;
-
-        // Tourner le joueur avec la cam�ra horizontalement
-        transform.Rotate(Vector3.up * t_lookDir.x);
-
-        // G�rer la rotation verticale de la cam�ra
-        var t_clamp = ClampAngle(_cameraPivot.eulerAngles.x - t_lookDir.y, _minVerticalAngle, _maxVerticalAngle);
-        var t_delta = t_clamp - _cameraPivot.eulerAngles.x;
-        _cameraPivot.Rotate(Vector3.right * t_delta);
-
-
-        int t_scrollValue = (int)_scrollAction.ReadValue<float>();
-
-        if (t_scrollValue != 0 && isLockedOn && Time.time - _timeSinceLastScroll >= 0.2f) 
-        {
-            _timeSinceLastScroll = Time.time;
-            _lockOnTargetSystem.ChangeTarget(t_scrollValue);
-        }
+        _instance.states[StateKind.Grounded].Set(_isGrounded);
+        
+        _yaw += _lookAction.ReadValue<Vector2>().x * Time.deltaTime * _mouseSensitivity;
+        _pitch -= _lookAction.ReadValue<Vector2>().y * Time.deltaTime * _mouseSensitivity;
     }
     
     private void FixedUpdate()
     {
+        //Clamp vertical angle to avoid over-rotating the camera
+        _pitch = Mathf.Clamp(_pitch, _minVerticalAngle, _maxVerticalAngle);
+
+        // Apply the rotation to the camera pivot
+        Quaternion targetRotation = Quaternion.Euler(_pitch, _yaw, 0);
+        _cameraPivot.rotation = Quaternion.Slerp(_cameraPivot.rotation, targetRotation, Time.deltaTime * 10f);
+
+        // Allign the player with the camera if he goes over a critical angle
+        float t_cameraYaw = _cameraPivot.eulerAngles.y;
+        float t_playerYaw = transform.eulerAngles.y;
+        float t_deltaYaw = Mathf.DeltaAngle(t_playerYaw, t_cameraYaw);
+
+        if (Mathf.Abs(t_deltaYaw) > 45f)
+        {
+            // rotation speed factor (the bigger the delta, the faster the rotation)
+            float t_speedFactor = Mathf.Clamp((Mathf.Abs(t_deltaYaw) - 45f) / 45f, 0.1f, 0.5f) * 3f;
+
+            //smooth rotation of the player towards the camera
+            _rigidbody.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, t_cameraYaw, 0), Time.deltaTime * t_speedFactor);
+        }
+
+        // Lock-On System
+        int t_scrollValue = (int)_scrollAction.ReadValue<float>();
+        if (t_scrollValue != 0 && isLockedOn && Time.time - _timeSinceLastScroll >= 0.2f)
+        {
+            _timeSinceLastScroll = Time.time;
+            _lockOnTargetSystem.ChangeTarget(t_scrollValue);
+            SetConstraintTarget(_lockOnTargetSystem.GetTargetBodyPartObject().transform);
+        }
+
         Collider[] t_checkGround = Physics.OverlapSphere(groundCheck.position, _groundCheckRadius, _groundLayerMask);
         _isGrounded = t_checkGround.Length > 0;
 
-        if (!_instance.context.isMovementOverrided)
+        if (!_instance.states[StateKind.MovementOverrided] && !_instance.states[StateKind.MovementLocked])
         {
-            _speed = _instance.context.modifiers[ModifierTarget.Speed]?.ComputeValue(_baseSpeed) ?? _baseSpeed;
-            // _speed = _baseSpeed * _instance.Context.SpeedModifier;
+            _speed = _instance.statistics[StatisticKind.Speed].Apply<float>(_instance.modifiers[StatisticKind.Speed]) * _speedFactor;
 
             if (_isGrounded)
             {

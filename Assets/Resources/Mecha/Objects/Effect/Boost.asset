@@ -14,15 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <description>k__BackingField: Boost
   <behaviour>k__BackingField:
-    rid: 2512019433379594311
+    rid: 8176260003044524032
   references:
     version: 2
     RefIds:
-    - rid: 2512019433379594311
-      type: {class: BoostEffect, ns: Mekaiju, asm: Assembly-CSharp}
+    - rid: 8176260003044524032
+      type: {class: BoostEffect, ns: Mekaiju.Entity.Effect, asm: Assembly-CSharp}
       data:
         _modifiers:
-          _array:
-          - 0.5
-          - 0.5
-          - 0.5
+          _valArray:
+          - value: 50
+            kind: 1
+          - value: 50
+            kind: 1
+          - value: 50
+            kind: 1
+          - value: 0
+            kind: 0
+          _refArray: []

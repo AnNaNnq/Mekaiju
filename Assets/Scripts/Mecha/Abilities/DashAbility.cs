@@ -1,10 +1,22 @@
 using System.Collections;
 using Mekaiju.AI;
+using Mekaiju.Entity;
+using Mekaiju.AI.Body;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System;
+using MyBox;
 
 namespace Mekaiju
 {
-    public class DashAbility : IAbilityBehaviour
+    [Serializable]
+    public class DashPayload : IPayload
+    {
+        public float force;
+        public float duration;
+    }
+
+    public class DashAbility : IStaminableAbility
     {
         /// <summary>
         /// 
@@ -21,12 +33,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField]
-        private float _consumption;
-
-        /// <summary>
-        /// 
-        /// </summary>
+        [Header("Visual Effects")]
         [SerializeField]
         private MeshTrailConfig _meshTrailConfig;
 
@@ -37,93 +44,152 @@ namespace Mekaiju
         private GameObject _speedVfx;
 
         /// <summary>
-        /// 
+        /// WASD input
         /// </summary>
-        private bool _isAcitve;
+        [Header("Input")]
+        [SerializeField]
+        private InputActionReference _input;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private Vector3 _direction;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private MeshTrailTut _ghost;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private GameObject _camera;
-
-        /// <summary>
-        /// 
-        /// </summary>
         private float _elapedTime;
+        private float _endTriggerTimout = 1f;
+        private float _actionTriggerTimout = 1f;
 
-        public override void Initialize(MechaPartInstance p_self)
+        private float _runtimeForce;
+        private float _runtimeDuration;
+
+        private Vector3      _direction;
+        private MeshTrailTut _ghost;
+        private GameObject   _camera;
+
+        private AnimationState _animationState;
+        private MechaAnimatorProxy _animationProxy;
+
+        private Rigidbody    _rigidbody;
+
+        public override void Initialize(EntityInstance p_self)
         {
-            _isAcitve   = false;
+            base.Initialize(p_self);
+            
             _elapedTime = 0;
 
-            _ghost = p_self.mecha.gameObject.AddComponent<MeshTrailTut>();
+            _runtimeForce    = _force;
+            _runtimeDuration = _duration;
+
+            _ghost = p_self.parent.gameObject.AddComponent<MeshTrailTut>();
             _ghost.config = _meshTrailConfig;
 
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
+
+
+            _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
+
+            if (!_animationProxy)
+            {
+                Debug.LogWarning("Unable to find animator proxy on mecha!");
+            }
+
+            if (p_self.parent.TryGetComponent<Rigidbody>(out var t_rb))
+            {
+                _rigidbody = t_rb;
+            }
+            else
+            {
+                Debug.LogWarning("Unable to find rigidbody on mecha!");
+            }
+
+            _animationProxy.onDash.AddListener(_OnDashAnimationEvent);
         }
 
-        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
+        public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
             return (
-                !_isAcitve && 
-                !p_self.mecha.context.isMovementAltered && 
-                p_self.mecha.stamina - _consumption >= 0f &&
-                Mathf.Abs(p_self.mecha.context.moveAction.ReadValue<Vector2>().magnitude) > 0    
+                base.IsAvailable(p_self, p_opt) &&
+                !p_self.states[StateKind.Protected] &&
+                 p_self.states[StateKind.Grounded]  &&
+                Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0    
             );
         }
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
+        public override IAlteration Alter<T>(T p_payload)
+        {
+            if (p_payload is DashPayload t_casted)
+            {
+                DashPayload t_diff = new();
+
+                _runtimeForce    += (t_diff.force    = _force    * t_casted.force);
+                _runtimeDuration += (t_diff.duration = _duration * t_casted.duration);
+
+                return new Alteration<DashPayload>(t_casted, t_diff);
+            }
+            return null;
+        }
+
+        public override void Revert(IAlteration p_payload)
+        {
+            if (p_payload is Alteration<DashPayload> t_casted)
+            {
+                _runtimeForce    -= t_casted.diff.force;
+                _runtimeDuration -= t_casted.diff.duration;
+            }
+        }
+
+        public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
-                Vector2   t_input     = p_self.mecha.context.moveAction.ReadValue<Vector2>();
-                Transform t_transform = p_self.mecha.transform;
+                Vector2   t_input     = _input.action.ReadValue<Vector2>();
+                Transform t_transform = p_self.parent.transform;
                 _direction = (t_input.y * t_transform.forward + t_input.x * t_transform.right).normalized;
 
                 if (Mathf.Abs(_direction.sqrMagnitude) > 0)
                 {
-                    p_self.mecha.ConsumeStamina(_consumption);
-                    p_self.mecha.context.isMovementOverrided = true;
+                    state.Set(AbilityState.Active);
+                    _animationState = AnimationState.Idle;
 
-                    _ghost.Trigger(_duration);
+                    ConsumeStamina(p_self);
+
+                    p_self.states[StateKind.MovementOverrided].Set(true);
+
+                    _ghost.Trigger(_runtimeDuration);
                     var t_go = GameObject.Instantiate(_speedVfx, _camera.transform);
                     t_go.transform.Translate(new(0, 0, 2f));
 
-                    _isAcitve   = true;
+                    _animationProxy.animator.SetTrigger("Dash");
+
+                    // Wait for animation action
+                    float t_timout = _actionTriggerTimout;
+                    yield return new WaitUntil(() => _animationState == AnimationState.Trigger || (t_timout -= Time.deltaTime) <= 0);
+
                     _elapedTime = 0;
-                    yield return new WaitUntil(() => 
+                    yield return new WaitUntil(() =>
                     {
                         _elapedTime += Time.deltaTime;
-                        return _elapedTime >= _duration; 
+                        return _elapedTime >= _runtimeDuration;
                     });
-                    _isAcitve = false;
 
                     GameObject.Destroy(t_go);
-                    p_self.mecha.context.isMovementOverrided = false;
+                    p_self.states[StateKind.MovementOverrided].Set(false);
+
+                    yield return WaitForCooldown();
+
+                    state.Set(AbilityState.Ready);
                 }
             }
 
             yield return null;
         }
 
-        public override void FixedTick(MechaPartInstance p_self)
+        public override void FixedTick(EntityInstance p_self)
         {
-            if (_isAcitve)
+            if (state == AbilityState.Active)
             {
-                Rigidbody t_rb  = p_self.mecha.context.rigidbody;
-                Vector3   t_vel = _force * (1 - _elapedTime / _duration) * _direction;
-                t_rb.linearVelocity = new(t_vel.x, t_rb.linearVelocity.y, t_vel.z);
+                Vector3 t_vel = _runtimeForce * (1 - _elapedTime / _runtimeDuration) * _direction;
+                _rigidbody.linearVelocity = new(t_vel.x, _rigidbody.linearVelocity.y, t_vel.z);
             }   
+        }
+        private void _OnDashAnimationEvent(AnimationEvent p_event)
+        {
+            _animationState = p_event.state;
         }
     }
 }

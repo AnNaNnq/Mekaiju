@@ -1,18 +1,24 @@
 using System;
 using System.Collections;
 using Mekaiju.AI;
+using Mekaiju.AI.Body;
 using Mekaiju.Utils;
 using UnityEngine;
 using UnityEngine.Events;
+using Mekaiju.Entity;
+using System.Collections.Generic;
+using Mekaiju.Entity.Effect;
 
 namespace Mekaiju
 {
+    using HealthStatisticValue = Mekaiju.Utils.EnumArray<Mekaiju.MechaPart, float>;
+
 
     /// <summary>
     /// 
     /// </summary>
     [Serializable]
-    public class MechaPartInstance : IEntityInstance
+    public class MechaPartInstance : EntityInstance
     {
         /// <summary>
         /// 
@@ -22,27 +28,34 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private MechaPartConfig _config;
+        private MechaPartDesc _desc;
 
         /// <summary>
         /// 
         /// </summary>
-        [field: SerializeField]
-        public float health { get; private set; }
+        private float _health;
+
+        /// <summary>
+        /// Store the alteration applies to ability (in case we have to revert it).
+        /// </summary>
+        private IAlteration _alteration;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="p_inst"></param>
         /// <param name="p_config"></param>
-        public void Initialize(MechaInstance p_inst, MechaPartConfig p_config)
+        public void Initialize(MechaInstance p_inst, MechaPartDesc p_desc)
         {
-            mecha   = p_inst;
+            mecha  = p_inst;
+            parent = p_inst;
 
-            _config = p_config;
-            health = p_config.desc.health;
+            _desc   = p_desc;
+            _health = baseHealth;
 
-            _config.ability.behaviour?.Initialize(this);
+            _alteration = null;
+
+            _desc.ability.behaviour?.Initialize(this);
         }
 
         /// <summary>
@@ -53,10 +66,10 @@ namespace Mekaiju
         /// <returns></returns>
         public IEnumerator TriggerAbility(BodyPartObject p_target, object p_opt)
         {
-            if (_config.ability.behaviour.IsAvailable(this, p_opt))
+            if (_desc.ability.behaviour.IsAvailable(this, p_opt))
             {
                 mecha.timePoints[TimePoint.LastAbilityTriggered] = Time.time;
-                yield return _config.ability.behaviour.Trigger(this, p_target, p_opt);
+                yield return _desc.ability.behaviour.Trigger(this, p_target, p_opt);
             }
         }
 
@@ -65,43 +78,124 @@ namespace Mekaiju
         /// </summary>
         public void ReleaseAbility()
         {
-            _config.ability.behaviour.Release();
+            _desc.ability.behaviour.Release();
         }
 
-        private void Update()
+        /// <summary>
+        /// Should be used only by MechaInstance or Self.<br/>
+        /// This function is used in case of compound damages.
+        /// </summary>
+        /// <param name="p_damage">The amount of damage to deal.</param>
+        public float TakeDamage(float p_damage)
         {
-            _config.ability.behaviour?.Tick(this);
+            var t_recover = 0.5f * p_damage;
+            if (isAlive)
+            {
+                var t_taken = Mathf.Min(p_damage, _health);
+                _health = Math.Max(0f, _health - p_damage);
+
+                if (_alteration == null && _health < (mecha.desc.partTreshold / 100f) * baseHealth)
+                {
+                    _alteration = _desc.ability.behaviour.Alter(_desc.ability.healthTuneAlteration);
+                }
+
+                return Mathf.Max(t_taken, t_recover);
+            }
+
+            return t_recover;
         }
 
-        private void FixedUpdate()
+        /// <summary>
+        /// Should be used only by MechaInstance or Self.<br/>
+        /// This function is used in case of compound heal.
+        /// </summary>
+        /// <param name="p_amount">The amount of health to restore.</param>
+        public float HHeal(float p_amount)
         {
-            _config.ability.behaviour?.FixedTick(this);
+            if (isAlive)
+            {
+                var t_health = _health;
+                _health = Mathf.Min(baseHealth, _health + p_amount);
+
+                if (_alteration != null && _health > (mecha.desc.partTreshold / 100f) * baseHealth)
+                {
+                    _desc.ability.behaviour.Revert(_alteration);
+                    _alteration = null;
+                }
+
+                return _health - t_health;
+            }
+
+            return 0f;
         }
 
-#region IEntityInstance implementation
+        public override void Update()
+        {
+            _desc.ability.behaviour?.Tick(this);
+        }
 
-        public override EnumArray<ModifierTarget, ModifierCollection> modifiers => mecha.modifiers;
+        public override void FixedUpdate()
+        {
+            _desc.ability.behaviour?.FixedTick(this);
+        }
 
-        public override UnityEvent<float> onTakeDamage => mecha.onTakeDamage;
-        public override UnityEvent<float> onDealDamage => mecha.onDealDamage;
+        #region IEntityInstance implementation
+        public override List<StatefullEffect> effects => parent.effects;
+
+        public override UnityEvent<StatefullEffect> onAddEffect    => parent.onAddEffect;
+        public override UnityEvent<StatefullEffect> onRemoveEffect => parent.onRemoveEffect;
+
+        public override EnumArray<StatisticKind, ModifierCollection> modifiers   => parent.modifiers;
+        public override EnumArray<StatisticKind, IStatistic>        statistics => parent.statistics;
+
+        public override EnumArray<TimePoint, float>        timePoints => parent.timePoints;
+        public override EnumArray<StateKind, State<bool>> states     => parent.states;
+
+        public override UnityEvent<IDamageable, float, DamageKind> onBeforeTakeDamage => parent.onBeforeTakeDamage;
+        public override UnityEvent<IDamageable, float, DamageKind> onAfterTakeDamage  => parent.onAfterTakeDamage;
+        public override UnityEvent<float> onDealDamage => parent.onDealDamage;
 
         public override bool isAlive => health > 0f;
 
-        public override float baseHealth => _config.desc.health;
+        public override float baseHealth => statistics[StatisticKind.Health].Apply<HealthStatisticValue>(modifiers[StatisticKind.Health])[_desc.part];
+        public override float health     => _health;
 
-        public override void TakeDamage(float p_damage)
+        public override float Heal(float p_amount)
         {
-            var t_damage = mecha.context.modifiers[ModifierTarget.Defense].ComputeValue(p_damage);
-            
-            mecha.timePoints[TimePoint.LastDamage] = Time.time;
-            health = Mathf.Max(0f, health - t_damage);
-
-            onTakeDamage.Invoke(t_damage);
+            var t_heal = HHeal(p_amount);
+            mecha.HHeal(t_heal);
+            return t_heal;
         }
 
-        public override void Heal(float p_heal)
+        public override float TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
-            health = Mathf.Min(_config.desc.health, health + p_heal);
+            onBeforeTakeDamage.Invoke(p_from, p_damage, p_kind);
+            if (!states[StateKind.Invulnerable])
+            {
+                timePoints[TimePoint.LastDamage] = Time.time;
+
+                var t_defense = statistics[StatisticKind.Defense].Apply<float>(modifiers[StatisticKind.Defense]);
+                var t_damage  = p_damage - p_damage * t_defense;
+                var t_taken   = TakeDamage(t_damage);
+
+                mecha.TakeDamage(t_taken);
+                onAfterTakeDamage.Invoke(p_from, t_taken, p_kind);
+                return t_taken;
+            }
+            return 0f;
+        }
+
+        public override float baseStamina => parent.baseStamina;
+        public override float stamina     => parent.stamina;
+
+        public override void ConsumeStamina(float p_amount)
+        {
+            parent.ConsumeStamina(p_amount);
+        }
+
+        public override void RestoreStamina(float p_amount)
+        {
+            parent.RestoreStamina(p_amount);
         }
     }
 #endregion

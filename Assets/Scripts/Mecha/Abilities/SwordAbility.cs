@@ -1,77 +1,119 @@
+using System;
 using System.Collections;
 using Mekaiju.AI;
+using Mekaiju.AI.Body;
+using Mekaiju.Entity;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Mekaiju
 {
+    [Serializable]
+    public class SwordPayload : IPayload
+    {
+        public float damage;
+    }
 
     /// <summary>
-    /// 
+    /// The sword ability behaviour
     /// </summary>
-    class SwordAbility : IAbilityBehaviour
+    class SwordAbility : IStaminableAbility
     {
+#region Parameters
         /// <summary>
-        /// 
+        /// The damage factor (multiply the mecha damage stat)
         /// </summary>
-        [SerializeField]
-        private int _damage;
+        [Tooltip("The damage factor (multiply the mecha damage stat).")]
+        [SerializeField, Range(0f, 5f)]
+        private float _damageFactor;
+#endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [SerializeField]
-        private int _rateOfFire;
+        private float _endTriggerTimout = 1;
 
-        /// <summary>
-        /// Distance in m.
-        /// </summary>
-        [SerializeField]
-        private int _reachDistance;
+        private float _runtimeDamageFactor;
 
-        /// <summary>
-        /// Stamina consumption for a shot
-        /// </summary>
-        [SerializeField]
-        private int _consumption;
+        private AnimationState     _animationState;
+        private MechaAnimatorProxy _animationProxy;
 
-        private float _lastTriggerTime;
-        private float _minTimeBetweenFire => 1f / (_rateOfFire / 60f);
-
-        public override void Initialize(MechaPartInstance p_self)
+        public override void Initialize(EntityInstance p_self)
         {
-            _lastTriggerTime = -1000f;
-        }
+            base.Initialize(p_self);
 
-        public override bool IsAvailable(MechaPartInstance p_self, object p_opt)
-        {
-            return Time.time - _lastTriggerTime >= _minTimeBetweenFire && p_self.mecha.stamina - _consumption >= 0f;
-        }
+            _runtimeDamageFactor = _damageFactor;
 
-        public override IEnumerator Trigger(MechaPartInstance p_self, BodyPartObject p_target, object p_opt)
-        {
-            var t_now     = Time.time; 
-            var t_elapsed = t_now - _lastTriggerTime;
-            if (t_elapsed >= _minTimeBetweenFire)
+            _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
+
+            if (!_animationProxy)
             {
-                _lastTriggerTime = t_now;
-
-                p_self.mecha.context.animationProxy.animator.SetTrigger("LArm");
-
-                p_self.mecha.ConsumeStamina(_consumption);
-
-                // Compute travel time
-                var t_tpos = p_target.transform.position;
-                var t_dist = Vector3.Distance(p_self.transform.position, t_tpos);
-                if (t_dist < _reachDistance)
-                {
-                    // Make damage
-                    var t_damage = p_self.mecha.context.modifiers[ModifierTarget.Damage].ComputeValue((float)_damage);
-                    p_target.TakeDamage((int)t_damage);
-                    p_self.onDealDamage.Invoke(t_damage);
-                }
-
+                Debug.LogWarning("Unable to find animator proxy on mecha!");
             }
-            yield return null;
+
+            _animationProxy.onLArm.AddListener(_OnAnimationEvent);
+        }
+
+        public override IAlteration Alter<T>(T p_payload)
+        {
+            if (p_payload is SwordPayload t_casted)
+            {
+                SwordPayload t_diff = new();
+
+                _runtimeDamageFactor += (t_diff.damage = _damageFactor * t_casted.damage);
+
+                return new Alteration<SwordPayload>(t_casted, t_diff);
+            }
+            return null;
+        }
+
+        public override void Revert(IAlteration p_payload)
+        {
+            if (p_payload is Alteration<SwordPayload> t_casted)
+            {
+                _runtimeDamageFactor -= t_casted.diff.damage;
+            }
+        }
+
+        public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
+        {
+            if (IsAvailable(p_self, p_opt))
+            {
+                state.Set(AbilityState.Active);
+                _animationState = AnimationState.Idle;
+
+                ConsumeStamina(p_self);
+
+                _animationProxy.animator.SetTrigger("LArm");
+
+                UnityAction<Collider> t_cb = (t_collision) =>
+                {
+                    if (t_collision.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
+                    {
+                        if (t_bpo != p_target && p_target != null)
+                        {
+                            t_bpo = p_target;
+                        }
+                        var t_damage = _runtimeDamageFactor * p_self.statistics[StatisticKind.Damage].Apply<float>(p_self.modifiers[StatisticKind.Damage]);
+                        t_bpo.TakeDamage(p_self.parent, t_damage, DamageKind.Direct);
+                        p_self.onDealDamage.Invoke(t_damage);
+                    }
+                };
+
+                p_self.onCollide.AddListener(t_cb);
+
+                // Wait for animation end
+                var t_timout = _endTriggerTimout;
+                yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
+
+                p_self.onCollide.RemoveListener(t_cb);
+
+                yield return WaitForCooldown();
+
+                state.Set(AbilityState.Ready);
+            }
+        }
+
+        private void _OnAnimationEvent(AnimationEvent p_event)
+        {
+            _animationState = p_event.state;
         }
     }
 

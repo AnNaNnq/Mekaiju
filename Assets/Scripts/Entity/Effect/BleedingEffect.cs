@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
 
     /// <summary>
@@ -11,15 +11,15 @@ namespace Mekaiju
     public class BleedingEffect : IEffectBehaviour
     {
         [SerializeField]
-        private int _damage;
+        private float _damage;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="self"></param>
-        public override void Tick(IEntityInstance p_self)
+        public override void Tick(EntityInstance p_self)
         {
-            p_self.TakeDamage(_damage * Time.deltaTime);
+            p_self.TakeDamage(null, _damage * Time.deltaTime, DamageKind.Indirect);
         }
     }
 

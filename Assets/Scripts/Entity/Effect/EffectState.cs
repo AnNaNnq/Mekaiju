@@ -1,9 +1,8 @@
-using NUnit.Framework;
 using System;
 using UnityEngine;
 using System.Linq;
 
-namespace Mekaiju
+namespace Mekaiju.Entity.Effect
 {
     /// <summary>
     /// 
@@ -22,7 +21,7 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        private IEntityInstance _target;
+        private EntityInstance _target;
 
         /// <summary>
         /// 
@@ -54,7 +53,7 @@ namespace Mekaiju
         /// </summary>
         public EffectState state { get; private set; }
 
-        public StatefullEffect(IEntityInstance p_target, Effect p_effect, float p_time)
+        public StatefullEffect(EntityInstance p_target, Effect p_effect, float p_time)
         {
             state = EffectState.Inactive;
 
@@ -66,7 +65,7 @@ namespace Mekaiju
             effect.behaviour?.OnAdd(p_target);
         }
 
-        public StatefullEffect(IEntityInstance p_target, Effect p_effect) : this(p_target, p_effect, -1)
+        public StatefullEffect(EntityInstance p_target, Effect p_effect) : this(p_target, p_effect, -1)
         {        
 
         }
@@ -78,7 +77,6 @@ namespace Mekaiju
                 if (time > 0 && _elapsed > time)
                 {
                     state = EffectState.Expired;
-                    effect.behaviour?.OnRemove(_target);
                 }
                 else
                 {

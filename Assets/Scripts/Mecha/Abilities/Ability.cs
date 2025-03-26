@@ -23,14 +23,23 @@ namespace Mekaiju
         /// <summary>
         /// 
         /// </summary>
-        [field: SerializeField]
-        public MechaPart target { get; private set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
         [field: SerializeReference, SubclassPicker]
         public IAbilityBehaviour behaviour { get; private set; }
+
+        /// <summary>
+        /// Used to alterate ability behaviour for health tune.
+        /// </summary>
+        [field: SerializeReference, SubclassPicker]
+        public IPayload healthTuneAlteration { get; private set; }
+
+        /// <summary>
+        /// Used to grand ability on reward
+        /// </summary>
+        [field: SerializeReference, SubclassPicker]
+        public AbilityGranter granter { get; private set; }
+
+        [field: SerializeField]
+        public Sprite icon;
 
         public void OnValidate()
         {
