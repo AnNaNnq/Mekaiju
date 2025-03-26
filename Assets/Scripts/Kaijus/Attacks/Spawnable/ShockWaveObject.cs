@@ -62,7 +62,7 @@ namespace Mekaiju.AI.Attack.Instance
 
             foreach (var col in _cols)
             {
-                if (col.CompareTag("Player") && !_hitObjects.Contains(col)) // V�rifie si pas d�j� touch�
+                if (col.CompareTag("MechaPart") && !_hitObjects.Contains(col)) // V�rifie si pas d�j� touch�
                 {
                     Vector3 t_toPlayer = col.transform.position - transform.position;
                     float t_distanceToWave = Mathf.Abs(t_toPlayer.magnitude - _radius); // Distance exacte
@@ -71,12 +71,12 @@ namespace Mekaiju.AI.Attack.Instance
                     {
                         _hitObjects.Add(col); // Ajoute l'objet pour �viter de le toucher plusieurs fois
                         Rigidbody t_rb = col.GetComponent<Rigidbody>();
-                        MechaInstance t_instance = col.GetComponent<MechaInstance>();
-                        if (t_rb != null && t_instance.states[StateKind.Grounded])
+                        MechaPartInstance t_mechaPart = col.GetComponent<MechaPartInstance>();
+                        if (t_rb != null && t_mechaPart.states[StateKind.Grounded])
                         {
                             float t_damage = _stats.kaiju.GetRealDamage(_stats.shockwaveDamage);
-                            t_instance.TakeDamage(_stats.kaiju, t_damage, DamageKind.Direct);
-                            t_instance.AddEffect(_stats.effect, _stats.effectDuration);
+                            t_mechaPart.TakeDamage(_stats.kaiju, t_damage, DamageKind.Direct);
+                            t_mechaPart.AddEffect(_stats.effect, _stats.effectDuration);
                         }
                     }
                 }

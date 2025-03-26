@@ -22,12 +22,12 @@ namespace Mekaiju.AI.Attack.Instance
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.CompareTag("Player"))
+            if(other.CompareTag("MechaPart"))
             {
-                MechaInstance t_mecha = other.GetComponent<MechaInstance>();
+                MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
                 KaijuInstance t_kaiju = GameObject.FindGameObjectWithTag("Kaiju").GetComponent<KaijuInstance>();
-                t_mecha.TakeDamage(t_kaiju, _dmg, Entity.DamageKind.Direct);
-                t_mecha.AddEffect(_stat.effect, _stat.effectDuration);
+                t_mechaPart.TakeDamage(t_kaiju, _dmg, Entity.DamageKind.Direct);
+                t_mechaPart.AddEffect(_stat.effect, _stat.effectDuration);
             }
             if(!other.CompareTag("KaijuPart") && !other.CompareTag("DoomsdayRaySpawn") && !other.CompareTag("Spawnable") && !other.CompareTag("Ground"))
             {
