@@ -1379,6 +1379,7 @@ GameObject:
   - component: {fileID: 9077810304970783289}
   - component: {fileID: 4063167506037753474}
   - component: {fileID: 2303755822981274691}
+  - component: {fileID: 4942543224455732333}
   m_Layer: 5
   m_Name: Effects
   m_TagString: Untagged
@@ -1402,8 +1403,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 161.14, y: -330.09253}
-  m_SizeDelta: {x: -963.06, y: -919.4248}
+  m_AnchoredPosition: {x: -700.4584, y: -496.19995}
+  m_SizeDelta: {x: -1573.6548, y: -1049.7551}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4063167506037753474
 CanvasRenderer:
@@ -1443,6 +1444,32 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4942543224455732333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3830720150796648942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 3
+  m_Spacing: 20
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 1
+  m_ChildScaleHeight: 1
+  m_ReverseArrangement: 0
 --- !u!1 &4012859481344649985
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,7 +1749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBarUI: {fileID: 7850165892825906334}
-  effect: {fileID: 5882815357681125857, guid: ad9ff04be0a656e4eae5e87024371992, type: 3}
+  effectPrefab: {fileID: 1033160616847637108, guid: ad9ff04be0a656e4eae5e87024371992, type: 3}
   effectsList: {fileID: 9077810304970783289}
   capacityPrefab: {fileID: 9051996878209285898, guid: ffa0752a1b712c344ba3847bb34fcd58, type: 3}
   capacitiesList: {fileID: 4392403916865384035}
