@@ -58,7 +58,7 @@ namespace Mekaiju.Entity.Effect
             state = EffectState.Inactive;
 
             _target  = p_target; 
-            effect   = ScriptableObject.Instantiate(p_effect);
+            effect   = p_effect;
             time     = p_time;
             _elapsed = 0f;
 
@@ -68,6 +68,14 @@ namespace Mekaiju.Entity.Effect
         public StatefullEffect(EntityInstance p_target, Effect p_effect) : this(p_target, p_effect, -1)
         {        
 
+        }
+
+        public void Reset(float p_time)
+        {
+            state = EffectState.Inactive;
+
+            time     = p_time;
+            _elapsed = 0;
         }
 
         public void Tick()
