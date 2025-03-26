@@ -16,6 +16,8 @@ MonoBehaviour:
   <objectName>k__BackingField: Arm_R
   <behaviour>k__BackingField:
     rid: 2512019433379594304
+  <healthTuneAlteration>k__BackingField:
+    rid: 8176260393629122626
   <granter>k__BackingField:
     rid: 8176260169380397124
   references:
@@ -37,3 +39,7 @@ MonoBehaviour:
       data:
         <targetName>k__BackingField: Bras droit
         _part: 3
+    - rid: 8176260393629122626
+      type: {class: RailGunPayload, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        damage: -0.5
