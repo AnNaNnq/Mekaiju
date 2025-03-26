@@ -12,10 +12,11 @@ public class CapacityImage : MonoBehaviour
 
     Coroutine _cooldownRotine;
 
-    public void Init(IAbilityBehaviour p_ability)
+    public void Init(Ability p_ability)
     {
-        cooldownImage.sprite = GetComponent<Image>().sprite;
-        _ability = p_ability;
+        cooldownImage.sprite = p_ability.onCooldownIcon;
+        cooldownImage.fillAmount = 0;
+        _ability = p_ability.behaviour;
         _ability.state.onChange.AddListener(UpdateImage);
     }
 
@@ -41,7 +42,7 @@ public class CapacityImage : MonoBehaviour
         while (true)
         {
             cooldownImage.fillAmount = _ability.cooldown;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
 }

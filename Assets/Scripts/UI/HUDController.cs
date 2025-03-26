@@ -97,9 +97,9 @@ public class HUDController : MonoBehaviour
                 Image t_img = t_obj.GetComponent<Image>();
                 CapacityImage t_capImg = t_obj.GetComponent<CapacityImage>();
 
-                t_img.sprite = t_desc.ability.icon;
+                t_img.sprite = t_desc.ability.activeIcon;
                 t_obj.name = t_desc.ability.name + "_img";
-                t_capImg.Init(t_desc.ability.behaviour);
+                t_capImg.Init(t_desc.ability);
             }
         });
     }

@@ -38,7 +38,9 @@ namespace Mekaiju
         public AbilityGranter granter { get; private set; }
 
         [field: SerializeField]
-        public Sprite icon;
+        public Sprite activeIcon;
+        public Sprite onCooldownIcon;
+        public Sprite usingIcon;
 
         public void OnValidate()
         {

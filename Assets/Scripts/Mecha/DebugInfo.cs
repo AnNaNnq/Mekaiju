@@ -121,7 +121,7 @@ public class DebugInfo : MonoBehaviour
         {
             GameObject instance = Instantiate(capacityPrefab, capacitiesList);
             Image abilityImage = instance.GetComponent<Image>();
-            abilityImage.sprite = p_ability.icon;
+            abilityImage.sprite = p_ability.activeIcon;
         }
     }
 
