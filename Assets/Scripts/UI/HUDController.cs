@@ -42,7 +42,7 @@ public class HUDController : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
         _maxHealth = _inst.health;
-        _Capacities();
+        UpdateCapacity();
     }
 
     // Update is called once per frame
@@ -82,31 +82,26 @@ public class HUDController : MonoBehaviour
     #endregion
 
     #region Capacities
-    private void _Capacities()
+    public void UpdateCapacity()
+    {
+        GetCapacities();
+    }
+
+    public void GetCapacities()
     {
         _inst.desc.parts.ForEach((t_part, t_desc) =>
         {
-            if (t_part == MechaPart.Legs)
+            if (t_desc.ability != null && t_part != MechaPart.Legs)
             {
-                _CooldownCapacities(((LegsCompoundAbility)t_desc.ability.behaviour)[LegsSelector.Dash]);
-                _CooldownCapacities(((LegsCompoundAbility)t_desc.ability.behaviour)[LegsSelector.Jump]);
-            }
-            else
-            {
-                _CooldownCapacities(t_desc.ability);
+                GameObject t_obj = Instantiate(capacityPrefab, capacitiesList.transform);
+                Image t_img = t_obj.GetComponent<Image>();
+                CapacityImage t_capImg = t_obj.GetComponent<CapacityImage>();
+
+                t_img.sprite = t_desc.ability.icon;
+                t_obj.name = t_desc.ability.name + "_img";
+                t_capImg.Init(t_desc.ability.behaviour);
             }
         });
-    }
-
-    private void _CooldownCapacities(Ability p_ability)
-    {
-        float t_cooldown = p_ability.behaviour.cooldown;
-        if (!p_ability.name.Equals("EmptyAbility"))
-        {
-            GameObject instance = Instantiate(capacityPrefab, capacitiesList);
-            Image abilityImage = instance.GetComponent<Image>();
-            abilityImage.sprite = p_ability.icon;
-        }
     }
     #endregion
 
