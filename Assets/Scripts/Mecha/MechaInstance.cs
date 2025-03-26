@@ -7,6 +7,8 @@ using Mekaiju.Entity.Effect;
 
 namespace Mekaiju
 {
+    using HealthStatisticValue = Mekaiju.Utils.EnumArray<Mekaiju.MechaPart, float>;
+
     /// <summary>
     /// 
     /// </summary>
@@ -27,6 +29,11 @@ namespace Mekaiju
         /// 
         /// </summary>
         public MechaDesc desc { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _health;
 
         /// <summary>
         /// The current stamina of this entity.
@@ -58,6 +65,7 @@ namespace Mekaiju
             AddEffect(Resources.Load<Effect>("Mecha/Objects/Effect/Heal"));
 
             _stamina = desc.stamina;
+            _health  = baseHealth; 
 
             desc.standalones.ForEach((_, t_ability) => t_ability.behaviour.Initialize(this));
 
@@ -94,30 +102,62 @@ namespace Mekaiju
             base.FixedUpdate();
             desc.standalones.ForEach((_, t_ability) => t_ability.behaviour.FixedTick(this));
         }
-        #endregion
+#endregion
 
-        #region IEntityInstance implementation
-        protected override EnumArray<Statistics, float> statistics => desc.statistics;
+        /// <summary>
+        /// Should be called only by MechaPartInstance.
+        /// </summary>
+        /// <param name="p_damage">The amount of damage to deal.</param>
+        public void TakeDamage(float p_damage)
+        {
+            _health = Mathf.Max(0f, _health - p_damage);
+        }
+
+        /// <summary>
+        /// Should be called only by MechaPartInstance.
+        /// </summary>
+        /// <param name="p_amount">The amount of health to restore.</param>
+        public void HHeal(float p_amount)
+        {
+            _health = Mathf.Min(baseHealth, _health + p_amount);
+        }
+
+#region IEntityInstance implementation
+        public override EnumArray<StatisticKind, IStatistic> statistics => desc.statistics;
 
         public override bool isAlive => health > 0;
 
-        public override float health     => _parts.Aggregate(0f, (t_acc, t_part) => { return t_acc + t_part.health; });
-        public override float baseHealth => desc.statistics[Statistics.Health];
+        public override float health     => _health;
+        public override float baseHealth => statistics[StatisticKind.Health].Apply<HealthStatisticValue>(modifiers[StatisticKind.Health]).Sum();
 
-        public override void Heal(float p_amount)
+        public override float Heal(float p_amount)
         {
-            foreach (var t_part in _parts)
-            {
-                t_part.Heal(p_amount);
-            }
+            var t_dist = p_amount / _parts.Count();
+            var t_heal = _parts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.HHeal(t_dist));
+
+            HHeal(t_heal);
+            return t_heal;
         }
 
-        public override void TakeDamage(float p_damage)
+        public override float TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
-            foreach (var t_part in _parts)
+            onBeforeTakeDamage.Invoke(p_from, p_damage, p_kind);
+            if (!states[StateKind.Invulnerable])
             {
-                t_part.TakeDamage(p_damage / _parts.Count());    
+                timePoints[TimePoint.LastDamage] = Time.time;
+
+                var t_defense = statistics[StatisticKind.Defense].Apply<float>(modifiers[StatisticKind.Defense]);
+                var t_damage  = p_damage - p_damage * t_defense;
+                var t_dist    = t_damage / _parts.Count();
+                var t_taken   = _parts.Aggregate(0f, (t_acc, t_part) => t_acc + t_part.TakeDamage(t_dist));
+
+                TakeDamage(t_taken);
+                onAfterTakeDamage.Invoke(p_from, t_taken, p_kind);
+                Debug.Log($"base : {p_damage}, after_defense: {t_damage}, t_taken: {t_taken}");
+                return t_taken;
             }
+
+            return 0f;
         }
 
         public override float stamina     => _stamina;

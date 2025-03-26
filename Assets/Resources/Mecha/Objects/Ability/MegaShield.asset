@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2c90c8f421734c05b8e3589afd75ced, type: 3}
+  m_Name: MegaShield
+  m_EditorClassIdentifier: 
+  <description>k__BackingField: "Augmente la d\xE9fense pendant x secondes  "
+  <objectName>k__BackingField: Head
+  <behaviour>k__BackingField:
+    rid: 8176260250792624197
+  <icon>k__BackingField: {fileID: 21300000, guid: 49aab07507711c7498e85375a8f67db5, type: 3}
+  <granter>k__BackingField:
+    rid: 8176260250792624196
+  <showInHUD>k__BackingField: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 8176260250792624196
+      type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        <targetName>k__BackingField: Head
+        _part: 0
+    - rid: 8176260250792624197
+      type: {class: MegaShieldAbility, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        _cooldown: 10
+        _consumption: 0
+        _defense: 30
+        _time: 20

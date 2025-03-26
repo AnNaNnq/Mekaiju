@@ -9151,7 +9151,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 9a2a7e8bdc0bb7842b2084d4f1d209b7, type: 2}
+  sharedProfile: {fileID: 11400000, guid: fbde5be40d1ba914db936ed6b397a990, type: 2}
 --- !u!4 &739631466
 Transform:
   m_ObjectHideFlags: 0
@@ -12899,6 +12899,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 15515172087615071, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 1982317437}
     - target: {fileID: 2210248317071661439, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -12988,6 +12992,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
+--- !u!114 &1147216786 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 15515172087615071, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
+  m_PrefabInstance: {fileID: 1147216785}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56f03713910ce6149b24235236a4fee7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1148042925
 GameObject:
   m_ObjectHideFlags: 0
@@ -22157,6 +22172,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e15f3b14c2cba6498e2a6f4d86a474d, type: 3}
+--- !u!20 &1982317437 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1848661010026459219, guid: 7e15f3b14c2cba6498e2a6f4d86a474d, type: 3}
+  m_PrefabInstance: {fileID: 1982317436}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1983859253
 GameObject:
   m_ObjectHideFlags: 0
@@ -23620,6 +23640,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5855820826959060527, guid: 2fa81e41a54c4764684de8bfcda15827, type: 3}
+      propertyPath: _crosshairController
+      value: 
+      objectReference: {fileID: 1147216786}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -23847,14 +23871,14 @@ MeshFilter:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1902384493}
+  - {fileID: 739631466}
   - {fileID: 888928857}
+  - {fileID: 138813496}
+  - {fileID: 1902384493}
   - {fileID: 1982317436}
   - {fileID: 1908225165}
-  - {fileID: 2125019013}
   - {fileID: 904720856}
   - {fileID: 364301802}
-  - {fileID: 124472318}
-  - {fileID: 739631466}
+  - {fileID: 2125019013}
   - {fileID: 1147216785}
-  - {fileID: 138813496}
+  - {fileID: 124472318}

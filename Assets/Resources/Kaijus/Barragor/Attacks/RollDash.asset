@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c81f28bfa57eadc47904e311de7feb8c, type: 3}
+  m_Name: RollDash
+  m_EditorClassIdentifier: 
+  <attack>k__BackingField:
+    rid: 7914790865167974648
+  references:
+    version: 2
+    RefIds:
+    - rid: 7914790865167974648
+      type: {class: RollDash, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
+      data:
+        timeBeforeAttack: 1
+        cooldown: 1
+        range: 60
+        canMakeDamage: 1
+        damage: 100
+        blockable: 0
+        attackRange: 10
+        rollSpeed: 400
+        growingZonePrefab: {fileID: 75760364275592244, guid: 758b1e444fefd534397052de2e23b34d, type: 3}
+        effect: {fileID: 11400000, guid: 75bc609f0c750b743bb40896e9e5c995, type: 2}
+        zoneDamage: 5
+        damageTick: 0.5

@@ -1,18 +1,25 @@
 using System.Collections;
-using Mekaiju.AI;
 using Mekaiju.Entity;
 using Mekaiju.AI.Body;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
+using MyBox;
 
 namespace Mekaiju
 {
-    public class DashAbility : IAbilityBehaviour
+    [Serializable]
+    public class DashPayload : IPayload
+    {
+        public float force;
+        public float duration;
+    }
+
+    public class DashAbility : IStaminableAbility
     {
         /// <summary>
         /// 
         /// </summary>
-        [Header("General")]
         [SerializeField]
         private float _force;
 
@@ -21,12 +28,6 @@ namespace Mekaiju
         /// </summary>
         [SerializeField]
         private float _duration;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [SerializeField]
-        private float _consumption;
 
         /// <summary>
         /// 
@@ -52,6 +53,9 @@ namespace Mekaiju
         private float _endTriggerTimout = 1f;
         private float _actionTriggerTimout = 1f;
 
+        private float _runtimeForce;
+        private float _runtimeDuration;
+
         private Vector3      _direction;
         private MeshTrailTut _ghost;
         private GameObject   _camera;
@@ -66,6 +70,9 @@ namespace Mekaiju
             base.Initialize(p_self);
             
             _elapedTime = 0;
+
+            _runtimeForce    = _force;
+            _runtimeDuration = _duration;
 
             _ghost = p_self.parent.gameObject.AddComponent<MeshTrailTut>();
             _ghost.config = _meshTrailConfig;
@@ -96,11 +103,33 @@ namespace Mekaiju
         {
             return (
                 base.IsAvailable(p_self, p_opt) &&
-                !p_self.states[State.Protected] &&
-                p_self.states[State.Grounded]   &&
-                p_self.stamina - _consumption >= 0f &&
+                !p_self.states[StateKind.Protected] &&
+                 p_self.states[StateKind.Grounded]  &&
                 Mathf.Abs(_input.action.ReadValue<Vector2>().magnitude) > 0    
             );
+        }
+
+        public override IAlteration Alter<T>(T p_payload)
+        {
+            if (p_payload is DashPayload t_casted)
+            {
+                DashPayload t_diff = new();
+
+                _runtimeForce    += (t_diff.force    = _force    * t_casted.force);
+                _runtimeDuration += (t_diff.duration = _duration * t_casted.duration);
+
+                return new Alteration<DashPayload>(t_casted, t_diff);
+            }
+            return null;
+        }
+
+        public override void Revert(IAlteration p_payload)
+        {
+            if (p_payload is Alteration<DashPayload> t_casted)
+            {
+                _runtimeForce    -= t_casted.diff.force;
+                _runtimeDuration -= t_casted.diff.duration;
+            }
         }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
@@ -113,15 +142,16 @@ namespace Mekaiju
 
                 if (Mathf.Abs(_direction.sqrMagnitude) > 0)
                 {
-                    p_self.ConsumeStamina(_consumption);
-                    p_self.states[State.MovementOverrided] = true;
+                    state.Set(AbilityState.Active);
+                    _animationState = AnimationState.Idle;
 
-                    _ghost.Trigger(_duration);
+                    ConsumeStamina(p_self);
+
+                    p_self.states[StateKind.MovementOverrided].Set(true);
+
+                    _ghost.Trigger(_runtimeDuration);
                     var t_go = GameObject.Instantiate(_speedVfx, _camera.transform);
                     t_go.transform.Translate(new(0, 0, 2f));
-
-                    state = AbilityState.Active;
-                    _animationState = AnimationState.Idle;
 
                     _animationProxy.animator.SetTrigger("Dash");
 
@@ -133,13 +163,15 @@ namespace Mekaiju
                     yield return new WaitUntil(() =>
                     {
                         _elapedTime += Time.deltaTime;
-                        return _elapedTime >= _duration;
+                        return _elapedTime >= _runtimeDuration;
                     });
 
-                    state = AbilityState.Ready;
-
                     GameObject.Destroy(t_go);
-                    p_self.states[State.MovementOverrided] = false;
+                    p_self.states[StateKind.MovementOverrided].Set(false);
+
+                    yield return WaitForCooldown();
+
+                    state.Set(AbilityState.Ready);
                 }
             }
 
@@ -150,7 +182,7 @@ namespace Mekaiju
         {
             if (state == AbilityState.Active)
             {
-                Vector3 t_vel = _force * (1 - _elapedTime / _duration) * _direction;
+                Vector3 t_vel = _runtimeForce * (1 - _elapedTime / _runtimeDuration) * _direction;
                 _rigidbody.linearVelocity = new(t_vel.x, _rigidbody.linearVelocity.y, t_vel.z);
             }   
         }

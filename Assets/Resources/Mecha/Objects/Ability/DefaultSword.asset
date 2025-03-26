@@ -16,19 +16,26 @@ MonoBehaviour:
   <objectName>k__BackingField: Arm_L
   <behaviour>k__BackingField:
     rid: 2512019433379594307
+  <healthTuneAlteration>k__BackingField:
+    rid: 8176260393629122627
   <granter>k__BackingField:
     rid: 8176260169380397126
+  icon: {fileID: 21300000, guid: 00afc47dc494310478de45b8291d1e34, type: 3}
   references:
     version: 2
     RefIds:
     - rid: 2512019433379594307
       type: {class: SwordAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
+        _cooldown: 0
+        _consumption: 0
         _damageFactor: 1
-        _reachDistance: 20
-        _consumption: 5
     - rid: 8176260169380397126
       type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}
       data:
         <targetName>k__BackingField: Bras gauche
         _part: 2
+    - rid: 8176260393629122627
+      type: {class: SwordPayload, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        damage: -0.5

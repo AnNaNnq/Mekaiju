@@ -12750,7 +12750,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 9a2a7e8bdc0bb7842b2084d4f1d209b7, type: 2}
+  sharedProfile: {fileID: 11400000, guid: fbde5be40d1ba914db936ed6b397a990, type: 2}
 --- !u!4 &598511973
 Transform:
   m_ObjectHideFlags: 0
@@ -45559,6 +45559,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 816295594824716404, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 816295594824716404, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -27.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 816295594824716404, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5581235530429943963, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.366482
@@ -45607,6 +45619,10 @@ PrefabInstance:
       propertyPath: managedReferences[7914790751780995222].nest
       value: 
       objectReference: {fileID: 1798801039}
+    - target: {fileID: 9031289339843561335, guid: 758eef8a4dbf00f409717da3cee74f5a, type: 3}
+      propertyPath: managedReferences[7914790751780995222].nest
+      value: 
+      objectReference: {fileID: 1798801039}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45616,15 +45632,15 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1783566530}
-  - {fileID: 192211227}
   - {fileID: 598511973}
+  - {fileID: 1783566530}
   - {fileID: 1123966189}
-  - {fileID: 1798801039}
-  - {fileID: 131294930}
-  - {fileID: 529762912}
-  - {fileID: 1418711460}
-  - {fileID: 1904947513}
+  - {fileID: 192211227}
   - {fileID: 272126425}
+  - {fileID: 1904947513}
+  - {fileID: 1798801039}
   - {fileID: 5351538510094317334}
+  - {fileID: 131294930}
   - {fileID: 1382457179}
+  - {fileID: 1418711460}
+  - {fileID: 529762912}

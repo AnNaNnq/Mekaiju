@@ -14,21 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <description>k__BackingField: Perform a dash.
   <objectName>k__BackingField: 
-  <target>k__BackingField: 4
   <behaviour>k__BackingField:
     rid: 2512019433379594303
+  <healthTuneAlteration>k__BackingField:
+    rid: 8176260388005085253
+  <granter>k__BackingField:
+    rid: -2
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2512019433379594303
       type: {class: DashAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
+        _cooldown: 2
+        _consumption: 0
         _force: 100
         _duration: 0.8
-        _consumption: 5
         _meshTrailConfig:
           refreshRate: 0.075
           destroyDelay: 1
           material: {fileID: -876546973899608171, guid: eda1e64517cca074782659ab3569707f, type: 3}
         _speedVfx: {fileID: 4796063517896905453, guid: 1026ad1c8924c4fad997c86a5afd79a4, type: 3}
         _input: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - rid: 8176260388005085253
+      type: {class: DashPayload, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        force: -0.5
+        duration: 0

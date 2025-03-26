@@ -33,7 +33,6 @@ namespace Mekaiju.AI.PhaseAttack
             MechaInstance t_mecha = _kaiju.target.GetComponent<MechaInstance>();
             t_mecha.RemoveEffect(_effectUsed);
             _kaiju.motor.StartKaiju();
-            _kaiju.SetPhase(2);
         }
 
         public override void Failure()
@@ -44,7 +43,7 @@ namespace Mekaiju.AI.PhaseAttack
 
             var t_damage = _kaiju.GetRealDamage(damage);
 
-            t_mecha.TakeDamage(t_damage);
+            t_mecha.TakeDamage(_kaiju, t_damage, Entity.DamageKind.Direct);
             _kaiju.motor.StartKaiju();
             _kaiju.Heal(healAmountWhenFail);
             _kaiju.SetPhase(1);

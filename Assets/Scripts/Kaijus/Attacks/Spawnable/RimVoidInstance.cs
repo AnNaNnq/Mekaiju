@@ -133,31 +133,31 @@ namespace Mekaiju.AI.Attack.Instance
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("MechaPart"))
             {
-                MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-                _speedMod = t_mecha.AddEffect(_stat.rimVoidEffect);
+                MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
+                _speedMod = t_mechaPart.mecha.AddEffect(_stat.rimVoidEffect);
                 _damagable = true;
-                StartCoroutine(Damage(t_mecha));
+                StartCoroutine(Damage(t_mechaPart));
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("MechaPart"))
             {
-                MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-                t_mecha.RemoveEffect(_speedMod);
+                MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
+                t_mechaPart.mecha.RemoveEffect(_speedMod);
                 _damagable = false;
             }
         }
 
-        IEnumerator Damage(MechaInstance p_mecha)
+        IEnumerator Damage(MechaPartInstance p_mechaPart)
         {
             while (_damagable)
             {
                 float t_damage = _instance.GetRealDamage(_stat.damage);
-                p_mecha.TakeDamage(t_damage);
+                p_mechaPart.TakeDamage(_instance, t_damage, Entity.DamageKind.Direct);
                 _instance.AddDPS(t_damage);
                 _instance.UpdateUI();
                 yield return new WaitForSeconds(_stat.rimVoidHitCooldown);
