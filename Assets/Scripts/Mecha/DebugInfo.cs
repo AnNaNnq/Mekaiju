@@ -133,7 +133,7 @@ public class DebugInfo : MonoBehaviour
             {
                 _CooldownCapacities(((LegsCompoundAbility)t_desc.ability.behaviour)[LegsSelector.Dash]);
                 _CooldownCapacities(((LegsCompoundAbility)t_desc.ability.behaviour)[LegsSelector.Jump]);
-            }
+            } 
             else
             {
                 _CooldownCapacities(t_desc.ability);

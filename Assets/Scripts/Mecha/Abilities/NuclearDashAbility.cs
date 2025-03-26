@@ -6,66 +6,42 @@ using UnityEngine;
 
 namespace Mekaiju
 {
-    public class NuclearDashAbility : IAbilityBehaviour
+    public class NuclearDashAbility : IStaminableAbility
     {
         [Header("General")]
         [SerializeField]
-        private DashAlterPayload _dashFactor;
+        [OverrideLabel("Alteration factor")]
+        [Tooltip("force = .5 means force = (1 + .5) * force")]
+        private DashPayload _dashFactor;
 
         [SerializeField]
         [OverrideLabel("Duration (s)")]
         private float _duration;
 
-        [SerializeField]
-        [OverrideLabel("Cooldown (s)")]
-        private float _cooldown;
-
-        [SerializeField]
-        private float _consumption;
-
         [Header("Other")]
         [SerializeField]
         private Ability _dashAbility;
 
-        private DashAlterPayload _reset;
-        private float             _currentCooldown;
-
-        public override float cooldown => _currentCooldown;
-
-        public override void Initialize(EntityInstance p_self)
-        {
-            base.Initialize(p_self);
-
-            _reset = new();
-            _reset.forceFactor    = 1f;
-            _reset.durationFactor = 1f;
-
-            _currentCooldown = 0;
-        }
-
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return base.IsAvailable(p_self, p_opt) && p_self.stamina - _consumption >= 0f;
+            return base.IsAvailable(p_self, p_opt);
         }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
-                state = AbilityState.Active;
+                state.Set(AbilityState.Active);
 
-                p_self.ConsumeStamina(_consumption);
+                ConsumeStamina(p_self);
 
-                _dashAbility.behaviour.Alter(_dashFactor);
+                var t_alteration = _dashAbility.behaviour.Alter(_dashFactor);
                 yield return new WaitForSeconds(_duration);
-                _dashAbility.behaviour.Alter(_reset);
+                _dashAbility.behaviour.Revert(t_alteration);
 
-                state = AbilityState.InCooldown;
+                yield return WaitForCooldown();
 
-                _currentCooldown = _cooldown;
-                yield return new WaitUntil(() => (_currentCooldown -= Time.deltaTime) <= 0);
-
-                state = AbilityState.Ready;
+                state.Set(AbilityState.Ready);
             }
         }
     }

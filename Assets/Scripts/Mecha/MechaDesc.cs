@@ -26,6 +26,13 @@ namespace Mekaiju
         public EnumArray<StatisticKind, IStatistic> statistics { get; private set; }
 
         /// <summary>
+        /// The treshold to alter ability (base on part health)
+        /// </summary>
+        [field: OverrideLabel("Part Treshold (%)")]
+        [field: SerializeField]
+        public float partTreshold { get; private set; }
+
+        /// <summary>
         /// The description for each parts
         /// </summary>
         [field: Foldout("General")]

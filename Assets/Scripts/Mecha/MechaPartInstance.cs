@@ -36,6 +36,11 @@ namespace Mekaiju
         private float _health;
 
         /// <summary>
+        /// Store the alteration applies to ability (in case we have to revert it).
+        /// </summary>
+        private IAlteration _alteration;
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="p_inst"></param>
@@ -47,6 +52,8 @@ namespace Mekaiju
 
             _desc   = p_desc;
             _health = baseHealth;
+
+            _alteration = null;
 
             _desc.ability.behaviour?.Initialize(this);
         }
@@ -79,9 +86,47 @@ namespace Mekaiju
         /// This function is used in case of compound damages.
         /// </summary>
         /// <param name="p_damage">The amount of damage to deal.</param>
-        public void TakeDamage(float p_damage)
+        public float TakeDamage(float p_damage)
         {
-            _health = Mathf.Max(0f, _health - p_damage);
+            var t_recover = 0.5f * p_damage;
+            if (isAlive)
+            {
+                var t_taken = Mathf.Min(p_damage, _health);
+                _health = Math.Max(0f, _health - p_damage);
+
+                if (_alteration == null && _health < (mecha.desc.partTreshold / 100f) * baseHealth)
+                {
+                    _alteration = _desc.ability.behaviour.Alter(_desc.ability.healthTuneAlteration);
+                }
+
+                return Mathf.Max(t_taken, t_recover);
+            }
+
+            return t_recover;
+        }
+
+        /// <summary>
+        /// Should be used only by MechaInstance or Self.<br/>
+        /// This function is used in case of compound heal.
+        /// </summary>
+        /// <param name="p_amount">The amount of health to restore.</param>
+        public float HHeal(float p_amount)
+        {
+            if (isAlive)
+            {
+                var t_health = _health;
+                _health = Mathf.Min(baseHealth, _health + p_amount);
+
+                if (_alteration != null && _health > (mecha.desc.partTreshold / 100f) * baseHealth)
+                {
+                    _desc.ability.behaviour.Revert(_alteration);
+                    _alteration = null;
+                }
+
+                return _health - t_health;
+            }
+
+            return 0f;
         }
 
         public override void Update()
@@ -103,8 +148,8 @@ namespace Mekaiju
         public override EnumArray<StatisticKind, ModifierCollection> modifiers   => parent.modifiers;
         public override EnumArray<StatisticKind, IStatistic>        statistics => parent.statistics;
 
-        public override EnumArray<TimePoint, float>  timePoints => parent.timePoints;
-        public override EnumArray<StateKind, State> states     => parent.states;
+        public override EnumArray<TimePoint, float>        timePoints => parent.timePoints;
+        public override EnumArray<StateKind, State<bool>> states     => parent.states;
 
         public override UnityEvent<IDamageable, float, DamageKind> onBeforeTakeDamage => parent.onBeforeTakeDamage;
         public override UnityEvent<IDamageable, float, DamageKind> onAfterTakeDamage  => parent.onAfterTakeDamage;
@@ -115,23 +160,29 @@ namespace Mekaiju
         public override float baseHealth => statistics[StatisticKind.Health].Apply<HealthStatisticValue>(modifiers[StatisticKind.Health])[_desc.part];
         public override float health     => _health;
 
-        public override void Heal(float p_heal)
+        public override float Heal(float p_amount)
         {
-            _health = Mathf.Min(baseHealth, _health + p_heal);
+            var t_heal = HHeal(p_amount);
+            mecha.HHeal(t_heal);
+            return t_heal;
         }
 
-        public override void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
+        public override float TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
             onBeforeTakeDamage.Invoke(p_from, p_damage, p_kind);
             if (!states[StateKind.Invulnerable])
             {
+                timePoints[TimePoint.LastDamage] = Time.time;
+
                 var t_defense = statistics[StatisticKind.Defense].Apply<float>(modifiers[StatisticKind.Defense]);
                 var t_damage  = p_damage - p_damage * t_defense;
-                timePoints[TimePoint.LastDamage] = Time.time;
-                TakeDamage(t_damage);
+                var t_taken   = TakeDamage(t_damage);
 
-                onAfterTakeDamage.Invoke(p_from, t_damage, p_kind);
+                mecha.TakeDamage(t_taken);
+                onAfterTakeDamage.Invoke(p_from, t_taken, p_kind);
+                return t_taken;
             }
+            return 0f;
         }
 
         public override float baseStamina => parent.baseStamina;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Mekaiju.AI.Attack
 {
@@ -20,15 +22,15 @@ namespace Mekaiju.AI.Attack
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!_playerInside && other.CompareTag("Player"))
+            if (!_playerInside && other.CompareTag("MechaPart"))
             {
                 _playerInside = true;
-                MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-                StartCoroutine(DealDamage(t_mecha));
+                MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
+                StartCoroutine(DealDamage(t_mechaPart));
                 if (_stats.addEffect)
                 {
                     float t_duration = _stats.asDuration ? _stats.effectDuration : -1;
-                    _effect = t_mecha.AddEffect(_stats.effect, t_duration);
+                    _effect = t_mechaPart.mecha.AddEffect(_stats.effect, t_duration);
                 }
             }
 
@@ -42,7 +44,7 @@ namespace Mekaiju.AI.Attack
             }
         }
 
-        private IEnumerator DealDamage(MechaInstance p_mech)
+        private IEnumerator DealDamage(MechaPartInstance p_mech)
         {
             while (_playerInside)
             {
@@ -57,13 +59,13 @@ namespace Mekaiju.AI.Attack
 
         private void OnTriggerExit(Collider other)
         {
-            if (_playerInside && other.CompareTag("Player"))
+            if (_playerInside && other.CompareTag("MechaPart"))
             {
                 _playerInside = false;
                 if (!_stats.asDuration && _effect != null)
                 {
-                    MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-                    t_mecha.RemoveEffect(_effect);
+                    MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
+                    t_mechaPart.mecha.RemoveEffect(_effect);
                 }
             }
         }

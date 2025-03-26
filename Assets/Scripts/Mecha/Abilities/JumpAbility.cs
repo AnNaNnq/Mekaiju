@@ -4,9 +4,16 @@ using Mekaiju.AI.Body;
 using UnityEngine;
 using Mekaiju.Entity;
 using MyBox;
+using System;
 
 namespace Mekaiju
 {
+    [Serializable]
+    public class JumpPayload : IPayload
+    {
+        public float force;
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -21,6 +28,8 @@ namespace Mekaiju
         private float _endTriggerTimout    = 5f;
         private float _actionTriggerTimout = 5f;
 
+        private float _runtimeForce;
+
         private bool _requested;
 
         private AnimationState     _animationState;
@@ -31,7 +40,8 @@ namespace Mekaiju
         {
             base.Initialize(p_self);
             
-            _requested  = false;
+            _requested    = false;
+            _runtimeForce = _force;
 
             _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
 
@@ -54,16 +64,14 @@ namespace Mekaiju
 
         public override bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return (
-                base.IsAvailable(p_self, p_opt) && p_self.states[StateKind.Grounded] && !_requested
-            );
+            return base.IsAvailable(p_self, p_opt) && p_self.states[StateKind.Grounded] && !_requested && _runtimeForce > 0f;
         }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {  
             if (IsAvailable(p_self, p_opt))
             {
-                state = AbilityState.Active;
+                state.Set(AbilityState.Active);
                 _animationState = AnimationState.Idle;
 
                 _animationProxy.animator.SetTrigger("Jump");
@@ -83,7 +91,28 @@ namespace Mekaiju
 
                 yield return WaitForCooldown();
 
-                state = AbilityState.Ready;
+                state.Set(AbilityState.Ready);
+            }
+        }
+
+        public override IAlteration Alter<T>(T p_payload)
+        {
+            if (p_payload is JumpPayload t_casted)
+            {
+                JumpPayload t_diff = new();
+
+                _runtimeForce += (t_diff.force = _force * t_casted.force);
+
+                return new Alteration<JumpPayload>(t_casted, t_diff);
+            }
+            return null;
+        }
+
+        public override void Revert(IAlteration p_payload)
+        {
+            if (p_payload is Alteration<JumpPayload> t_casted)
+            {
+                _runtimeForce -= t_casted.diff.force;
             }
         }
 
@@ -92,7 +121,7 @@ namespace Mekaiju
             // Perform physic jump if requested
             if (_requested)
             {
-                _rigidbody.AddForce(Vector3.up * _force, ForceMode.Impulse);
+                _rigidbody.AddForce(Vector3.up * _runtimeForce, ForceMode.Impulse);
                 _requested = false;
             }
         }

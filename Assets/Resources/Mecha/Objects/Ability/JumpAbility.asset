@@ -14,15 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <description>k__BackingField: Jump
   <objectName>k__BackingField: default
-  <target>k__BackingField: 4
-  <icon>k__BackingField: {fileID: 21300000, guid: 46dd9581bc849d147b7f3b2ac40856ee, type: 3}
   <behaviour>k__BackingField:
     rid: 2512019433379594308
+  <healthTuneAlteration>k__BackingField:
+    rid: -2
+  <granter>k__BackingField:
+    rid: -2
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2512019433379594308
       type: {class: JumpAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
-        _force: 25000
         _cooldown: 0.5
+        _consumption: 0
+        _force: 25000

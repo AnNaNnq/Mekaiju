@@ -32,16 +32,20 @@ public class KaijuMotor : MonoBehaviour
         LookTarget();
     }
 
+    public void MoveTo(Vector3 p_pos)
+    {
+        MoveTo(p_pos, _instance.stoppingDistanceMin);
+    }
 
     /// <summary>
     /// Moves the Kaiju to a given position
     /// </summary>
     /// <param name="p_pos"></param>
     /// <param name="p_stopping"></param>
-    public void MoveTo(Vector3 p_pos, float p_stopping = 10f)
+    public void MoveTo(Vector3 p_pos, float p_stopping)
     {
         if (_agent.enabled == false) return;
-        p_stopping = Mathf.Max(p_stopping, 10f);
+        p_stopping = Mathf.Max(p_stopping, _instance.stoppingDistanceMin);
 
         
         _agent.destination = p_pos;

@@ -30,9 +30,8 @@ namespace Mekaiju
 
         public IEnumerator WaitForCooldown()
         {
-            state = AbilityState.InCooldown;
-
             _currentCooldown = _cooldown;
+            state.Set(AbilityState.InCooldown);
             yield return new WaitUntil(() => (_currentCooldown -= Time.deltaTime) <= 0);
         }
     }

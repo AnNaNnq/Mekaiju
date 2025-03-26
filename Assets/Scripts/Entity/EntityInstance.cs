@@ -21,7 +21,6 @@ namespace Mekaiju.Entity
         /// <summary>
         /// Store effect to apply to the current entity.
         /// </summary>
-        [field: SerializeField]
         public virtual List<StatefullEffect> effects { get; } = new();
 
         /// <summary>
@@ -33,7 +32,7 @@ namespace Mekaiju.Entity
         /// <summary>
         /// Define usefull states on an entity
         /// </summary>
-        public virtual EnumArray<StateKind, State> states { get; } = new(() => new());
+        public virtual EnumArray<StateKind, State<bool>> states { get; } = new(() => new(false));
 
         /// <summary>
         /// Bind base entity stats.
@@ -62,8 +61,8 @@ namespace Mekaiju.Entity
         public abstract float health     { get; }
         public abstract float baseHealth { get; }
 
-        public abstract void Heal      (float p_amount);
-        public abstract void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind);
+        public abstract float Heal      (float p_amount);
+        public abstract float TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind);
 
         public virtual float baseStamina => 0f;
         public virtual float stamina     => 0f;
@@ -76,16 +75,23 @@ namespace Mekaiju.Entity
 
         public IDisposable AddEffect(Effect.Effect p_effect)
         {
-            effects.Add(new(this, p_effect));
-            onAddEffect.Invoke(effects[^1]);
-            return effects[^1];
+            return AddEffect(p_effect, -1);
         }
 
         public IDisposable AddEffect(Effect.Effect p_effect, float p_time)
         {
-            effects.Add(new(this, p_effect, p_time));
-            onAddEffect.Invoke(effects[^1]);
-            return effects[^1];
+            StatefullEffect t_ret = effects.Find(t_effect => t_effect.effect == p_effect);
+            if (t_ret == null)
+            {
+                effects.Add(new(this, p_effect, p_time));
+                t_ret = effects[^1];
+                onAddEffect.Invoke(t_ret);
+            }
+            else
+            {
+                t_ret.Reset(p_time);
+            }
+            return t_ret;
         }
 
         public void RemoveEffect(IDisposable p_effect)
