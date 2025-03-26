@@ -27,13 +27,14 @@ public class HUDController : MonoBehaviour
     private void Awake()
     {
         _inst = GameObject.Find("Player").GetComponent<MechaInstance>();
+        _inst.onAddEffect.AddListener(_SetEffects);
+        _inst.onRemoveEffect.AddListener(_RemoveEffects);
+        
         _effectsMapping = new();
     }
 
     void Start()
     {
-        _inst.onAddEffect.AddListener(_SetEffects);
-        _inst.onRemoveEffect.AddListener(_RemoveEffects);
         StartCoroutine(LateStart(1));
     }
 

@@ -56,7 +56,7 @@ namespace Mekaiju
         {
             desc = GameManager.instance.playerData.mechaDesc;
 
-            AddEffect(Resources.Load<Effect>("Mecha/Objects/Effect/Stamina"));
+            // AddEffect(Resources.Load<Effect>("Mecha/Objects/Effect/Stamina"));
             AddEffect(Resources.Load<Effect>("Mecha/Objects/Effect/Heal"));
 
             _stamina = desc.stamina;
