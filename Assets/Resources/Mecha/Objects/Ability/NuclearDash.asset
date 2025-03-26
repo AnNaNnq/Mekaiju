@@ -16,22 +16,24 @@ MonoBehaviour:
   <objectName>k__BackingField: Head
   <behaviour>k__BackingField:
     rid: 8176260274335252546
-  <icon>k__BackingField: {fileID: 21300000, guid: 46dd9581bc849d147b7f3b2ac40856ee, type: 3}
+  <healthTuneAlteration>k__BackingField:
+    rid: -2
   <granter>k__BackingField:
     rid: 8176260274335252547
-  <showInHUD>k__BackingField: 1
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 8176260274335252546
       type: {class: NuclearDashAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:
-        _dashFactor:
-          forceFactor: 2
-          durationFactor: 1.5
-        _duration: 10
         _cooldown: 5
         _consumption: 0
+        _dashFactor:
+          force: 0
+          duration: 0
+        _duration: 10
         _dashAbility: {fileID: 11400000, guid: 91ffdedc6e8784a359d9b8c4d8a498ac, type: 2}
     - rid: 8176260274335252547
       type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}

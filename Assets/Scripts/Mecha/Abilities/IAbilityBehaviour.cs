@@ -13,6 +13,21 @@ namespace Mekaiju
         Ready, InCooldown, Active
     }
 
+    public abstract class IPayload {}
+    public interface IAlteration {}
+
+    public class Alteration<T> : IAlteration
+    {
+        public T payload;
+        public T diff;
+
+        public Alteration(T p_payload, T p_diff)
+        {
+            payload = p_payload;
+            diff    = p_diff;
+        }
+    }
+
 
     /// <summary>
     /// An interface that defines all behaviour about ability.
@@ -39,10 +54,15 @@ namespace Mekaiju
         }
 
         /// <summary>
-        /// Used handle alter payload.
+        /// Used to handle alter payload.
         /// </summary>
         /// <param name="p_payload">The data used to alter ability.</param>
-        public virtual void Alter(object p_payload) {}
+        public virtual IAlteration Alter<T>(T p_payload) { return null; }
+
+        /// <summary>
+        /// Used to restore default ability properties.
+        /// </summary>
+        public virtual void Revert(IAlteration p_alteration) {}
 
         /// <summary>
         /// Indicates whether the capacity can be triggered.

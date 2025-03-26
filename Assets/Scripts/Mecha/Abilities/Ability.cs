@@ -27,10 +27,10 @@ namespace Mekaiju
         public IAbilityBehaviour behaviour { get; private set; }
 
         /// <summary>
-        /// 
+        /// Used to alterate ability behaviour for health tune.
         /// </summary>
-        [field: SerializeField]
-        public Sprite icon { get; private set; }
+        [field: SerializeReference, SubclassPicker]
+        public IPayload healthTuneAlteration { get; private set; }
 
         /// <summary>
         /// Used to grand ability on reward

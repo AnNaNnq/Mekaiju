@@ -16,10 +16,10 @@ MonoBehaviour:
   <objectName>k__BackingField: 
   <behaviour>k__BackingField:
     rid: 2512019433379594303
-  <icon>k__BackingField: {fileID: 0}
+  <healthTuneAlteration>k__BackingField:
+    rid: 8176260388005085253
   <granter>k__BackingField:
     rid: -2
-  <showInHUD>k__BackingField: 0
   references:
     version: 2
     RefIds:
@@ -38,3 +38,8 @@ MonoBehaviour:
           material: {fileID: -876546973899608171, guid: eda1e64517cca074782659ab3569707f, type: 3}
         _speedVfx: {fileID: 4796063517896905453, guid: 1026ad1c8924c4fad997c86a5afd79a4, type: 3}
         _input: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - rid: 8176260388005085253
+      type: {class: DashPayload, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        force: -0.5
+        duration: 0
