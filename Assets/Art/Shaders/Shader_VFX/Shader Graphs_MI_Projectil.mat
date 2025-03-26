@@ -37,6 +37,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Alpha_map:
+        m_Texture: {fileID: 2800000, guid: 7c39ec43aa9fd0e48a52d69d77dde292, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -51,12 +55,20 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Curv: 1.01
-    - _FresnelPower: 2.48
+    - _Alpha: 1
+    - _Curv: 0
+    - _Fresnel: 0
+    - _FresnelPower: 34.43
+    - _Opacity: 0
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _VertexPaintOpacity: 2.38
     m_Colors:
-    - _Color: {r: 16, g: 0, b: 0, a: 1}
-    - _Color_1: {r: 0.034198113, g: 0, b: 0, a: 0}
+    - _Color: {r: 4.759381, g: 0, b: 0, a: 1}
+    - _ColorBase: {r: 1.5472568, g: 4.5412064, b: 0, a: 1}
+    - _ColorFresnel: {r: 24.284786, g: 178.90816, b: 0, a: 0.95686275}
+    - _Color_1: {r: 1, g: 0, b: 0, a: 0}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Tiling: {r: 28.2, g: 0.87, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
