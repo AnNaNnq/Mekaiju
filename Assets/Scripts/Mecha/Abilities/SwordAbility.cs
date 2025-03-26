@@ -8,6 +8,11 @@ using UnityEngine.Events;
 
 namespace Mekaiju
 {
+    [Serializable]
+    public class SwordPayload : IPayload
+    {
+        public float damage;
+    }
 
     /// <summary>
     /// The sword ability behaviour
@@ -25,12 +30,16 @@ namespace Mekaiju
 
         private float _endTriggerTimout = 1;
 
+        private float _runtimeDamageFactor;
+
         private AnimationState     _animationState;
         private MechaAnimatorProxy _animationProxy;
 
         public override void Initialize(EntityInstance p_self)
         {
             base.Initialize(p_self);
+
+            _runtimeDamageFactor = _damageFactor;
 
             _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
 
@@ -40,6 +49,27 @@ namespace Mekaiju
             }
 
             _animationProxy.onLArm.AddListener(_OnAnimationEvent);
+        }
+
+        public override IAlteration Alter<T>(T p_payload)
+        {
+            if (p_payload is SwordPayload t_casted)
+            {
+                SwordPayload t_diff = new();
+
+                _runtimeDamageFactor += (t_diff.damage = _damageFactor * t_casted.damage);
+
+                return new Alteration<SwordPayload>(t_casted, t_diff);
+            }
+            return null;
+        }
+
+        public override void Revert(IAlteration p_payload)
+        {
+            if (p_payload is Alteration<SwordPayload> t_casted)
+            {
+                _runtimeDamageFactor -= t_casted.diff.damage;
+            }
         }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
@@ -61,7 +91,7 @@ namespace Mekaiju
                         {
                             t_bpo = p_target;
                         }
-                        var t_damage = _damageFactor * p_self.statistics[StatisticKind.Damage].Apply<float>(p_self.modifiers[StatisticKind.Damage]);
+                        var t_damage = _runtimeDamageFactor * p_self.statistics[StatisticKind.Damage].Apply<float>(p_self.modifiers[StatisticKind.Damage]);
                         t_bpo.TakeDamage(p_self.parent, t_damage, DamageKind.Direct);
                         p_self.onDealDamage.Invoke(t_damage);
                     }

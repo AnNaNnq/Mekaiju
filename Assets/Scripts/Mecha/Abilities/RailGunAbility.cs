@@ -5,9 +5,15 @@ using Mekaiju.AI.Body;
 using MyBox;
 using UnityEngine;
 using Unity.Cinemachine;
+using System;
 
 namespace Mekaiju
 {
+    [Serializable]
+    public class RailGunPayload : IPayload
+    {
+        public float damage;
+    }
 
     /// <summary>
     /// 
@@ -61,6 +67,8 @@ namespace Mekaiju
         private float _actionTriggerTimout = 5f;
         private float _projectileDestructionTimout = 10f;
 
+        private float _runtimeDamageFactor;
+
         private Transform          _launchTransform;
         private CinemachineCamera  _camera;
         private AnimationState     _animationState;
@@ -69,6 +77,8 @@ namespace Mekaiju
         public override void Initialize(EntityInstance p_self)
         {
             base.Initialize(p_self);
+
+            _runtimeDamageFactor = _damageFactor;
 
             _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
 
@@ -81,6 +91,27 @@ namespace Mekaiju
             _camera          = GameObject.FindWithTag("MainCamera").GetComponent<CinemachineCamera>();
 
             _animationProxy.onRArm.AddListener(_OnAnimationEvent);
+        }
+
+        public override IAlteration Alter<T>(T p_payload)
+        {
+            if (p_payload is RailGunPayload t_casted)
+            {
+                RailGunPayload t_diff = new();
+
+                _runtimeDamageFactor += (t_diff.damage = _damageFactor * t_casted.damage);
+
+                return new Alteration<RailGunPayload>(t_casted, t_diff);
+            }
+            return null;
+        }
+
+        public override void Revert(IAlteration p_payload)
+        {
+            if (p_payload is Alteration<RailGunPayload> t_casted)
+            {
+                _runtimeDamageFactor -= t_casted.diff.damage;
+            }
         }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
@@ -114,7 +145,7 @@ namespace Mekaiju
                     {
                         if (t_collision.collider.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
                         {
-                            var t_damage = _damageFactor * p_self.statistics[StatisticKind.Damage].Apply<float>(p_self.modifiers[StatisticKind.Damage]);
+                            var t_damage = _runtimeDamageFactor * p_self.statistics[StatisticKind.Damage].Apply<float>(p_self.modifiers[StatisticKind.Damage]);
                             t_bpo.TakeDamage(p_self.parent, t_damage, DamageKind.Direct);
                             p_self.onDealDamage.Invoke(t_damage);
                         }
