@@ -136,7 +136,7 @@ namespace Mekaiju.AI.Attack.Instance
             if (other.CompareTag("MechaPart"))
             {
                 MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
-                _speedMod = t_mechaPart.AddEffect(_stat.rimVoidEffect);
+                _speedMod = t_mechaPart.mecha.AddEffect(_stat.rimVoidEffect);
                 _damagable = true;
                 StartCoroutine(Damage(t_mechaPart));
             }
@@ -147,7 +147,7 @@ namespace Mekaiju.AI.Attack.Instance
             if (other.CompareTag("MechaPart"))
             {
                 MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
-                t_mechaPart.RemoveEffect(_speedMod);
+                t_mechaPart.mecha.RemoveEffect(_speedMod);
                 _damagable = false;
             }
         }

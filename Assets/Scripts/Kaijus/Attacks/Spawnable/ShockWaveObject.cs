@@ -76,7 +76,7 @@ namespace Mekaiju.AI.Attack.Instance
                         {
                             float t_damage = _stats.kaiju.GetRealDamage(_stats.shockwaveDamage);
                             t_mechaPart.TakeDamage(_stats.kaiju, t_damage, DamageKind.Direct);
-                            t_mechaPart.AddEffect(_stats.effect, _stats.effectDuration);
+                            t_mechaPart.mecha.AddEffect(_stats.effect, _stats.effectDuration);
                         }
                     }
                 }

@@ -30,7 +30,7 @@ namespace Mekaiju.AI.Attack
                 if (_stats.addEffect)
                 {
                     float t_duration = _stats.asDuration ? _stats.effectDuration : -1;
-                    _effect = t_mechaPart.AddEffect(_stats.effect, t_duration);
+                    _effect = t_mechaPart.mecha.AddEffect(_stats.effect, t_duration);
                 }
             }
 
@@ -59,13 +59,13 @@ namespace Mekaiju.AI.Attack
 
         private void OnTriggerExit(Collider other)
         {
-            if (_playerInside && other.CompareTag("Player"))
+            if (_playerInside && other.CompareTag("MechaPart"))
             {
                 _playerInside = false;
                 if (!_stats.asDuration && _effect != null)
                 {
-                    MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-                    t_mecha.RemoveEffect(_effect);
+                    MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
+                    t_mechaPart.mecha.RemoveEffect(_effect);
                 }
             }
         }
