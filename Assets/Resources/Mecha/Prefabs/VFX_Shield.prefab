@@ -82,8 +82,8 @@ Transform:
   m_GameObject: {fileID: 7907176242590952020}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalPosition: {x: 0, y: 0.9, z: 0.7}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 969254238783573958}
@@ -153,12 +153,27 @@ VisualEffect:
       - m_Value: 50
         m_Name: LifeTime
         m_Overridden: 1
+      - m_Value: 0.4
+        m_Name: SparkSize
+        m_Overridden: 1
     m_Vector2f:
       m_Array: []
     m_Vector3f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 0, y: 10, z: 0}
+        m_Name: SparkGravity
+        m_Overridden: 1
     m_Vector4f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 0, y: 95.87451, z: 36.367252, w: 1}
+        m_Name: ColorFront
+        m_Overridden: 1
+      - m_Value: {x: 0.09892718, y: 2.9960783, z: 1.1253209, w: 0}
+        m_Name: ColorBack
+        m_Overridden: 1
+      - m_Value: {x: 0, y: 2.4335723, z: 2.3455048, w: 0}
+        m_Name: FresnelColor
+        m_Overridden: 1
     m_Uint:
       m_Array: []
     m_Int:
