@@ -36,15 +36,15 @@ namespace Mekaiju.AI.Attack
             _line.positionCount = 2;
             _line.SetPosition(0, _start.position);
             _line.SetPosition(1, transform.position);
-            if(Physics.Raycast(_start.position, direction, out RaycastHit hit, distance, LayerMask.GetMask("Player"))){
+            if(Physics.Raycast(_start.position, direction, out RaycastHit hit, distance, LayerMask.GetMask("MechaPart"))){
                 if (_damagable)
                 {
                     _damagable = false;
-                    if (hit.collider.TryGetComponent(out MechaInstance _mecha))
+                    if (hit.collider.TryGetComponent(out MechaPartInstance t_mechaPart))
                     {
-                        float p_damage = _instnace.GetRealDamage(_stat.damage);
-                        _mecha.TakeDamage(_instnace, p_damage, Entity.DamageKind.Direct);
-                        _instnace.AddDPS(p_damage);
+                        float t_damage = _instnace.GetRealDamage(_stat.damage);
+                        t_mechaPart.TakeDamage(_instnace, t_damage, Entity.DamageKind.Direct);
+                        _instnace.AddDPS(t_damage);
                         StartCoroutine(DamagableCooldown());
                     }
                 }

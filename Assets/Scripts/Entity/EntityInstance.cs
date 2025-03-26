@@ -21,7 +21,6 @@ namespace Mekaiju.Entity
         /// <summary>
         /// Store effect to apply to the current entity.
         /// </summary>
-        [field: SerializeField]
         public virtual List<StatefullEffect> effects { get; } = new();
 
         /// <summary>
@@ -76,16 +75,23 @@ namespace Mekaiju.Entity
 
         public IDisposable AddEffect(Effect.Effect p_effect)
         {
-            effects.Add(new(this, p_effect));
-            onAddEffect.Invoke(effects[^1]);
-            return effects[^1];
+            return AddEffect(p_effect, -1);
         }
 
         public IDisposable AddEffect(Effect.Effect p_effect, float p_time)
         {
-            effects.Add(new(this, p_effect, p_time));
-            onAddEffect.Invoke(effects[^1]);
-            return effects[^1];
+            StatefullEffect t_ret = effects.Find(t_effect => t_effect.effect == p_effect);
+            if (t_ret == null)
+            {
+                effects.Add(new(this, p_effect, p_time));
+                t_ret = effects[^1];
+                onAddEffect.Invoke(t_ret);
+            }
+            else
+            {
+                t_ret.Reset(p_time);
+            }
+            return t_ret;
         }
 
         public void RemoveEffect(IDisposable p_effect)

@@ -1,5 +1,4 @@
 using Mekaiju.Attributes;
-using MyBox;
 using UnityEngine;
 
 namespace Mekaiju
