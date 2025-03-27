@@ -17,13 +17,16 @@ MonoBehaviour:
   <objectName>k__BackingField: Chest
   <behaviour>k__BackingField:
     rid: 8176260257158004802
-  <icon>k__BackingField: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  <healthTuneAlteration>k__BackingField:
+    rid: -2
   <granter>k__BackingField:
     rid: 8176260257158004803
-  <showInHUD>k__BackingField: 1
+  icon: {fileID: 21300000, guid: b54586d2944d9234692a42f3582d8a12, type: 3}
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 8176260257158004802
       type: {class: ReflectDamageAbility, ns: Mekaiju, asm: Assembly-CSharp}
       data:

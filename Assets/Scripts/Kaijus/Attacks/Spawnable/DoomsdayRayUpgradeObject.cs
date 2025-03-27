@@ -72,10 +72,10 @@ namespace Mekaiju.AI.Attack.Instance
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("MechaPart"))
             {
-                MechaInstance mechaInstance = other.GetComponent<MechaInstance>();
-                mechaInstance.TakeDamage(_instance, _instance.GetRealDamage(_stat.damage), Entity.DamageKind.Direct);
+                MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
+                t_mechaPart.TakeDamage(_instance, _instance.GetRealDamage(_stat.damage), Entity.DamageKind.Direct);
             }
             else if (other.CompareTag("Ground"))
             {
