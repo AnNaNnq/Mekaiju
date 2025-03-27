@@ -29,6 +29,7 @@ namespace Mekaiju.AI.Attack
             if (_kaiju.TargetInRange(range) && !_kaiju.TargetInRange(attackRange))
             {
                 Debug.Log("run");
+                _kaiju.motor.StartKaiju();
                 _kaiju.motor.SetSpeed(sprintSpeed);
                 _kaiju.motor.MoveTo(_kaiju.target.transform.position, attackRange);
                 _kaiju.StartCoroutine(SprintDuration(_kaiju));
