@@ -362,6 +362,7 @@ GameObject:
   - component: {fileID: 6102630006622668945}
   - component: {fileID: 8310287972238015579}
   - component: {fileID: 9162803609603508628}
+  - component: {fileID: 5482675631485000741}
   m_Layer: 3
   m_Name: Prefab_Camion 1
   m_TagString: Untagged
@@ -456,13 +457,28 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1917348887596186450, guid: a87781bec04a838459aefbe181bce39e, type: 3}
+--- !u!114 &5482675631485000741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7517895987493150094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64106b671ba21e34bbccd272b9daef24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSpawn: {fileID: 3115142396272228985, guid: d79bb92fb28432f4cbeca29bbacb3b96, type: 3}
+  soundEffect: {fileID: 8300000, guid: 1c6e1f0260db4384fb66483ec24e0e3c, type: 3}
+  particleEffect: {fileID: 0}
 --- !u!1 &8564662754945053708
 GameObject:
   m_ObjectHideFlags: 0
