@@ -1,3 +1,4 @@
+using Mekaiju.Utils;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack.Instance
@@ -19,10 +20,10 @@ namespace Mekaiju.AI.Attack.Instance
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("MechaPart"))
+            if (other.gameObject.TryGetMechaPartInstance(out var t_inst))
             {
                 var t_dmg = _instance.GetRealDamage(_dmg);
-                other.gameObject.GetComponent<MechaPartInstance>().TakeDamage(_instance, t_dmg, Entity.DamageKind.Direct);
+                t_inst.TakeDamage(_instance, t_dmg, Entity.DamageKind.Direct);
                 _instance.AddDPS(t_dmg);
                 _instance.UpdateUI();
             }

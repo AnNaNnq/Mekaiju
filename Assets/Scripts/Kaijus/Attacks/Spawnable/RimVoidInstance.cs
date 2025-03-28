@@ -133,21 +133,19 @@ namespace Mekaiju.AI.Attack.Instance
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("MechaPart"))
+            if (other.gameObject.TryGetMechaPartInstance(out var t_inst))
             {
-                MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
-                _speedMod = t_mechaPart.mecha.AddEffect(_stat.rimVoidEffect);
+                _speedMod = t_inst.mecha.AddEffect(_stat.rimVoidEffect);
                 _damagable = true;
-                StartCoroutine(Damage(t_mechaPart));
+                StartCoroutine(Damage(t_inst));
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("MechaPart"))
+            if (other.gameObject.TryGetMechaPartInstance(out var t_inst))
             {
-                MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
-                t_mechaPart.mecha.RemoveEffect(_speedMod);
+                t_inst.mecha.RemoveEffect(_speedMod);
                 _damagable = false;
             }
         }

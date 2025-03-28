@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Mekaiju.Entity;
+using Mekaiju.Utils;
 using UnityEngine;
 
 namespace Mekaiju.AI.Attack.Instance
@@ -17,7 +18,7 @@ namespace Mekaiju.AI.Attack.Instance
         Collider[] _cols;
         Rigidbody _rb;
 
-        HashSet<Collider> _hitObjects = new HashSet<Collider>();
+        HashSet<MechaPartInstance> _hitObjects = new HashSet<MechaPartInstance>();
 
         public void SetUp(ShockWaveStat p_stats)
         {
@@ -62,21 +63,23 @@ namespace Mekaiju.AI.Attack.Instance
 
             foreach (var col in _cols)
             {
-                if (col.CompareTag("MechaPart") && !_hitObjects.Contains(col)) // V�rifie si pas d�j� touch�
+                if (col.gameObject.TryGetMechaPartInstance(out var t_inst)) // V�rifie si pas d�j� touch�
                 {
-                    Vector3 t_toPlayer = col.transform.position - transform.position;
-                    float t_distanceToWave = Mathf.Abs(t_toPlayer.magnitude - _radius); // Distance exacte
-
-                    if (t_distanceToWave < _lineWith) // V�rifie si le joueur est bien sur la ligne de l'onde
+                    if (!_hitObjects.Contains(t_inst))
                     {
-                        _hitObjects.Add(col); // Ajoute l'objet pour �viter de le toucher plusieurs fois
-                        Rigidbody t_rb = col.GetComponent<Rigidbody>();
-                        MechaPartInstance t_mechaPart = col.GetComponent<MechaPartInstance>();
-                        if (t_rb != null && t_mechaPart.states[StateKind.Grounded])
+                        Vector3 t_toPlayer = col.transform.position - transform.position;
+                        float t_distanceToWave = Mathf.Abs(t_toPlayer.magnitude - _radius); // Distance exacte
+
+                        if (t_distanceToWave < _lineWith) // V�rifie si le joueur est bien sur la ligne de l'onde
                         {
-                            float t_damage = _stats.kaiju.GetRealDamage(_stats.shockwaveDamage);
-                            t_mechaPart.TakeDamage(_stats.kaiju, t_damage, DamageKind.Direct);
-                            t_mechaPart.mecha.AddEffect(_stats.effect, _stats.effectDuration);
+                            _hitObjects.Add(t_inst); // Ajoute l'objet pour �viter de le toucher plusieurs fois
+                            Rigidbody t_rb = col.attachedRigidbody;
+                            if (t_rb != null && t_inst.states[StateKind.Grounded])
+                            {
+                                float t_damage = _stats.kaiju.GetRealDamage(_stats.shockwaveDamage);
+                                t_inst.TakeDamage(_stats.kaiju, t_damage, DamageKind.Direct);
+                                t_inst.mecha.AddEffect(_stats.effect, _stats.effectDuration);
+                            }
                         }
                     }
                 }

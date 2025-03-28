@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mekaiju.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,15 +23,15 @@ namespace Mekaiju.AI.Attack
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!_playerInside && other.CompareTag("MechaPart"))
+            if (!_playerInside && other.gameObject.TryGetMechaPartInstance(out var t_inst))
             {
                 _playerInside = true;
-                MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
-                StartCoroutine(DealDamage(t_mechaPart));
+                // MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
+                StartCoroutine(DealDamage(t_inst));
                 if (_stats.addEffect)
                 {
                     float t_duration = _stats.asDuration ? _stats.effectDuration : -1;
-                    _effect = t_mechaPart.mecha.AddEffect(_stats.effect, t_duration);
+                    _effect = t_inst.mecha.AddEffect(_stats.effect, t_duration);
                 }
             }
 
@@ -59,13 +60,13 @@ namespace Mekaiju.AI.Attack
 
         private void OnTriggerExit(Collider other)
         {
-            if (_playerInside && other.CompareTag("MechaPart"))
+            if (_playerInside && other.gameObject.TryGetMechaPartInstance(out var t_inst))
             {
                 _playerInside = false;
                 if (!_stats.asDuration && _effect != null)
                 {
-                    MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
-                    t_mechaPart.mecha.RemoveEffect(_effect);
+                    // MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
+                    t_inst.mecha.RemoveEffect(_effect);
                 }
             }
         }

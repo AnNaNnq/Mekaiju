@@ -28,7 +28,7 @@ namespace Mekaiju
         private float _damageFactor;
 #endregion
 
-        private float _endTriggerTimout = 1;
+        private float _endTriggerTimout = 5;
 
         private float _runtimeDamageFactor;
 
@@ -78,6 +78,7 @@ namespace Mekaiju
             {
                 state.Set(AbilityState.Active);
                 _animationState = AnimationState.Idle;
+                p_self.states[StateKind.AbilityLocked].Set(true);
 
                 ConsumeStamina(p_self);
 
@@ -103,6 +104,7 @@ namespace Mekaiju
                 var t_timout = _endTriggerTimout;
                 yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
 
+                p_self.states[StateKind.AbilityLocked].Set(false);
                 p_self.onCollide.RemoveListener(t_cb);
 
                 yield return WaitForCooldown();

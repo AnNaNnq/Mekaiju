@@ -29,7 +29,7 @@ namespace Mekaiju.AI.Attack {
 
         MechaInstance _mecha;
 
-        List<MechaPartInstance> _mechaParts;
+        HashSet<MechaPartInstance> _mechaParts;
 
         bool blocked = false;
 
@@ -37,7 +37,7 @@ namespace Mekaiju.AI.Attack {
         {
             canUse = true;
             _mecha = null;
-            _mechaParts = new List<MechaPartInstance>();
+            _mechaParts = new();
             blocked = false;
             StopAttackCoroutine();
         }

@@ -1,4 +1,5 @@
 using Mekaiju;
+using Mekaiju.Utils;
 using System;
 using UnityEngine;
 
@@ -14,7 +15,8 @@ public class KaijuCollsionDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        MechaPartInstance mecha = other.GetComponent<MechaPartInstance>();
+        MechaPartInstance mecha = other.gameObject.GetMechaPartInstance();
+
         if (mecha != null)
         {
             OnMechaEnter?.Invoke(mecha);
@@ -33,7 +35,8 @@ public class KaijuCollsionDetector : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        MechaPartInstance mecha = other.GetComponent<MechaPartInstance>();
+        MechaPartInstance mecha = other.gameObject.GetMechaPartInstance();
+
         if (mecha != null)
         {
             OnMechaExit?.Invoke(mecha);
