@@ -13,18 +13,18 @@ namespace Mekaiju.Entity.Effect
         /// 
         /// </summary>
         [SerializeField]
-        private EnumArray<Statistics, Modifier> _modifiers;
+        private EnumArray<StatisticKind, Modifier> _modifiers;
 
         /// <summary>
         /// 
         /// </summary>
-        private EnumArray<Statistics, Modifier> _modifierRefs;
+        private EnumArray<StatisticKind, Modifier> _modifierRefs;
 
         public override void OnAdd(EntityInstance p_self)
         {
             _modifierRefs = new();
             _modifiers.ForEach((t_key, t_value) => {
-                _modifierRefs[t_key] = p_self.modifiers[t_key].Add(t_value.value, t_value.kind);
+                _modifierRefs[t_key] = p_self.modifiers[t_key].Add(t_value.value / 100f, t_value.kind);
             });
         }
 

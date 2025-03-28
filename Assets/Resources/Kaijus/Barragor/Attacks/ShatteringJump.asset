@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c81f28bfa57eadc47904e311de7feb8c, type: 3}
+  m_Name: ShatteringJump
+  m_EditorClassIdentifier: 
+  <attack>k__BackingField:
+    rid: 7914790865167974639
+  references:
+    version: 2
+    RefIds:
+    - rid: 7914790865167974639
+      type: {class: ShatteringJump, ns: Mekaiju.AI.Attack, asm: Assembly-CSharp}
+      data:
+        timeBeforeAttack: 1
+        cooldown: 0
+        range: 90
+        canMakeDamage: 1
+        damage: 50
+        blockable: 0
+        jumpForce: 3000
+        wave:
+          shockwavePrefab: {fileID: 4463112248481850273, guid: 23ef9ca6fd70e204cbe381450a3c848f, type: 3}
+          shockwaveSpeed: 20
+          shockwaveDamage: 100
+          maxRadius: 100
+          effect: {fileID: 11400000, guid: 558e38446bba040239195dfc8926312e, type: 2}
+          effectDuration: 1
+          kaiju: {fileID: 0}
+        electricZonePrefab: {fileID: 829531332958177211, guid: 41f46073f6a73a84a97221b58a268f0c, type: 3}
+        electricZone:
+          damage: 100
+          tickRate: 0.2
+          addEffect: 0
+          effect: {fileID: 0}
+          asDuration: 0
+          effectDuration: 0
+        zoneDuration: 10

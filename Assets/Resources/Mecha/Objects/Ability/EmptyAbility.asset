@@ -12,14 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c90c8f421734c05b8e3589afd75ced, type: 3}
   m_Name: EmptyAbility
   m_EditorClassIdentifier: 
-  <description>k__BackingField: 
+  <description>k__BackingField: Default chest without behaviour.
   <objectName>k__BackingField: Chest
-  <target>k__BackingField: 1
   <behaviour>k__BackingField:
     rid: 8176259984244604993
+  <icon>k__BackingField: {fileID: 0}
+  <granter>k__BackingField:
+    rid: 8176260172734005318
+  <showInHUD>k__BackingField: 1
   references:
     version: 2
     RefIds:
     - rid: 8176259984244604993
       type: {class: EmptyAbility, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 8176260172734005318
+      type: {class: MechaPartGranter, ns: Mekaiju, asm: Assembly-CSharp}
+      data:
+        <targetName>k__BackingField: Torse
+        _part: 1

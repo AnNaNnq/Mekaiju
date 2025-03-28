@@ -19,20 +19,58 @@ namespace Mekaiju.AI
     [RequireComponent(typeof(Rigidbody))]
     public class KaijuInstance : EntityInstance
     {
-        [Header("General")]
+        #region variable
+        [Separator("General")]
         [Tag] public string targetTag;
         public KaijuStats stats;
         public BodyPart[] bodyParts;
 
-        [Separator]
+        [Separator("Behavior")]
         [field: SerializeReference, SubclassPicker]
         public List<KaijuBehavior> behaviors = new List<KaijuBehavior>();
-        public float timeBetweenTowAction = 1f;
-
-        [field: SerializeField]
-        public InstanceContext context { get; private set; }
 
         public List<KaijuPassive> passives;
+       
+        [SOSelector]
+        [OverrideLabel("Attack Graph (Phase 1)")]
+        public KaijuAttackContainer attackGraphPhaseOne;
+        [SOSelector]
+        [OverrideLabel("Attack Graph (Phase 2)")]
+        public KaijuAttackContainer attackGraphPhaseTow;
+        public float timeBetweenTowAction;
+
+        [Separator("Phases")]
+        public int currentPhase = 2;
+        [Separator]
+        public KaijuPhaseAttack changePhaseAction;
+
+        [Separator("Health")]
+        [ReadOnly, SerializeField] private float currentHealth = 0;
+        public float reduceDamageWhenDestroy = 2;
+
+        [Separator("Movement")]
+        public float stoppingDistanceMin = 10;
+
+        [Separator("Debug")]
+        public bool checkRange;
+        [ConditionalField(nameof(checkRange))] public float debugRange;
+        [ReadOnly] public float dps;
+
+        private KaijuDebug _debug;
+
+        [Separator("Pas touche")]
+        public KaijuCollsionDetector detector;
+
+        [Separator("Instance")]
+        bool _isInFight;
+
+        #endregion
+
+        #region variable composant
+        public event Action<Collision> OnCollision;
+        
+        [field: SerializeField]
+        public InstanceContext context { get; private set; }
 
         public GameObject target { get; private set; }
 
@@ -41,6 +79,10 @@ namespace Mekaiju.AI
 
         protected KaijuMotor _motor;
 
+        public Rigidbody rb { get { return _rb; } }
+
+        private Rigidbody _rb;
+
         public KaijuBrain brain { get { return _brain; } }
 
         private KaijuBrain _brain;
@@ -48,34 +90,9 @@ namespace Mekaiju.AI
         public KaijuAnimatorController animator { get { return _animation; } }
 
         private KaijuAnimatorController _animation;
+        #endregion
 
-        public int currentPhase = 2;
-
-        [SOSelector]
-        [OverrideLabel("Attack Graph (Phase 1)")]
-        public KaijuAttackContainer attackGraphPhaseOne;
-        [SOSelector]
-        [OverrideLabel("Attack Graph (Phase 2)")]
-        public KaijuAttackContainer attackGraphPhaseTow;
-
-        [Separator]
-        public KaijuPhaseAttack changePhaseAction;
-
-        [Separator]
-        [Header("Debug")]
-        public bool checkRange;
-        [ConditionalField(nameof(checkRange))] public float debugRange;
-        public float dps;
-
-        private KaijuDebug _debug;
-
-        bool _isInFight;
-
-        public event Action<Collision> OnCollision;
-
-        [Header("Pas touche")]
-        public KaijuCollsionDetector detector;
-
+        #region Kaiju Function
         public KaijuAttackContainer GetGraph()
         {
             if (currentPhase == 1) return attackGraphPhaseOne;
@@ -87,6 +104,7 @@ namespace Mekaiju.AI
             _motor = GetComponent<KaijuMotor>();
             _brain = GetComponent<KaijuBrain>();
             _animation = GetComponent<KaijuAnimatorController>();
+            _rb = GetComponent<Rigidbody>();
             target = GameObject.FindGameObjectWithTag(targetTag);
             foreach (var behavior in behaviors)
             {
@@ -98,6 +116,8 @@ namespace Mekaiju.AI
             dps = 0;
 
             currentPhase = 1;
+
+            currentHealth = baseHealth;
 
             // We add the BodyPartObject script to bodyParts objects if they don't already have it
             foreach (BodyPart t_part in bodyParts)
@@ -138,6 +158,11 @@ namespace Mekaiju.AI
             {
                 UseBehavior();
             }
+
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                ChangePhase();
+            }
         }
 
         public override void FixedUpdate()
@@ -161,6 +186,7 @@ namespace Mekaiju.AI
                 motor.StopKaiju();
                 changePhaseAction.attack.Action();
             }
+            SetPhase(2);
         }
 
         public void SetPhase(int p_phase)
@@ -187,13 +213,13 @@ namespace Mekaiju.AI
 
         public float GetRealDamage(float p_amonunt)
         {
-            var t_damage = modifiers[Statistics.Damage].ComputeValue(p_amonunt);
+            var t_damage = modifiers[StatisticKind.Damage].ComputeValue(p_amonunt);
             return stats.dmg * (t_damage/100);
         }
 
         public float GetRealSpeed(float p_amonunt)
         {
-            var t_amount = modifiers[Statistics.Speed].ComputeValue(p_amonunt);
+            var t_amount = modifiers[StatisticKind.Speed].ComputeValue(p_amonunt);
             return stats.speed * (t_amount / 100);
 
         }
@@ -218,6 +244,7 @@ namespace Mekaiju.AI
         {
             OnCollision?.Invoke(collision);  // Passe la collision � l'�v�nement
         }
+        #endregion
 
         #region setters & getters
 
@@ -264,9 +291,11 @@ namespace Mekaiju.AI
         #region implemation of IEntityInstance
         public override float baseHealth => bodyParts.Sum(p => p.maxHealth);
 
-        public override float health => bodyParts.Sum(p => p.currentHealth);
+        public override float health => currentHealth;
 
-        public override bool isAlive => !bodyParts.All(t_part => t_part.isDestroyed);
+        public float partsHealth => bodyParts.Sum(p => p.currentHealth);
+
+        public override bool isAlive => !(bodyParts.All(t_part => t_part.isDestroyed) || currentHealth <= 0);
 
         public void Heal(GameObject p_bodyPart, float p_amonunt)
         {
@@ -281,31 +310,40 @@ namespace Mekaiju.AI
             {
                 p_bodyPart.isDestroyed = false;
             }
+
+            currentHealth += p_amonunt;
+            if (currentHealth > baseHealth) currentHealth = baseHealth;
         }
 
-        public override void Heal(float p_amount)
+        public override float Heal(float p_amount)
         {
             float t_amountForPart = p_amount / bodyParts.Count();
             foreach(var part in bodyParts)
             {
                 Heal(part, t_amountForPart);
             }
+
+            return 0f;
         }
 
-        public void TakeDamage(GameObject p_bodyPart, float p_amonunt)
+        public void TakeDamage(GameObject p_bodyPart, IDamageable p_from, float p_amonunt, DamageKind p_kind)
         {
             BodyPart t_part = GetBodyPartWithGameObject(p_bodyPart);
-            TakeDamage(t_part, p_amonunt);
+            TakeDamage(t_part, p_from, p_amonunt, p_kind);
         }
 
-        public void TakeDamage(BodyPart p_bodyPart, float p_amonunt)
+        public float TakeDamage(BodyPart p_bodyPart, IDamageable p_from, float p_amonunt, DamageKind p_kind)
         {
-            var t_defense = modifiers[Statistics.Defense].ComputeValue(stats.def);
+            onBeforeTakeDamage.Invoke(p_from, p_amonunt, p_kind);
+
+            var t_defense = modifiers[StatisticKind.Defense].ComputeValue(stats.def);
 
             var t_realDamage = p_amonunt * (1- (t_defense/100));
 
-            p_bodyPart.currentHealth -= p_amonunt;
+            p_bodyPart.currentHealth -= t_realDamage;
             p_bodyPart.currentHealth = MathF.Max(0, p_bodyPart.currentHealth);
+
+            currentHealth -= p_bodyPart.isDestroyed ? t_realDamage / reduceDamageWhenDestroy : t_realDamage;
 
             if (!p_bodyPart.isDestroyed && p_bodyPart.currentHealth <= 0)
             {
@@ -319,9 +357,9 @@ namespace Mekaiju.AI
                 passive.passive.OnDamage();
             }
 
-            onTakeDamage.Invoke(p_amonunt);
+            onAfterTakeDamage.Invoke(p_from, t_realDamage, p_kind);
 
-            if (IsDeath())
+            if (!isAlive)
             {
                 Destroy(gameObject);
             }
@@ -330,27 +368,19 @@ namespace Mekaiju.AI
             {
                 ChangePhase();
             }
+
+            return 0f;
         }
 
-        public override void TakeDamage(float p_damage)
+        public override float TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
             float t_amountForPart = p_damage / bodyParts.Count();
             foreach (var part in bodyParts)
             {
-                TakeDamage(part, t_amountForPart);
+                TakeDamage(part, p_from, t_amountForPart, p_kind);
             }
-        }
 
-        public bool IsDeath()
-        {
-            foreach(BodyPart t_part in bodyParts)
-            {
-                if (!t_part.isDestroyed)
-                {
-                    return false;
-                }
-            }
-            return true;
+            return 0f;
         }
         #endregion
 
@@ -362,9 +392,6 @@ namespace Mekaiju.AI
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(transform.position, debugRange);
             }
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position + transform.forward * 7f, 4f);
         }
 
         public IEnumerator resetDps()

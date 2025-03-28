@@ -17,9 +17,9 @@ namespace Mekaiju.AI.Body
             }
         }
 
-        public void TakeDamage(float p_damage)
+        public void TakeDamage(IDamageable p_from, float p_damage, DamageKind p_kind)
         {
-            _instance.TakeDamage(gameObject, p_damage);
+            _instance.TakeDamage(gameObject, p_from, p_damage, p_kind);
         }
     }
 }

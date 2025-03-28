@@ -13,6 +13,21 @@ namespace Mekaiju
         Ready, InCooldown, Active
     }
 
+    public abstract class IPayload {}
+    public interface IAlteration {}
+
+    public class Alteration<T> : IAlteration
+    {
+        public T payload;
+        public T diff;
+
+        public Alteration(T p_payload, T p_diff)
+        {
+            payload = p_payload;
+            diff    = p_diff;
+        }
+    }
+
 
     /// <summary>
     /// An interface that defines all behaviour about ability.
@@ -22,7 +37,7 @@ namespace Mekaiju
         /// <summary>
         /// Return the ability state.
         /// </summary>
-        public AbilityState state { get; protected set; }
+        public State<AbilityState> state { get; protected set; } = new(AbilityState.Ready);
 
         /// <summary>
         /// Return the remaining cooldown time
@@ -35,8 +50,19 @@ namespace Mekaiju
         /// <param name="p_self">The instance where the ability is loaded.</param>
         public virtual void Initialize(EntityInstance p_self) 
         {
-            state = AbilityState.Ready;
+            state.Set(AbilityState.Ready);
         }
+
+        /// <summary>
+        /// Used to handle alter payload.
+        /// </summary>
+        /// <param name="p_payload">The data used to alter ability.</param>
+        public virtual IAlteration Alter<T>(T p_payload) { return null; }
+
+        /// <summary>
+        /// Used to restore default ability properties.
+        /// </summary>
+        public virtual void Revert(IAlteration p_alteration) {}
 
         /// <summary>
         /// Indicates whether the capacity can be triggered.
@@ -46,7 +72,7 @@ namespace Mekaiju
         /// <returns>true if capacity is able to be triggered, else false.</returns>
         public virtual bool IsAvailable(EntityInstance p_self, object p_opt)
         {
-            return state == AbilityState.Ready && !p_self.states[State.AbilityLocked];
+            return state == AbilityState.Ready && !p_self.states[StateKind.AbilityLocked];
         }
 
         /// <summary>
@@ -66,7 +92,10 @@ namespace Mekaiju
         /// <param name="p_self">The instance where the ability is loaded.</param>
         /// <param name="p_target">The enemy part that is locked (or null).</param>
         /// <param name="p_opt">An optional parameter (should be null if not needed).</param>
-        public abstract IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt);
+        public virtual IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
+        {
+            yield return null;
+        }
 
         /// <summary>
         /// Use to release an ability if nessacary.<br/>

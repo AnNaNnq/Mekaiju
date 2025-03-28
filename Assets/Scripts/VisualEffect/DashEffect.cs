@@ -32,7 +32,7 @@ namespace Mekaiju
             float t_totalTime = time;
             while (time > 0)
             {
-                time -= config.refreshRate;
+                time -= Mathf.Max(config.refreshRate, Time.deltaTime);
                 _skinnedMeshRenderers ??= GetComponentsInChildren<SkinnedMeshRenderer>();
 
                 for (int i = 0; i < _skinnedMeshRenderers.Length; i++)
@@ -44,7 +44,7 @@ namespace Mekaiju
                     MeshRenderer t_mr = t_go.AddComponent<MeshRenderer>();
                     MeshFilter   t_mf = t_go.AddComponent<MeshFilter>();
 
-                    config.material.SetFloat("_Progress", (t_totalTime - time) / t_totalTime);
+                    // config.material.SetFloat("_Progress", (t_totalTime - time) / t_totalTime);
                     Mesh mesh = new Mesh();
                     _skinnedMeshRenderers[i].BakeMesh(mesh);
 

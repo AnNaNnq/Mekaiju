@@ -26,9 +26,12 @@ namespace Mekaiju.LockOnTargetSystem
         private bool _isLockedOn = false; // État du Lock-On
 
         private Transform _cameraPivot;
+
+        [SerializeField] private CrosshairController _crosshairController;
+
         private void Start()
         {
-            _cameraPivot = transform.Find("CameraPivot");
+            _cameraPivot = transform.FindNested("CameraPivot");
         }
 
         private void Update()
@@ -63,6 +66,7 @@ namespace Mekaiju.LockOnTargetSystem
                 _targetIndex = 0;
                 _lockedTarget = _potentialTargets[_targetIndex];
                 Debug.Log("Lock-On activé sur : " + _lockedTarget.name);
+                _crosshairController?.ChangeCrosshairAfterDelay(true);
                 StartCoroutine(_SmoothFollowTarget());
             }
             else
@@ -70,6 +74,7 @@ namespace Mekaiju.LockOnTargetSystem
                 _isLockedOn = p_isLockedOn;
                 _lockedTarget = null;
                 Debug.Log("Lock-On désactivé");
+                _crosshairController?.ChangeCrosshairAfterDelay(false);
                 StopAllCoroutines();
             }
         }
@@ -85,6 +90,9 @@ namespace Mekaiju.LockOnTargetSystem
 
             _lockedTarget = _potentialTargets[_targetIndex];
             Debug.Log("Nouvelle cible verrouillée : " + _lockedTarget.name);
+
+            _crosshairController?.FollowTarget(_lockedTarget);
+            _crosshairController?.SwayCrosshairOnTargetChange();
         }
 
         // Suit la cible verrouillée de manière fluide

@@ -13,27 +13,59 @@ MonoBehaviour:
   m_Name: BaseMecha
   m_EditorClassIdentifier: 
   <stamina>k__BackingField: 100
-  statistics:
-    _array:
-    - 100
-    - 0
-    - 100
-    - 1600
-  <prefab>k__BackingField: {fileID: 4942416412367976556, guid: 469c3e07c7ba068498881d0c5a4ff039, type: 3}
+  <statistics>k__BackingField:
+    _refArray:
+    - rid: 8176260236176261122
+    - rid: 8176260236176261123
+    - rid: 8176260236176261124
+    - rid: 8176260236176261125
+  <partTreshold>k__BackingField: 20
   <parts>k__BackingField:
-    _array:
-    - <healthPercent>k__BackingField: 0.15625
-      <isAbilityReplaceable>k__BackingField: 1
+    _valArray:
+    - <isAbilityReplaceable>k__BackingField: 1
+      <part>k__BackingField: 0
       ability: {fileID: 11400000, guid: 498a1c5da7ac444a99ef89b5962522be, type: 2}
-    - <healthPercent>k__BackingField: 0.3125
-      <isAbilityReplaceable>k__BackingField: 1
+    - <isAbilityReplaceable>k__BackingField: 1
+      <part>k__BackingField: 1
       ability: {fileID: 11400000, guid: 9b5a1aa128757411d802cfea6168083a, type: 2}
-    - <healthPercent>k__BackingField: 0.15625
-      <isAbilityReplaceable>k__BackingField: 1
+    - <isAbilityReplaceable>k__BackingField: 1
+      <part>k__BackingField: 2
       ability: {fileID: 11400000, guid: d0e9dd6c574bf490b99b630046a00346, type: 2}
-    - <healthPercent>k__BackingField: 0.15625
-      <isAbilityReplaceable>k__BackingField: 1
+    - <isAbilityReplaceable>k__BackingField: 1
+      <part>k__BackingField: 3
       ability: {fileID: 11400000, guid: f10b9573766e54572ad4f6fb3bc05198, type: 2}
-    - <healthPercent>k__BackingField: 0.21875
-      <isAbilityReplaceable>k__BackingField: 0
+    - <isAbilityReplaceable>k__BackingField: 0
+      <part>k__BackingField: 4
       ability: {fileID: 11400000, guid: 589ff5f39c3dc430ab2b635edf0ad02f, type: 2}
+    _refArray: []
+  <standalones>k__BackingField:
+    _valArray:
+    - {fileID: 11400000, guid: f345f41745b724afd86c9717339e9ef9, type: 2}
+    - {fileID: 11400000, guid: 9b5a1aa128757411d802cfea6168083a, type: 2}
+    _refArray: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 8176260236176261122
+      type: {class: FloatStatistic, ns: Mekaiju.Entity, asm: Assembly-CSharp}
+      data:
+        _value: 100
+    - rid: 8176260236176261123
+      type: {class: FloatStatistic, ns: Mekaiju.Entity, asm: Assembly-CSharp}
+      data:
+        _value: 0
+    - rid: 8176260236176261124
+      type: {class: FloatStatistic, ns: Mekaiju.Entity, asm: Assembly-CSharp}
+      data:
+        _value: 100
+    - rid: 8176260236176261125
+      type: {class: HealthStatistic, ns: Mekaiju.Entity, asm: Assembly-CSharp}
+      data:
+        _value:
+          _valArray:
+          - 250
+          - 500
+          - 250
+          - 250
+          - 350
+          _refArray: []

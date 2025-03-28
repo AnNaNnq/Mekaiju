@@ -4,14 +4,21 @@ using Mekaiju.Entity;
 using Mekaiju.AI.Body;
 using MyBox;
 using UnityEngine;
+using Unity.Cinemachine;
+using System;
 
 namespace Mekaiju
 {
+    [Serializable]
+    public class RailGunPayload : IPayload
+    {
+        public float damage;
+    }
 
     /// <summary>
     /// 
     /// </summary>
-    public class RailGunAbility : IAbilityBehaviour
+    public class RailGunAbility : IStaminableAbility
     {
 #region Parameters
         /// <summary>
@@ -22,6 +29,14 @@ namespace Mekaiju
         private float _damageFactor;
 
         /// <summary>
+        /// The projectil prefab to be thrown (must contain WeaponBullet comp)
+        /// </summary>
+        [Header("Projectile")]
+        [Tooltip("The projectil prefab to be thrown")]
+        [SerializeField]
+        private GameObject _projectile;
+
+        /// <summary>
         /// The projectil speed in m/s
         /// </summary>
         [Tooltip("The projectil speed in m/s")]
@@ -29,22 +44,9 @@ namespace Mekaiju
         private float _projectileSpeed;
 
         /// <summary>
-        /// The stamina consumption
-        /// </summary>
-        [Tooltip("The stamina consumption")]
-        [SerializeField, PositiveValueOnly]
-        private int _consumption;
-
-        /// <summary>
-        /// The projectil prefab to be thrown (must contain WeaponBullet comp)
-        /// </summary>
-        [Tooltip("The projectil prefab to be thrown")]
-        [SerializeField]
-        private GameObject _projectile;
-
-        /// <summary>
         /// The impact vfx prefab
         /// </summary>
+        [Header("Impact")]
         [Tooltip("The impact vfx")]
         [SerializeField]
         private GameObject _impactVfx;
@@ -55,18 +57,28 @@ namespace Mekaiju
         [Tooltip("The impact decal prefab")]
         [SerializeField]
         private GameObject _impactDecal;
+
+        [SerializeField]
+        private string _launchPosition;
+
 #endregion
 
         private float _endTriggerTimout    = 5f;
         private float _actionTriggerTimout = 5f;
         private float _projectileDestructionTimout = 10f;
 
+        private float _runtimeDamageFactor;
+
+        private Transform          _launchTransform;
+        private CinemachineCamera  _camera;
         private AnimationState     _animationState;
         private MechaAnimatorProxy _animationProxy;
 
         public override void Initialize(EntityInstance p_self)
         {
             base.Initialize(p_self);
+
+            _runtimeDamageFactor = _damageFactor;
 
             _animationProxy = p_self.parent.GetComponentInChildren<MechaAnimatorProxy>();
 
@@ -75,39 +87,67 @@ namespace Mekaiju
                 Debug.LogWarning("Unable to find animator proxy on mecha!");
             }
 
+            _launchTransform = p_self.parent.transform.FindNested(_launchPosition);
+            _camera          = GameObject.FindWithTag("MainCamera").GetComponent<CinemachineCamera>();
+
             _animationProxy.onRArm.AddListener(_OnAnimationEvent);
         }
 
-        public override bool IsAvailable(EntityInstance p_self, object p_opt)
+        public override IAlteration Alter<T>(T p_payload)
         {
-            return base.IsAvailable(p_self, p_opt) && p_self.stamina - _consumption >= 0f;
+            if (p_payload is RailGunPayload t_casted)
+            {
+                RailGunPayload t_diff = new();
+
+                _runtimeDamageFactor += (t_diff.damage = _damageFactor * t_casted.damage);
+
+                return new Alteration<RailGunPayload>(t_casted, t_diff);
+            }
+            return null;
+        }
+
+        public override void Revert(IAlteration p_payload)
+        {
+            if (p_payload is Alteration<RailGunPayload> t_casted)
+            {
+                _runtimeDamageFactor -= t_casted.diff.damage;
+            }
         }
 
         public override IEnumerator Trigger(EntityInstance p_self, BodyPartObject p_target, object p_opt)
         {
             if (IsAvailable(p_self, p_opt))
             {
-                state = AbilityState.Active;
+                state.Set(AbilityState.Active);
                 _animationState = AnimationState.Idle;
 
+                ConsumeStamina(p_self);
+
+                p_self.states[StateKind.MovementLocked].Set(true);
+                p_self.states[StateKind.AbilityLocked] .Set(true);
+
                 _animationProxy.animator.SetTrigger("RArm");
+
+                p_self.parent.GetComponent<PlayerController>().SetArmTargeting(true);
 
                 // Wait for animation action
                 float t_timout = _actionTriggerTimout;
                 yield return new WaitUntil(() => _animationState == AnimationState.Trigger || (t_timout -= Time.deltaTime) <= 0);
 
-                p_self.ConsumeStamina(_consumption);
-
                 // Setup projectile and launch
-                var t_wb = GameObject.Instantiate(_projectile).GetComponent<WeaponBullet>();
-                t_wb.transform.position = p_self.transform.position + new Vector3(0, 2.5f, 0) + (10f * p_self.parent.transform.forward);
+                Vector3 t_direction = _camera.transform.forward.normalized;
+
+                Vector3    t_position = _launchTransform.position + (2f * _camera.transform.forward);
+                Quaternion t_rotation = Quaternion.LookRotation(t_direction) * Quaternion.Euler(Vector3.up * 90f);
+                var t_wb = GameObject.Instantiate(_projectile, t_position, t_rotation).GetComponent<WeaponBullet>();
+
                 t_wb.OnCollide.AddListener(
                     (t_go, t_collision) => 
                     {
                         if (t_collision.collider.gameObject.TryGetComponent<BodyPartObject>(out var t_bpo))
                         {
-                            var t_damage = _damageFactor * p_self.ComputedStatistics(Statistics.Damage);
-                            t_bpo.TakeDamage(t_damage);
+                            var t_damage = _runtimeDamageFactor * p_self.statistics[StatisticKind.Damage].Apply<float>(p_self.modifiers[StatisticKind.Damage]);
+                            t_bpo.TakeDamage(p_self.parent, t_damage, DamageKind.Direct);
                             p_self.onDealDamage.Invoke(t_damage);
                         }
 
@@ -127,14 +167,21 @@ namespace Mekaiju
                         GameObject.Destroy(t_go);
                     }
                 );
-                t_wb.Launch(p_self.parent.transform.forward.normalized * _projectileSpeed, p_self.parent.transform.forward);
+                t_wb.Launch(t_direction * _projectileSpeed);
                 t_wb.Timout(_projectileDestructionTimout);
 
                 // Wait for animation end
                 t_timout = _endTriggerTimout;
                 yield return new WaitUntil(() => _animationState == AnimationState.End || (t_timout -= Time.deltaTime) <= 0);
 
-                state = AbilityState.Ready;
+                p_self.parent.GetComponent<PlayerController>().SetArmTargeting(false);
+                
+                p_self.states[StateKind.MovementLocked].Set(false);
+                p_self.states[StateKind.AbilityLocked] .Set(false);
+
+                yield return WaitForCooldown();
+
+                state.Set(AbilityState.Ready);
             }
         }
 

@@ -9,18 +9,11 @@ namespace Mekaiju.Entity
         /// Bind base entity stats.
         /// Must be overrided to use computedStats.
         /// </summary>
-        protected EnumArray<Statistics, float> statistics { get; }
+        public EnumArray<StatisticKind, IStatistic> statistics { get; protected set; }
 
         /// <summary>
         /// Used to apply modifer on statistics.
         /// </summary>
-        public EnumArray<Statistics, ModifierCollection> modifiers { get; }
-
-        /// <summary>
-        /// Compute stats with modifiers.
-        /// </summary>
-        /// <param name="p_kind">The targeted statistics.</param>
-        /// <returns>The computed statistic.</returns>
-        public float ComputedStatistics(Statistics p_kind);
+        public EnumArray<StatisticKind, ModifierCollection> modifiers { get; }
     }
 }

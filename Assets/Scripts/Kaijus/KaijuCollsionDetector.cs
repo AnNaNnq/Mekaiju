@@ -1,28 +1,50 @@
 using Mekaiju;
+using Mekaiju.Utils;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class KaijuCollsionDetector : MonoBehaviour
 {
-    public event Action<MechaInstance> OnMechaEnter;
-    public event Action<MechaInstance> OnMechaExit;
+    public event Action<MechaPartInstance> OnMechaEnter;
+    public event Action<MechaPartInstance> OnMechaExit;
+
+    public event Action OnGround;
+
+    public event Action OnShieldEnter;
+    public event Action OnShieldExit;
 
     private void OnTriggerEnter(Collider other)
     {
-        MechaInstance mecha = other.GetComponent<MechaInstance>();
+        MechaPartInstance mecha = other.gameObject.GetMechaPartInstance();
+
         if (mecha != null)
         {
             OnMechaEnter?.Invoke(mecha);
+        }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("Walkable"))
+        {
+            OnGround?.Invoke();
+        }
+
+        if (other.CompareTag("Shield"))
+        {
+            OnShieldEnter?.Invoke();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        MechaInstance mecha = other.GetComponent<MechaInstance>();
+        MechaPartInstance mecha = other.gameObject.GetMechaPartInstance();
+
         if (mecha != null)
         {
             OnMechaExit?.Invoke(mecha);
+        }
+
+        if (other.CompareTag("Shield"))
+        {
+            OnShieldExit?.Invoke();
         }
     }
 }

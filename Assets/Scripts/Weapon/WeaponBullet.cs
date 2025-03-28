@@ -29,12 +29,9 @@ public class WeaponBullet : MonoBehaviour
     /// Launch the bullet with the given speed and given direction
     /// </summary>
     /// <param name="p_velocity">The target velocity</param>
-    /// <param name="p_direction">The target direction</param>
-    public void Launch(Vector3 p_velocity, Vector3 p_direction)
+    public void Launch(Vector3 p_velocity)
     {
         _velocity = p_velocity;
-        transform.rotation = Quaternion.LookRotation(p_direction);
-        transform.Rotate(new (0, 90, 0));
     }
 
     /// <summary>

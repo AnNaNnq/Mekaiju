@@ -13,15 +13,17 @@ namespace Mekaiju.AI
 
         private KaijuAttackContainer _attackGraph;
         private KaijuMotor _motor;
-        [Header("Pas touche c'est juste du debug")]
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private string _lastAttack;
 
         [SerializeField, ReadOnly]
         KaijuAttack _currentAttack;
 
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private bool _canAttack = true;
+
+        [ReadOnly]
+        public bool isStopped = false;
 
         public KaijuAttack[] allAttacks { get { return _allAttacks; } }
         private KaijuAttack[] _allAttacks;
@@ -121,6 +123,8 @@ namespace Mekaiju.AI
 
         public void Attack(List<string> p_attackGUID)
         {
+            if (isStopped) return;
+
             List<KaijuPassive> t_activePassives = _instance.GetPassivesActive();
             if (t_activePassives.Count > 0)
             {
@@ -160,7 +164,9 @@ namespace Mekaiju.AI
                 {
                     _motor.StopKaiju();
                     _motor.LookTarget();
-                    t_kaijuAttacks[i].attack.Active(_instance);
+                    Debug.Log($"Le kaiju lance l'attaque {t_kaijuAttacks[i].name}");
+                    StartCoroutine(t_kaijuAttacks[i].attack.Lunch(_instance));
+                    //t_kaijuAttacks[i].attack.Active(_instance);
                     _lastAttack = t_kaijuAttacks[i].name;
                     _canAttack = false;
                     return;
