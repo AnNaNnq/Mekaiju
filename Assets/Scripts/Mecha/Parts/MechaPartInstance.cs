@@ -9,6 +9,7 @@ using Mekaiju.Entity;
 using System.Collections.Generic;
 using Mekaiju.Entity.Effect;
 using System.Linq;
+using MyBox;
 
 namespace Mekaiju
 {
@@ -43,26 +44,9 @@ namespace Mekaiju
 
         private void Awake()
         {
-            var t_smr   = GetComponent<SkinnedMeshRenderer>();
-            var t_mesh  = t_smr.sharedMesh;
-            var t_bones = t_smr.bones;
-
-            HashSet<int> t_usedBonesIndex = new();
-            t_mesh.boneWeights.ToList().ForEach(t_bw => {
-                t_usedBonesIndex.Add(t_bw.boneIndex0);
-                t_usedBonesIndex.Add(t_bw.boneIndex1);
-                t_usedBonesIndex.Add(t_bw.boneIndex2);
-                t_usedBonesIndex.Add(t_bw.boneIndex3);
-            });
-            var t_influentBones = t_usedBonesIndex.Where(t_ubi => t_ubi < t_bones.Length).Select(t_ubi => t_bones[t_ubi]);
-
-            t_influentBones.ToList().ForEach(t_bone => {
-                if (t_bone.gameObject.TryGetComponent<Collider>(out var _))
-                {
-                    var t_mcp = t_bone.gameObject.AddComponent<MechaCollisionProxy>();
-                    t_mcp.onCollide.AddListener(t_collision => onCollide.Invoke(t_collision));
-                }
-            });
+            var t_smr = GetComponent<SkinnedMeshRenderer>();
+            t_smr.rootBone.GetComponentsInChildren<MechaPartCollisionProxy>().Where(t_comp => t_comp.target == name).ForEach(t_comp => t_comp.Setup(this));
+            t_smr.rootBone.GetComponentsInChildren<MechaPartGetterProxy>   ().Where(t_comp => t_comp.target == name).ForEach(t_comp => t_comp.Setup(this));
         }
 
         /// <summary>

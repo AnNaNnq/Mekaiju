@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Mekaiju.Utils;
+using UnityEngine;
 
 namespace Mekaiju.AI.Attack.Instance
 {
@@ -21,12 +22,11 @@ namespace Mekaiju.AI.Attack.Instance
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.CompareTag("MechaPart"))
+            if(other.gameObject.TryGetMechaPartInstance(out var t_inst))
             {
-                MechaPartInstance t_mechaPart = other.GetComponent<MechaPartInstance>();
                 KaijuInstance t_kaiju = GameObject.FindGameObjectWithTag("Kaiju").GetComponent<KaijuInstance>();
-                t_mechaPart.TakeDamage(t_kaiju, _dmg, Entity.DamageKind.Direct);
-                t_mechaPart.mecha.AddEffect(_stat.effect, _stat.effectDuration);
+                t_inst.TakeDamage(t_kaiju, _dmg, Entity.DamageKind.Direct);
+                t_inst.mecha.AddEffect(_stat.effect, _stat.effectDuration);
             }
             if(!other.CompareTag("KaijuPart") && !other.CompareTag("DoomsdayRaySpawn") && !other.CompareTag("Spawnable") && !other.CompareTag("Ground"))
             {

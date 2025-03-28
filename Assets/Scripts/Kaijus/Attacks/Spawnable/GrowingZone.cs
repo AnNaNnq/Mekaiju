@@ -7,8 +7,8 @@ namespace Mekaiju.AI.Attack.Instance
 {
     public class GrowingZone : MonoBehaviour
     {
-        public Transform startPoint; // Premier objet (début du collider)
-        public Transform endPoint;   // Deuxième objet (fin du collider)
+        public Transform startPoint; // Premier objet (dï¿½but du collider)
+        public Transform endPoint;   // Deuxiï¿½me objet (fin du collider)
         public Transform useEndPoint;
         public BoxCollider boxCollider;
 
@@ -30,7 +30,7 @@ namespace Mekaiju.AI.Attack.Instance
             Vector3 t_direction = useEndPoint.position - startPoint.position;
             float t_distance = t_direction.magnitude;
 
-            // Définir la position centrale entre les deux points
+            // Dï¿½finir la position centrale entre les deux points
             boxCollider.transform.position = startPoint.position;
 
             // Faire pivoter l'objet pour qu'il s'aligne avec la direction
@@ -42,7 +42,7 @@ namespace Mekaiju.AI.Attack.Instance
             // Ajuster la taille du BoxCollider
             boxCollider.size = new Vector3(boxCollider.size.x, boxCollider.size.y, t_distance);
 
-            // Décaler le BoxCollider pour qu'il s'étire bien dans la direction
+            // Dï¿½caler le BoxCollider pour qu'il s'ï¿½tire bien dans la direction
             boxCollider.center = new Vector3(0, 0, t_distance / 2f);
         }
 
@@ -60,23 +60,21 @@ namespace Mekaiju.AI.Attack.Instance
 
         private void OnChildTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.gameObject.TryGetMechaPartInstance(out var t_inst))
             {
                 _playerInside = true;
-                MechaInstance t_mecha = other.GetComponent<MechaInstance>();
-                StartCoroutine(Damage(t_mecha));
-
-                _effect = t_mecha.AddEffect(stat.effect);
+                StartCoroutine(Damage(t_inst));
+                _effect = t_inst.AddEffect(stat.effect);
             }
         }
 
-        IEnumerator Damage(MechaInstance p_mecha)
+        IEnumerator Damage(MechaPartInstance p_inst)
         {
             while (_playerInside)
             {
                 float t_damage = kaiju.GetRealDamage(stat.zoneDamage);
                 kaiju.AddDPS(t_damage);
-                p_mecha.TakeDamage(kaiju, t_damage, Entity.DamageKind.Direct);
+                p_inst.TakeDamage(kaiju, t_damage, Entity.DamageKind.Direct);
 
                 yield return new WaitForSeconds(stat.damageTick);
             }
@@ -84,10 +82,10 @@ namespace Mekaiju.AI.Attack.Instance
 
         private void OnChildTriggerExit(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.gameObject.TryGetMechaPartInstance(out var t_inst))
             {
                 _playerInside = false;
-                other.GetComponent<MechaInstance>().RemoveEffect(_effect);
+                t_inst.RemoveEffect(_effect);
             }
         }
     }

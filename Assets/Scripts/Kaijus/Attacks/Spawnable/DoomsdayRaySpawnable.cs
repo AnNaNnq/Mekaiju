@@ -40,7 +40,7 @@ namespace Mekaiju.AI.Attack
                 if (_damagable)
                 {
                     _damagable = false;
-                    if (hit.collider.TryGetComponent(out MechaPartInstance t_mechaPart))
+                    if (hit.collider.gameObject.TryGetMechaPartInstance(out var t_mechaPart))
                     {
                         float t_damage = _instnace.GetRealDamage(_stat.damage);
                         t_mechaPart.TakeDamage(_instnace, t_damage, Entity.DamageKind.Direct);
