@@ -19,12 +19,15 @@ namespace Mekaiju.AI.Attack
 
         public override void Active(EntityInstance p_kaiju)
         {
-            KaijuInstance t_kaiju = p_kaiju as KaijuInstance;
-            base.Active(t_kaiju);
-            t_kaiju.OnCollision += HandleCollision;
-            _rb = t_kaiju.GetComponent<Rigidbody>();
+            base.Active(p_kaiju);
 
-            _kaiju.motor.StopKaiju();
+            if (p_kaiju as KaijuInstance != null)
+            {
+                KaijuInstance t_kaiju = p_kaiju as KaijuInstance;
+                t_kaiju.OnCollision += HandleCollision;
+                _kaiju.motor.StopKaiju();
+            }
+            _rb = p_kaiju.GetComponent<Rigidbody>();
 
             _kaiju.StartCoroutine(AttackEnumerator());
 

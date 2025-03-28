@@ -73,12 +73,15 @@ namespace Mekaiju.AI.Attack {
             canUse = false;
             blocked = false;
 
-            _kaiju = (KaijuInstance)p_kaiju;
-            _kaiju.detector.OnMechaEnter += OnMechEnter;
-            _kaiju.detector.OnMechaExit += OnMechExit;
-            _kaiju.detector.OnGround += OnGround;
-            _kaiju.detector.OnShieldEnter += OnShieldEnter;
-            _kaiju.detector.OnShieldExit += OnShiedExit;
+            if(_kaiju as KaijuInstance != null)
+            {
+                _kaiju = (KaijuInstance)p_kaiju;
+                _kaiju.detector.OnMechaEnter += OnMechEnter;
+                _kaiju.detector.OnMechaExit += OnMechExit;
+                _kaiju.detector.OnGround += OnGround;
+                _kaiju.detector.OnShieldEnter += OnShieldEnter;
+                _kaiju.detector.OnShieldExit += OnShiedExit;
+            }
         }
 
         public virtual IEnumerator AttackEnumerator()

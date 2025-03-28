@@ -42,7 +42,7 @@ namespace Mekaiju.Tuto
 
         public void tutorialExecutoin()
         {
-            if(_steps.Count > _turorialPhase) _steps[_turorialPhase].behavior.Execute(_mecha);
+            if(_steps.Count > _turorialPhase) _steps[_turorialPhase].behavior.Execute(_mecha, this);
         }
 
         public bool IsInMovement()
