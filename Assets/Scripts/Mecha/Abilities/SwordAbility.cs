@@ -115,7 +115,6 @@ namespace Mekaiju
 
         private void _OnAnimationEvent(AnimationEvent p_event)
         {
-            Debug.Log(p_event.state);
             _animationState = p_event.state;
         }
     }
