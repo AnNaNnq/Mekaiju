@@ -1,3 +1,5 @@
+using Mekaiju.Entity;
+using Mekaiju.Tuto;
 using UnityEngine;
 
 namespace Mekaiju.AI
@@ -6,7 +8,7 @@ namespace Mekaiju.AI
     public class KaijuAnimatorController : MonoBehaviour
     {
         private Animator _animator;
-        private KaijuInstance _instance;
+        private EntityInstance _instance;
 
         private void Start()
         {
@@ -16,9 +18,19 @@ namespace Mekaiju.AI
 
         private void Update()
         {
-            if (_animator != null && HasParameter("speed")) _animator.SetFloat("speed", _instance.motor.IsInMovement() ? 1 : 0);
-        }
+            if (_animator == null || !HasParameter("speed")) return;
 
+            if (_instance as KaijuInstance)
+            {
+                KaijuInstance t_kaiju = (KaijuInstance)_instance;
+                _animator.SetFloat("speed", t_kaiju.motor.IsInMovement() ? 1 : 0);
+            }
+            else if (_instance as TutorialInstance)
+            {
+                TutorialInstance t_tuto = (TutorialInstance)_instance;
+                _animator.SetFloat("speed", t_tuto.IsInMovement() ? 1 : 0);
+            }
+        }
 
         public void AttackAnimation(string p_animName)
         {

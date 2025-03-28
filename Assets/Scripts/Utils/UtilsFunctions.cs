@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Mekaiju.Utils
@@ -81,6 +82,19 @@ namespace Mekaiju.Utils
             {
                 Debug.LogError("Error: No valid hits detected for laser path.");
             }
+        }
+
+        public static List<T> LoadAllSO<T>()
+            where T : ScriptableObject
+        {
+            List<T> t_object = Resources.LoadAll<T>("/").ToList();
+
+            if (t_object == null || t_object.Count == 0)
+            {
+                Debug.LogWarning("Aucun ScriptableObject");
+            }
+
+            return t_object;
         }
     }
 }
