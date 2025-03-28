@@ -2089,6 +2089,7 @@ GameObject:
   m_Component:
   - component: {fileID: 95024488}
   - component: {fileID: 95024487}
+  - component: {fileID: 95024489}
   m_Layer: 0
   m_Name: PP
   m_TagString: Untagged
@@ -2128,6 +2129,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1283851746}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &95024489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95024486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3297c8c94f7ddfd41b54b346bffd59e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _universalRendererMaterial: {fileID: 2100000, guid: 30b3bb14e21c91e4495b8f112c122ed2, type: 2}
+  _lowHealthThreshold: 0.3
+  _hitEffectDuration: 0.5
+  _lowHealthColor: {r: 1, g: 0, b: 0, a: 1}
+  _lowHealthPlusHitColor: {r: 0.4056604, g: 0, b: 0, a: 1}
+  _hitColor: {r: 1, g: 0.55620337, b: 0, a: 1}
+  _normalColor: {r: 0, g: 0.86376, b: 1, a: 1}
 --- !u!1001 &95403391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24958,36 +24978,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2284741516743572496, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -2.9731445
-      objectReference: {fileID: 0}
-    - target: {fileID: 4207599343060187373, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -2.9731445
-      objectReference: {fileID: 0}
     - target: {fileID: 4445705561929065140, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
       propertyPath: m_Name
       value: CombatCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 5599913758647511561, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -2.9731445
-      objectReference: {fileID: 0}
-    - target: {fileID: 7425341139336172446, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-      propertyPath: effectTimeList
-      value: 
-      objectReference: {fileID: 1144606080}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
---- !u!224 &1144606080 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 9077810304970783289, guid: 6975a645b49ca4fc2a2fedcd5a77ba1f, type: 3}
-  m_PrefabInstance: {fileID: 1144606079}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1146281445
 PrefabInstance:
   m_ObjectHideFlags: 0

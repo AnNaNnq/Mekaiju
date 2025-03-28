@@ -8140,6 +8140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1665107857}
   - component: {fileID: 1665107856}
+  - component: {fileID: 1665107858}
   m_Layer: 0
   m_Name: Postprocessvolumes
   m_TagString: Untagged
@@ -8179,6 +8180,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1665107858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665107855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3297c8c94f7ddfd41b54b346bffd59e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _universalRendererMaterial: {fileID: 2100000, guid: 30b3bb14e21c91e4495b8f112c122ed2, type: 2}
+  _lowHealthThreshold: 0.3
+  _hitEffectDuration: 0.5
+  _lowHealthColor: {r: 1, g: 0, b: 0, a: 1}
+  _lowHealthPlusHitColor: {r: 0.4056604, g: 0, b: 0, a: 1}
+  _hitColor: {r: 1, g: 0.55620337, b: 0, a: 1}
+  _normalColor: {r: 0, g: 0.86376, b: 1, a: 1}
 --- !u!1 &1703993249
 GameObject:
   m_ObjectHideFlags: 0
