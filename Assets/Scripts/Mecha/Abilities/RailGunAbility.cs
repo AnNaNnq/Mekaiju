@@ -124,6 +124,7 @@ namespace Mekaiju
                 ConsumeStamina(p_self);
 
                 p_self.states[StateKind.MovementLocked].Set(true);
+                p_self.states[StateKind.AbilityLocked] .Set(true);
 
                 _animationProxy.animator.SetTrigger("RArm");
 
@@ -176,6 +177,7 @@ namespace Mekaiju
                 p_self.parent.GetComponent<PlayerController>().SetArmTargeting(false);
                 
                 p_self.states[StateKind.MovementLocked].Set(false);
+                p_self.states[StateKind.AbilityLocked] .Set(false);
 
                 yield return WaitForCooldown();
 
