@@ -287,8 +287,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 20.164047, y: 53.135647, z: 119.04555}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7164205517179921522}
   - {fileID: 5612924232185351653}
@@ -352,19 +352,22 @@ MonoBehaviour:
   - rid: 7914790751780995222
   - rid: 7914790548137836614
   - rid: 7914790548137836615
+  passives: []
+  attackGraphPhaseOne: {fileID: 11400000, guid: e361eb976566cde499d92635c7b56823, type: 2}
+  attackGraphPhaseTow: {fileID: 11400000, guid: cd0b871fee59b4a4990f43c4c114b170, type: 2}
   timeBetweenTowAction: 1
+  currentPhase: 2
+  changePhaseAction: {fileID: 0}
+  currentHealth: 0
+  reduceDamageWhenDestroy: 2
+  stoppingDistanceMin: 2
+  checkRange: 1
+  debugRange: 2
+  dps: 0
+  detector: {fileID: 8456061541833978944}
   <context>k__BackingField:
     animationProxy: {fileID: 0}
     rigidbody: {fileID: 0}
-  passives: []
-  currentPhase: 2
-  attackGraphPhaseOne: {fileID: 11400000, guid: e361eb976566cde499d92635c7b56823, type: 2}
-  attackGraphPhaseTow: {fileID: 11400000, guid: cd0b871fee59b4a4990f43c4c114b170, type: 2}
-  changePhaseAction: {fileID: 0}
-  checkRange: 1
-  debugRange: 5
-  dps: 0
-  detector: {fileID: 8456061541833978944}
   references:
     version: 2
     RefIds:
@@ -406,6 +409,7 @@ MonoBehaviour:
   _lastAttack: 
   _currentAttack: {fileID: 0}
   _canAttack: 1
+  isStopped: 0
 --- !u!195 &5546872031696329262
 NavMeshAgent:
   m_ObjectHideFlags: 0

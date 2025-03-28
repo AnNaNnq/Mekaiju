@@ -43,7 +43,7 @@ public class DebugInfo : MonoBehaviour
 
     private void Awake()
     {
-        _inst = GameObject.Find("Player").GetComponent<MechaInstance>();
+        _inst = GameObject.FindGameObjectWithTag("Player").GetComponent<MechaInstance>();
         _effectsMapping = new();
     }
 

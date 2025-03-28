@@ -21,7 +21,7 @@ public class CapacityImage : MonoBehaviour
 
     private void OnDisable()
     {
-        _ability.state.onChange.RemoveListener(UpdateImage);
+        _ability?.state.onChange.RemoveListener(UpdateImage);
     }
 
     void UpdateImage(AbilityState p_prev_state, AbilityState p_current_state)
